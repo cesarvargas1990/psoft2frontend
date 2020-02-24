@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>Consulta VSTFAC</h1>
+
+<div mat-dialog-content class="mat-typography">
+    <table class="main-table mobile-optimised" >
+        <thead>
+             <tr>           
+               <th *ngFor="let header of getHeaders()">{{header}}</th>
+             </tr>
+        </thead>
+        <tbody>
+             <tr *ngFor="let item of consultaVstFac">           
+               <td  *ngFor="let key of getHeaders()"  [attr.data-th]="key" >{{item[key]}}</td>
+             </tr>
+        </tbody>
+    </table>
+      <br>
+      
+</div>
+
+<mat-dialog-actions>
+  <button (click)="guardarCsvVstfac()" title="Guardar CSV VSTFAC" class="float-right btn btn-outline-primary btn-sm"
+      mat-icon-button color="primary">
+      <mat-icon aria-label="Edit">cloud_download</mat-icon>
+  </button>
+ 
+
+</mat-dialog-actions>
+
+
+
+
+

@@ -1,0 +1,7 @@
+<mat-toolbar  color="primary" >
+  <button  *ngIf="authService.isLoggedIn()" mat-icon-button id="menu" (click)="navService.openNav()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>PrestaSoft</span>
+  <span class="example-spacer"></span>
+  </mat-toolbar>

@@ -1,0 +1,171 @@
+<h4 mat-dialog-title>{{data['titulo']}} </h4>
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="PrefijoForm" novalidate>
+
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Prefijo Sistema" formControlName="PREFIJO">
+                    <!-- error -->
+                    <mat-error *ngIf="errorHandling('PREFIJO', 'required')">
+                        El <strong>Prefijo</strong> Ingresado no es valido
+                    </mat-error>
+
+                </mat-form-field>
+
+            </div>
+
+            <div class="col-md-6" *ngIf="editView!=true">
+
+
+                <mat-form-field class="example-full-width">
+                    <mat-label>Empresa</mat-label>
+                    <mat-select formControlName="NIT_EMPRESA">
+                        <mat-option *ngFor="let elemento of data['comboEmpresas']" [value]="elemento.NIT">
+                            {{elemento.NOMBRE}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="errorHandling('NIT_EMPRESA', 'required')">
+                        Debe seleccionar <strong>Empresa</strong> Valida
+                    </mat-error>
+                </mat-form-field>
+
+            </div>
+
+            <div class="col-md-6" *ngIf="editView!=true">
+
+
+                <mat-form-field class="example-full-width">
+                    <mat-label>Proveedor</mat-label>
+                    <mat-select formControlName="NIT_PROVFE" (selectionChange)="seleccionProveedor($event.value)"> 
+                        <mat-option *ngFor="let elemento of data['comboProveedoresFE']" [value]="elemento.NIT_PROVFE" >
+                            {{elemento.NOMBREPROVFE}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="errorHandling('NIT_PROVFE', 'required')">
+                        Debe seleccionar <strong>Proveedor</strong> Valido
+                    </mat-error>
+                </mat-form-field>
+
+
+            </div>
+
+            <div class="col-md-6">
+                <mat-form-field class="example-full-width"> 
+                    <mat-label>Seleccione Escenario de facturaci&oacute;n</mat-label>
+    
+                    <mat-select placeholder="Escenario de facturaci&oacute;n" formControlName="IDESCN">
+                        <mat-option *ngFor="let elemento of comboEscenario" [value]="elemento.IDESCN">
+                            {{elemento.NOMBRE}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="errorHandling('IDESCN', 'required')">
+                        Debe seleccionar <strong>Escenario de facturaci&oacute;n</strong> 
+                    </mat-error>
+                    
+                </mat-form-field> 
+    
+            </div>
+
+            <div class="col-md-6">
+
+
+                <mat-form-field class="example-full-width">
+                    <input matInput placeholder="N&uacute;mero Control" formControlName="CONSEC" pattern="[0-9]*">
+                    <!-- error -->
+                    <mat-error *ngIf="errorHandling('CONSEC', 'required')">
+                        El <strong>N&uacute;mero de control</strong> Ingresado no es valido
+                    </mat-error>
+                </mat-form-field>
+
+            </div>
+
+
+
+            <div class="col-md-6">
+ 
+
+                <mat-form-field class="example-full-width">
+                    <mat-label>Tipo Documento</mat-label>
+                    <mat-select formControlName="TIPODOCUMENTO">
+                        <mat-option *ngFor="let elemento of comboTiposDocumentoFE" [value]="elemento.CODTIPODOCUMENTO">
+                            {{elemento.TIPODOCUMENTO}} 
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="errorHandling('TIPODOCUMENTO', 'required')">
+                        Debe seleccionar <strong>Tipo Documento</strong> Valido
+                    </mat-error>
+                </mat-form-field>
+
+            </div>
+
+            <div class="col-md-6">
+
+
+
+                <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Prefijo Resoluci&oacute;n" formControlName="RANGONUMERACION">
+                    <!-- error -->
+                    <mat-error *ngIf="errorHandling('RANGONUMERACION', 'required')">
+                        El <strong>Prefijo de Resoluci&oacute;n</strong> Ingresado no es valido
+                    </mat-error>
+                </mat-form-field>
+
+            </div>
+
+            <div class="col-md-6">
+
+
+                <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Transacci&oacute;n" formControlName="TRANSA" pattern="[0-9]*">
+                    <!-- error -->
+                    <mat-error *ngIf="errorHandling('TRANSA', 'required')">
+                        La <strong>Transacci&oacute;n</strong> Ingresada no es valido
+                    </mat-error>
+                </mat-form-field>
+
+            </div>
+
+            
+
+            <div class="col-md-6">
+
+
+                <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Resoluci&oacute;n" formControlName="RESOLUCION" >
+                    <!-- error -->
+                    <mat-error *ngIf="errorHandling('RESOLUCION', 'required')">
+                        La <strong>Resoluci&oacute;</strong> Ingresada no es valida
+                    </mat-error>
+                </mat-form-field>
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button (click)="guardarPrefijo()" [disabled]="!PrefijoForm.valid"
+        class="float-right btn btn-outline-primary btn-sm" mat-icon-button color="accent">
+        <mat-icon aria-label="Edit">save</mat-icon>
+    </button>
+    <button (click)="cerrarModal()" class="float-right btn btn-outline-primary btn-sm" mat-icon-button color="accent">
+        <mat-icon aria-label="Edit">cancel</mat-icon>
+    </button>
+
+</mat-dialog-actions> 

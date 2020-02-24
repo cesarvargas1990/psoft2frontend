@@ -1,0 +1,68 @@
+<h4 mat-dialog-title>{{data['titulo']}} </h4>
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="EmpresaProvForm" novalidate>
+
+
+        <div class="row">
+
+
+            <div class="col-md-6">
+
+
+                <mat-form-field class="example-full-width">
+                    <mat-label>Empresa</mat-label>
+                    <mat-select formControlName="NIT_EMPRESA">
+                        <mat-option *ngFor="let elemento of data['comboEmpresas']" [value]="elemento.NIT">
+                            {{elemento.NOMBRE}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="errorHandling('NIT_EMPRESA', 'required')">
+                        Debe seleccionar <strong>Empresa</strong> Valida
+                    </mat-error>
+                </mat-form-field>
+
+            </div>
+
+            <div class="col-md-6">
+
+
+                <mat-form-field class="example-full-width">
+                    <mat-label>Proveedor</mat-label>
+                    <mat-select formControlName="NIT_PROVFE" (selectionChange)="seleccionProveedor($event.value)">
+                        <mat-option *ngFor="let elemento of data['comboProveedoresFE']" [value]="elemento.NIT_PROVFE">
+                            {{elemento.NOMBREPROVFE}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="errorHandling('NIT_PROVFE', 'required')">
+                        Debe seleccionar <strong>Proveedor</strong> Valido
+                    </mat-error>
+                </mat-form-field>
+
+
+            </div>
+
+            <div class="col-md-12">
+                <form [formGroup]="form" >
+                    <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
+    
+                </form>
+            </div>
+           
+
+
+        </div>
+        
+
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button (click)="guardarEmpresaProvFE()" [disabled]="!EmpresaProvForm.valid || !form.valid" 
+        class="float-right btn btn-outline-primary btn-sm" mat-icon-button color="accent">
+        <mat-icon aria-label="Edit">save</mat-icon>
+    </button>
+    <button (click)="cerrarModal()" class="float-right btn btn-outline-primary btn-sm" mat-icon-button color="accent">
+        <mat-icon aria-label="Edit">cancel</mat-icon>
+    </button>
+
+</mat-dialog-actions>

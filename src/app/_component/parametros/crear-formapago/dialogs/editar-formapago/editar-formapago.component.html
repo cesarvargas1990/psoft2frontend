@@ -1,0 +1,13 @@
+<h4 mat-dialog-title>EDITAR FORMA DE PAGO  </h4>
+
+
+
+<mat-dialog-content>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
+        <mat-dialog-actions>
+                <button type="submit" class="btn btn-primary submit-button" ><mat-icon aria-label="Edit">save</mat-icon></button>
+        </mat-dialog-actions>
+      </form>
+</mat-dialog-content>
+

@@ -1,0 +1,169 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
+import { environment } from './../../../environments/environment';
+import { AuthService } from '../../_services/auth.service'
+import { Observable, throwError } from 'rxjs';
+import { retry, catchError } from 'rxjs/operators';
+const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+import Swal from 'sweetalert2';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PrestamosService {
+
+
+  //private server: string = 'https://mipropiedadhorizontal.com.co/api/api';
+  private server: string = 'http://localhost:8080/api';
+
+  private services =
+    {
+      psformapago:this.server + '/psformapago',
+      calcularCuotas: this.server + '/calcularCuotas',
+      listaformaspago: this.server + '/listaformaspago',
+      listaperiodospago: this.server + '/listaperiodopago',
+      guardarPrestamo: this.server + '/guardarPrestamo',
+      consultaFormasPago : this.server + '/consultaFormasPago',
+      consultaFormaPago : this.server + '/consultaFormaPago'
+    };
+
+
+  httpOpts: any = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json', 'Accept': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`
+    })
+  };
+
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+
+  ) { }
+
+  handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      alert('An error occurred:'+error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error.error}`);
+console.log (error);
+        if (error.error.message == 'Unauthorized') {
+          Swal.fire({
+            type: 'error',
+            title: 'Error al iniciar',
+            text: 'Verifique usuario o password', 
+          })
+        }
+        
+    }
+    // return an observable with a user-facing error message
+    return throwError(
+      'Error en la respuesta del servidor (verifique conexion a internet).');
+  }
+
+ 
+
+  calcularCuotas(data): Observable<any> {
+    console.log('la data');
+    console.log(data);
+    return this.http.post<any>(`${this.services.calcularCuotas}` , data, this.httpOpts).pipe(
+      retry(2),
+      catchError(this.handleError)
+    )
+  }
+
+
+  getFormasPago(): Observable<any> {
+    console.log('la data');
+    
+    let nitempresa = localStorage.getItem('nit_empresa');
+    return this.http.get<any>(`${this.services.listaformaspago}`+'/'+nitempresa , this.httpOpts).pipe(
+      retry(2),
+      catchError(this.handleError)
+    )
+  }
+
+  getPeriodosPago(): Observable<any> {
+    
+    
+    
+    return this.http.get<any>(`${this.services.listaperiodospago }` , this.httpOpts).pipe(
+      retry(2),
+      catchError(this.handleError)
+    )
+  }
+
+  deleteFormaPago(data): Observable<any> {
+    return this.http.delete(`${this.services.psformapago}` + '/' + data.id, this.httpOpts)
+  }
+
+
+
+  guardarFormaPago(data): Observable<any> {
+    
+    let nitempresa = localStorage.getItem('nit_empresa');
+    let id_usureg = localStorage.getItem('id_usuario');
+    data.nitempresa = nitempresa;
+    data.id_usureg = id_usureg;
+    return this.http.post<any>(`${this.services.psformapago}` , data, this.httpOpts).pipe(
+      retry(2),
+      catchError(this.handleError)
+    )
+  }
+
+  consultaFormasPago(): Observable<any> {
+    
+    let data: any = {};
+    let nitempresa = localStorage.getItem('nit_empresa');
+    data.nitempresa = nitempresa;
+    
+    return this.http.post<any>(`${this.services.consultaFormasPago }` , data, this.httpOpts).pipe(
+      retry(2),
+      catchError(this.handleError)
+    )
+  }
+
+  consultaFormaPago(id): Observable<any> {
+    
+    let data: any = {};
+    let nitempresa = localStorage.getItem('nit_empresa');
+    data.nitempresa = nitempresa;
+    
+    return this.http.get<any>(`${this.services.consultaFormaPago }`+'/'+id , this.httpOpts).pipe(
+      retry(2),
+      catchError(this.handleError)
+    )
+  }
+
+  guardarPrestamo(data): Observable<any> {
+    
+    let nitempresa = localStorage.getItem('nit_empresa');
+    let id_usureg = localStorage.getItem('id_usuario');
+    data.nitempresa = nitempresa;
+    data.id_usureg = id_usureg;
+    return this.http.post<any>(`${this.services.guardarPrestamo}` , data, this.httpOpts).pipe(
+      retry(2),
+      catchError(this.handleError)
+    )
+  }
+
+  saveFormaPago(data): Observable<any> {
+    data.nitempresa = localStorage.getItem('nit_empresa');
+    data.id_user = localStorage.getItem('id');
+    return this.http.post(`${this.services.psformapago }`, data, this.httpOpts)
+  }
+
+  updateFormaPago(data): Observable<any> {
+    data.nitempresa = localStorage.getItem('nit_empresa');
+    
+    return this.http.put(`${this.services.psformapago }` + '/' + data.id, data, this.httpOpts)
+  }
+  
+
+ 
+}

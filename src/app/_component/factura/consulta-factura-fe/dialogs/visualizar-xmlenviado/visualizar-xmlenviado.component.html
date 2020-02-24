@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>XML Enviado a proveedor</h1>
+
+<mat-dialog-content class="mat-typography">
+
+    <div class="contenedorCodigo">
+        <pre><code [highlight]="xml" (highlighted)="onHighlight($event)">  </code></pre>
+       </div> 
+</mat-dialog-content>
+
+
+
+<mat-dialog-actions>
+    <button (click)="guardarArchivoXmlEnviado()" tittle = "Descargar Archivo" class="float-right btn btn-outline-primary btn-sm"
+        mat-icon-button color="primary">
+        <mat-icon aria-label="Edit">cloud_download</mat-icon>
+    </button>
+</mat-dialog-actions>
+
+
+
+
+

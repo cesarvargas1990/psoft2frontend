@@ -1,0 +1,32 @@
+<h4 mat-dialog-title>{{data['titulo']}} </h4>
+<mat-dialog-content class="mat-typography">
+    <div class="col-md-12">
+        <form [formGroup]="form">
+ 
+            <mat-form-field class="example-full-width"> 
+                <mat-label>Seleccione Escenario de facturaci&oacute;n</mat-label>
+
+                <mat-select placeholder="Escenario de facturaci&oacute;n" (selectionChange)="datosEscenario($event.value)" formControlName="IDESCN">
+                    <mat-option *ngFor="let elemento of comboEscenario" [value]="elemento.IDESCN">
+                        {{elemento.NOMBRE}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field> 
+
+
+            <formly-form [form]="form"  [fields]="fields" [model]="model"></formly-form>
+
+        </form>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button (click)="guardarEmpresaProvFE()" [disabled]="!form.valid" class="float-right btn btn-outline-primary btn-sm"
+        mat-icon-button color="accent">
+        <mat-icon aria-label="Edit">save</mat-icon>
+    </button>
+    <button (click)="cerrarModal()" class="float-right btn btn-outline-primary btn-sm" mat-icon-button color="accent">
+        <mat-icon aria-label="Edit">cancel</mat-icon>
+    </button>
+
+</mat-dialog-actions>

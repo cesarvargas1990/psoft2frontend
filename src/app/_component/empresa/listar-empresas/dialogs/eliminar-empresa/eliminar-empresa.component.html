@@ -1,0 +1,8 @@
+<h4 mat-dialog-title>Esta seguro de eliminar la empresa?</h4>
+<mat-dialog-content>
+    {{data.NOMBRE}}
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="1" (click)="eliminarEmpresa()">Eliminar</button>
+    <button mat-button (click)="cerrarModal()" tabindex="-1">Cancelar</button>
+</mat-dialog-actions>

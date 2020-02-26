@@ -16,18 +16,60 @@
 
     <mat-sidenav-content>
 
-      <div class="row">
-        <div class="col-md-6">
-         
-        </div>
 
 
-        <div class="col-md-6">
-           
+
+      <div class="card" style="width: 100%;">
+        <div class="card-body">
+          <h5 class="card-title">Listado de Prestamos</h5>
+          <div class="card-text">
+            <mat-form-field class="example-full-width">
+              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
+            </mat-form-field>
+      
+            <mat-table class="table-responsive" [dataSource]="dataSource" matSort class="mat-elevation-z8 ">
+        
+        
+        
+                    
+              <ng-container matColumnDef="nomcliente">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </mat-header-cell>
+                <mat-cell *matCellDef="let element"> <span class="mobile-label">Cliente:</span>{{element.nomcliente}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="nomfpago">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Forma Pago </mat-header-cell>
+                <mat-cell *matCellDef="let element"> <span class="mobile-label">F Pago:</span>{{element.nomfpago}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="valorpres">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> V. Cuota </mat-header-cell>
+                <mat-cell *matCellDef="let element"> <span class="mobile-label">V. Cuota:</span>{{element.valcuota}} </mat-cell>
+              </ng-container>
+
+
+              <ng-container matColumnDef="celular">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Celular </mat-header-cell>
+                <mat-cell *matCellDef="let element"> <span class="mobile-label">Celular:</span>{{element.celular}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="direcasa">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Direcci&oacute;n Casa </mat-header-cell>
+                <mat-cell *matCellDef="let element"> <span class="mobile-label">Dir Casa:</span>{{element.direcasa}} </mat-cell>
+              </ng-container>
+      
+            
+                  
+                
+              
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20, 25, 50, 100,dataSource.data.length]" showFirstLastButtons>
+            </mat-paginator>
           </div>
-
+        </div>
       </div>
-
 
 
     </mat-sidenav-content>

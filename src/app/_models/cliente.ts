@@ -7,6 +7,8 @@ export interface Cliente {
     ciudad: string;
     telefijo: string;
     celular: string;
+    email: string;
+    perfil_facebook: string;
     direcasa: string;
     diretrabajo: string;
     ubicasa: string;

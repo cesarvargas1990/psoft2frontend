@@ -52,6 +52,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
 
   form = new FormGroup({});
   model: any = {}; 
+  
   options: FormlyFormOptions = {};
 
   tiposdocumento: any = {};

@@ -24,17 +24,70 @@
 
                         <form [formGroup]="form" (ngSubmit)="submit()">
                             <mat-tab-group>
-                              <mat-tab *ngFor="let tab of tabs;let index = index;"
-                                [label]="tab.label"
-                                [disabled]="index !== 0 && !form.at(index - 1)?.valid">
-                                <formly-form
-                                  [form]="form.at(index)"
-                                  [model]="model"
-                                  [fields]="tab.fields"
-                                  [options]="options[index]">
-                                </formly-form>
-                              </mat-tab>
-                             
+                                <mat-tab *ngFor="let tab of tabs;let index = index;" [label]="tab.label"
+                                    [disabled]="index !== 0 && !form.at(index - 1)?.valid">
+                                    <formly-form [form]="form.at(index)" [model]="model" [fields]="tab.fields"
+                                        [options]="options[index]">
+                                    </formly-form>
+                                </mat-tab>
+                                <mat-tab label="Firma cliente">
+                                    <p>Escriba su firma sobre el cuadro de abajo.</p>
+                                    <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()"
+                                        (onEndEvent)="drawComplete()"></signature-pad>
+                                    <ng-container #fieldComponent></ng-container>
+
+
+                                    <button type="button" (click)="drawComplete()" title="Guardar"
+                                        class="btn btn-primary submit-button">
+                                        <mat-icon aria-label="Edit">save</mat-icon>
+                                    </button>
+                                    &nbsp;
+
+                                    <button type="button" title="Limpiar" (click)="drawClear()"
+                                        class="btn btn-primary submit-button">
+                                        <mat-icon aria-label="Edit">clear</mat-icon>
+                                    </button>
+                                </mat-tab>
+
+                                <mat-tab label="Archivos">
+                                    <p>Seleccione los archivos a cargar (o presione sobre el icono de webcam).</p>
+                                   
+
+                                    <webcam [trigger]="triggerObservable"   (imageCapture)="handleImage($event)" *ngIf="webcam==1 "></webcam>
+
+                                    <div class="card" *ngFor="let item of listaTiposDocumento; let i = index" style="width: 100%;">
+                                        
+                                            <div class="row">
+                                                <div class="col-md-6">
+<h5>{{item.nombre}}</h5>
+<span style="color:red;" *ngIf="message">{{message}}</span>
+<mat-divider></mat-divider>
+<input #file type="file" accept='image/*' (click)="webcam=0;tomarfoto=0" (change)="preview(file.files,i)" /> 
+<mat-divider></mat-divider>
+
+<button type="button" *ngIf="tomarfoto==0" (click)="webcam=1;listaArchivos[i]='';tomarfoto=1" class="btn btn-primary submit-button">
+        <mat-icon aria-label="videocam">videocam</mat-icon>
+    </button>
+
+    <button type="button" *ngIf="webcam==1"  (click)="triggerSnapshot(i);listaTipoDoc[i]=item.id" class="btn btn-primary submit-button">
+            <mat-icon aria-label="videocam">control_camera</mat-icon>
+        </button>
+    
+
+</div>
+<mat-divider></mat-divider>
+
+<img [src]="listaArchivos[i]" *ngIf="listaArchivos[i]" [attr.file-index]="i" height="200" >
+                                            </div>
+                                        
+
+                                        <p></p>
+                                        </div>
+                                        
+
+                                    
+                                </mat-tab>
+
                             </mat-tab-group>
 
                             <mat-dialog-actions>
@@ -43,9 +96,16 @@
                                 </button>
                             </mat-dialog-actions>
 
-                          </form>
-                         <br>
-                        
+
+
+
+
+
+                            <br>
+
+                        </form>
+                        <br>
+
 
 
                     </div>

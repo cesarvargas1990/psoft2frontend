@@ -179,6 +179,35 @@ export class EditarClienteComponent implements OnInit {
           required: true,
         },
       },
+
+      {
+        key: 'email',
+        className: 'col-md-3',
+        type: 'input',
+        defaultValue: this.data.email,
+        modelOptions: {
+          updateOn: 'submit',
+        },
+        templateOptions: {
+          label: 'Email',
+          required: true,
+        },
+      },
+
+
+      {
+        key: 'perfil_facebook',
+        className: 'col-md-3',
+        type: 'input',
+        defaultValue: this.data.perfil_facebook,
+        modelOptions: {
+          updateOn: 'submit',
+        },
+        templateOptions: {
+          label: 'Perfil facebook',
+          required: true,
+        },
+      },
   
   
       {

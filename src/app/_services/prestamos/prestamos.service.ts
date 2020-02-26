@@ -13,8 +13,8 @@ import Swal from 'sweetalert2';
 export class PrestamosService {
 
 
-  //private server: string = 'https://mipropiedadhorizontal.com.co/api/api';
-  private server: string = 'http://localhost:8080/api';
+  private server: string = 'https://mipropiedadhorizontal.com.co/api/api';
+  //private server: string = 'http://localhost:8080/api';
 
   private services =
     {
@@ -24,7 +24,9 @@ export class PrestamosService {
       listaperiodospago: this.server + '/listaperiodopago',
       guardarPrestamo: this.server + '/guardarPrestamo',
       consultaFormasPago : this.server + '/consultaFormasPago',
-      consultaFormaPago : this.server + '/consultaFormaPago'
+      consultaFormaPago : this.server + '/consultaFormaPago',
+      pstdocadjuntos : this.server + '/pstdocadjuntos',
+      listadoPrestamos :this.server + '/listadoPrestamos'
     };
 
 
@@ -116,6 +118,15 @@ console.log (error);
     )
   }
 
+  listaTiposDocumento () : Observable<any> {
+    let data : any={};
+    let nitempresa = localStorage.getItem('nit_empresa');
+    return this.http.get<any>(`${this.services.pstdocadjuntos  }` , this.httpOpts).pipe(
+      retry(2),
+      catchError(this.handleError)
+    )
+  }
+
   consultaFormasPago(): Observable<any> {
     
     let data: any = {};
@@ -150,6 +161,15 @@ console.log (error);
       retry(2),
       catchError(this.handleError)
     )
+  }
+
+  
+
+  listadoPrestamos(data): Observable<any> {
+    
+    data.nitempresa = localStorage.getItem('nit_empresa');
+    data.id_user = localStorage.getItem('id');
+    return this.http.post(`${this.services.listadoPrestamos }`, data, this.httpOpts)
   }
 
   saveFormaPago(data): Observable<any> {

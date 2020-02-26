@@ -5,6 +5,10 @@ import {NavService} from '../../_services/nav.service';
 import {VERSION} from '@angular/material';
 import {MediaMatcher} from '@angular/cdk/layout';
 import { EChartOption } from 'echarts';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { ListaPrestamos } from '../../_models/ListaPrestamos';
+import { PrestamosService } from '../../_services/prestamos/prestamos.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,7 +20,21 @@ export class DashboardComponent implements AfterViewInit {
   options: any = {};
   options2: any = {};
 
+  model: any = {};
+  data: any = {};
+  datosEmpresa: any = [];
+  datosPrestamos: any = [];
+
+  displayedColumns: string[] = ['nomcliente','valorpres','nomfpago','celular','direcasa'];
+
+  dataSource = new MatTableDataSource([]);
+
   @ViewChild('appDrawer', {static: false}) appDrawer: ElementRef;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 
 
   etiquetasGraficaAcumulada = {};
@@ -46,14 +64,37 @@ export class DashboardComponent implements AfterViewInit {
   menuUsuario = JSON.parse (localStorage.getItem('menu_usuario')); 
   
   navItems: NavItem[] = this.menuUsuario; 
-  model: any = {};
+  
+
+  getDatosPrestamo() {
+
+    
+    this.prestamosService.listadoPrestamos(this.data).subscribe(
+      response => {
+
+        if (response ){
+          console.log('datasa prestamos');
+          console.log(response);
+          this.datosPrestamos = response;
+          let DATOS: ListaPrestamos[] = this.datosPrestamos;
+          this.dataSource = new MatTableDataSource(DATOS);
+          this.dataSource.sort = this.sort;
+        }
+
+      }
+    )
+
+    
+  }
+  
  
   dataFromServer: any = [];
  
   constructor(
     public authService: AuthService,
     private navService: NavService,
-    changeDetectorRef: ChangeDetectorRef, media: MediaMatcher
+    changeDetectorRef: ChangeDetectorRef, media: MediaMatcher,
+    public prestamosService: PrestamosService
   ) { 
 
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
@@ -69,15 +110,10 @@ export class DashboardComponent implements AfterViewInit {
 
   ngOnInit() {
     this.mobileQuery.removeListener(this._mobileQueryListener);
-    this.getSomePrivateStuff();
+    //this.getSomePrivateStuff();
+    this.getDatosPrestamo();
 
-    this.model.action = 'facturacionElectronica/datosGraficoDocumentosFE';
-    this.model.id_usuario = JSON.parse(localStorage.getItem('id_usuario'));
-    if (localStorage.getItem('nit_empresa') != null) {
-      this.model.NIT_EMPRESA = JSON.parse( localStorage.getItem('nit_empresa')  ); 
-    } else {
-      this.model.NIT_EMPRESA = '';
-    }
+    
     
     
 

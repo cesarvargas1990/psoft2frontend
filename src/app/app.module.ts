@@ -145,7 +145,12 @@ import { NgxTinymceModule } from 'ngx-tinymce';
 
 import { SignaturePadModule } from 'ngx-signaturepad';
 
-import {FirmaWrapperComponent} from './_component/firma/firma-wrapper.component';
+//import {FirmaWrapperComponent} from './_component/firma/firma-wrapper.component';
+import { CargaradjuntosComponent } from './_component/cargaradjuntos/cargaradjuntos/cargaradjuntos.component';
+import { ListaPrestamosComponent } from './_component/cliente/lista-prestamos/lista-prestamos.component';
+
+
+import {WebcamModule} from 'ngx-webcam';
 
 export function IpValidatorMessage(err, field: FormlyFieldConfig){
   return `"${field.formControl.value}" is not a valid IP Address`;
@@ -263,9 +268,9 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig){
     NgxEchartsModule,
     FormlyMatDatepickerModule,
     FormlyModule.forRoot({
-      wrappers: [
-        { name: 'firma', component: FirmaWrapperComponent },
-      ],
+      //wrappers: [
+        //{ name: 'firma', component: FirmaWrapperComponent },
+      //],
       types: [
         {
           name: 'input',
@@ -280,7 +285,8 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig){
     NgxTinymceModule.forRoot({
       baseURL: './assets/tinymce/',
     }),
-    SignaturePadModule
+    SignaturePadModule,
+    WebcamModule,
     
   ],
   declarations: [
@@ -320,7 +326,12 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig){
     EditarClienteComponent,
     CrearClienteComponent,
     CrearPrestamoComponent,    
-    FormlyFieldInput, CrearFormapagoComponent, EditarFormapagoComponent,FirmaWrapperComponent
+    FormlyFieldInput, 
+    CrearFormapagoComponent, 
+    EditarFormapagoComponent,
+    //FirmaWrapperComponent, 
+    CargaradjuntosComponent,
+    ListaPrestamosComponent
   ],
   bootstrap: [
     AppComponent
@@ -347,7 +358,8 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig){
     VisualizarJsonrequestComponent,
     VisualizarEstadoDocumentoComponent,
     EditarClienteComponent,
-    EditarFormapagoComponent
+    EditarFormapagoComponent,
+    ListaPrestamosComponent
   ],
   providers: [
     LoaderService,

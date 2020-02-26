@@ -34,10 +34,7 @@
                 <mat-cell *matCellDef="let element"> <span class="mobile-label">Cliente:</span>{{element.nomcliente}} </mat-cell>
               </ng-container>
 
-              <ng-container matColumnDef="codtipdocid">
-                <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Documento </mat-header-cell>
-                <mat-cell *matCellDef="let element"> <span class="mobile-label">Cliente:</span>{{element.codtipdocid}} </mat-cell>
-              </ng-container>
+             
 
               <ng-container matColumnDef="numdocumento">
                 <mat-header-cell *matHeaderCellDef mat-sort-header> N&uacute;mero Documento </mat-header-cell>
@@ -50,14 +47,20 @@
               </ng-container>
 
 
-              <ng-container matColumnDef="telefijo">
-                <mat-header-cell *matHeaderCellDef mat-sort-header> Telefono Fijo </mat-header-cell>
-                <mat-cell *matCellDef="let element"> <span class="mobile-label">Telefono Fijo</span>{{element.telefijo}} </mat-cell>
-              </ng-container>
   
               <ng-container matColumnDef="celular">
                 <mat-header-cell *matHeaderCellDef mat-sort-header> Celular </mat-header-cell>
                 <mat-cell *matCellDef="let element"> <span class="mobile-label">Celular</span>{{element.celular}} </mat-cell>
+              </ng-container>
+ 
+              <ng-container matColumnDef="email">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+                <mat-cell *matCellDef="let element"> <span class="mobile-label">Email</span>{{element.email}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="perfil_facebook">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Facebook </mat-header-cell>
+                <mat-cell *matCellDef="let element"> <span class="mobile-label">Facebook</span><a target="_blank" href="{{element.perfil_facebook}}">&nbsp;Ver</a> </mat-cell>
               </ng-container>
   
               <ng-container matColumnDef="direcasa">
@@ -89,6 +92,11 @@
                   <button title="Eliminar Cliente" class="float-right btn btn-outline-danger btn-sm" mat-icon-button color="accent"
                     (click)="modalEliminarCliente(row)">
                     <mat-icon aria-label="Delete">delete</mat-icon>
+                  </button>
+
+                  <button title="Listado Creditos" class="float-right btn btn-outline-info btn-sm" mat-icon-button color="accent"
+                    (click)="modalListadoCreditos(row)">
+                    <mat-icon aria-label="find_in_page">find_in_page</mat-icon>
                   </button>
                 </mat-cell>
               </ng-container>

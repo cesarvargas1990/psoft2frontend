@@ -36,9 +36,9 @@ export class ListarClienteComponent implements AfterViewInit {
   model: any = {};
 
   datosCliente: any = [];
+ 
 
-
-  displayedColumns: string[] = ['nomcliente', 'codtipdocid', 'numdocumento', 'ciudad', 'telefijo', 'celular', 'direcasa', 'diretrabajo', 'action'];
+  displayedColumns: string[] = ['nomcliente', 'numdocumento', 'ciudad', 'celular','email','perfil_facebook', 'direcasa', 'diretrabajo', 'action'];
 
 
   dataSource = new MatTableDataSource([]);
@@ -109,6 +109,11 @@ export class ListarClienteComponent implements AfterViewInit {
     });
   }
 
+
+  modalListadoCreditos (row) {
+
+    
+  }
   modalEliminarCliente(row) {
 
     Swal.fire({

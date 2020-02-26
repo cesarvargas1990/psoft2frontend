@@ -1,10 +1,10 @@
-import { Component, ViewChild, ElementRef, OnInit,ChangeDetectorRef,AfterViewInit , ViewContainerRef} from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, ChangeDetectorRef, AfterViewInit, ViewContainerRef } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 
-
-import {NavItem} from '../../../_models/nav-item';
-import {NavService} from '../../../_services/nav.service';
-import {VERSION} from '@angular/material';
-import {MediaMatcher} from '@angular/cdk/layout';
+import { NavItem } from '../../../_models/nav-item';
+import { NavService } from '../../../_services/nav.service';
+import { VERSION } from '@angular/material';
+import { MediaMatcher } from '@angular/cdk/layout';
 import { MatSort } from '@angular/material/sort';
 import { AuthService } from '../../../_services/auth.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -12,14 +12,15 @@ import { Cliente } from '../../../_models/cliente';
 import { ClienteService } from '../../../_services/cliente/cliente.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TipodocidentiService } from '../../../_services/tipodocidenti/tipodocidenti.service';
-import { UsersService} from '../../../_services/users/users.service';
+import { UsersService } from '../../../_services/users/users.service';
 import Swal from 'sweetalert2';
+import { PrestamosService } from '../../../_services/prestamos/prestamos.service';
 
-
-import { FormArray,FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { Router } from '@angular/router';
-import  { FirmaWrapperComponent} from '../../../_component/firma/firma-wrapper.component';
+import { SignaturePad } from 'ngx-signaturepad/signature-pad';
+import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 
 export interface TabType {
   label: string;
@@ -34,12 +35,50 @@ export interface TabType {
 export class CrearClienteComponent implements AfterViewInit {
 
 
-  @ViewChild(FirmaWrapperComponent,{static: false} ) child: FirmaWrapperComponent ; 
+  public showWebcam = true;
+  public allowCameraSwitch = true;
+  public multipleWebcamsAvailable = false;
+  public deviceId: string;
+  public videoOptions: MediaTrackConstraints = {
+    // width: {ideal: 1024},
+    // height: {ideal: 576}
+  };
+  public errors: WebcamInitError[] = [];
 
-  @ViewChild('fieldComponent', {static: false}) fieldComponent: ViewContainerRef;
-  
-  
-  
+  // latest snapshot
+  public webcamImage: WebcamImage = null;
+
+  // webcam snapshot trigger
+  private trigger: Subject<void> = new Subject<void>();
+  // switch to next / previous / specific webcam; true/false: forward/backwards, string: deviceId
+  private nextWebcam: Subject<boolean | string> = new Subject<boolean | string>();
+
+
+
+  @ViewChild(SignaturePad, { static: false }) signaturePad: SignaturePad;
+
+  public signaturePadOptions: Object = { // passed through to szimek/signature_pad constructor
+    'minWidth': 5,
+    'canvasWidth': window.innerWidth,
+    'canvasHeight': 300
+  };
+
+  public imagePath;
+  imgURL: any;
+  public message: string;
+
+  listaArchivos: any = {};
+  listaTipoDoc: any = {};
+  lista: string[] = ["hola", "que", "tal", "estas"];
+  listaTiposDocumento: any = {};
+  webcam = 0;
+  tomarfoto = 0;
+  currentIndexImage = 0;
+
+  urlimage: any = {};
+
+  model: any = {};
+  data: any = {};
   tabs: TabType[] = [
     {
       label: 'Datos Personales',
@@ -48,7 +87,7 @@ export class CrearClienteComponent implements AfterViewInit {
 
           fieldGroupClassName: 'row',
           fieldGroup: [
-  
+
             {
               key: 'nomcliente',
               className: 'col-md-4',
@@ -64,7 +103,7 @@ export class CrearClienteComponent implements AfterViewInit {
                 required: true
               },
             },
-        
+
             {
               key: 'id_cobrador',
               className: 'col-md-4',
@@ -76,7 +115,7 @@ export class CrearClienteComponent implements AfterViewInit {
                 label: 'Cobrador',
                 placeholder: 'Seleccione cobrador',
                 required: true,
-                options:  this.usersService.getUsers()
+                options: this.usersService.getUsers()
               },
             },
             {
@@ -90,17 +129,17 @@ export class CrearClienteComponent implements AfterViewInit {
                 label: 'Tipo Documento',
                 placeholder: 'Seleccione Tipo documento',
                 required: true,
-                options:  this.tipodocidentiService.getTipodocidenti()
+                options: this.tipodocidentiService.getTipodocidenti()
               },
             },
             {
               key: 'numdocumento',
               className: 'col-md-4',
               type: 'input',
-              
+
               modelOptions: {
                 updateOn: 'blur',
-               
+
               },
               templateOptions: {
                 label: 'Numero Documento',
@@ -111,8 +150,8 @@ export class CrearClienteComponent implements AfterViewInit {
             {
               key: 'ciudad',
               className: 'col-md-4',
-              type: 'input', 
-              modelOptions: { 
+              type: 'input',
+              modelOptions: {
                 updateOn: 'blur',
               },
               templateOptions: {
@@ -123,20 +162,20 @@ export class CrearClienteComponent implements AfterViewInit {
             {
               key: 'telefijo',
               className: 'col-md-4',
-              type: 'input', 
-              modelOptions: { 
+              type: 'input',
+              modelOptions: {
                 updateOn: 'blur',
               },
               templateOptions: {
                 label: 'Telefono Fijo',
-                
+
               },
             },
             {
               key: 'celular',
               className: 'col-md-4',
-              type: 'input', 
-              modelOptions: { 
+              type: 'input',
+              modelOptions: {
                 updateOn: 'blur',
               },
               templateOptions: {
@@ -144,38 +183,62 @@ export class CrearClienteComponent implements AfterViewInit {
                 required: true,
               },
             },
-        
+
             {
-              key: 'direcasa',
+              key: 'celular',
               className: 'col-md-4',
-              type: 'input', 
-              modelOptions: { 
+              type: 'input',
+              modelOptions: {
                 updateOn: 'blur',
               },
               templateOptions: {
-                label: 'Dir Casa',
-                required_: true
-              
+                label: 'Celular',
+                required: true,
               },
             },
-        
+
+            {
+              key: 'email',
+              className: 'col-md-4',
+              type: 'input',
+              modelOptions: {
+                updateOn: 'blur',
+              },
+              templateOptions: {
+                label: 'Email',
+                required: true,
+              },
+            },
+
+            {
+              key: 'perfil_facebook',
+              className: 'col-md-4',
+              type: 'input',
+              modelOptions: {
+                updateOn: 'blur',
+              },
+              templateOptions: {
+                label: 'Perfil Facebook',
+                required: true
+
+              },
+            },
+
             {
               key: 'diretrabajo',
               className: 'col-md-4',
-              type: 'input', 
-              modelOptions: { 
+              type: 'input',
+              modelOptions: {
                 updateOn: 'blur',
               },
               templateOptions: {
                 label: 'Dir Trabajo',
-              
+
               },
             },
-        
-            
-  
+
           ]
-  
+
         }
       ],
     },
@@ -186,17 +249,13 @@ export class CrearClienteComponent implements AfterViewInit {
 
           fieldGroupClassName: 'row',
           fieldGroup: [
-  
-            
-        
-           
-         
-            
+
+
             {
               key: 'ciudad',
               className: 'col-md-4',
-              type: 'input', 
-              modelOptions: { 
+              type: 'input',
+              modelOptions: {
                 updateOn: 'blur',
               },
               templateOptions: {
@@ -207,20 +266,20 @@ export class CrearClienteComponent implements AfterViewInit {
             {
               key: 'telefijo',
               className: 'col-md-4',
-              type: 'input', 
-              modelOptions: { 
+              type: 'input',
+              modelOptions: {
                 updateOn: 'blur',
               },
               templateOptions: {
                 label: 'Telefono Fijo',
-                
+
               },
             },
             {
               key: 'celular',
               className: 'col-md-4',
-              type: 'input', 
-              modelOptions: { 
+              type: 'input',
+              modelOptions: {
                 updateOn: 'blur',
               },
               templateOptions: {
@@ -228,152 +287,119 @@ export class CrearClienteComponent implements AfterViewInit {
                 required: true,
               },
             },
-        
+
             {
               key: 'direcasa',
               className: 'col-md-4',
-              type: 'input', 
-              modelOptions: { 
+              type: 'input',
+              modelOptions: {
                 updateOn: 'blur',
               },
               templateOptions: {
                 label: 'Dir Casa',
                 required_: true
-              
+
               },
             },
-        
+
             {
               key: 'diretrabajo',
               className: 'col-md-4',
-              type: 'input', 
-              modelOptions: { 
+              type: 'input',
+              modelOptions: {
                 updateOn: 'blur',
               },
               templateOptions: {
                 label: 'Dir Trabajo',
-              
+
               },
             },
-        
-            
-  
+
+
+
           ]
-  
+
         }
       ],
     },
-    
 
-    {
-      label:'Doc Adjuntos',
-      fields: [
-
-       
-        
-      ]
-    },
-    {
-      label:'Firma cliente',
-      fields: [
-        {
-          key: 'firma',
-          wrappers: ['firma'],
-          templateOptions: { label: 'Firma del cliente' },
-          
-        },
-        
-      ]
-    },
     {
       label: 'Referencias',
       fields: [
-        
+
 
         {
 
           fieldGroupClassName: 'row',
           fieldGroup: [
-  
+
             {
               key: 'ref1',
               className: 'col-md-4',
-              type: 'input', 
-              modelOptions: { 
+              type: 'input',
+              modelOptions: {
                 updateOn: 'blur',
               },
               templateOptions: {
                 label: 'Referencia 1',
-              
+
               },
             },
             {
               key: 'ref2',
               className: 'col-md-4',
-              type: 'input', 
-              modelOptions: { 
+              type: 'input',
+              modelOptions: {
                 updateOn: 'blur',
               },
               templateOptions: {
                 label: 'Referencia 2',
               },
             },
-  
-          ]
-  
-        }
 
+          ]
+
+        }
 
       ],
     },
   ];
-  
+
   form = new FormArray(this.tabs.map(() => new FormGroup({})));
   options = this.tabs.map(() => <FormlyFormOptions>{});
 
 
-
-
-
-
-  //form = new FormGroup({});
-  model: any = {};
-  //options: FormlyFormOptions = {};
-
-  tiposdocumento : any = {};
-  cobradores :any = {};
+  tiposdocumento: any = {};
+  cobradores: any = {};
 
   fields: FormlyFieldConfig[] = [];
 
 
-
-
-  @ViewChild('appDrawer', {static: false}) appDrawer: ElementRef;
+  @ViewChild('appDrawer', { static: false }) appDrawer: ElementRef;
 
   mobileQuery: MediaQueryList;
 
   version = VERSION;
 
-  menuUsuario = JSON.parse (localStorage.getItem('menu_usuario')); 
-  
-  navItems: NavItem[] = this.menuUsuario; 
+  menuUsuario = JSON.parse(localStorage.getItem('menu_usuario'));
 
-  
+  navItems: NavItem[] = this.menuUsuario;
 
-  datosCliente : any = [];
 
-  
+  datosCliente: any = [];
+
 
   constructor(
     public authService: AuthService,
     private navService: NavService,
-    public clienteService : ClienteService, 
+    public clienteService: ClienteService,
     changeDetectorRef: ChangeDetectorRef, media: MediaMatcher,
     public router: Router,
-    public tipodocidentiService : TipodocidentiService,
-    public usersService : UsersService
-    
-  ) { 
+    public tipodocidentiService: TipodocidentiService,
+    public usersService: UsersService,
+    public prestamosService: PrestamosService
+
+  ) {
 
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -382,72 +408,124 @@ export class CrearClienteComponent implements AfterViewInit {
   }
 
   private _mobileQueryListener: () => void;
- 
-  
+
+
   async ngOnInit() {
 
 
-    
-    //this.tiposdocumento = await this.tipodocidentiService.getTipodocidenti();
-    
-    
 
-    //this.cobradores = await this.usersService.getUsers();
+    WebcamUtil.getAvailableVideoInputs()
+      .then((mediaDevices: MediaDeviceInfo[]) => {
+        this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
+      });
+
+
+
+    this.signaturePad.set('minWidth', 5); // set szimek/signature_pad options at runtime
+    this.signaturePad.clear(); // invoke functions from szimek/signature_pad API
+
+
 
     this.mobileQuery.removeListener(this._mobileQueryListener);
-    
-    
-    
-    
+
+
+
   }
 
 
-  
-  
+  public triggerSnapshot(i): void {
+    this.currentIndexImage = i;
+    this.trigger.next();
+  }
+
+  public toggleWebcam(): void {
+    this.showWebcam = !this.showWebcam;
+  }
+
+  public handleInitError(error: WebcamInitError): void {
+    this.errors.push(error);
+  }
+
+  public showNextWebcam(directionOrDeviceId: boolean | string): void {
+
+    this.nextWebcam.next(directionOrDeviceId);
+  }
+
+  public handleImage(webcamImage: WebcamImage): void {
+
+    this.webcam = 0;
+    this.tomarfoto = 0;
+
+
+    this.webcamImage = webcamImage;
+    this.urlimage = this.webcamImage.imageAsDataUrl;
+    this.listaArchivos[this.currentIndexImage] = this.urlimage;
+
+  }
+
+  public cameraWasSwitched(deviceId: string): void {
+
+    this.deviceId = deviceId;
+  }
+
+  public get triggerObservable(): Observable<void> {
+    return this.trigger.asObservable();
+  }
+
+  public get nextWebcamObservable(): Observable<boolean | string> {
+    return this.nextWebcam.asObservable();
+  }
+
+
+  async tiposDocumentos() {
+
+    this.prestamosService.listaTiposDocumento().subscribe(
+      response => {
+
+        this.listaTiposDocumento = response;
+      }
+    )
+
+  }
+
 
   async ngAfterViewInit() {
 
+    this.tiposDocumentos();
 
 
-   // this.tiposdocumento = await this.tipodocidentiService.getTipodocidenti();
-   // this.cobradores = await this.usersService.getUsers();
-    
+
     this.navService.appDrawer = this.appDrawer;
 
 
 
-
-
-    //this.tabs = 
-
-
-    
   }
 
 
-  
+  drawComplete() {
+
+  }
+
+  drawStart() {
+
+  }
+
+
+  drawClear() {
+    this.signaturePad.clear();
+  }
 
   submit() {
 
-      
-    
 
     if (this.form.valid) {
 
-      console.log(this.model);
-
-     // let firmacliente = this.signaturePad.toDataURL();
-      console.log('firmacliente base 64');
-      //console.log(firmacliente);
       this.clienteService.saveCliente(this.model).subscribe(
 
         response => {
-  
+
 
           if (response) {
-
-
-
 
             this.model = response;
             Swal.fire({
@@ -458,6 +536,33 @@ export class CrearClienteComponent implements AfterViewInit {
               (result) => {
 
                 if (result.value == true) {
+
+
+                  let ltdoc;
+
+                  for (let i = 0; i < Object.keys(this.listaArchivos).length; i++) {
+
+
+                    let imageBase64 = this.listaArchivos[i];
+                    ltdoc = this.listaTipoDoc[i];
+
+
+                    if (this.listaArchivos[i] != '') {
+                      this.data.image = imageBase64;
+                      this.data.id_tdocadjunto = this.listaTipoDoc[i];
+                      this.data.id_cliente = response.id;
+                      this.data.path =  './upload/documentosAdjuntos/';
+                      this.data.fileExt = 'jpeg';
+
+                      this.clienteService.uploadFile(this.data).subscribe(
+                        response => {
+                          console.log(response);
+                        }
+                      )
+                    }
+
+                  }
+
                   this.model = response;
                   this.router.navigate(['/clientes/listar']);
                 }
@@ -465,16 +570,12 @@ export class CrearClienteComponent implements AfterViewInit {
               }
             )
 
-
-           
           }
-          
-          
-  
+
         }
-  
+
       )
-      
+
     } else {
       Swal.fire({
         type: 'error',
@@ -484,8 +585,35 @@ export class CrearClienteComponent implements AfterViewInit {
     }
 
 
-    
-    
+
   }
+
+  preview(files, i) {
+
+
+    if (files.length === 0)
+      return;
+
+    var mimeType = files[0].type;
+    if (mimeType.match(/image\/*/) == null) {
+      this.message = "Only images are supported.";
+      return;
+    }
+
+    var reader = new FileReader();
+    this.imagePath = files;
+    reader.readAsDataURL(files[0]);
+    reader.onload = (_event) => {
+
+
+
+      this.listaArchivos[i] = reader.result;
+
+
+      this.imgURL = reader.result;
+    }
+  }
+
+
 
 }

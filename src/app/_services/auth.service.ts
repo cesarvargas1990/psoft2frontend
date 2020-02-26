@@ -12,8 +12,8 @@ import Swal from 'sweetalert2';
 export class AuthService {
  
   // API path
-  //basePath = 'https://mipropiedadhorizontal.com.co/api/api/';
-  basePath = 'http://localhost:8080/api/';
+  basePath = 'https://mipropiedadhorizontal.com.co/api/api/';
+  //basePath = 'http://localhost:8080/api/';
 
   constructor(
     private router: Router,

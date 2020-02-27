@@ -148,6 +148,38 @@ export class CrearClienteComponent implements AfterViewInit {
               },
             },
             {
+              key: 'fch_expdocumento',
+              className: 'col-md-4',
+              type: 'datepicker',
+
+              modelOptions: {
+                updateOn: 'blur',
+
+              },
+              templateOptions: {
+                label: 'Fecha Expedicion',
+                placeholder: 'Fecha Expedicion',
+                required: true,
+              },
+            },
+
+            {
+              key: 'fch_nacimiento',
+              className: 'col-md-4',
+              type: 'datepicker',
+
+              modelOptions: {
+                updateOn: 'blur',
+
+              },
+              templateOptions: {
+                label: 'Fecha Nacimiento',
+                placeholder: 'Fecha Nacimiento',
+                required: true,
+              },
+            },
+
+            {
               key: 'ciudad',
               className: 'col-md-4',
               type: 'input',

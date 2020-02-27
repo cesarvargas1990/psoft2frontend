@@ -87,7 +87,7 @@ import {MenuListItemComponent} from './_component/menu-list-item/menu-list-item.
 import {LogoComponent} from '../app/_component/logo/logo.component';
 
 
-
+import { DatePipe } from '@angular/common';
 
 
 // Custom material (idioma, extensiones y modificaciones a modulos de material. ETC)
@@ -148,6 +148,10 @@ import { SignaturePadModule } from 'ngx-signaturepad';
 //import {FirmaWrapperComponent} from './_component/firma/firma-wrapper.component';
 import { CargaradjuntosComponent } from './_component/cargaradjuntos/cargaradjuntos/cargaradjuntos.component';
 import { ListaPrestamosComponent } from './_component/cliente/lista-prestamos/lista-prestamos.component';
+
+
+
+import { CrearDocumentoComponent } from './_component/generarDocumentos/crear-documento/crear-documento.component';
 
 
 import {WebcamModule} from 'ngx-webcam';
@@ -331,7 +335,8 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig){
     EditarFormapagoComponent,
     //FirmaWrapperComponent, 
     CargaradjuntosComponent,
-    ListaPrestamosComponent
+    ListaPrestamosComponent,
+    CrearDocumentoComponent
   ],
   bootstrap: [
     AppComponent
@@ -363,21 +368,20 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig){
   ],
   providers: [
     LoaderService,
+    NavService,
+    DatePipe,
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
     {provide: LocationStrategy, useClass: HashLocationStrategy},
     {provide: MAT_DATE_LOCALE, useValue: 'es'},
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
-    NavService,
-    { provide: MatPaginatorIntl, 
-      useClass: MatPaginatorIntlEs
-    },
     {
       provide: HIGHLIGHT_OPTIONS,
       useValue: {
         languages: getHighlightLanguages()
       }
     },
+    
     AppService]
 })
 export class AppModule {}

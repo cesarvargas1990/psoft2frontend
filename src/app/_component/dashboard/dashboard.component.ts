@@ -25,7 +25,7 @@ export class DashboardComponent implements AfterViewInit {
   datosEmpresa: any = [];
   datosPrestamos: any = [];
 
-  displayedColumns: string[] = ['nomcliente','valorpres','nomfpago','celular','direcasa'];
+  displayedColumns: string[] = ['nomcliente','valorpres','nomfpago','celular','direcasa','action'];
 
   dataSource = new MatTableDataSource([]);
 

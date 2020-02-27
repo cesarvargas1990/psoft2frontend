@@ -5,6 +5,8 @@ export interface Cliente {
     codtipdocid : string;
     numdocumento : string;
     ciudad: string;
+    fch_expdocumento: string;
+    fch_nacimiento: string;
     telefijo: string;
     celular: string;
     email: string;

@@ -59,8 +59,9 @@ export class ClienteService {
 
   ) { }
 
-  getAllClientes(): Observable<any> {
-    return this.http.get(`${this.services.psclientes}`, this.httpOpts)
+  getAllClientes(data): Observable<any> {
+    let nitempresa = localStorage.getItem('nit_empresa'); 
+    return this.http.post(`${this.services.psclientes}` +'/'+nitempresa, data,this.httpOpts)
   }
 
   getClientes(): Observable<any> {

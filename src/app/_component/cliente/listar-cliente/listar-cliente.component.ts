@@ -34,6 +34,7 @@ export class ListarClienteComponent implements AfterViewInit {
   navItems: NavItem[] = this.menuUsuario;
 
   model: any = {};
+  data: any = {};
 
   datosCliente: any = [];
  
@@ -79,7 +80,7 @@ export class ListarClienteComponent implements AfterViewInit {
 
   getDatosCliente() {
 
-    this.clienteService.getAllClientes().subscribe(
+    this.clienteService.getAllClientes(this.data).subscribe(
 
       response => {
         this.datosCliente = response;

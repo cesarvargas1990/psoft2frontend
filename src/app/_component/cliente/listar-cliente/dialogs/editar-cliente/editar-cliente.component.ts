@@ -9,11 +9,12 @@ import { ClienteService } from '../../../../../_services/cliente/cliente.service
 import Swal from 'sweetalert2';
 import { TipodocidentiService } from './../../../../../_services/tipodocidenti/tipodocidenti.service';
 import { UsersService} from '../../../../../_services/users/users.service';
-
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-editar-cliente',
   templateUrl: './editar-cliente.component.html',
-  styleUrls: ['./editar-cliente.component.scss']
+  styleUrls: ['./editar-cliente.component.scss'],
+  providers: [DatePipe]
 })
 export class EditarClienteComponent implements OnInit {
 
@@ -72,7 +73,8 @@ export class EditarClienteComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: Cliente,
     public clienteServicio: ClienteService,
     public tipodocidentiService : TipodocidentiService,
-    public usersService : UsersService
+    public usersService : UsersService,
+    private datePipe: DatePipe
 
   ) { }
 
@@ -140,6 +142,42 @@ export class EditarClienteComponent implements OnInit {
           required: true,
         },
       },
+
+      {
+        key: 'fch_expdocumento',
+        className: 'col-md-4',
+        defaultValue: this.data.fch_expdocumento,
+        type: 'datepicker',
+
+        modelOptions: {
+          updateOn: 'blur',
+
+        },
+        templateOptions: {
+          label: 'Fecha Expedicion',
+          placeholder: 'Fecha Expedicion',
+          required: true,
+        },
+      },
+
+      {
+        key: 'fch_nacimiento',
+        className: 'col-md-4',
+        defaultValue: this.data.fch_nacimiento,
+        type: 'datepicker',
+
+        modelOptions: {
+          updateOn: 'blur',
+
+        },
+        templateOptions: {
+          label: 'Fecha Nacimiento',
+          placeholder: 'Fecha Nacimiento',
+          required: true,
+        },
+      },
+      
+
       {
         key: 'ciudad',
         className: 'col-md-3',

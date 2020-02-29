@@ -36,7 +36,7 @@
                                             <mat-icon aria-label="Edit">table_chart</mat-icon>
                                         </button>
                                         &nbsp;
-                                        <button *ngIf= "mostrarTablaResumen" type="button" class="btn btn-primary submit-button" (click)="guardarPrestamo()" title="Guardar Prestamo" >
+                                        <button *ngIf= "mostrarTablaResumen && !listarDocumentosPrestamo" type="button" class="btn btn-primary submit-button" (click)="guardarPrestamo()" title="Guardar Prestamo" >
                                                 <mat-icon aria-label="Edit">save</mat-icon>
                                             </button>
                                         &nbsp;
@@ -51,10 +51,11 @@
                     </div>
                 </div> 
             </div>
+            
 <br>
 
             <div *ngIf= "mostrarTablaResumen" class="card" style="width: 100%;">
-                <div class="card-body">
+                <div *ngIf="!listarDocumentosPrestamo" class="card-body">
                         <h5 class="card-title">Tabla de Resumen del prestamo</h5>
                         <div class="card-text">
 
@@ -79,6 +80,30 @@
 
                     </div>
                 </div>
+ 
+                
+                  
+
+                <div *ngIf="listarDocumentosPrestamo" class="card-body">
+                    <h5 class="card-title">imprimir Documentos del prestamo</h5>
+                    <div class="card-text">
+
+                            <div mat-dialog-content class="mat-typography">
+                                    
+                                <div *ngFor="let item of plantillas_html">
+                                    <br>
+                                    <tinymce [(ngModel)]="item.plantilla_html"  [config]="config"></tinymce> 
+
+                                </div>
+                                      <br>
+                                      
+                                </div>
+
+                                
+
+                </div>
+            </div>
+
             </div>
 
 

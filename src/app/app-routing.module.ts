@@ -12,7 +12,7 @@ import { ListarClienteComponent } from './_component/cliente/listar-cliente/list
 import { CrearClienteComponent } from './_component/cliente/crear-cliente/crear-cliente.component';
 import { CrearPrestamoComponent } from './_component/cliente/crear-prestamo/crear-prestamo.component';
 import { CrearFormapagoComponent} from './_component/parametros/crear-formapago/crear-formapago.component';
-
+import { CrearDocumentoComponent} from './_component/parametros/crear-documento/crear-documento.component';
 const routes: Routes = [ 
 
   {
@@ -38,6 +38,9 @@ const routes: Routes = [
 
   {path: 'parametros', children: [
     {path:'formaspago', component: CrearFormapagoComponent,
+        canActivate: [AuthGuard] } ,
+
+        {path:'documentos', component: CrearDocumentoComponent,
         canActivate: [AuthGuard] } 
         
     ]

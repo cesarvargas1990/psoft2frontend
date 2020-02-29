@@ -141,6 +141,10 @@ import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 import { CrearFormapagoComponent } from './_component/parametros/crear-formapago/crear-formapago.component';
 import { EditarFormapagoComponent } from './_component/parametros/crear-formapago/dialogs/editar-formapago/editar-formapago.component';
 
+
+import { CrearDocumentoComponent } from './_component/parametros/crear-documento/crear-documento.component';
+import { EditarDocumentoComponent } from './_component/parametros/crear-documento/dialogs/editar-documento/editar-documento.component';
+
 import { NgxTinymceModule } from 'ngx-tinymce';
 
 import { SignaturePadModule } from 'ngx-signaturepad';
@@ -148,10 +152,10 @@ import { SignaturePadModule } from 'ngx-signaturepad';
 //import {FirmaWrapperComponent} from './_component/firma/firma-wrapper.component';
 import { CargaradjuntosComponent } from './_component/cargaradjuntos/cargaradjuntos/cargaradjuntos.component';
 import { ListaPrestamosComponent } from './_component/cliente/lista-prestamos/lista-prestamos.component';
+import { ListarPrestamosclienteComponent } from './_component/cliente/listar-cliente/dialogs/listar-prestamoscliente/listar-prestamoscliente.component';
 
 
 
-import { CrearDocumentoComponent } from './_component/generarDocumentos/crear-documento/crear-documento.component';
 
 
 import {WebcamModule} from 'ngx-webcam';
@@ -333,10 +337,16 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig){
     FormlyFieldInput, 
     CrearFormapagoComponent, 
     EditarFormapagoComponent,
+
+    CrearDocumentoComponent,
+    EditarDocumentoComponent,
+
+
     //FirmaWrapperComponent, 
     CargaradjuntosComponent,
     ListaPrestamosComponent,
-    CrearDocumentoComponent
+    ListarPrestamosclienteComponent
+    
   ],
   bootstrap: [
     AppComponent
@@ -364,7 +374,9 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig){
     VisualizarEstadoDocumentoComponent,
     EditarClienteComponent,
     EditarFormapagoComponent,
-    ListaPrestamosComponent
+    ListaPrestamosComponent,
+    EditarDocumentoComponent,
+    ListarPrestamosclienteComponent
   ],
   providers: [
     LoaderService,

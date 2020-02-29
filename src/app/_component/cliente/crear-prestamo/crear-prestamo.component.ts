@@ -29,26 +29,10 @@ import { Router } from '@angular/router';
 })
 export class CrearPrestamoComponent implements AfterViewInit {
 
-
-
-  config: any = {
-    height: 1000,
-    theme: 'modern',
-    // powerpaste advcode toc tinymcespellchecker a11ychecker mediaembed linkchecker help
-    plugins: 'print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image imagetools link media template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists textcolor wordcount contextmenu colorpicker textpattern',
-    toolbar: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
-    image_advtab: true,
-    imagetools_toolbar: 'rotateleft rotateright | flipv fliph | editimage imageoptions',
-    templates: [
-      { title: 'Nombre del Cliente', content: '{$nombreCliente}' },
-      { title: 'Codigo del prestamo', content: '{$codigoPrestamo}' }
-    ],
-    content_css: [
-      '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-      '//www.tinymce.com/css/codepen.min.css'
-    ]
-  };
-
+  panelOpenState = false;
+  plantillas_html : any = {};
+  config: any = {};
+  listarDocumentosPrestamo = false;
 
   form = new FormGroup({});
   model: any = {}; 
@@ -119,12 +103,30 @@ export class CrearPrestamoComponent implements AfterViewInit {
   async ngAfterViewInit() {
 
 
+    this.config = {
+      height: 500,
+      theme: 'modern',
+      // powerpaste advcode toc tinymcespellchecker a11ychecker mediaembed linkchecker help
+      plugins: 'print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image imagetools link media template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists textcolor wordcount contextmenu colorpicker textpattern',
+      toolbar: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
+      image_advtab: true,
+      imagetools_toolbar: 'rotateleft rotateright | flipv fliph | editimage imageoptions',
+      init_instance_callback: function() {},
+      content_css: [
+        '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+        '//www.tinymce.com/css/codepen.min.css'
+      ]
+    }
+
     this.tiposdocumento = await this.tipodocidentiService.getTipodocidenti();
     this.cobradores = await this.usersService.getUsers();
     this.listaClientes = await this.clienteService.getClientes();
     this.formaspago = await this.prestamosService.getFormasPago();
     console.log('los clientes');
     console.log(this.listaClientes);
+
+    
+
 
     this.navService.appDrawer = this.appDrawer;
 
@@ -456,7 +458,26 @@ console.log (this.form.value)
                     type: 'info',
                     title: 'Informaci&oacute;n',
                     text: 'Se crea satisfactoriamente el prestamo # '+response,
-                  })
+                  }).then(
+                    (result) => {
+      
+                      if (result.value == true) {
+ 
+                          this.listarDocumentosPrestamo = true;
+
+                          this.model.id_prestamo = response; 
+                          this.prestamosService.renderTemplates(this.model).subscribe(
+                            response => {
+                              console.log (response);
+                              this.plantillas_html = response;
+                            }
+                          )
+
+                        
+                      }
+      
+                    }
+                  )
       
                 }
             }

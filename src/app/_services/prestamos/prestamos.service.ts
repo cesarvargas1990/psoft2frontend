@@ -26,7 +26,11 @@ export class PrestamosService {
       consultaFormasPago : this.server + '/consultaFormasPago',
       consultaFormaPago : this.server + '/consultaFormaPago',
       pstdocadjuntos : this.server + '/pstdocadjuntos',
-      listadoPrestamos :this.server + '/listadoPrestamos'
+      consultaTipoDocPlantilla : this.server + '/consultaTipoDocPlantilla',
+      listadoPrestamos :this.server + '/listadoPrestamos',
+      pstdocplant : this.server + '/pstdocplant',
+      generarVariablesPlantillas : this.server + '/generarVariablesPlantillas',
+      renderTemplates : this.server + '/renderTemplates'
     };
 
 
@@ -105,6 +109,10 @@ console.log (error);
   }
 
 
+  deleteDocumentoPlantilla(data): Observable<any> {
+    return this.http.delete(`${this.services.pstdocplant}` + '/' + data.id, this.httpOpts)
+  }
+
 
   guardarFormaPago(data): Observable<any> {
     
@@ -113,6 +121,18 @@ console.log (error);
     data.nitempresa = nitempresa;
     data.id_usureg = id_usureg;
     return this.http.post<any>(`${this.services.psformapago}` , data, this.httpOpts).pipe(
+      retry(2),
+      catchError(this.handleError)
+    )
+  }
+
+  guardarDocumento(data): Observable<any> {
+    
+    let nitempresa = localStorage.getItem('nit_empresa');
+    let id_usureg = localStorage.getItem('id_usuario');
+    data.nitempresa = nitempresa;
+    data.id_usureg = id_usureg;
+    return this.http.post<any>(`${this.services.pstdocplant }` , data, this.httpOpts).pipe(
       retry(2),
       catchError(this.handleError)
     )
@@ -127,13 +147,47 @@ console.log (error);
     )
   }
 
+  listaVariablesPlantillas () : Observable<any> {
+    
+    let nitempresa = localStorage.getItem('nit_empresa');
+    return this.http.get<any>(`${this.services.generarVariablesPlantillas  }`+'/'+nitempresa, this.httpOpts).pipe(
+      retry(2),
+      catchError(this.handleError)
+    )
+  }
+
+  prueba () : Observable<any> {
+    
+    let data : any={};
+    let nitempresa = localStorage.getItem('nit_empresa');
+ 
+    return this.http.get<any>(`${this.services.generarVariablesPlantillas   }` , this.httpOpts).pipe(
+      retry(2),
+      catchError(this.handleError)
+    )
+
+  
+  }
+
   consultaFormasPago(): Observable<any> {
     
     let data: any = {};
     let nitempresa = localStorage.getItem('nit_empresa');
     data.nitempresa = nitempresa;
     
-    return this.http.post<any>(`${this.services.consultaFormasPago }` , data, this.httpOpts).pipe(
+    return this.http.post<any>(`${this.services.consultaFormasPago }` + '/'+nitempresa , data, this.httpOpts).pipe(
+      retry(2),
+      catchError(this.handleError)
+    )
+  }
+
+  consultaPlantillasDocumentos(): Observable<any> {
+    
+    let data: any = {};
+    let nitempresa = localStorage.getItem('nit_empresa');
+    data.nitempresa = nitempresa;
+    
+    return this.http.post<any>(`${this.services.consultaTipoDocPlantilla  }` , data, this.httpOpts).pipe(
       retry(2),
       catchError(this.handleError)
     )
@@ -163,6 +217,18 @@ console.log (error);
     )
   }
 
+  renderTemplates(data): Observable<any> {
+    
+    let nitempresa = localStorage.getItem('nit_empresa');
+    let id_usureg = localStorage.getItem('id_usuario');
+    data.nitempresa = nitempresa;
+    data.id_usureg = id_usureg;
+    return this.http.post<any>(`${this.services.renderTemplates}` , data, this.httpOpts).pipe(
+      retry(2),
+      catchError(this.handleError)
+    )
+  }
+
   
 
   listadoPrestamos(data): Observable<any> {
@@ -182,6 +248,12 @@ console.log (error);
     data.nitempresa = localStorage.getItem('nit_empresa');
     
     return this.http.put(`${this.services.psformapago }` + '/' + data.id, data, this.httpOpts)
+  }
+
+  updatePlantillaDocumento(data): Observable<any> {
+    data.nitempresa = localStorage.getItem('nit_empresa');
+    
+    return this.http.put(`${this.services.pstdocplant }` + '/' + data.id, data, this.httpOpts)
   }
   
 

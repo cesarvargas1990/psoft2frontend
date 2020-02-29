@@ -42,7 +42,8 @@ export class ClienteService {
     {
       psclientes: this.server + '/psclientes',
       listadoclientes: this.server + '/listadoclientes',
-      guardarArchivos : this.server+ '/guardarArchivoAdjunto'
+      guardarArchivos : this.server+ '/guardarArchivoAdjunto',
+      prestamosCliente : this.server+ '/prestamosCliente',
     };
 
 
@@ -88,6 +89,13 @@ export class ClienteService {
     data.id_usuario = localStorage.getItem('id');
     return this.http.post(`${this.services.guardarArchivos}`, data, this.httpOpts);
 }
+
+
+  getPrestamosCliente(data): Observable<any> {
+    data.nitempresa = localStorage.getItem('nit_empresa');
+    data.id_user = localStorage.getItem('id');
+    return this.http.post(`${this.services.prestamosCliente}`, data, this.httpOpts)
+  }
 
  dataURLtoFile(dataurl, filename) {
  

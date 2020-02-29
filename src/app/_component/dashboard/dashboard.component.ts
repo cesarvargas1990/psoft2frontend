@@ -9,7 +9,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { ListaPrestamos } from '../../_models/ListaPrestamos';
 import { PrestamosService } from '../../_services/prestamos/prestamos.service';
-
+import { MatPaginator } from '@angular/material/paginator';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -25,12 +25,13 @@ export class DashboardComponent implements AfterViewInit {
   datosEmpresa: any = [];
   datosPrestamos: any = [];
 
-  displayedColumns: string[] = ['nomcliente','valorpres','nomfpago','celular','direcasa','action'];
+  displayedColumns: string[] = ['nomcliente','valorpres','nomfpago','celular','direcasa'];
 
   dataSource = new MatTableDataSource([]);
 
   @ViewChild('appDrawer', {static: false}) appDrawer: ElementRef;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -79,6 +80,7 @@ export class DashboardComponent implements AfterViewInit {
           let DATOS: ListaPrestamos[] = this.datosPrestamos;
           this.dataSource = new MatTableDataSource(DATOS);
           this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
         }
 
       }

@@ -179,55 +179,10 @@ export class CrearClienteComponent implements AfterViewInit {
               },
             },
 
-            {
-              key: 'ciudad',
-              className: 'col-md-4',
-              type: 'input',
-              modelOptions: {
-                updateOn: 'blur',
-              },
-              templateOptions: {
-                label: 'Ciudad',
-                required: true,
-              },
-            },
-            {
-              key: 'telefijo',
-              className: 'col-md-4',
-              type: 'input',
-              modelOptions: {
-                updateOn: 'blur',
-              },
-              templateOptions: {
-                label: 'Telefono Fijo',
+          
+           
+           
 
-              },
-            },
-            {
-              key: 'celular',
-              className: 'col-md-4',
-              type: 'input',
-              modelOptions: {
-                updateOn: 'blur',
-              },
-              templateOptions: {
-                label: 'Celular',
-                required: true,
-              },
-            },
-
-            {
-              key: 'celular',
-              className: 'col-md-4',
-              type: 'input',
-              modelOptions: {
-                updateOn: 'blur',
-              },
-              templateOptions: {
-                label: 'Celular',
-                required: true,
-              },
-            },
 
             {
               key: 'email',
@@ -256,18 +211,7 @@ export class CrearClienteComponent implements AfterViewInit {
               },
             },
 
-            {
-              key: 'diretrabajo',
-              className: 'col-md-4',
-              type: 'input',
-              modelOptions: {
-                updateOn: 'blur',
-              },
-              templateOptions: {
-                label: 'Dir Trabajo',
-
-              },
-            },
+            
 
           ]
 

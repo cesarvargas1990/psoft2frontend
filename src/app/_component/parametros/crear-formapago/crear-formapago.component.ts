@@ -15,7 +15,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { TipodocidentiService } from '../../../_services/tipodocidenti/tipodocidenti.service';
 import { UsersService} from '../../../_services/users/users.service';
 import Swal from 'sweetalert2';
-
+import { MatPaginator } from '@angular/material/paginator';
 import { EditarFormapagoComponent} from '../../../_component/parametros/crear-formapago/dialogs/editar-formapago/editar-formapago.component';
  
 import { FormGroup } from '@angular/forms';
@@ -45,6 +45,7 @@ export class CrearFormapagoComponent implements AfterViewInit {
 
 
   @ViewChild('appDrawer', {static: false}) appDrawer: ElementRef;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   mobileQuery: MediaQueryList;
 
@@ -417,6 +418,7 @@ export class CrearFormapagoComponent implements AfterViewInit {
         console.log(DATOS);
         this.dataSource = new MatTableDataSource(DATOS);
         this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
 
       }, error => {
         this.authService.logout();

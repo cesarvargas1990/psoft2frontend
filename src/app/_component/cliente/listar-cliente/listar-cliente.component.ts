@@ -14,6 +14,8 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { EditarClienteComponent } from '../.././../_component/cliente/listar-cliente/dialogs/editar-cliente/editar-cliente.component';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { ListarPrestamosclienteComponent } from '../../../_component/cliente/listar-cliente/dialogs/listar-prestamoscliente/listar-prestamoscliente.component';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-listar-cliente',
@@ -24,7 +26,7 @@ export class ListarClienteComponent implements AfterViewInit {
 
 
   @ViewChild('appDrawer', { static: false }) appDrawer: ElementRef;
-
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   mobileQuery: MediaQueryList;
 
   version = VERSION;
@@ -88,6 +90,11 @@ export class ListarClienteComponent implements AfterViewInit {
         console.log(DATOS);
         this.dataSource = new MatTableDataSource(DATOS);
         this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        
+
+        
+
 
       }, error => {
         this.authService.logout();
@@ -112,6 +119,16 @@ export class ListarClienteComponent implements AfterViewInit {
 
 
   modalListadoCreditos (row) {
+
+    const dialogRef = this.dialog.open(ListarPrestamosclienteComponent, {
+
+      data: row
+    });
+    // Subscribirme al evento de cerrar el cuadro de dialogo
+    dialogRef.afterClosed().subscribe(result => {
+      this.getDatosCliente();
+
+    });
 
     
   }

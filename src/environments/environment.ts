@@ -3,11 +3,13 @@
 // The list of file replacements can be found in `angular.json`.
 
 const BASE_URL = 'https://mipropiedadhorizontal.com.co/api';
+const UPLOADS_CLIENTES = 'http://mipropiedadhorizontal.com.co/api/upload/documentosAdjuntos/';
 //const BASE_URL = 'http://localhost:8080';
 
 export const environment = {
   production: true,
-  API_URL : BASE_URL + '/api'
+  API_URL : BASE_URL + '/api',
+  UPLOADS_CLIENTES : UPLOADS_CLIENTES
 };
 
 /*

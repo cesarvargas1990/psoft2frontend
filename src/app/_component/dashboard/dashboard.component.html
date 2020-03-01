@@ -19,7 +19,7 @@
 
 
 
-      <div class="card" style="width: 100%;">
+      <div *ngIf="!visualizarDocumentos" class="card" style="width: 100%;">
         <div class="card-body">
           <h5 class="card-title">Listado de Prestamos</h5>
           <div class="card-text">
@@ -57,6 +57,30 @@
                 <mat-header-cell *matHeaderCellDef mat-sort-header> Direcci&oacute;n Casa </mat-header-cell>
                 <mat-cell *matCellDef="let element"> <span class="mobile-label">Dir Casa:</span>{{element.direcasa}} </mat-cell>
               </ng-container>
+
+
+              <ng-container matColumnDef="action">
+                <mat-header-cell *matHeaderCellDef>
+                  <button title="Crear Prestamo" class="float-right btn btn-outline-primary btn-sm" mat-icon-button color="primary"
+                    (click)="irPantallaCrearPrestamo()">
+                    <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+                  </button>
+                </mat-header-cell>
+  
+                <mat-cell *matCellDef="let row; let i=index;">
+                 
+  
+                  <button title="Documentos" class="float-right btn btn-outline-primary btn-sm" mat-icon-button color="primary"
+                    (click)="modalListadoDocumentos(row)">
+                    <mat-icon aria-label="print">print</mat-icon>
+                  </button>
+
+                  <button title="Listado Cuotas" class="float-right btn btn-outline-info btn-sm" mat-icon-button color="primary"
+                    (click)="modalListadoCuotas(row)">
+                    <mat-icon aria-label="find_in_page">find_in_page</mat-icon>
+                  </button>
+                </mat-cell>
+              </ng-container>
       
             
                   
@@ -67,6 +91,44 @@
             </mat-table>
             <mat-paginator [pageSize]="25" [length]="dataSource.data.length" [pageSizeOptions]="[5, 10, 20, 25, 50, 100,dataSource.data.length]" showFirstLastButtons>
             </mat-paginator>
+          </div>
+        </div>
+      </div>
+      
+
+      <div *ngIf="visualizarDocumentos"class="card" style="width: 100%;">
+          
+        <div class="card-body">
+            <div>
+                <button title="Volver" (click)="visualizarDocumentos=false;" class="left btn btn-outline-primary btn-sm" mat-icon-button color="primary"
+                (click)="modalAdicionarEmpresa()">
+                <mat-icon aria-label="Example icon-button with a heart icon">keyboard_backspace</mat-icon>
+              </button>
+            </div>
+          <h5 class="card-title">Listado de Documentos del prestamo</h5>
+          <div class="card-text">
+            
+      
+
+
+            <mat-accordion>
+              <mat-expansion-panel *ngFor="let item of plantillas_html" (opened)="panelOpenState = true"
+                (closed)="panelOpenState = false">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{item.nombre}}
+                  </mat-panel-title>
+            
+                </mat-expansion-panel-header>
+            
+                <br>
+                <tinymce [(ngModel)]="item.plantilla_html" [config]="config"></tinymce>
+            
+              </mat-expansion-panel>
+            
+            </mat-accordion>
+            
+       
           </div>
         </div>
       </div>

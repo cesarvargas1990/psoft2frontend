@@ -93,8 +93,6 @@ export class ListarClienteComponent implements AfterViewInit {
         this.dataSource.paginator = this.paginator;
         
 
-        
-
 
       }, error => {
         this.authService.logout();

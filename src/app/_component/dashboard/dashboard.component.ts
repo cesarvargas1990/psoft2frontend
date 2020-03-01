@@ -10,6 +10,16 @@ import { MatSort } from '@angular/material/sort';
 import { ListaPrestamos } from '../../_models/ListaPrestamos';
 import { PrestamosService } from '../../_services/prestamos/prestamos.service';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+import { ListarDocumentosprestamoComponent} from '../../_component/dashboard/dialogs/listar-documentosprestamo/listar-documentosprestamo.component';
+import { 
+  CanActivate, 
+  ActivatedRouteSnapshot, 
+  RouterStateSnapshot, 
+  Router 
+} from '@angular/router';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -22,10 +32,16 @@ export class DashboardComponent implements AfterViewInit {
 
   model: any = {};
   data: any = {};
+  config: any = {};
   datosEmpresa: any = [];
   datosPrestamos: any = [];
 
-  displayedColumns: string[] = ['nomcliente','valorpres','nomfpago','celular','direcasa'];
+
+  plantillas_html :any = {};
+  visualizarDocumentos = false;
+  
+
+  displayedColumns: string[] = ['nomcliente','valorpres','nomfpago','celular','direcasa','action'];
 
   dataSource = new MatTableDataSource([]);
 
@@ -75,7 +91,7 @@ export class DashboardComponent implements AfterViewInit {
 
         if (response ){
           console.log('datasa prestamos');
-          console.log(response);
+          
           this.datosPrestamos = response;
           let DATOS: ListaPrestamos[] = this.datosPrestamos;
           this.dataSource = new MatTableDataSource(DATOS);
@@ -89,14 +105,17 @@ export class DashboardComponent implements AfterViewInit {
     
   }
   
+  
  
   dataFromServer: any = [];
  
   constructor(
+    public dialog: MatDialog,
     public authService: AuthService,
     private navService: NavService,
     changeDetectorRef: ChangeDetectorRef, media: MediaMatcher,
-    public prestamosService: PrestamosService
+    public prestamosService: PrestamosService,
+    private router: Router
   ) { 
 
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
@@ -111,22 +130,58 @@ export class DashboardComponent implements AfterViewInit {
   
 
   ngOnInit() {
+
+    this.config = {
+      height: 500,
+      theme: 'modern',
+      // powerpaste advcode toc tinymcespellchecker a11ychecker mediaembed linkchecker help
+      plugins: 'print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image imagetools link media template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists textcolor wordcount contextmenu colorpicker textpattern',
+      toolbar: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
+      image_advtab: true,
+      imagetools_toolbar: 'rotateleft rotateright | flipv fliph | editimage imageoptions',
+      init_instance_callback: function() {},
+      content_css: [
+        '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+        '//www.tinymce.com/css/codepen.min.css'
+      ]
+    }
+
     this.mobileQuery.removeListener(this._mobileQueryListener);
     //this.getSomePrivateStuff();
     this.getDatosPrestamo();
 
     
-    
-    
-
-    
+      
 
   }
+
+
+
+
+  irPantallaCrearPrestamo () {
+    this.router.navigate(['/clientes/crearPrestamo']);
+  }
+
+  modalListadoDocumentos(row): void {
+
+    this.visualizarDocumentos = true;
+
+   
+    
+    this.model.id_prestamo = row.id_prestamo;
+                          this.prestamosService.renderTemplates(this.model).subscribe(
+                            response => {
+                              console.log (response);
+                              this.plantillas_html = response;
+                            }
+                          )
+
+    
+
+
+  }
+
  
-  getSomePrivateStuff() {
-    
-    
-  }
 
   ngAfterViewInit() {
     this.navService.appDrawer = this.appDrawer;

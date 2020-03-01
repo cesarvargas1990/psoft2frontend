@@ -30,7 +30,8 @@ export class PrestamosService {
       listadoPrestamos :this.server + '/listadoPrestamos',
       pstdocplant : this.server + '/pstdocplant',
       generarVariablesPlantillas : this.server + '/generarVariablesPlantillas',
-      renderTemplates : this.server + '/renderTemplates'
+      renderTemplates : this.server + '/renderTemplates',
+      psdocadjuntos: this.server + '/psdocadjuntos'
     };
 
 
@@ -236,6 +237,13 @@ console.log (error);
     data.nitempresa = localStorage.getItem('nit_empresa');
     data.id_user = localStorage.getItem('id');
     return this.http.post(`${this.services.listadoPrestamos }`, data, this.httpOpts)
+  }
+
+  listadoArchivosCliente(id): Observable<any> {
+    let data: any = {};
+    data.nitempresa = localStorage.getItem('nit_empresa');
+    data.id_user = localStorage.getItem('id');
+    return this.http.get(`${this.services.psdocadjuntos  }`+'/'+id, this.httpOpts)
   }
 
   saveFormaPago(data): Observable<any> {

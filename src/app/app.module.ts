@@ -155,7 +155,7 @@ import { ListaPrestamosComponent } from './_component/cliente/lista-prestamos/li
 import { ListarPrestamosclienteComponent } from './_component/cliente/listar-cliente/dialogs/listar-prestamoscliente/listar-prestamoscliente.component';
 
 
-
+import { ListarDocumentosprestamoComponent } from './_component/dashboard/dialogs/listar-documentosprestamo/listar-documentosprestamo.component';
 
 
 import {WebcamModule} from 'ngx-webcam';
@@ -345,8 +345,8 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig){
     //FirmaWrapperComponent, 
     CargaradjuntosComponent,
     ListaPrestamosComponent,
-    ListarPrestamosclienteComponent
-    
+    ListarPrestamosclienteComponent,
+    ListarDocumentosprestamoComponent
   ],
   bootstrap: [
     AppComponent
@@ -376,7 +376,8 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig){
     EditarFormapagoComponent,
     ListaPrestamosComponent,
     EditarDocumentoComponent,
-    ListarPrestamosclienteComponent
+    ListarPrestamosclienteComponent,
+	  ListarDocumentosprestamoComponent
   ],
   providers: [
     LoaderService,

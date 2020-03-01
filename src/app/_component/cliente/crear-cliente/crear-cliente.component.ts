@@ -67,6 +67,7 @@ export class CrearClienteComponent implements AfterViewInit {
   imgURL: any;
   public message: string;
 
+  modoEdicion = false;
   listaArchivos: any = {};
   listaTipoDoc: any = {};
   lista: string[] = ["hola", "que", "tal", "estas"];
@@ -74,11 +75,14 @@ export class CrearClienteComponent implements AfterViewInit {
   webcam = 0;
   tomarfoto = 0;
   currentIndexImage = 0;
+  
 
   urlimage: any = {};
 
   model: any = {};
   data: any = {};
+
+  
   tabs: TabType[] = [
     {
       label: 'Datos Personales',
@@ -410,6 +414,7 @@ export class CrearClienteComponent implements AfterViewInit {
 
 
   public triggerSnapshot(i): void {
+    
     this.currentIndexImage = i;
     this.trigger.next();
   }
@@ -436,6 +441,8 @@ export class CrearClienteComponent implements AfterViewInit {
     this.webcamImage = webcamImage;
     this.urlimage = this.webcamImage.imageAsDataUrl;
     this.listaArchivos[this.currentIndexImage] = this.urlimage;
+    console.log('como va');
+    console.log (this.listaArchivos);
 
   }
 
@@ -528,7 +535,7 @@ export class CrearClienteComponent implements AfterViewInit {
                       this.data.id_tdocadjunto = this.listaTipoDoc[i];
                       this.data.id_cliente = response.id;
                       this.data.path =  './upload/documentosAdjuntos/';
-                      this.data.fileExt = 'jpeg';
+                      this.data.fileExt = 'jpeg'; 
 
                       this.clienteService.uploadFile(this.data).subscribe(
                         response => {

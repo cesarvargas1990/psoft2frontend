@@ -31,7 +31,9 @@ export class PrestamosService {
       pstdocplant : this.server + '/pstdocplant',
       generarVariablesPlantillas : this.server + '/generarVariablesPlantillas',
       renderTemplates : this.server + '/renderTemplates',
-      psdocadjuntos: this.server + '/psdocadjuntos'
+      psdocadjuntos: this.server + '/psdocadjuntos',
+      psfechaspago : this.server + '/psfechaspago',
+      pspagos : this.server + '/pspagos'
     };
 
 
@@ -157,6 +159,15 @@ console.log (error);
     )
   }
 
+  listaFechasPago (id_prestamo) : Observable<any> {
+    
+    let nitempresa = localStorage.getItem('nit_empresa');
+    return this.http.get<any>(`${this.services.psfechaspago  }`+'/'+id_prestamo, this.httpOpts).pipe(
+      retry(2),
+      catchError(this.handleError)
+    )
+  }
+
   prueba () : Observable<any> {
     
     let data : any={};
@@ -262,6 +273,13 @@ console.log (error);
     data.nitempresa = localStorage.getItem('nit_empresa');
     
     return this.http.put(`${this.services.pstdocplant }` + '/' + data.id, data, this.httpOpts)
+  }
+
+  registrarPagoCuota(data): Observable<any> {
+    
+    data.nitempresa = localStorage.getItem('nit_empresa');
+    data.id_user = localStorage.getItem('id');
+    return this.http.post(`${this.services.pspagos }`, data, this.httpOpts)
   }
   
 

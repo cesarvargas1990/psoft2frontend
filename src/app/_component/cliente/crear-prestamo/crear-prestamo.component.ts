@@ -100,6 +100,10 @@ export class CrearPrestamoComponent implements AfterViewInit {
 
   }
 
+  volver () {
+    this.router.navigate(['/dashboard']);
+  }
+
   async ngAfterViewInit() {
 
 
@@ -429,7 +433,9 @@ console.log (this.form.value)
     }
     return headers;
   }
-
+  modalAdicionarEmpresa(){
+    
+  }
   async guardarPrestamo () {
 
     if (this.form.valid) {

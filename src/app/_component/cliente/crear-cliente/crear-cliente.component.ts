@@ -63,6 +63,8 @@ export class CrearClienteComponent implements AfterViewInit {
     'canvasHeight': 300
   };
 
+  panelOpenState = false;
+
   public imagePath;
   imgURL: any;
   public message: string;

@@ -51,7 +51,9 @@ export class EditarClienteComponent implements OnInit {
   webcam = 0;
   tomarfoto = 0;
   currentIndexImage = 0;
-  public photoPath: string = environment.UPLOADS_CLIENTES;
+  panelOpenState = false;
+  
+  public photoPath: string = 'http://mipropiedadhorizontal.com.co/api/upload/documentosAdjuntos/';
   urlimage: any = {};
 
 
@@ -417,7 +419,7 @@ export class EditarClienteComponent implements OnInit {
           this.listaTiposDocumento = response;
           Object.entries(response).forEach(([key, value]) => {
 
-            this.listaTipoDoc[key] = value['id'];
+            this.listaTipoDoc[value['id']] = value['id'];
 
 
           })
@@ -455,8 +457,8 @@ export class EditarClienteComponent implements OnInit {
       response => {
         Object.entries(response).forEach(([key, value]) => {
 
-          console.log(value);
-          this.listaArchivos[key] = this.photoPath + value['nombrearchivo'];
+          
+          this.listaArchivos[value['id_tdocadjunto']] = this.photoPath + value['nombrearchivo'];
 
 
         })
@@ -469,8 +471,8 @@ export class EditarClienteComponent implements OnInit {
 
 
   public triggerSnapshot(i): void {
-    ////console.log ('home');
-    ////console.log(i);
+    //////console.log ('home');
+    //////console.log(i);
     this.currentIndexImage = i;
     this.trigger.next();
   }
@@ -497,8 +499,8 @@ export class EditarClienteComponent implements OnInit {
     this.webcamImage = webcamImage;
     this.urlimage = this.webcamImage.imageAsDataUrl;
     this.listaArchivos[this.currentIndexImage] = this.urlimage;
-    //console.log ('lisra archivos');
-    //console.log (this.listaArchivos);
+    ////console.log ('lisra archivos');
+    ////console.log (this.listaArchivos);
 
   }
 

@@ -31,17 +31,17 @@
                                                     <mat-divider></mat-divider>
                                                     <input #file type="file" accept='image/*'
                                                         (click)="webcam=0;tomarfoto=0"
-                                                        (change)="preview(file.files,i)" />
+                                                        (change)="preview(file.files,item.id)" />
                                                     <mat-divider></mat-divider>
  
                                                     <button type="button" *ngIf="tomarfoto==0"
-                                                        (click)="webcam=1;listaArchivos[i]='';tomarfoto=1"
+                                                        (click)="webcam=1;listaArchivos[item.id]='';tomarfoto=1"
                                                         class="btn btn-primary submit-button">
                                                         <mat-icon aria-label="videocam">videocam</mat-icon>
                                                     </button>
 
                                                     <button type="button" *ngIf="webcam==1"
-                                                        (click)="triggerSnapshot(i);listaTipoDoc[i]=item.id"
+                                                        (click)="triggerSnapshot(item.id);listaTipoDoc[item.id]=item.id"
                                                         class="btn btn-primary submit-button">
                                                         <mat-icon aria-label="videocam">control_camera</mat-icon>
                                                     </button>
@@ -51,7 +51,7 @@
                                                 <div class="col-md-6">
                                                     <mat-divider></mat-divider>
 
-                                                    <img [src]="listaArchivos[i]" *ngIf="listaArchivos[i]"
+                                                    <img [src]="listaArchivos[item.id]" *ngIf="listaArchivos[item.id]"
                                                         [attr.file-index]="i" height="200">
                                                 </div>
                                                 

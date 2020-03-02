@@ -20,6 +20,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class ListarDocumentosprestamoComponent implements OnInit {
 
   html = ``;
+  panelOpenState = false;
   config: any = {
     
   };

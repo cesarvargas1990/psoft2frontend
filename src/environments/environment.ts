@@ -4,6 +4,7 @@
 
 const BASE_URL = 'https://mipropiedadhorizontal.com.co/api';
 const UPLOADS_CLIENTES = 'http://mipropiedadhorizontal.com.co/api/upload/documentosAdjuntos/';
+//const UPLOADS_CLIENTES = 'http://localhost:8080/api/upload/documentosAdjuntos/';
 //const BASE_URL = 'http://localhost:8080';
 
 export const environment = {

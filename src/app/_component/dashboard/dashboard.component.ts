@@ -225,16 +225,18 @@ export class DashboardComponent implements AfterViewInit {
 
       if (result.value == true) {
 
-        
+        console.log (row);
         this.model.fecha_pago = row.fecha_pago;
         this.model.id_prestamo = row.id_prestamo;
         this.model.id_cliente = row.id_cliente;
+        this.model.id = row.id;
         this.prestamosService.registrarPagoCuota(this.model).subscribe(
           response => {
-    
+  
             
             if (response ){
               Swal.fire("Listo!", "El pago ha sido registrado.", "success");
+              this.listadoCuotas(row);
             }
           }
         )

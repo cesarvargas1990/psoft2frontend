@@ -178,7 +178,7 @@
                   </mat-header-cell>
     
                   <mat-cell *matCellDef="let row; let i=index;">
-                      <button title="PagarCuota" class="float-right btn btn-outline-primary btn-sm" mat-icon-button color="primary"
+                      <button  *ngIf ="!row.id_fecha_pago" title="PagarCuota" class="float-right btn btn-outline-primary btn-sm" mat-icon-button color="primary"
                       (click)="pagarCuotaPrestamo(row);">
                       <mat-icon aria-label="money">money</mat-icon>
                     </button>

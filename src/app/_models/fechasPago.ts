@@ -4,5 +4,5 @@ export interface fechasPago {
   id_prestamo : number;
   fecha_pago : Date;
   valcuota : number;
-  
+  ind_cuotapaga : number;
 }

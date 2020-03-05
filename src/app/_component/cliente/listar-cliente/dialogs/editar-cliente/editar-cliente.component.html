@@ -29,7 +29,7 @@
                                                     
                                                     <span style="color:red;" *ngIf="message">{{message}}</span>
                                                     <mat-divider></mat-divider>
-                                                    <input #file type="file" accept='image/*'
+                                                    <input #file type="file" accept='image/*,application/pdf'
                                                         (click)="webcam=0;tomarfoto=0"
                                                         (change)="preview(file.files,item.id)" />
                                                     <mat-divider></mat-divider>
@@ -50,8 +50,9 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <mat-divider></mat-divider>
-
-                                                    <img [src]="listaArchivos[item.id]" *ngIf="listaArchivos[item.id]"
+                                                    <a href="{{listaArchivos[item.id]}}" *ngIf=" (listaArchivos[item.id].substr(listaArchivos[item.id].lastIndexOf('.') + 1) == 'pdf')" target="_blank">Visualizar</a>
+                                                    
+                                                    <img [src]="listaArchivos[item.id]" *ngIf=" (listaArchivos[item.id].substr(listaArchivos[item.id].lastIndexOf('.') + 1) != 'pdf')"
                                                         [attr.file-index]="i" height="200">
                                                 </div>
                                                 

@@ -537,7 +537,7 @@ export class CrearClienteComponent implements AfterViewInit {
                       this.data.id_tdocadjunto = this.listaTipoDoc[i];
                       this.data.id_cliente = response.id;
                       this.data.path =  './upload/documentosAdjuntos/';
-                      this.data.fileExt = 'jpeg'; 
+                      
 
                       this.clienteService.uploadFile(this.data).subscribe(
                         response => {
@@ -580,7 +580,8 @@ export class CrearClienteComponent implements AfterViewInit {
       return;
 
     var mimeType = files[0].type;
-    if (mimeType.match(/image\/*/) == null) {
+    
+    if (mimeType.match(/image\/*/) || (mimeType.match(/application\/pdf/) == null)) {
       this.message = "Only images are supported.";
       return;
     }

@@ -99,7 +99,7 @@ export class EditarClienteComponent implements OnInit {
             this.dataImage.id_tdocadjunto = this.listaTipoDoc;
             this.dataImage.id_cliente = this.data.id;
             this.dataImage.path = './upload/documentosAdjuntos/';
-            this.dataImage.fileExt = 'jpeg';
+            
 
             this.clienteServicio.editFile(this.dataImage).subscribe(
               response => {
@@ -525,8 +525,9 @@ export class EditarClienteComponent implements OnInit {
       return;
 
     var mimeType = files[0].type;
-    if (mimeType.match(/image\/*/) == null) {
-      this.message = "Only images are supported.";
+    
+    if (mimeType.match(/image\/*/) == null && mimeType.match(/application\/pdf/) == null) {
+      this.message = "Solo se Aceptan, Imagenes o Documentos PDF.";
       return;
     }
 

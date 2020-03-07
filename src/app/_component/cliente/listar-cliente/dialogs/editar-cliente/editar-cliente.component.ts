@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Inject, AfterViewInit,ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Cliente } from '../../../../../_models/cliente';
 import { environment } from '../../../../../../environments/environment';
@@ -12,6 +12,7 @@ import { UsersService } from '../../../../../_services/users/users.service';
 import { DatePipe } from '@angular/common';
 import { PrestamosService } from '../../../../../_services/prestamos/prestamos.service';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
+import { SignaturePad } from 'ngx-signaturepad/signature-pad';
 
 @Component({
   selector: 'app-editar-cliente',
@@ -22,7 +23,7 @@ import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 export class EditarClienteComponent implements OnInit {
 
 
-
+  @ViewChild(SignaturePad, { static: false }) signaturePad: SignaturePad;
 
   public imagePath;
   imgURL: any;
@@ -46,8 +47,8 @@ export class EditarClienteComponent implements OnInit {
   private trigger: Subject<void> = new Subject<void>();
   // switch to next / previous / specific webcam; true/false: forward/backwards, string: deviceId
   private nextWebcam: Subject<boolean | string> = new Subject<boolean | string>();
-
-  listaTiposDocumento: any = {};
+ 
+  listaTiposDocumento: [] = [];
   webcam = 0;
   tomarfoto = 0;
   currentIndexImage = 0;
@@ -480,6 +481,14 @@ export class EditarClienteComponent implements OnInit {
 
   public toggleWebcam(): void {
     this.showWebcam = !this.showWebcam;
+  }
+
+  public validateExtension(filename){
+    if (filename) {
+      if (filename != "") {
+        return filename.substr(filename.lastIndexOf('.') + 1)
+      }
+    }
   }
 
   public handleInitError(error: WebcamInitError): void {

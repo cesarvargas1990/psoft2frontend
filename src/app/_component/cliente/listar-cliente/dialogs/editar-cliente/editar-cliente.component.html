@@ -50,9 +50,9 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <mat-divider></mat-divider>
-                                                    <a href="{{listaArchivos[item.id]}}" *ngIf=" (listaArchivos[item.id].substr(listaArchivos[item.id].lastIndexOf('.') + 1) == 'pdf')" target="_blank">Visualizar</a>
+                                                    <a href="{{listaArchivos[item.id]}}" *ngIf="listaArchivos[item.id] && validateExtension(listaArchivos[item.id]) == 'pdf'" target="_blank">Visualizar</a>
                                                     
-                                                    <img [src]="listaArchivos[item.id]" *ngIf=" (listaArchivos[item.id].substr(listaArchivos[item.id].lastIndexOf('.') + 1) != 'pdf')"
+                                                    <img [src]="listaArchivos[item.id]" *ngIf=" listaArchivos[item.id] && validateExtension(listaArchivos[item.id]) != 'pdf'"
                                                         [attr.file-index]="i" height="200">
                                                 </div>
                                                 

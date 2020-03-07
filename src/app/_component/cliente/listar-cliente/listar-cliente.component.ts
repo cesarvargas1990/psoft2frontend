@@ -39,14 +39,14 @@ export class ListarClienteComponent implements AfterViewInit {
   @ViewChild('appDrawer', { static: false }) appDrawer: ElementRef;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  @ViewChild(SignaturePad, { static: false }) signaturePad: SignaturePad;
+  @ViewChild(SignaturePad, { static: false }) public signaturePad: SignaturePad;
   imagePath :any = {};
   imgURL :any = {};
 
   mobileQuery: MediaQueryList;
   webcam = 0;
   version = VERSION;
-  listaArchivos: any = {};
+  listaArchivos: any = [];
   
   tomarfoto = 0;
   modoEdicion = false;
@@ -70,8 +70,8 @@ export class ListarClienteComponent implements AfterViewInit {
   data: any = {};
   tabs: TabType[] = [];
   datosCliente: any = [];
-  listaTiposDocumento: any = {};
-  listaTipoDoc: any = {};
+  listaTiposDocumento: any = [];
+  listaTipoDoc: any = [];
 
   panelOpenState = false;
   displayedColumns: string[] = ['nomcliente', 'numdocumento', 'ciudad', 'celular','email','perfil_facebook', 'direcasa', 'diretrabajo', 'action'];

@@ -55,7 +55,7 @@ export class CrearClienteComponent implements AfterViewInit {
 
 
 
-  @ViewChild(SignaturePad, { static: false }) signaturePad: SignaturePad;
+  @ViewChild(SignaturePad, { static: false }) public signaturePad: SignaturePad;
 
   public signaturePadOptions: Object = { // passed through to szimek/signature_pad constructor
     'minWidth': 5,
@@ -70,10 +70,10 @@ export class CrearClienteComponent implements AfterViewInit {
   public message: string;
 
   modoEdicion = false;
-  listaArchivos: any = {};
-  listaTipoDoc: any = {};
+  listaArchivos: any = [];
+  listaTipoDoc: any = [];
   lista: string[] = ["hola", "que", "tal", "estas"];
-  listaTiposDocumento: any = {};
+  listaTiposDocumento: [] = [];
   webcam = 0;
   tomarfoto = 0;
   currentIndexImage = 0;
@@ -403,8 +403,7 @@ export class CrearClienteComponent implements AfterViewInit {
 
 
 
-    this.signaturePad.set('minWidth', 5); // set szimek/signature_pad options at runtime
-    this.signaturePad.clear(); // invoke functions from szimek/signature_pad API
+ 
 
 
 
@@ -581,8 +580,8 @@ export class CrearClienteComponent implements AfterViewInit {
 
     var mimeType = files[0].type;
     
-    if (mimeType.match(/image\/*/) || (mimeType.match(/application\/pdf/) == null)) {
-      this.message = "Only images are supported.";
+    if (mimeType.match(/image\/*/) == null && mimeType.match(/application\/pdf/) == null) {
+      this.message = "Solo se Aceptan, Imagenes o Documentos PDF.";
       return;
     }
 
@@ -597,6 +596,14 @@ export class CrearClienteComponent implements AfterViewInit {
 
 
       this.imgURL = reader.result;
+    }
+  }
+
+  public validateExtension(filename){
+    if (filename) {
+      if (filename != "") {
+        return filename.substr(filename.lastIndexOf('.') + 1)
+      }
     }
   }
 

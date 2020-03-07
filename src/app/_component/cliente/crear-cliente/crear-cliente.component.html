@@ -72,9 +72,9 @@
                                                     
                                                     <span style="color:red;" *ngIf="message">{{message}}</span>
                                                     <mat-divider></mat-divider>
-                                                    <input #file type="file" accept='image/*'
+                                                    <input #file type="file" accept='image/*,application/pdf'
                                                         (click)="webcam=0;tomarfoto=0"
-                                                        (change)="preview(file.files,i)" />
+                                                        (change)="preview(file.files,i);listaTipoDoc[i]=item.id" />
                                                     <mat-divider></mat-divider>
 
                                                     <button type="button" *ngIf="tomarfoto==0"
@@ -90,11 +90,11 @@
                                                     </button>
 
 
-                                                </div>
+                                                </div>  
                                                 <div class="col-md-6">
                                                     <mat-divider></mat-divider>
-
-                                                    <img [src]="listaArchivos[i]" *ngIf="listaArchivos[i]"
+                                                    <a href="{{listaArchivos[i]}}" *ngIf="listaArchivos[i] && validateExtension(listaArchivos[i]) == 'pdf'" target="_blank">Visualizar</a>
+                                                    <img [src]="listaArchivos[i]" *ngIf="listaArchivos[i] && validateExtension(listaArchivos[i]) == 'pdf'"
                                                         [attr.file-index]="i" height="200">
                                                 </div>
                                                 

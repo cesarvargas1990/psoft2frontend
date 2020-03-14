@@ -96,7 +96,6 @@ export class DashboardComponent implements AfterViewInit {
       response => {
 
         if (response ){
-          console.log('datasa prestamos');
           
           this.datosFechasPago = response;
           let DATOS: ListaPrestamos[] = this.datosFechasPago;
@@ -154,7 +153,37 @@ export class DashboardComponent implements AfterViewInit {
   private _mobileQueryListener: () => void;
  
 
+  eliminarPrestamo(row) {
   
+
+console.log(row);
+    Swal.fire({
+      title: 'Esta seguro?',
+      text: "Desea eliminar el prestamo?",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si!',
+      cancelButtonText: 'No!'
+    }).then((result) => {
+
+      if (result.value == true) {
+
+
+        this.prestamosService.deletePrestamo (row).subscribe(
+          response => {
+              this.getDatosPrestamo();
+          }
+        )
+
+
+      }
+
+    })
+
+
+  }
 
   ngOnInit() {
 

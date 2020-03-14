@@ -33,7 +33,9 @@ export class PrestamosService {
       renderTemplates : this.server + '/renderTemplates',
       psdocadjuntos: this.server + '/psdocadjuntos',
       psfechaspago : this.server + '/psfechaspago',
-      pspagos : this.server + '/pspagos'
+      pspagos : this.server + '/pspagos',
+      eliminarPrestamo : this.server + '/eliminarPrestamo'
+
     };
 
 
@@ -109,6 +111,10 @@ console.log (error);
 
   deleteFormaPago(data): Observable<any> {
     return this.http.delete(`${this.services.psformapago}` + '/' + data.id, this.httpOpts)
+  }
+
+  deletePrestamo(data): Observable<any> {
+    return this.http.delete(`${this.services.eliminarPrestamo }` + '/' + data.id_prestamo, this.httpOpts)
   }
 
 

@@ -128,5 +128,8 @@
       }
     }
   },
-  "defaultProject": "visualtechfront"
+  "defaultProject": "visualtechfront",
+  "cli": {
+    "analytics": "3236ef83-2489-4545-8778-fa0323749e18"
+  }
 }

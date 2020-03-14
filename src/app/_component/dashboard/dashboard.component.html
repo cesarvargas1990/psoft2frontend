@@ -79,6 +79,11 @@
                     (click)="visualizarListaCuotas=true;visualizarDocumentos=false;listadoPrestamos=false;listadoCuotas(row)">
                     <mat-icon aria-label="find_in_page">find_in_page</mat-icon>
                   </button>
+
+                  <button title="Eliminar Prestamo" class="float-right btn btn-outline-info btn-sm" mat-icon-button color="accent"
+                    (click)="eliminarPrestamo(row)">
+                    <mat-icon aria-label="delete">delete</mat-icon>
+                  </button>
                 </mat-cell>
               </ng-container>
       

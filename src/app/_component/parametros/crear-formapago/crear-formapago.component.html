@@ -3,8 +3,7 @@
     <app-top-nav class="fixed-topnav" fxHide.gt-xs></app-top-nav>
     <app-loading></app-loading>
     <mat-sidenav-container class="example-sidenav-container">
-        <mat-sidenav #appDrawer [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches"
-            fixedTopGap="56" [opened]="!mobileQuery.matches">
+        <mat-sidenav #appDrawer [mode]="mobileQuery.matches ? 'over' : 'over'" [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" [opened]="false">
             <div class="logo-container" fxFlexAlign="center">
                 <app-logo *ngIf="authService.isLoggedIn()"></app-logo>
             </div>
@@ -18,6 +17,12 @@
 
             <div class="card" style="width: 100%;">
                 <div class="card-body">
+                    <div>
+                        <button title="Volver" (click)="volver()" class="left btn btn-outline-primary btn-sm" mat-icon-button color="primary">
+                      <mat-icon aria-label="Example icon-button with a heart icon">keyboard_backspace</mat-icon>
+                    </button>
+                    </div>
+
                     <h5 class="card-title">Creaci&oacute;n de Formas de pago</h5>
                     <div class="card-text">
 
@@ -50,76 +55,74 @@
 
                         <mat-form-field class="example-full-width">
                             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
-                          </mat-form-field>
-                
-                          <mat-table class="table-responsive" [dataSource]="dataSource" matSort class="mat-elevation-z8 ">
-                
-                
-                
-                            
+                        </mat-form-field>
+
+                        <mat-table class="table-responsive" [dataSource]="dataSource" matSort class="mat-elevation-z8 ">
+
+
+
+
                             <ng-container matColumnDef="id">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header>  Cod Forma Pago </mat-header-cell>
-                              <mat-cell *matCellDef="let element"> <span class="mobile-label">Cod F Pago:</span>{{element.id}} </mat-cell>
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Cod Forma Pago </mat-header-cell>
+                                <mat-cell *matCellDef="let element" data-label="Cod Forma Pago"> {{element.id}} </mat-cell>
                             </ng-container>
-              
+
                             <ng-container matColumnDef="nomfpago">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                              <mat-cell *matCellDef="let element"> <span class="mobile-label">Nombre:</span>{{element.nomfpago}} </mat-cell>
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                                <mat-cell *matCellDef="let element" data-label="Nombre"> {{element.nomfpago}} </mat-cell>
                             </ng-container>
 
                             <ng-container matColumnDef="nomperiodopago">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header> Periodo Pago </mat-header-cell>
-                              <mat-cell *matCellDef="let element"> <span class="mobile-label">Periodo Pago:</span>{{element.nomperiodopago}} </mat-cell>
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Periodo Pago </mat-header-cell>
+                                <mat-cell *matCellDef="let element" data-label="Periodo Pago"> {{element.nomperiodopago}} </mat-cell>
                             </ng-container>
 
                             <ng-container matColumnDef="numcuotas">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header> Num Cuotas </mat-header-cell>
-                              <mat-cell *matCellDef="let element"> <span class="mobile-label">Numero Cuotas:</span>{{element.numcuotas}} </mat-cell>
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Num Cuotas </mat-header-cell>
+                                <mat-cell *matCellDef="let element" data-label="N&uacute;mero Cuotas"> {{element.numcuotas}} </mat-cell>
                             </ng-container>
 
                             <ng-container matColumnDef="valorpres">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header> Valor Prestamo </mat-header-cell>
-                              <mat-cell *matCellDef="let element"> <span class="mobile-label">Valor Prestamo:</span>{{element.valorpres}} </mat-cell>
-                            </ng-container> 
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Valor Prestamo </mat-header-cell>
+                                <mat-cell *matCellDef="let element" data-label="Valor Prestamo">{{element.valorpres}} </mat-cell>
+                            </ng-container>
 
                             <ng-container matColumnDef="valseguro">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header> Valor Seguro </mat-header-cell>
-                              <mat-cell *matCellDef="let element"> <span class="mobile-label">Valor Seguro:</span>{{element.valseguro}} </mat-cell>
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Valor Seguro </mat-header-cell>
+                                <mat-cell *matCellDef="let element" data-label="Valor Seguro"> {{element.valseguro}} </mat-cell>
                             </ng-container>
 
                             <ng-container matColumnDef="porcint">
-                              <mat-header-cell *matHeaderCellDef mat-sort-header> Porc Interes </mat-header-cell>
-                              <mat-cell *matCellDef="let element"> <span class="mobile-label">Porc Interes:</span>{{element.porcint}} </mat-cell>
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Porc Interes </mat-header-cell>
+                                <mat-cell *matCellDef="let element" data-label="Porc Interes"> {{element.porcint}} </mat-cell>
                             </ng-container>
-              
-                
-                
-              
+
+
+
+
                             <ng-container matColumnDef="action">
-                              <mat-header-cell *matHeaderCellDef>
-                                <!-- <button title="Agregar Cliente" class="float-right btn btn-outline-primary btn-sm" mat-icon-button color="primary"
+                                <mat-header-cell *matHeaderCellDef>
+                                    <!-- <button title="Agregar Cliente" class="float-right btn btn-outline-primary btn-sm" mat-icon-button color="primary"
                                   (click)="modalAdicionarEmpresa()">
                                   <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
-                                </button> --> 
-                              </mat-header-cell>
-                
-                              <mat-cell *matCellDef="let row; let i=index;">
-                                <button  title="Editar Forma de pago" class="float-right btn btn-outline-primary btn-sm" mat-icon-button color="primary"
-                                  (click)="modalEditarFormaPago(row)">
+                                </button> -->
+                                </mat-header-cell>
+
+                                <mat-cell *matCellDef="let row; let i=index;">
+                                    <button title="Editar Forma de pago" class="float-right btn btn-outline-primary btn-sm" mat-icon-button color="primary" (click)="modalEditarFormaPago(row)">
                                   <mat-icon aria-label="Edit">edit</mat-icon>
                                 </button>
-                
-                                <button title="Eliminar Forma Pago" class="float-right btn btn-outline-danger btn-sm" mat-icon-button color="accent"
-                                  (click)="eliminarFormaPago(row)">
+
+                                    <button title="Eliminar Forma Pago" class="float-right btn btn-outline-danger btn-sm" mat-icon-button color="accent" (click)="eliminarFormaPago(row)">
                                   <mat-icon aria-label="Delete">delete</mat-icon>
                                 </button>
-                              </mat-cell>
+                                </mat-cell>
                             </ng-container>
                             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                          </mat-table>
-                          <mat-paginator [pageSizeOptions]="[5, 10, 20, 25, 50, 100,dataSource.data.length]" showFirstLastButtons>
-                          </mat-paginator>
+                        </mat-table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20, 25, 50, 100,dataSource.data.length]" showFirstLastButtons>
+                        </mat-paginator>
 
 
                     </div>
@@ -128,7 +131,7 @@
 
 
 
-            
+
         </mat-sidenav-content>
     </mat-sidenav-container>
 </div>

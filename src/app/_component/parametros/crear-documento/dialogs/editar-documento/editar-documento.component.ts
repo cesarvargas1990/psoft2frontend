@@ -13,7 +13,7 @@ import { UsersService} from '../../../../../_services/users/users.service';
 import { PrestamosService } from '../../../../../_services/prestamos/prestamos.service';
 import { DomSanitizer } from '@angular/platform-browser';
 @Component({
-  selector: 'app-editar-cliente',
+  selector: 'app-editar-documento',
   templateUrl: './editar-documento.component.html',
   styleUrls: ['./editar-documento.component.scss']
 })
@@ -109,7 +109,7 @@ export class EditarDocumentoComponent implements OnInit {
     this.prestamosService.listaVariablesPlantillas().subscribe(
       response => {
         this.config = {
-          height: 250,
+          // height: 250,
           theme: 'modern',
           // powerpaste advcode toc tinymcespellchecker a11ychecker mediaembed linkchecker help
           plugins: 'print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image imagetools link media template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists textcolor wordcount contextmenu colorpicker textpattern',
@@ -131,39 +131,9 @@ export class EditarDocumentoComponent implements OnInit {
     this.periodospago = await this.prestamosService.getPeriodosPago();
 
     this.html = this.data.plantilla_html;
-    this.fields = [
 
-       
-    
-      {
-
-        fieldGroupClassName: 'row',
-        fieldGroup: [
-
-          {
-            key: 'nombre',
-            className: 'col-md-12',
-            type: 'input',
-            defaultValue: this.data.nombre,
-            modelOptions: {
-              updateOn: 'blur',
-            },
-            templateOptions: {
-              label: 'Nombre Plantilla',
-              placeholder: 'Nombre Plantilla',
-              required: true,
-            },
-          },
-      
-         
-          
-
-        ]
-
-      }
-    
-
-  ];
+   
+     
 
 
   }

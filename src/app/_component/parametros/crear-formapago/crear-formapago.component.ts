@@ -443,4 +443,9 @@ export class CrearFormapagoComponent implements AfterViewInit {
 
   }
 
+  volver () {
+    this.router.navigate(['/dashboard']);
+  }
+
+
 }

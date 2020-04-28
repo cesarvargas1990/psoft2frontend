@@ -2,7 +2,7 @@ import { Component, OnInit, Inject,AfterViewInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Cliente } from '../../../../_models/cliente';
 import { documento } from '../../../../_models/documento';
-
+import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 
@@ -104,7 +104,8 @@ export class ListarDocumentosprestamoComponent implements OnInit {
     public tipodocidentiService : TipodocidentiService,
     public usersService : UsersService,
     public prestamosService : PrestamosService,
-    public san: DomSanitizer
+    public san: DomSanitizer,
+    public router: Router,
 
   ) { }
 
@@ -191,6 +192,11 @@ export class ListarDocumentosprestamoComponent implements OnInit {
    
 
   }
+
+  volver () {
+    this.router.navigate(['/dashboard']);
+  }
+
 
   
 

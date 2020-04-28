@@ -47,8 +47,9 @@ export class CrearDocumentoComponent implements AfterViewInit {
 
   fields: FormlyFieldConfig[] = [];
 
-
-
+  documentoPlantilla:  any = {};
+  modoEdicion = false;
+  editItem = false;
 
   @ViewChild('appDrawer', {static: false}) appDrawer: ElementRef;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -107,7 +108,7 @@ export class CrearDocumentoComponent implements AfterViewInit {
      this.prestamosService.listaVariablesPlantillas().subscribe(
       response => {
         this.config = {
-          height: 250,
+          height: 500,
           theme: 'modern',
           // powerpaste advcode toc tinymcespellchecker a11ychecker mediaembed linkchecker help
           plugins: 'print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image imagetools link media template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists textcolor wordcount contextmenu colorpicker textpattern',
@@ -160,7 +161,7 @@ export class CrearDocumentoComponent implements AfterViewInit {
       }
     ]
 
-    this.getDatosFormasPago();
+    this.getDatosDocumentos();
   }
 
   applyFilter(filterValue: string) {
@@ -195,7 +196,7 @@ export class CrearDocumentoComponent implements AfterViewInit {
               text: 'Se elimino satisfactoriamente el registro.',
             })
 
-            this.getDatosFormasPago();
+            this.getDatosDocumentos();
 
           }, error => {
 
@@ -254,7 +255,7 @@ export class CrearDocumentoComponent implements AfterViewInit {
   
           this.model = response;
           //console.log (response);
-          this.getDatosFormasPago ();
+          this.getDatosDocumentos ();
 
           Swal.fire({
             type: 'info',
@@ -279,9 +280,9 @@ export class CrearDocumentoComponent implements AfterViewInit {
 
     
     
-  }
+  } 
 
-  getDatosFormasPago() {
+  getDatosDocumentos() {
  
     this.prestamosService.consultaPlantillasDocumentos ().subscribe(
 
@@ -303,19 +304,74 @@ export class CrearDocumentoComponent implements AfterViewInit {
 
   modalEditarFormaPago(row: any[]): void {
 console.log (row);
-    const dialogRef = this.dialog.open(EditarDocumentoComponent, {
+   /* const dialogRef = this.dialog.open(EditarDocumentoComponent, {
        height: '800px',
       width: '1800px',
       data: row
-    });
+    }); */
 
-    dialogRef.afterClosed().subscribe(result => {
+   /* dialogRef.afterClosed().subscribe(result => {
       
-      this.getDatosFormasPago ();
+      this.getDatosDocumentos ();
 
-    });
+    }); */
 
 
+  }
+
+  volver () {
+    this.modoEdicion = false; 
+    //this.router.navigate(['/dashboard']);
+  }
+
+  editarDocumento (row) {
+
+    this.html = row.plantilla_html;
+    this.model.nombre = row.nombre;
+    this.model.id = row.id;
+  }
+
+  editarPlantilla () {
+    if (this.form.valid) { 
+      //this.model.id = this.data.id;
+      this.documentoPlantilla.id =  this.model.id;
+      this.documentoPlantilla.nombre = this.model.nombre;
+      this.documentoPlantilla.plantilla_html = this.html;
+      
+      console.log (this.documentoPlantilla);
+console.log (this.documentoPlantilla);
+      this.prestamosService.updatePlantillaDocumento (this.documentoPlantilla).subscribe(
+
+        response => {
+
+           console.log (response); 
+
+          if (response) {
+
+            this.model = response;
+            Swal.fire({
+              type: 'info',
+              title: 'Informaci&oacute;n',
+              text: 'Se actualizo satisfactoriamente el registro.',
+            }).then(
+              (result) => {
+
+                if (result.value == true) {
+                  //this.dialogRef.close();
+                  this.getDatosDocumentos();
+                }
+
+              }
+            )
+
+
+          }
+
+
+        }
+
+      )
+    }
   }
 
 }

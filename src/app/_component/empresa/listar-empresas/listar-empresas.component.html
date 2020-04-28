@@ -3,8 +3,8 @@
 <app-top-nav class="fixed-topnav" fxHide.gt-xs></app-top-nav> 
 <app-loading></app-loading> 
 <mat-sidenav-container class="example-sidenav-container">
-  <mat-sidenav  #appDrawer  [mode]="mobileQuery.matches ? 'over' : 'side'"
-  [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" [opened]="!mobileQuery.matches">
+  <mat-sidenav  #appDrawer  [mode]="mobileQuery.matches ? 'over' : 'over'"
+  [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" [opened]="false">
     <div class="logo-container" fxFlexAlign="center">
       <app-logo *ngIf="authService.isLoggedIn()"></app-logo>
     </div>

@@ -45,14 +45,15 @@ export class DashboardComponent implements AfterViewInit {
   visualizarListaCuotas = false;
   listadoPrestamos = true;
 
-  displayedColumns: string[] = ['nomcliente','valorpres','nomfpago','celular','direcasa','action'];
-  displayedColumnsFecPago: string[] = ['id_prestamo','fecha_pago','valcuota','action'];
+  displayedColumns: string[] = ['nomcliente','valorpres','valseguro','valcuota','nomfpago','celular','direcasa','action'];
+  displayedColumnsFecPago: string[] = ['id_prestamo','fecha_pago','valcuota','valseguro','valtotal','action'];
 
   dataSource = new MatTableDataSource([]);
   dataSourceFecPago = new MatTableDataSource([]);
 
   @ViewChild('appDrawer', {static: false}) appDrawer: ElementRef;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+  
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   applyFilter(filterValue: string) {

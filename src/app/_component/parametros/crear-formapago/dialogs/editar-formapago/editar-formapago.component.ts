@@ -13,7 +13,7 @@ import { UsersService} from '../../../../../_services/users/users.service';
 import { PrestamosService } from '../../../../../_services/prestamos/prestamos.service';
 
 @Component({
-  selector: 'app-editar-cliente',
+  selector: 'app-editar-formapago',
   templateUrl: './editar-formapago.component.html',
   styleUrls: ['./editar-formapago.component.scss']
 })

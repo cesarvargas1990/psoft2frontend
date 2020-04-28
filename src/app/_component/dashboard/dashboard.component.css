@@ -1,102 +1,63 @@
-.example-card {
-  max-width: 400px;
-}
-
-.example-header-image {
-  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
-  background-size: cover;
-}
-
-.example-events {
-    width: 300px;
-    height: 200px;
-    overflow: auto;
-    border: 1px solid #555;
-  }
-  .mat-sidenav, .mat-sidenav-content {
-    padding: 24px;
-  }
-
-  
-  .mat-table__wrapper .mat-table {
-    min-width: auto !important;
-    width: 100% !important;
-}
-
-.mat-header-row {
-    width: 100%;
-}
-
-.mat-row {
-    width: 100%;
-}
-
-
-  
-  th.mat-sort-header-sorted {
-    color: black;
-  }
-
-  
-
-
-  
-  .mat-table {
-    //overflow: auto;
-    //max-height: 500px;
-  }
-  
-  .mobile-label {
-    display: none;
-  }
-  
-  @media(max-width: 600px) {
-    .mobile-label {
-      width: 80px;
-      display: inline-block;
-          font-weight: bold;
-          font-size: 1em;
-    }
-  
-    .mat-header-row {
-      display: none;
-    }
-  
-   
-
-    .mat-table .mat-row {
-      border-bottom: 10px solid #ddd;
-      display: block;
-      align-items: start;
-      flex-direction: column;
-      padding: 8px 24px;
-    }
-
+@media screen and (max-width: 960px) {
     .mat-table {
-      mat-row, mat-header-row, mat-footer-row {
-        padding-left: 24px;
-        padding-right: 24px;
-      
-      }
-    
-      mat-cell:first-child, mat-footer-cell:first-child, mat-header-cell:first-child {
-        padding-left: 0;
-        
-      }
-    
-      mat-cell:last-child, mat-footer-cell:last-child, mat-header-cell:last-child {
-        padding-right: 0;
-        
-      }
-
-      
+        border: 0;
+        vertical-align: middle
     }
+    .mat-table .mat-header-cell {
+        border: 10px solid;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+    .mat-table .mat-row {
+        border-bottom: 5px solid #ddd;
+        display: block;
+    }
+    .mat-table .mat-cell {
+        border-bottom: 1px solid #ddd;
+        display: block;
+        text-align: right;
+        padding: inherit;
+        height: 30px;
+        margin-bottom: 4%;
+        padding-right: 24px;
+        margin-top: 5%;
+    }
+    .mat-table .mat-cell:before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        padding-left: 24px;
+        font-size: .85em;
+    }
+    .mat-table .mat-cell:last-child {
+        border-bottom: 0;
+    }
+}
 
-    
+.mat-column-valorpres {
+    justify-content: right;
+}
 
-    
-  }
-   
-  .mat-sidenav, .mat-sidenav-content {
-    padding: 24px;
-  }
+.mat-column-valseguro {
+    justify-content: right;
+}
+
+.mat-column-valcuota {
+    justify-content: right;
+}
+
+.mat-column-nomfpago {
+    justify-content: center;
+}
+
+.mat-column-valtotal {
+    justify-content: right;
+}
+
+.mat-column-action {
+    justify-content: right;
+}

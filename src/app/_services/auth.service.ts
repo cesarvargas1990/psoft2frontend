@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
@@ -11,9 +12,8 @@ import Swal from 'sweetalert2';
 })
 export class AuthService {
  
-  // API path
-  //basePath = 'https://mipropiedadhorizontal.com.co/api/api/';
-  basePath = 'http://localhost:8080/api/';
+  
+  basePath = environment.API_URL;
 
   constructor(
     private router: Router,
@@ -57,7 +57,7 @@ console.log (error);
   // Verify user credentials on server to get token
   loginForm(data): Observable<LoginResponse> {
     return this.http
-      .post<LoginResponse>(this.basePath +'auth/login', data, this.httpOptions)
+      .post<LoginResponse>(this.basePath +'/auth/login', data, this.httpOptions)
       .pipe(
         retry(2),
         catchError(this.handleError)

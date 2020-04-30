@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   }
  
   login() {
-    this.model.action = 'auth/login';
+    this.model.action = '/auth/login';
     this.authService.loginForm(this.model).subscribe(response => {
       if (response.status === 'success') {
         this.authService.setUser(response);

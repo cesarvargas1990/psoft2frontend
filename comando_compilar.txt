@@ -1,11 +1,28 @@
+-- generar key de la apk
 keytool -genkey -v -keystore psoft2.keystore -alias psoft2app -keyalg RSA -keysize 2048 -validity 10000
-
-
 
 
 dentro de la carpeta:
 
 E:\Documentos\proyectos\psoft2frontend\platforms\android\app\build\outputs\apk\release
 
-
+-- firmar apk
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore psoft2.keystore app-release-unsigned.apk psoft2app
+
+-- compilar
+==================================================
+
+ng build --configuration local --base-href ./ --aot --buildOptimizer   (local)
+ng build --configuration demo --base-href ./ --aot --buildOptimizer    (demo)
+ng build --prod --base-href ./ --aot --buildOptimizer                  (credifb)
+==================================================
+
+-- desplegar servir  en localhost, demo, credifb
+==================================================
+
+ng serve --c local              (local)
+ng serve --c demo or ng serve   (demo)
+ng serve --c prod               (credifb)
+
+
+

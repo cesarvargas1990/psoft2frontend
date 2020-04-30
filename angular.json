@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "visualtechfront": {
+    "psoft2frontend": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -62,24 +62,91 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+			
+			"local": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.local.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "5mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            },
+			
+			"demo": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.demo.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "5mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "visualtechfront:build"
+            "browserTarget": "psoft2frontend:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "visualtechfront:build:production"
+              "browserTarget": "psoft2frontend:build:production"
+            },
+            "local": {
+              "browserTarget": "psoft2frontend:build:local"
+            },
+            "demo": {
+              "browserTarget": "psoft2frontend:build:demo"
             }
+
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "visualtechfront:build"
+            "browserTarget": "psoft2frontend:build"
           }
         },
         "test": {
@@ -117,18 +184,18 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "visualtechfront:serve"
+            "devServerTarget": "psoft2frontend:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "visualtechfront:serve:production"
+              "devServerTarget": "psoft2frontend:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "visualtechfront",
+  "defaultProject": "psoft2frontend",
   "cli": {
     "analytics": "3236ef83-2489-4545-8778-fa0323749e18"
   }

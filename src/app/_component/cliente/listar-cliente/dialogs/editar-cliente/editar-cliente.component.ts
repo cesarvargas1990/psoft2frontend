@@ -54,8 +54,8 @@ export class EditarClienteComponent implements OnInit {
   currentIndexImage = 0;
   panelOpenState = false;
   
-  public photoPath: string = 'http://mipropiedadhorizontal.com.co/api/upload/documentosAdjuntos/';
-  //public photoPath: string = 'http://localhost:8080/api/upload/documentosAdjuntos/';
+  public photoPath: string = environment.UPLOADS_CLIENTES;
+  
   urlimage: any = {};
 
 

@@ -4,8 +4,10 @@ import { environment } from './../../../environments/environment';
 import { AuthService } from '../../_services/auth.service'
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
-const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 import Swal from 'sweetalert2';
+
+const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +15,8 @@ import Swal from 'sweetalert2';
 export class PrestamosService {
 
 
-  private server: string = 'https://mipropiedadhorizontal.com.co/api/api';
-  //private server: string = 'http://localhost:8080/api';
+  private server: string = environment.API_URL;
+
 
   private services =
     {

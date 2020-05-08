@@ -36,7 +36,8 @@ export class PrestamosService {
       psdocadjuntos: this.server + '/psdocadjuntos',
       psfechaspago : this.server + '/psfechaspago',
       pspagos : this.server + '/pspagos',
-      eliminarPrestamo : this.server + '/eliminarPrestamo'
+      eliminarPrestamo : this.server + '/eliminarPrestamo',
+      listatiposistemaprest : this.server + '/listatiposistemaprest'
 
     };
 
@@ -82,8 +83,8 @@ console.log (error);
  
 
   calcularCuotas(data): Observable<any> {
-    console.log('la data');
-    console.log(data);
+    
+    data.nitempresa = localStorage.getItem('nit_empresa'); 
     return this.http.post<any>(`${this.services.calcularCuotas}` , data, this.httpOpts).pipe(
       retry(2),
       catchError(this.handleError)
@@ -110,6 +111,18 @@ console.log (error);
       catchError(this.handleError)
     )
   }
+
+  getSistemaPrestamo(): Observable<any> {
+    
+    
+    
+    return this.http.get<any>(`${this.services.listatiposistemaprest }` , this.httpOpts).pipe(
+      retry(2),
+      catchError(this.handleError)
+    )
+  }
+
+  
 
   deleteFormaPago(data): Observable<any> {
     return this.http.delete(`${this.services.psformapago}` + '/' + data.id, this.httpOpts)
@@ -249,7 +262,7 @@ console.log (error);
     )
   }
 
-  
+   
 
   listadoPrestamos(data): Observable<any> {
     

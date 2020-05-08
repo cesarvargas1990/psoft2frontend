@@ -3,8 +3,8 @@
     <app-top-nav class="fixed-topnav" fxHide.gt-xs></app-top-nav>
     <app-loading></app-loading>
     <mat-sidenav-container class="example-sidenav-container">
-        <mat-sidenav #appDrawer [mode]="mobileQuery.matches ? 'over' : 'over'" [fixedInViewport]="mobileQuery.matches"
-            fixedTopGap="56" [opened]="false">
+        <mat-sidenav #appDrawer [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches"
+            fixedTopGap="56" [opened]="true">
             <div class="logo-container" fxFlexAlign="center">
                 <app-logo *ngIf="authService.isLoggedIn()"></app-logo>
             </div>
@@ -63,7 +63,7 @@
 <br>
 
             <div *ngIf= "mostrarTablaResumen" class="card" style="width: 100%;">
-                <div *ngIf="!listarDocumentosPrestamo" class="card-body">
+                <div *ngIf="!listarDocumentosPrestamo" class="card-body table-responsive">
                         <h5 class="card-title">Tabla de Resumen del prestamo</h5>
                         <div class="card-text">
 

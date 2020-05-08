@@ -100,6 +100,18 @@ h1.example-app-name {
     .card-body {
         -ms-flex: 1 1 auto !important;
         flex: 1 1 auto !important;
-        padding: 0.1rem !important;
+        padding: 0.7rem !important;
     }
+}
+
+.editarCliente {
+    padding-left: 0px !important;
+}
+
+.mat-dialog-title {
+    text-align: left !important;
+}
+
+.listadoDocumentos {
+    padding: 15px;
 }

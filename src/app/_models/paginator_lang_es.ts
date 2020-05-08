@@ -1,4 +1,4 @@
-import {MatPaginatorIntl} from '@angular/material';
+/* import {MatPaginatorIntl} from '@angular/material';
 export class MatPaginatorIntlEs extends MatPaginatorIntl {
   itemsPerPageLabel = 'Registros por pagina';
   nextPageLabel     = 'Siguiente';
@@ -17,4 +17,4 @@ export class MatPaginatorIntlEs extends MatPaginatorIntl {
     return startIndex + 1 + ' - ' + endIndex + ' de ' + length;
   };
 
-}
+} */ 

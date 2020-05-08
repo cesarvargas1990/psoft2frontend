@@ -38,7 +38,7 @@ import {MatListModule} from '@angular/material/list';
 import {NgModule} from '@angular/core';
 import {MatPaginatorModule } from '@angular/material/paginator';
 import {MatSortModule } from '@angular/material/sort';
-import {MatPaginatorIntl} from '@angular/material';
+//import {MatPaginatorIntl} from '@angular/material';
 import {MatFormFieldModule } from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -91,7 +91,7 @@ import { DatePipe } from '@angular/common';
 
 
 // Custom material (idioma, extensiones y modificaciones a modulos de material. ETC)
-import { MatPaginatorIntlEs } from '../app/_models/paginator_lang_es';
+//import { MatPaginatorIntlEs } from '../app/_models/paginator_lang_es';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 

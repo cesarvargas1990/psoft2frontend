@@ -74,6 +74,7 @@ console.log (error);
     localStorage.setItem('nit_empresa', resp.nit_empresa);
     localStorage.setItem('ind_activo',JSON.stringify(resp.ind_activo))
     localStorage.setItem('is_admin', JSON.stringify(resp.is_admin));
+    localStorage.setItem('nom_conc_adicional', resp.nom_conc_adicional);
     localStorage.setItem('id_user', JSON.stringify(resp.id_user)); // Corresponde al cobrador al cual pertenece este usuario
     this.router.navigate(['/dashboard']); 
   } 

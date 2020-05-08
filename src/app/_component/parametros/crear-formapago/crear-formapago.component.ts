@@ -38,10 +38,11 @@ export class CrearFormapagoComponent implements AfterViewInit {
   tiposdocumento : any = {};
   cobradores :any = {};
   periodospago :any = {};
+  sistemaprestamo : any = {};
 
   fields: FormlyFieldConfig[] = [];
 
-
+  nom_conc_adicional :any = {};
 
 
   @ViewChild('appDrawer', {static: false}) appDrawer: ElementRef;
@@ -81,6 +82,7 @@ export class CrearFormapagoComponent implements AfterViewInit {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
+    this.nom_conc_adicional = localStorage.getItem('nom_conc_adicional');
 
   }
 
@@ -104,6 +106,7 @@ export class CrearFormapagoComponent implements AfterViewInit {
     
     this.navService.appDrawer = this.appDrawer;
     this.periodospago = await this.prestamosService.getPeriodosPago();
+    this.sistemaprestamo = await this.prestamosService.getSistemaPrestamo();
 
     this.fields = [
 
@@ -111,6 +114,21 @@ export class CrearFormapagoComponent implements AfterViewInit {
 
         fieldGroupClassName: 'row',
         fieldGroup: [
+
+          {
+            key: 'codtipsistemap',
+            className: 'col-md-6',
+            type: 'select',
+            modelOptions: {
+              updateOn: 'blur',
+            },
+            templateOptions: {
+              label: 'Sistema de prestamo (metodo)',
+              placeholder: 'Seleccione sistema de prestamo',
+              required: true,
+              options: this.sistemaprestamo
+            },
+          },
 
           {
             key: 'id_periodo_pago',
@@ -191,8 +209,8 @@ export class CrearFormapagoComponent implements AfterViewInit {
               updateOn: 'blur',
             },
             templateOptions: {
-              label: 'Valor de seguro',
-              placeholder: 'Ingrese Valor de seguro ?',
+              label: 'Valor de '+this.nom_conc_adicional,
+              placeholder: 'Ingrese Valor de '+this.nom_conc_adicional+ ' ?',
               required: true,
               pattern: /^[0-9]*\.?[0-9]*$/,
             },
@@ -233,7 +251,7 @@ export class CrearFormapagoComponent implements AfterViewInit {
               updateOn: 'blur',
             },
             templateOptions: {
-              label: 'Modificar valor del seguro?',
+              label: 'Modificar valor de '+this.nom_conc_adicional+' ?',
               placeholder: 'En el momento del registro del prestamo',
               
             }

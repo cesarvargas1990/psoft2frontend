@@ -4,7 +4,7 @@
 <app-loading></app-loading> 
 <mat-sidenav-container class="example-sidenav-container">
   <mat-sidenav  #appDrawer  [mode]="mobileQuery.matches ? 'over' : 'over'"
-  [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" [opened]="false">
+  [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" [opened]="true">
     <div class="logo-container" fxFlexAlign="center">
       <app-logo *ngIf="authService.isLoggedIn()"></app-logo>
     </div>

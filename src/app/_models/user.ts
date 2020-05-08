@@ -10,5 +10,6 @@ export interface LoginResponse {
     nit_empresa: string;
     ind_activo : number;
     id_user : number;
+    nom_conc_adicional : string;
     
 } 

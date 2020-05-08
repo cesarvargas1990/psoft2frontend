@@ -34,6 +34,8 @@ export class EditarFormapagoComponent implements OnInit {
   cobradores :any = {};
   fields: FormlyFieldConfig[] = [];
 
+  nom_conc_adicional : any = {};
+
   submit() {
 
     if (this.form.valid) { 
@@ -144,6 +146,7 @@ export class EditarFormapagoComponent implements OnInit {
             key: 'numcuotas',
             className: 'col-md-6',
             type: 'input',
+            defaultValue: this.data.numcuotas,
             modelOptions: {
               updateOn: 'blur',
             },
@@ -169,8 +172,8 @@ export class EditarFormapagoComponent implements OnInit {
               updateOn: 'blur',
             },
             templateOptions: {
-              label: 'Valor de seguro',
-              placeholder: 'Ingrese Valor de seguro',
+              label: 'Valor' +this.nom_conc_adicional,
+              placeholder: 'Ingrese Valor '+this.nom_conc_adicional,
               required: true,
               pattern: /^[0-9]*\.?[0-9]*$/,
             },
@@ -212,7 +215,7 @@ export class EditarFormapagoComponent implements OnInit {
               updateOn: 'blur',
             },
             templateOptions: {
-              label: 'Modificar valor del seguro?',
+              label: 'Modificar valor '+this.nom_conc_adicional + ' ?',
               placeholder: 'En el momento del registro del prestamo',
               
             }
@@ -260,7 +263,7 @@ export class EditarFormapagoComponent implements OnInit {
   async ngOnInit() {
 
 
-    
+    this.nom_conc_adicional = localStorage.getItem('nom_conc_adicional');
 
    
 

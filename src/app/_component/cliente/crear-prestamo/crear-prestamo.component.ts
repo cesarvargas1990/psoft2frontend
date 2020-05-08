@@ -71,6 +71,8 @@ export class CrearPrestamoComponent implements AfterViewInit {
 
   listaClientes: any = [];
 
+  nom_conc_adicional : any = {};
+
   constructor(
     public authService: AuthService,
     private navService: NavService,
@@ -93,6 +95,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
 
 
   ngOnInit() {
+    this.nom_conc_adicional = localStorage.getItem('nom_conc_adicional');
     this.mobileQuery.removeListener(this._mobileQueryListener);
 
 
@@ -319,7 +322,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
               updateOn: 'blur',
             },
             templateOptions: {
-              label: 'Valor de seguro',
+              label: 'Valor' + this.nom_conc_adicional,
               required: true,
             },
           },

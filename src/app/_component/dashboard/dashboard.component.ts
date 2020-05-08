@@ -29,6 +29,10 @@ import {
 export class DashboardComponent implements AfterViewInit {
 
   options: any = {};
+
+  codPrestaSeleccionado: any = {};
+  clienteSeleccionado:any = {};
+
   options2: any = {};
 
   model: any = {};
@@ -45,11 +49,15 @@ export class DashboardComponent implements AfterViewInit {
   visualizarListaCuotas = false;
   listadoPrestamos = true;
 
-  displayedColumns: string[] = ['nomcliente','valorpres','valseguro','valcuota','nomfpago','celular','direcasa','action'];
-  displayedColumnsFecPago: string[] = ['id_prestamo','fecha_pago','valcuota','valseguro','valtotal','action'];
+  displayedColumns: string[] = ['id_prestamo','nomcliente','valorpres','valseguro','valcuota','nomfpago','celular','direcasa','action'];
+  displayedColumnsFecPago: string[] = ['fecha_pago','valcuota','valseguro','valtotal','action'];
 
   dataSource = new MatTableDataSource([]);
   dataSourceFecPago = new MatTableDataSource([]);
+
+
+  nom_conc_adicional : any = {};
+  
 
   @ViewChild('appDrawer', {static: false}) appDrawer: ElementRef;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -114,6 +122,8 @@ export class DashboardComponent implements AfterViewInit {
   listadoCuotas (row) {
     
 
+    this.codPrestaSeleccionado = row.id_prestamo;
+    this.clienteSeleccionado = row.nomcliente;
     
     this.prestamosService.listaFechasPago(row.id_prestamo).subscribe(
       response => {
@@ -148,6 +158,7 @@ export class DashboardComponent implements AfterViewInit {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
+    
     
   } 
 
@@ -187,7 +198,7 @@ console.log(row);
   }
 
   ngOnInit() {
-
+    this.nom_conc_adicional = localStorage.getItem('nom_conc_adicional');
     this.config = {
       height: 500,
       theme: 'modern',

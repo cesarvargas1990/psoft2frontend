@@ -50,11 +50,16 @@ export class DashboardComponent implements AfterViewInit {
   listadoPrestamos = true;
 
   displayedColumns: string[] = ['id_prestamo','nomcliente','valorpres','valseguro','valcuota','nomfpago','celular','direcasa','action'];
-  displayedColumnsFecPago: string[] = ['fecha_pago','valcuota','valseguro','valtotal','action'];
+  displayedColumnsFecPago: string[] = ['fecha_pago','fecha_realpago','valcuota','valseguro','valtotal','action'];
 
   dataSource = new MatTableDataSource([]);
   dataSourceFecPago = new MatTableDataSource([]);
 
+  total_capital_prestado :string;
+  total_prestado_hoy :string;
+  total_interes_hoy :string;
+  total_prestado :string;
+  total_interes :string;
 
   nom_conc_adicional : any = {};
   
@@ -186,6 +191,7 @@ console.log(row);
         this.prestamosService.deletePrestamo (row).subscribe(
           response => {
               this.getDatosPrestamo();
+              this.refresh();
           }
         )
 
@@ -197,6 +203,41 @@ console.log(row);
 
   }
 
+
+  refresh () {
+
+    this.nom_conc_adicional = localStorage.getItem('nom_conc_adicional');
+    
+    this.prestamosService.capitalprestado().subscribe(response => {
+      
+      this.total_capital_prestado = response;
+    })
+
+    this.prestamosService.totalprestadohoy().subscribe(response => {
+      
+      this.total_prestado_hoy = response;
+    })
+
+    this.prestamosService.totalintereshoy().subscribe(response => {
+      
+      this.total_interes_hoy = response;
+    })
+
+    this.prestamosService.totalinteres().subscribe(response => {
+      
+      this.total_interes = response;
+    })
+
+    this.prestamosService.totalprestado().subscribe(response =>   {
+      this.total_prestado = response; 
+    })
+
+    this.mobileQuery.removeListener(this._mobileQueryListener);
+    //this.getSomePrivateStuff();
+    this.getDatosPrestamo();
+
+      
+  }
   ngOnInit() {
     this.nom_conc_adicional = localStorage.getItem('nom_conc_adicional');
     this.config = {
@@ -213,13 +254,8 @@ console.log(row);
         '//www.tinymce.com/css/codepen.min.css'
       ]
     }
+    this.refresh();
 
-    this.mobileQuery.removeListener(this._mobileQueryListener);
-    //this.getSomePrivateStuff();
-    this.getDatosPrestamo();
-
-    
-      
 
   }
 
@@ -266,11 +302,54 @@ console.log(row);
 
       if (result.value == true) {
 
-        console.log (row);
+
+        Swal.fire({
+          input: 'text',
+          title: 'Valor a pagar',
+          text: "Por favor ingrese el valor a cancelar:",
+          showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar!',
+      cancelButtonText: 'Cancelar!',
+          inputAttributes: {
+          autocapitalize: 'off',
+         
+            },
+            preConfirm: (response) => {
+
+
+              var currency = row.valtotal;
+              var number = Number(currency.replace(/[^0-9.-]+/g,""));
+
+              
+              alert (row.valtotal);
+              if (isNaN(response)){
+                Swal.fire ({
+                  title: 'Error!',
+                  text: 'El valor ingresado no es númerico!',
+                  cancelButtonColor: '#d33',
+                  type: 'error',
+                })
+                return false;
+              }
+
+              if (response <  number) {
+                Swal.fire ({
+                  title: 'Error!',
+                  text: 'El valor ingresado debe ser mayor o igual al valor de la cuota!',
+                  cancelButtonColor: '#d33',
+                  type: 'error',
+                })
+                return false;
+              }
+
+              console.log (row);
         this.model.fecha_pago = row.fecha_pago;
         this.model.id_prestamo = row.id_prestamo;
         this.model.id_cliente = row.id_cliente;
         this.model.id = row.id;
+        this.model.valor_pago = response;
         this.prestamosService.registrarPagoCuota(this.model).subscribe(
           response => {
   
@@ -278,9 +357,14 @@ console.log(row);
             if (response ){
               Swal.fire("Listo!", "El pago ha sido registrado.", "success");
               this.listadoCuotas(row);
+              this.refresh();
             }
           }
         )
+              
+            }
+        })
+        
 
       }
 

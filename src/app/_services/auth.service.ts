@@ -72,6 +72,7 @@ console.log (error);
     localStorage.setItem('id', JSON.stringify(resp.id));
     localStorage.setItem('id_usuario', JSON.stringify(resp.id));
     localStorage.setItem('nit_empresa', resp.nit_empresa);
+    localStorage.setItem('id_empresa', JSON.stringify(resp.id_empresa));
     localStorage.setItem('ind_activo',JSON.stringify(resp.ind_activo))
     localStorage.setItem('is_admin', JSON.stringify(resp.is_admin));
     localStorage.setItem('nom_conc_adicional', resp.nom_conc_adicional);

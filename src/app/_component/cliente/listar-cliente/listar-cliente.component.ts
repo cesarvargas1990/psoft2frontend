@@ -206,7 +206,7 @@ export class ListarClienteComponent implements AfterViewInit {
 
     Swal.fire({
       title: 'Esta seguro?',
-      text: "Desea eliminar el registro?",
+      text: "Se Eliminaran todos los prestamos asociados al cliente, Esta seguro de eliminar el registro?",
       type: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',

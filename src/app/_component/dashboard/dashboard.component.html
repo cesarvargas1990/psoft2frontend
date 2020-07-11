@@ -13,9 +13,99 @@
             </mat-nav-list>
         </mat-sidenav>
         <mat-sidenav-content>
+
+            <div class="row">
+                <div class="col-md-3">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">$ Balance</div>
+                        </div>
+        
+                        
+                        <p style="text-align:end">
+                            ${{total_capital_prestado}}
+                        </p>
+                        
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">$ Total prestado</div>
+                        </div>
+        
+                        
+                        <p style="text-align:end">
+                            ${{total_prestado}}
+                        </p>
+                        
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">$ Total intereses</div>
+                        </div>
+        
+                        
+                        <p style="text-align:end">
+                            ${{total_interes}}
+                        </p>
+                        
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">$ Prestado hoy</div>
+                        </div>
+        
+                        
+                        <p style="text-align:end">
+                            ${{total_prestado_hoy}}
+                        </p>
+                        
+                    </div>
+
+                </div>
+
+<br>
+                <div style="margin-top: 30px;" class="col-md-3">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">$ Ing Interes hoy</div>
+                        </div>
+        
+                        
+                        <p style="text-align:end">
+                            ${{total_interes_hoy}}
+                        </p>
+                        
+                    </div>
+
+                </div>
+
+               
+
+            </div>
+            
+            <br>
             <div *ngIf="!visualizarDocumentos && listadoPrestamos" class="card" style="width: 100%;">
                 <div class="card-body">
                     <h5 class="card-title">Listado de Prestamos</h5>
+
+                    
                     <div class="card-text">
                         <mat-form-field class="example-full-width">
                             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
@@ -133,6 +223,13 @@
                                 <mat-cell [ngStyle]="{'background-color': element.id_fecha_pago? '#00800085' : '#ff0000bf'}" *matCellDef="let element" data-label="Fecha Pago"> {{element.fecha_pago}}
                                 </mat-cell>
                             </ng-container>
+
+                            <ng-container matColumnDef="fecha_realpago">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Realiza Pago </mat-header-cell>
+                                <mat-cell [ngStyle]="{'background-color': element.id_fecha_pago? '#00800085' : '#ff0000bf'}" *matCellDef="let element" data-label="Fecha Pago"> {{element.fecha_realpago}}
+                                </mat-cell>
+                            </ng-container>
+
                             <ng-container matColumnDef="valcuota">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> Valor Intereses </mat-header-cell>
                                 <mat-cell [ngStyle]="{'background-color': element.id_fecha_pago? '#00800085' : '#ff0000bf'}" *matCellDef="let element" data-label="Val Cuota Interes"> {{element.valcuota}}

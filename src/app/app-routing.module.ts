@@ -1,3 +1,5 @@
+import { EmpresaParametrosComponent } from './_component/parametros/empresa-parametros/empresa-parametros.component';
+
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './_guards/auth.guard';
@@ -13,6 +15,7 @@ import { CrearClienteComponent } from './_component/cliente/crear-cliente/crear-
 import { CrearPrestamoComponent } from './_component/cliente/crear-prestamo/crear-prestamo.component';
 import { CrearFormapagoComponent} from './_component/parametros/crear-formapago/crear-formapago.component';
 import { CrearDocumentoComponent} from './_component/parametros/crear-documento/crear-documento.component';
+
 const routes: Routes = [ 
 
   {
@@ -41,6 +44,9 @@ const routes: Routes = [
         canActivate: [AuthGuard] } ,
 
         {path:'documentos', component: CrearDocumentoComponent,
+        canActivate: [AuthGuard] } ,
+
+        {path:'empresa', component: EmpresaParametrosComponent,
         canActivate: [AuthGuard] } 
         
     ]

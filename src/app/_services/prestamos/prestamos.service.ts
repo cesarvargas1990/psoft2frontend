@@ -37,8 +37,12 @@ export class PrestamosService {
       psfechaspago : this.server + '/psfechaspago',
       pspagos : this.server + '/pspagos',
       eliminarPrestamo : this.server + '/eliminarPrestamo',
-      listatiposistemaprest : this.server + '/listatiposistemaprest'
-
+      listatiposistemaprest : this.server + '/listatiposistemaprest', 
+      capitalprestado : this.server + '/capitalprestado',
+      totalprestadohoy : this.server + '/totalprestadohoy',
+      totalintereshoy : this.server + '/totalintereshoy',
+      totalinteres : this.server + '/totalinteres',
+      totalprestado : this.server + '/totalprestado'
     };
 
 
@@ -302,7 +306,57 @@ console.log (error);
     data.id_user = localStorage.getItem('id');
     return this.http.post(`${this.services.pspagos }`, data, this.httpOpts)
   }
+
+  capitalprestado (): Observable<any> {
+    let data: any = {};
+    data.nitempresa = localStorage.getItem('nit_empresa');
+    return this.http.get(`${this.services.capitalprestado }` + '/' + data.nitempresa, this.httpOpts)
+
+  }
+
+  totalprestadohoy (): Observable<any> {
+    let data: any = {};
+    data.fecha = this.fechaActual();
+    data.nitempresa = localStorage.getItem('nit_empresa');
+    return this.http.post(`${this.services.totalprestadohoy }` , data, this.httpOpts)
+
+  }
   
+  totalintereshoy (): Observable<any> {
+    let data: any = {};
+    data.fecha = this.fechaActual();
+    data.nitempresa = localStorage.getItem('nit_empresa');
+    return this.http.post(`${this.services.totalintereshoy }`,data, this.httpOpts)
+
+  }
+
+  totalinteres (): Observable<any> {
+    let data: any = {};
+    data.nitempresa = localStorage.getItem('nit_empresa');
+    return this.http.post(`${this.services.totalinteres }`,data, this.httpOpts)
+
+  }
+
+  totalprestado (): Observable<any> { 
+    let data: any = {};
+    data.nitempresa = localStorage.getItem('nit_empresa');
+    return this.http.get(`${this.services.totalprestado }` + '/' + data.nitempresa, this.httpOpts)
+
+  }
+
+   fechaActual() {
+    var d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
 
  
 }

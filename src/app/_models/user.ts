@@ -8,6 +8,7 @@ export interface LoginResponse {
     id: string;
     is_admin: Number;
     nit_empresa: string;
+    id_empresa: number;
     ind_activo : number;
     id_user : number;
     nom_conc_adicional : string;

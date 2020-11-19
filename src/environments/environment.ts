@@ -1,7 +1,7 @@
-const BASE_URL = 'https://mipropiedadhorizontal.com.co/apid';
+const BASE_URL = 'https://credisoft.co/api';
 
 export const environment = {
   production: false,
-  API_URL : BASE_URL + '/api',
-  UPLOADS_CLIENTES : BASE_URL +'/upload/documentosAdjuntos/' 
+  API_URL : BASE_URL + '',
+  UPLOADS_CLIENTES :  '/upload/documentosAdjuntos/' 
 };

@@ -102,8 +102,17 @@
             
             <br>
             <div *ngIf="!visualizarDocumentos && listadoPrestamos" class="card" style="width: 100%;">
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Listado de prestamos</div>
+                    </div>
+    
+                    
+                </div>
+
                 <div class="card-body">
-                    <h5 class="card-title">Listado de Prestamos</h5>
+                   
 
                     
                     <div class="card-text">
@@ -141,10 +150,7 @@
                                 <mat-header-cell *matHeaderCellDef mat-sort-header>V. Prestamo</mat-header-cell>
                                 <mat-cell *matCellDef="let element" data-label="V. Prestamo"> {{element.valorpres | currency:'':''}} </mat-cell>
                             </ng-container>
-                            <ng-container matColumnDef="valseguro">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{nom_conc_adicional}}</mat-header-cell>
-                                <mat-cell *matCellDef="let element"  [attr.data-label]=nom_conc_adicional> {{element.valseguro | currency:'':''}} </mat-cell>
-                            </ng-container>
+                            
                             <ng-container matColumnDef="celular">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header>Celular</mat-header-cell>
                                 <mat-cell *matCellDef="let element" data-label="Celular"> {{element.celular}}
@@ -235,11 +241,7 @@
                                 <mat-cell [ngStyle]="{'background-color': element.id_fecha_pago? '#00800085' : '#ff0000bf'}" *matCellDef="let element" data-label="Val Cuota Interes"> {{element.valcuota}}
                                 </mat-cell>
                             </ng-container> 
-                            <ng-container matColumnDef="valseguro">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> {{nom_conc_adicional}} </mat-header-cell>
-                                <mat-cell [ngStyle]="{'background-color': element.id_fecha_pago? '#00800085' : '#ff0000bf'}" *matCellDef="let element" [attr.data-label]="nom_conc_adicional"> {{element.valseguro}}
-                                </mat-cell>
-                            </ng-container>
+                            
 
                             <ng-container matColumnDef="valtotal" data-label="Val Total">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> Valor Pagar </mat-header-cell>

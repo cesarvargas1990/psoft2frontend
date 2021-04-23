@@ -222,20 +222,6 @@ export class EmpresaParametrosComponent implements OnInit {
               },
 
 
-              {
-                key: 'nom_conc_adicional',
-                defaultValue: this.datosEmpresa['nom_conc_adicional'],
-                className: 'col-md-6',
-                type: 'input',
-                modelOptions: {
-                  updateOn: 'blur',
-                },
-                templateOptions: {
-                  label: 'Nombre concepto adicional',
-                  placeholder: 'Nombre concepto adicional',
-                  required: true,
-                },
-              },
     
             ],
     

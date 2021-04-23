@@ -3,7 +3,8 @@
     <app-top-nav class="fixed-topnav" fxHide.gt-xs></app-top-nav>
     <app-loading></app-loading>
     <mat-sidenav-container class="example-sidenav-container">
-        <mat-sidenav #appDrawer [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" [opened]="true">
+        <mat-sidenav #appDrawer [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches"
+            fixedTopGap="56" [opened]="true">
             <div class="logo-container" fxFlexAlign="center">
                 <app-logo *ngIf="authService.isLoggedIn()"></app-logo>
             </div>
@@ -17,22 +18,38 @@
 
             <div class="card" *ngIf="!modoEdicion && !editItem" style="width: 100%;">
                 <div class="card-body">
-                    <h5 class="card-title">Listado plantillas de documentos</h5>
+
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title"> <button title="Volver" (click)="volver()"
+                                    class="left btn btn-outline-primary btn-sm" mat-icon-button color="primary">
+                                    <mat-icon aria-label="Example icon-button with a heart icon">keyboard_backspace
+                                    </mat-icon>
+                                </button>&nbsp;Listado plantillas de documentos</div>
+                        </div>
+
+
+                    </div>
+
+
                     <div class="card-text">
 
                         <mat-form-field class="example-full-width">
                             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
                         </mat-form-field>
                         <br>
-                        <button title="Crear Documento" class="btn btn-outline-primary btn-sm" mat-icon-button color="primary" (click)="modoEdicion=true;this.html='';this.model.nombre=''">
+                        <button title="Crear Documento" class="btn btn-outline-primary btn-sm" mat-icon-button
+                            color="primary" (click)="modoEdicion=true;this.html='';this.model.nombre=''">
                             <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
-                          </button>
+                        </button>
                         <br>
                         <mat-table class="table-responsive" [dataSource]="dataSource" matSort class="mat-elevation-z8 ">
 
                             <ng-container matColumnDef="nombre">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre Documento </mat-header-cell>
-                                <mat-cell *matCellDef="let element" data-label="Nombre Documento"> <span class="mobile-label">Nombre:</span>{{element.nombre}} </mat-cell>
+                                <mat-cell *matCellDef="let element" data-label="Nombre Documento"> <span
+                                        class="mobile-label">Nombre:</span>{{element.nombre}} </mat-cell>
                             </ng-container>
 
                             <ng-container></ng-container>
@@ -49,19 +66,24 @@
                                 </mat-cell>
 
                                 <mat-cell *matCellDef="let row; let i=index;">
-                                    <button title="Editar Plantilla Documento" class="float-right btn btn-outline-primary btn-sm" mat-icon-button color="primary" (click)="editItem=true;editarDocumento(row)">
-                              <mat-icon aria-label="Edit">edit</mat-icon>
-                            </button>
+                                    <button title="Editar Plantilla Documento"
+                                        class="float-right btn btn-outline-primary btn-sm" mat-icon-button
+                                        color="primary" (click)="editItem=true;editarDocumento(row)">
+                                        <mat-icon aria-label="Edit">edit</mat-icon>
+                                    </button>
 
-                                    <button title="Eliminar Plantilla Documento" class="float-right btn btn-outline-danger btn-sm" mat-icon-button color="accent" (click)="eliminarDocumentoPlantilla(row)">
-                              <mat-icon aria-label="Delete">delete</mat-icon>
-                            </button>
+                                    <button title="Eliminar Plantilla Documento"
+                                        class="float-right btn btn-outline-danger btn-sm" mat-icon-button color="accent"
+                                        (click)="eliminarDocumentoPlantilla(row)">
+                                        <mat-icon aria-label="Delete">delete</mat-icon>
+                                    </button>
                                 </mat-cell>
                             </ng-container>
                             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                         </mat-table>
-                        <mat-paginator [pageSizeOptions]="[5, 10, 20, 25, 50, 100,dataSource.data.length]" showFirstLastButtons>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20, 25, 50, 100,dataSource.data.length]"
+                            showFirstLastButtons>
                         </mat-paginator>
 
 
@@ -74,15 +96,18 @@
             <div *ngIf="modoEdicion" class="card" style="width: 100%;">
                 <div class="card-body">
 
-                    <div>
-                        <button title="Volver" (click)="volver()" class="left btn btn-outline-primary btn-sm" mat-icon-button color="primary">
-                      <mat-icon aria-label="Example icon-button with a heart icon">keyboard_backspace</mat-icon>
-                    </button>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title"> <button title="Volver" (click)="volver()"
+                                    class="left btn btn-outline-primary btn-sm" mat-icon-button color="primary">
+                                    <mat-icon aria-label="Example icon-button with a heart icon">keyboard_backspace
+                                    </mat-icon>
+                                </button>&nbsp;Titulo del Documento</div>
+                        </div>
+
                     </div>
 
-                    <h5 class="card-title">Titulo del Documento</h5>
                     <div class="card-text">
-
 
                         <form [formGroup]="form" (ngSubmit)="submit()">
                             <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form">
@@ -91,100 +116,100 @@
                         </form>
 
 
-
-
-
                     </div>
                 </div>
             </div>
-
-
 
 
             <div *ngIf="editItem" class="card" style="width: 100%;">
                 <div class="card-body">
 
-                    <div>
-                        <button title="Volver" (click)="volver();editItem=false" class="left btn btn-outline-primary btn-sm" mat-icon-button color="primary">
-                      <mat-icon aria-label="Example icon-button with a heart icon">keyboard_backspace</mat-icon>
-                    </button>
+
+                  
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title"> <button title="Volver" (click)="volver();editItem=false"
+                                    class="left btn btn-outline-primary btn-sm" mat-icon-button color="primary">
+                                    <mat-icon aria-label="Example icon-button with a heart icon">keyboard_backspace
+                                    </mat-icon>
+                                </button>&nbsp;Titulo del Documento</div>
+                        </div>
+
                     </div>
 
-                    <h5 class="card-title">Titulo del Documento</h5>
                     <div class="card-text">
-
 
                         <form [formGroup]="form" (ngSubmit)="submit()">
                             <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form">
                             </formly-form>
 
                         </form>
-
-
-
-
-
                     </div>
                 </div>
             </div>
-
-
-
             <br>
-
-
             <div *ngIf="editItem" class="card" style="width: 100%;">
                 <div class="card-body">
-                    <h5 class="card-title">Plantilla del Documento</h5>
-                    <div class="card-text">
 
+                    <div class="card-body">
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title"> >&nbsp;Plantilla del Documento</div>
+                            </div>
+    
+                        </div>
+                        <div class="card-text">
+                            <tinymce [(ngModel)]="html" [config]="config"></tinymce>
+                            <br>
+                            <mat-dialog-actions>
+                                <button type="button" (click)="submit()" title="Guardar Plantilla"
+                                    class="btn btn-primary submit-button">
+                                    <mat-icon aria-label="Edit">save</mat-icon>
+                                </button>
+                            </mat-dialog-actions>
+                        </div>
+                    </div>
+
+
+                    <div class="card-text">
 
                         <tinymce [(ngModel)]="html" [config]="config"></tinymce>
                         <br>
                         <mat-dialog-actions>
-                            <button type="button" (click)="editarPlantilla()" title="Guardar Plantilla" class="btn btn-primary submit-button">
-                          <mat-icon aria-label="Edit">save</mat-icon>
-                      </button>
+                            <button type="button" (click)="editarPlantilla()" title="Guardar Plantilla"
+                                class="btn btn-primary submit-button">
+                                <mat-icon aria-label="Edit">save</mat-icon>
+                            </button>
                         </mat-dialog-actions>
-
-
-
                     </div>
                 </div>
             </div>
 
-
-
             <br>
-
-
             <div *ngIf="modoEdicion" class="card" style="width: 100%;">
                 <div class="card-body">
-                    <h5 class="card-title">Plantilla del Documento</h5>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title"> >&nbsp;Plantilla del Documento</div>
+                        </div>
+
+                    </div>
                     <div class="card-text">
-
-
                         <tinymce [(ngModel)]="html" [config]="config"></tinymce>
                         <br>
                         <mat-dialog-actions>
-                            <button type="button" (click)="submit()" title="Guardar Plantilla" class="btn btn-primary submit-button">
-                          <mat-icon aria-label="Edit">save</mat-icon>
-                      </button>
+                            <button type="button" (click)="submit()" title="Guardar Plantilla"
+                                class="btn btn-primary submit-button">
+                                <mat-icon aria-label="Edit">save</mat-icon>
+                            </button>
                         </mat-dialog-actions>
-
-
-
                     </div>
                 </div>
             </div>
 
             <br>
-
-
-
-
-
-
 
         </mat-sidenav-content>
     </mat-sidenav-container>

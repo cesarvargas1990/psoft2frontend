@@ -49,8 +49,8 @@ export class DashboardComponent implements AfterViewInit {
   visualizarListaCuotas = false;
   listadoPrestamos = true;
 
-  displayedColumns: string[] = ['id_prestamo','nomcliente','valorpres','valseguro','valcuota','nomfpago','celular','direcasa','action'];
-  displayedColumnsFecPago: string[] = ['fecha_pago','fecha_realpago','valcuota','valseguro','valtotal','action'];
+  displayedColumns: string[] = ['id_prestamo','nomcliente','valorpres','valcuota','nomfpago','celular','direcasa','action'];
+  displayedColumnsFecPago: string[] = ['fecha_pago','fecha_realpago','valcuota','valtotal','action'];
 
   dataSource = new MatTableDataSource([]);
   dataSourceFecPago = new MatTableDataSource([]);
@@ -61,7 +61,6 @@ export class DashboardComponent implements AfterViewInit {
   total_prestado :string;
   total_interes :string;
 
-  nom_conc_adicional : any = {};
   
 
   @ViewChild('appDrawer', {static: false}) appDrawer: ElementRef;
@@ -206,7 +205,7 @@ console.log(row);
 
   refresh () {
 
-    this.nom_conc_adicional = localStorage.getItem('nom_conc_adicional');
+   
     
     this.prestamosService.capitalprestado().subscribe(response => {
       
@@ -239,7 +238,7 @@ console.log(row);
       
   }
   ngOnInit() {
-    this.nom_conc_adicional = localStorage.getItem('nom_conc_adicional');
+  
     this.config = {
       height: 500,
       theme: 'modern',

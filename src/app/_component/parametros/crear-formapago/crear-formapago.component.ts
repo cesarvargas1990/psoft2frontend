@@ -42,7 +42,6 @@ export class CrearFormapagoComponent implements AfterViewInit {
 
   fields: FormlyFieldConfig[] = [];
 
-  nom_conc_adicional :any = {};
 
 
   @ViewChild('appDrawer', {static: false}) appDrawer: ElementRef;
@@ -60,7 +59,7 @@ export class CrearFormapagoComponent implements AfterViewInit {
 
   datosFormasPago : any = [];
 
-  displayedColumns: string[] = ['id','nomfpago','nomperiodopago','valseguro','porcint','numcuotas','action'];
+  displayedColumns: string[] = ['id','nomfpago','nomperiodopago','porcint','numcuotas','action'];
 
   
   dataSource = new MatTableDataSource([]);
@@ -82,7 +81,7 @@ export class CrearFormapagoComponent implements AfterViewInit {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
-    this.nom_conc_adicional = localStorage.getItem('nom_conc_adicional');
+    
 
   }
 
@@ -201,25 +200,7 @@ export class CrearFormapagoComponent implements AfterViewInit {
             },
           },
 
-          {
-            key: 'valseguro',
-            className: 'col-md-6',
-            type: 'input',
-            modelOptions: {
-              updateOn: 'blur',
-            },
-            templateOptions: {
-              label: 'Valor de '+this.nom_conc_adicional,
-              placeholder: 'Ingrese Valor de '+this.nom_conc_adicional+ ' ?',
-              required: true,
-              pattern: /^[0-9]*\.?[0-9]*$/,
-            },
-            validation: {
-              messages: {
-                pattern: (error, field: FormlyFieldConfig) => `"${field.formControl.value}" no es un n\u00FAmero valido`,
-              },
-            },
-          },
+         
 
           {
             key: 'porcint',
@@ -242,20 +223,7 @@ export class CrearFormapagoComponent implements AfterViewInit {
           },
 
 
-          {
-            key: 'ind_solicseguro',
-            className: 'col-md-6',
-            type: 'checkbox',
-            defaultValue: false,
-            modelOptions: {
-              updateOn: 'blur',
-            },
-            templateOptions: {
-              label: 'Modificar valor de '+this.nom_conc_adicional+' ?',
-              placeholder: 'En el momento del registro del prestamo',
-              
-            }
-          },
+         
 
           {
             key: 'ind_solicporcint',

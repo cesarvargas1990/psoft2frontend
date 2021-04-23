@@ -71,7 +71,6 @@ export class CrearPrestamoComponent implements AfterViewInit {
 
   listaClientes: any = [];
 
-  nom_conc_adicional : any = {};
 
   constructor(
     public authService: AuthService,
@@ -95,7 +94,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
 
 
   ngOnInit() {
-    this.nom_conc_adicional = localStorage.getItem('nom_conc_adicional');
+    
     this.mobileQuery.removeListener(this._mobileQueryListener);
 
 
@@ -183,7 +182,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
               change: (field, $event) => {
 
                 this.form.get('porcint').setValue('');
-                this.form.get('valseguro').setValue('');
+             
                 this.form.get('numcuotas').setValue('');
                 this.form.get('valorpres').setValue('');
 
@@ -199,17 +198,13 @@ export class CrearPrestamoComponent implements AfterViewInit {
                       if (response) {
                         
                         this.form.get('porcint').setValue(response[0].porcint);
-                        this.form.get('valseguro').setValue(response[0].valseguro);
+                
                         this.form.get('numcuotas').setValue(response[0].numcuotas);
                         this.form.get('valorpres').setValue(response[0].valorpres);
 
                       
 
-                        if (response[0].ind_solicseguro == 0) {
-                          this.form.get('valseguro').disable({ onlySelf: true });
-                        } else {
-                          this.form.get('valseguro').enable();
-                        }
+                     
 
                         if (response[0].ind_solicporcint == 0) {
                           this.form.get('porcint').disable({ onlySelf: true });
@@ -314,18 +309,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
 
 
       
-          {
-            key: 'valseguro',
-            className: 'col-md-4',
-            type: 'input',
-            modelOptions: {
-              updateOn: 'blur',
-            },
-            templateOptions: {
-              label: 'Valor' + this.nom_conc_adicional,
-              required: true,
-            },
-          },
+        
 
           {
             key: 'fec_inicial',

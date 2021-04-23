@@ -34,7 +34,7 @@ export class EditarFormapagoComponent implements OnInit {
   cobradores :any = {};
   fields: FormlyFieldConfig[] = [];
 
-  nom_conc_adicional : any = {};
+ 
 
   submit() {
 
@@ -43,10 +43,8 @@ export class EditarFormapagoComponent implements OnInit {
       this.formaPagoModel.id =  this.data.id;
       this.formaPagoModel.id_periodo_pago = this.model.id_periodo_pago;
       this.formaPagoModel.nomfpago = this.model.nomfpago;
-      this.formaPagoModel.valseguro = this.model.valseguro;
       this.formaPagoModel.porcint = this.model.porcint;
       this.formaPagoModel.ind_solicporcint = this.model.ind_solicporcint;
-      this.formaPagoModel.ind_solicseguro = this.model.ind_solicseguro;
 
       this.prestamosService.updateFormaPago(this.formaPagoModel).subscribe(
 
@@ -163,26 +161,7 @@ export class EditarFormapagoComponent implements OnInit {
             },
           },
 
-          {
-            key: 'valseguro',
-            className: 'col-md-6',
-            type: 'input',
-            defaultValue: this.data.valseguro,
-            modelOptions: {
-              updateOn: 'blur',
-            },
-            templateOptions: {
-              label: 'Valor' +this.nom_conc_adicional,
-              placeholder: 'Ingrese Valor '+this.nom_conc_adicional,
-              required: true,
-              pattern: /^[0-9]*\.?[0-9]*$/,
-            },
-            validation: {
-              messages: {
-                pattern: (error, field: FormlyFieldConfig) => `"${field.formControl.value}" no es un n\u00FAmero valido`,
-              },
-            },
-          },
+        
 
           {
             key: 'porcint',
@@ -206,20 +185,7 @@ export class EditarFormapagoComponent implements OnInit {
           },
 
 
-          {
-            key: 'ind_solicseguro',
-            className: 'col-md-6',
-            type: 'checkbox',
-            defaultValue: this.data.ind_solicseguro,
-            modelOptions: {
-              updateOn: 'blur',
-            },
-            templateOptions: {
-              label: 'Modificar valor '+this.nom_conc_adicional + ' ?',
-              placeholder: 'En el momento del registro del prestamo',
-              
-            }
-          },
+         
 
           {
             key: 'ind_solicporcint',
@@ -263,7 +229,7 @@ export class EditarFormapagoComponent implements OnInit {
   async ngOnInit() {
 
 
-    this.nom_conc_adicional = localStorage.getItem('nom_conc_adicional');
+  
 
    
 

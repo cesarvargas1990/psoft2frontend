@@ -74,7 +74,7 @@ export class ListarClienteComponent implements AfterViewInit {
   listaTipoDoc: any = [];
 
   panelOpenState = false;
-  displayedColumns: string[] = ['nomcliente', 'numdocumento', 'ciudad', 'celular','email','perfil_facebook', 'direcasa', 'action'];
+  displayedColumns: string[] = ['nomcliente', 'numdocumento', 'ciudad', 'celular','email', 'direcasa', 'action'];
   public message: string;
 
   dataSource = new MatTableDataSource([]);

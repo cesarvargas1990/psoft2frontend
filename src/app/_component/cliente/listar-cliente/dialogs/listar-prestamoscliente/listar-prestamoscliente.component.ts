@@ -265,19 +265,7 @@ export class ListarPrestamosclienteComponent implements OnInit {
       },
 
 
-      {
-        key: 'perfil_facebook',
-        className: 'col-md-3',
-        type: 'input',
-        defaultValue: this.data.perfil_facebook,
-        modelOptions: {
-          updateOn: 'submit',
-        },
-        templateOptions: {
-          label: 'Perfil facebook',
-          required: true,
-        },
-      },
+  
   
   
       {

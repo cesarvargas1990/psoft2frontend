@@ -5,12 +5,8 @@ import { NavItem } from '../../../_models/nav-item';
 import { NavService } from '../../../_services/nav.service';
 import { VERSION } from '@angular/material';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { MatSort } from '@angular/material/sort';
 import { AuthService } from '../../../_services/auth.service';
-import { MatTableDataSource } from '@angular/material/table';
-import { Cliente } from '../../../_models/cliente';
 import { ClienteService } from '../../../_services/cliente/cliente.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TipodocidentiService } from '../../../_services/tipodocidenti/tipodocidenti.service';
 import { UsersService } from '../../../_services/users/users.service';
 import Swal from 'sweetalert2';
@@ -165,7 +161,6 @@ export class CrearClienteComponent implements AfterViewInit {
               templateOptions: {
                 label: 'Fecha Expedicion',
                 placeholder: 'Fecha Expedicion',
-                required: true,
               },
             },
 
@@ -203,19 +198,7 @@ export class CrearClienteComponent implements AfterViewInit {
               },
             },
 
-            {
-              key: 'perfil_facebook',
-              className: 'col-md-4',
-              type: 'input',
-              modelOptions: {
-                updateOn: 'blur',
-              },
-              templateOptions: {
-                label: 'Perfil Facebook',
-                required: true
-
-              },
-            },
+           
 
             
 

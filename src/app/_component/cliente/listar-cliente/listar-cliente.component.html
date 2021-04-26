@@ -19,12 +19,6 @@
             <div *ngIf="!modoEdicion" class="card" style="width: 100%;">
                 <div class="card-body">
 
-                    <div>
-
-                    </div>
-
-
-
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title"> <button title="Volver" (click)="volver()"
@@ -34,16 +28,18 @@
                                 </button>&nbsp;Listado de Clientes</div>
                         </div>
 
-
                     </div>
-
-
 
                     <div class="card-text">
                         <mat-form-field class="example-full-width">
                             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
                         </mat-form-field>
-
+                        <br>
+                        <button title="Agregar Cliente" class="float-right btn btn-outline-primary btn-sm"
+                            mat-icon-button color="primary" (click)="modalAdicionarEmpresa()">
+                            <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+                        </button>
+                        <br>
                         <mat-table class="table-responsive" [dataSource]="dataSource" matSort class="mat-elevation-z8 ">
 
 
@@ -95,7 +91,7 @@
 
 
                             <ng-container matColumnDef="action">
-                                <mat-header-cell *matHeaderCellDef>
+								<mat-header-cell *matHeaderCellDef>
                                     <button title="Agregar Cliente" class="float-right btn btn-outline-primary btn-sm"
                                         mat-icon-button color="primary" (click)="modalAdicionarEmpresa()">
                                         <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
@@ -208,32 +204,22 @@
                                                     <img [src]="listaArchivos[i]" *ngIf="listaArchivos[i]"
                                                         [attr.file-index]="i" height="200">
                                                 </div>
-
                                             </div>
-
                                         </mat-expansion-panel>
-
                                     </mat-accordion>
-
                                 </mat-tab>
-
                             </mat-tab-group>
-
                             <mat-dialog-actions>
                                 <button type="submit" [disabled]="!form.valid" class="btn btn-primary submit-button">
                                     <mat-icon aria-label="Edit">save</mat-icon>
                                 </button>
                             </mat-dialog-actions>
-
                             <br>
-
                         </form>
                         <br>
-
                     </div>
                 </div>
             </div>
-
         </mat-sidenav-content>
     </mat-sidenav-container>
 </div>

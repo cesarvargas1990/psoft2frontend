@@ -14,13 +14,13 @@
             </mat-nav-list>
         </mat-sidenav>
         <mat-sidenav-content>
-            <div class="card" style="width: 100%;">
+            <div class="card" style="width: 100%;" *ngIf="modoAgregar">
                 <div class="card-body">
                     <div>
                     </div>
                     <div class="card">
                         <div class="card-header">
-                            <div class="card-title"> <button title="Volver" (click)="volver()"
+                            <div class="card-title"> <button title="Volver" (click)="modoAgregar=false"
                                     class="left btn btn-outline-primary btn-sm" mat-icon-button color="primary">
                                     <mat-icon aria-label="Example icon-button with a heart icon">keyboard_backspace
                                     </mat-icon>
@@ -43,13 +43,15 @@
                 </div>
             </div>
 
-            <br>
-
-            <div class="card" style="width: 100%;">
+            <div class="card" style="width: 100%;" *ngIf="!modoAgregar">
                 <div class="card-body">
                     <div class="card">
                         <div class="card-header">
-                            <div class="card-title"> &nbsp;Listado formas de pago</div>
+                            <div class="card-title"> <button title="Volver" (click)="volver()"
+                                    class="left btn btn-outline-primary btn-sm" mat-icon-button color="primary">
+                                    <mat-icon aria-label="Example icon-button with a heart icon">keyboard_backspace
+                                    </mat-icon>
+                                </button>&nbsp;Listado formas de pago</div>
                         </div>
                     </div>
 
@@ -58,6 +60,13 @@
                         <mat-form-field class="example-full-width">
                             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
                         </mat-form-field>
+
+                        <br>
+                        <button title="Crear Forma de pago" class="btn btn-outline-primary btn-sm" mat-icon-button
+                            color="primary" (click)="modoAgregar=true">
+                            <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+                        </button>
+                        <br>
 
                         <mat-table class="table-responsive" [dataSource]="dataSource" matSort class="mat-elevation-z8 ">
 

@@ -14,7 +14,7 @@
         </mat-sidenav>
         <mat-sidenav-content>
 
-            <div class="row">
+            <div class="row" *ngIf="totales==true">
                 <div class="col-md-3">
 
                     <div class="card">
@@ -166,10 +166,10 @@
 
                                 </mat-header-cell>
                                 <mat-cell *matCellDef="let row; let i=index;">
-                                    <button title="Documentos" class="float-right btn btn-outline-primary btn-sm" mat-icon-button color="primary" (click)="modalListadoDocumentos(row);visualizarListaCuotas=false">
+                                    <button title="Documentos" class="float-right btn btn-outline-primary btn-sm" mat-icon-button color="primary" (click)="modalListadoDocumentos(row);visualizarListaCuotas=false;totales=false">
                     <mat-icon aria-label="print">print</mat-icon>
                   </button>
-                                    <button title="Listado Cuotas" class="float-right btn btn-outline-info btn-sm" mat-icon-button color="primary" (click)="visualizarListaCuotas=true;visualizarDocumentos=false;listadoPrestamos=false;listadoCuotas(row)">
+                                    <button title="Listado Cuotas" class="float-right btn btn-outline-info btn-sm" mat-icon-button color="primary" (click)="visualizarListaCuotas=true;visualizarDocumentos=false;listadoPrestamos=false;listadoCuotas(row);totales=false">
                     <mat-icon aria-label="find_in_page">find_in_page</mat-icon>
                   </button>
                                     <button title="Eliminar Prestamo" class="float-right btn btn-outline-info btn-sm" mat-icon-button color="accent" (click)="eliminarPrestamo(row)">
@@ -187,15 +187,15 @@
             </div>
             <div *ngIf="visualizarDocumentos" class="card" style="width: 100%;">
                 <div class="card-body">
-                    <div>
-                        <button title="Volver" (click)="visualizarDocumentos=false;" class="left btn btn-outline-primary btn-sm" mat-icon-button color="primary">
-              <mat-icon aria-label="Example icon-button with a heart icon">keyboard_backspace</mat-icon>
-            </button>
+                   <div class="card-header">
+                    <h5 class="card-title"><button title="Volver" (click)="visualizarDocumentos=false;totales=true" class="left btn btn-outline-primary btn-sm" mat-icon-button color="primary">
+                        <mat-icon aria-label="Example icon-button with a heart icon">keyboard_backspace</mat-icon>
+                      </button>&nbsp;Listado de Documentos del prestamo</h5>
                     </div>
-                    <h5 class="card-title">Listado de Documentos del prestamo</h5>
+                    <br>
                     <div class="card-text">
-                        <mat-accordion>
-                            <mat-expansion-panel *ngFor="let item of plantillas_html" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                        <mat-accordion multi>
+                            <mat-expansion-panel *ngFor="let item of plantillas_html" [expanded]="true"  (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         {{item.nombre}}
@@ -211,12 +211,14 @@
             </div>
             <div *ngIf="visualizarListaCuotas" class="card" style="width: 100%;">
                 <div class="card-body">
-                    <div>
-                        <button title="Volver" (click)="listadoPrestamos=true;visualizarListaCuotas=false;" class="left btn btn-outline-primary btn-sm" mat-icon-button color="primary">
-              <mat-icon aria-label="Example icon-button with a heart icon">keyboard_backspace</mat-icon>
-            </button>
+                    <div class="card-header">
+                        
+                    
+                    <h5 class="card-title"><button title="Volver" (click)="listadoPrestamos=true;visualizarListaCuotas=false;totales=true" class="left btn btn-outline-primary btn-sm" mat-icon-button color="primary">
+                        <mat-icon aria-label="Example icon-button with a heart icon">keyboard_backspace</mat-icon>
+                      </button>&nbsp;Listado de Cuotas del prestamo # {{codPrestaSeleccionado}}</h5>
+
                     </div>
-                    <h5 class="card-title">Listado de Cuotas del prestamo # {{codPrestaSeleccionado}}</h5>
                     <small>{{clienteSeleccionado}}</small>
                     <div class="card-text">
                         <mat-form-field class="example-full-width">

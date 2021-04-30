@@ -35,23 +35,18 @@
                             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
                         </mat-form-field>
                         <br>
-                        <button title="Agregar Cliente" class="float-right btn btn-outline-primary btn-sm"
+                        <button title="Agregar Cliente" class="btn btn-outline-primary btn-sm"
                             mat-icon-button color="primary" (click)="modalAdicionarEmpresa()">
                             <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
                         </button>
                         <br>
                         <mat-table class="table-responsive" [dataSource]="dataSource" matSort class="mat-elevation-z8 ">
 
-
-
-
                             <ng-container matColumnDef="nomcliente">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </mat-header-cell>
                                 <mat-cell *matCellDef="let element" data-label="Cliente"> {{element.nomcliente}}
                                 </mat-cell>
                             </ng-container>
-
-
 
                             <ng-container matColumnDef="numdocumento">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> N&uacute;mero Documento
@@ -65,8 +60,6 @@
                                 <mat-cell *matCellDef="let element" data-label="Ciudad">{{element.ciudad}} </mat-cell>
                             </ng-container>
 
-
-
                             <ng-container matColumnDef="celular">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> Celular </mat-header-cell>
                                 <mat-cell *matCellDef="let element" data-label="Celular"> {{element.celular}}
@@ -78,24 +71,15 @@
                                 <mat-cell *matCellDef="let element" data-label="Email"> {{element.email}} </mat-cell>
                             </ng-container>
 
-
-
                             <ng-container matColumnDef="direcasa">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> Dir Casa </mat-header-cell>
                                 <mat-cell *matCellDef="let element" data-label="Dir Casa"> {{element.direcasa}}
                                 </mat-cell>
                             </ng-container>
 
-
-
-
-
                             <ng-container matColumnDef="action">
-								<mat-header-cell *matHeaderCellDef>
-                                    <button title="Agregar Cliente" class="float-right btn btn-outline-primary btn-sm"
-                                        mat-icon-button color="primary" (click)="modalAdicionarEmpresa()">
-                                        <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
-                                    </button>
+                                <mat-header-cell *matHeaderCellDef>
+
                                 </mat-header-cell>
 
                                 <mat-cell *matCellDef="let row; let i=index;">

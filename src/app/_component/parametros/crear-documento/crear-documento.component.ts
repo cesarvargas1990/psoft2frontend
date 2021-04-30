@@ -167,10 +167,10 @@ export class CrearDocumentoComponent implements AfterViewInit {
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-
+ 
 
   eliminarDocumentoPlantilla(row) {
-
+ 
     Swal.fire({
       title: 'Esta seguro?',
       text: "Desea eliminar el registro?",

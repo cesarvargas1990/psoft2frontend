@@ -43,6 +43,9 @@ export class CrearFormapagoComponent implements AfterViewInit {
   fields: FormlyFieldConfig[] = [];
 
 
+  modoAgregar = false;
+  modoEdicion = false;
+
 
   @ViewChild('appDrawer', {static: false}) appDrawer: ElementRef;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -190,7 +193,7 @@ export class CrearFormapagoComponent implements AfterViewInit {
             templateOptions: {
               label: 'Valor del prestamo',
               placeholder: 'Ingrese Valor del prestamo',
-              required: true,
+              required: false,
               pattern: /^[0-9]*\.?[0-9]*$/,
             },
             validation: {

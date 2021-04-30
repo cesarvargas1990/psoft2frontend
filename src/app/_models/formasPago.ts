@@ -10,6 +10,10 @@ export interface formasPago {
     ind_solicporcint :number;
     nomfpago :string;
     nitempresa :string;
+    codtipsistemap :string;
+    valorpres :number;
+    ind_solivalorpres :number;
+    ind_solinumc :number;
 
 
    

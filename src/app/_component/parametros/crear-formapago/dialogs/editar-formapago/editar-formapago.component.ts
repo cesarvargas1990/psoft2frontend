@@ -34,7 +34,7 @@ export class EditarFormapagoComponent implements OnInit {
   cobradores :any = {};
   fields: FormlyFieldConfig[] = [];
 
- 
+  sistemaprestamo : any = {};
 
   submit() {
 
@@ -45,6 +45,8 @@ export class EditarFormapagoComponent implements OnInit {
       this.formaPagoModel.nomfpago = this.model.nomfpago;
       this.formaPagoModel.porcint = this.model.porcint;
       this.formaPagoModel.ind_solicporcint = this.model.ind_solicporcint;
+      this.formaPagoModel.ind_solinumc = this.model.ind_solinumc;
+      this.formaPagoModel.ind_solivalorpres = this.model.ind_solivalorpres;
 
       this.prestamosService.updateFormaPago(this.formaPagoModel).subscribe(
 
@@ -99,6 +101,7 @@ export class EditarFormapagoComponent implements OnInit {
     this.tiposdocumento = await this.tipodocidentiService.getTipodocidenti();
     this.cobradores = await this.usersService.getUsers();
     this.periodospago = await this.prestamosService.getPeriodosPago();
+    this.sistemaprestamo = await this.prestamosService.getSistemaPrestamo();
     this.fields = [
 
        
@@ -108,6 +111,22 @@ export class EditarFormapagoComponent implements OnInit {
 
         fieldGroupClassName: 'row',
         fieldGroup: [
+
+          {
+            key: 'codtipsistemap',
+            className: 'col-md-6',
+            type: 'select',
+            defaultValue: this.data.codtipsistemap,
+            modelOptions: {
+              updateOn: 'blur',
+            },
+            templateOptions: {
+              label: 'Sistema de prestamo (metodo)',
+              placeholder: 'Seleccione sistema de prestamo',
+              required: true,
+              options: this.sistemaprestamo
+            },
+          },
 
           {
             key: 'id_periodo_pago',
@@ -161,6 +180,27 @@ export class EditarFormapagoComponent implements OnInit {
             },
           },
 
+          {
+            key: 'valorpres',
+            className: 'col-md-6',
+            type: 'input',
+            defaultValue: this.data.valorpres,
+            modelOptions: {
+              updateOn: 'blur',
+            },
+            templateOptions: {
+              label: 'Valor del prestamo',
+              placeholder: 'Ingrese Valor del prestamo',
+              required: false,
+              pattern: /^[0-9]*\.?[0-9]*$/,
+            },
+            validation: {
+              messages: {
+                pattern: (error, field: FormlyFieldConfig) => `"${field.formControl.value}" no es un n\u00FAmero valido`,
+              },
+            },
+          },
+
         
 
           {
@@ -205,12 +245,27 @@ export class EditarFormapagoComponent implements OnInit {
             key: 'ind_solinumc',
             className: 'col-md-6',
             type: 'checkbox',
-            defaultValue: false,
+            defaultValue: this.data.ind_solinumc,
             modelOptions: {
               updateOn: 'blur',
             },
             templateOptions: {
               label: 'Modificar num cuotas?',
+              placeholder: 'En el momento del registro del prestamo',
+              
+            }
+          },
+
+          {
+            key: 'ind_solivalorpres',
+            className: 'col-md-6',
+            type: 'checkbox',
+            defaultValue: this.data.ind_solivalorpres,
+            modelOptions: {
+              updateOn: 'blur',
+            },
+            templateOptions: {
+              label: 'Modificar valor del prestamo ?',
               placeholder: 'En el momento del registro del prestamo',
               
             }

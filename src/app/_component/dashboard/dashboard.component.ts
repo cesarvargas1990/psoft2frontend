@@ -48,6 +48,7 @@ export class DashboardComponent implements AfterViewInit {
   visualizarDocumentos = false;
   visualizarListaCuotas = false;
   listadoPrestamos = true;
+  totales = true;
 
   displayedColumns: string[] = ['id_prestamo','nomcliente','valorpres','valcuota','nomfpago','celular','direcasa','action'];
   displayedColumnsFecPago: string[] = ['fecha_pago','fecha_realpago','valcuota','valtotal','action'];

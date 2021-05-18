@@ -78,11 +78,6 @@ import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { LoaderInterceptor } from './loader.interceptor';
 
 import {TopNavComponent} from './_component/top-nav/top-nav.component';
-import {ListarEmpresasComponent} from './_component/empresa/listar-empresas/listar-empresas.component';
-import {CrearEmpresaComponent} from './_component/empresa/crear-empresa/crear-empresa.component';
-import {EliminarEmpresaComponent } from './_component/empresa/listar-empresas/dialogs/eliminar-empresa/eliminar-empresa.component';
-import {EditarEmpresaComponent } from './_component/empresa/listar-empresas/dialogs/editar-empresa/editar-empresa.component';
-import {AdicionarEmpresaComponent } from './_component/empresa/listar-empresas/dialogs/adicionar-empresa/adicionar-empresa.component';
 import {MenuListItemComponent} from './_component/menu-list-item/menu-list-item.component';
 import {LogoComponent} from '../app/_component/logo/logo.component';
 
@@ -96,12 +91,6 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-mome
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
 import { LoaderComponent } from './loader/loader.component';
-import { PrefijosEmpresaProvComponent } from './_component/empresa/prefijos-empresa-prov/prefijos-empresa-prov.component';
-import { EditarPrefijoComponent } from './_component/empresa/prefijos-empresa-prov/dialogs/editar-prefijo/editar-prefijo.component';
-import { EliminarPrefijoComponent } from './_component/empresa/prefijos-empresa-prov/dialogs/eliminar-prefijo/eliminar-prefijo.component';
-import { EdicionarPrefijoComponent } from './_component/empresa/prefijos-empresa-prov/dialogs/edicionar-prefijo/edicionar-prefijo.component';
-import { AdicionarPrefijoComponent } from './_component/empresa/prefijos-empresa-prov/dialogs/adicionar-prefijo/adicionar-prefijo.component';
-import { ConsultaFacturaFEComponent } from './_component/factura/consulta-factura-fe/consulta-factura-fe.component';
 
 import {FormlyModule,FormlyFieldConfig} from '@ngx-formly/core';
 import {FormlyMaterialModule} from '@ngx-formly/material';
@@ -111,21 +100,8 @@ import {FormlyMaterialModule} from '@ngx-formly/material';
  */
 
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
-import { EmpresaProveedorComponent } from './_component/empresa/empresa-proveedor/empresa-proveedor.component';
-import { AdicionarEmpresaprovFeComponent } from './_component/empresa/empresa-proveedor/dialogs/adicionar-empresaprov-fe/adicionar-empresaprov-fe.component';
-import { EliminarEmpresaprovFeComponent } from './_component/empresa/empresa-proveedor/dialogs/eliminar-empresaprov-fe/eliminar-empresaprov-fe.component';
-import { EditarEmpresaprovFeComponent } from './_component/empresa/empresa-proveedor/dialogs/editar-empresaprov-fe/editar-empresaprov-fe.component';
-import { VisualizarLogComponent } from './_component/factura/consulta-factura-fe/dialogs/visualizar-log/visualizar-log.component';
-import { VisualizarVsComponent } from './_component/factura/consulta-factura-fe/dialogs/visualizar-vs/visualizar-vs.component';
-import { VisualizarVsfacComponent } from './_component/factura/consulta-factura-fe/dialogs/visualizar-vsfac/visualizar-vsfac.component';
-import { VisualizarXmlenviadoComponent } from './_component/factura/consulta-factura-fe/dialogs/visualizar-xmlenviado/visualizar-xmlenviado.component';
-import { VisualizarXmlrespComponent } from './_component/factura/consulta-factura-fe/dialogs/visualizar-xmlresp/visualizar-xmlresp.component';
-
-
 import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
-import { VisualizarJsonrequestComponent } from './_component/factura/consulta-factura-fe/dialogs/visualizar-jsonrequest/visualizar-jsonrequest.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
-import { VisualizarEstadoDocumentoComponent } from './_component/factura/consulta-factura-fe/dialogs/visualizar-estado-documento/visualizar-estado-documento.component';
 
 
 import { NgxEchartsModule } from 'ngx-echarts';
@@ -309,30 +285,11 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig){
     TopNavComponent, 
     // Se Declaran Componentes que de alguna manera implementan angular van aqui
     //(dialogos, o componentes de entrada)
-    ListarEmpresasComponent, 
-    CrearEmpresaComponent, 
-    EliminarEmpresaComponent, 
-    AdicionarEmpresaComponent,
-    EditarEmpresaComponent,
+  
     LoaderComponent,
-    PrefijosEmpresaProvComponent,
-    EditarPrefijoComponent,
-    EliminarPrefijoComponent,
-    EdicionarPrefijoComponent,
-    AdicionarPrefijoComponent,
-    ConsultaFacturaFEComponent,
+   
     LogoComponent,
-    EmpresaProveedorComponent,
-    AdicionarEmpresaprovFeComponent,
-    EliminarEmpresaprovFeComponent,
-    EditarEmpresaprovFeComponent,
-    VisualizarLogComponent,
-    VisualizarVsComponent,
-    VisualizarVsfacComponent,
-    VisualizarXmlenviadoComponent,
-    VisualizarXmlrespComponent,
-    VisualizarJsonrequestComponent,
-    VisualizarEstadoDocumentoComponent,
+   
     ListarClienteComponent,
     EditarClienteComponent,
     CrearClienteComponent,
@@ -358,25 +315,9 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig){
   ],
   entryComponents: [
     // Se registra como Componentes de entrada (dialogos o componentes que implementaron angular module)
-    ListarEmpresasComponent, 
-    CrearEmpresaComponent, 
-    EliminarEmpresaComponent, 
-    AdicionarEmpresaComponent,
-    EditarEmpresaComponent,
-    EditarPrefijoComponent,
-    EliminarPrefijoComponent,
-    //EdicionarPrefijoComponent,
-    AdicionarPrefijoComponent,
-    AdicionarEmpresaprovFeComponent,
-    EditarEmpresaprovFeComponent,
-    EliminarEmpresaprovFeComponent,
-    VisualizarLogComponent,
-    VisualizarVsComponent,
-    VisualizarVsfacComponent,
-    VisualizarXmlenviadoComponent,
-    VisualizarXmlrespComponent,
-    VisualizarJsonrequestComponent,
-    VisualizarEstadoDocumentoComponent,
+
+
+    //EdicionarPrefijoComponent, 
     EditarClienteComponent,
     EditarFormapagoComponent,
     ListaPrestamosComponent,

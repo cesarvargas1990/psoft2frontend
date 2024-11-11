@@ -1,209 +1,201 @@
 <div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
-    <app-top-nav fxHide.xs></app-top-nav>
-    <app-top-nav class="fixed-topnav" fxHide.gt-xs></app-top-nav>
-    <app-loading></app-loading>
-    <mat-sidenav-container class="example-sidenav-container">
-        <mat-sidenav #appDrawer [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches"
-            fixedTopGap="56" [opened]="true">
-            <div class="logo-container" fxFlexAlign="center">
-                <app-logo *ngIf="authService.isLoggedIn()"></app-logo>
+  <app-top-nav fxHide.xs></app-top-nav>
+  <app-top-nav class="fixed-topnav" fxHide.gt-xs></app-top-nav>
+  <app-loading></app-loading>
+  <mat-sidenav-container class="example-sidenav-container">
+    <mat-sidenav #appDrawer [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches"
+      fixedTopGap="56" [opened]="true">
+      <div class="logo-container" fxFlexAlign="center">
+        <app-logo *ngIf="authService.isLoggedIn()"></app-logo>
+      </div>
+      <mat-divider></mat-divider>
+      <mat-nav-list *ngIf="authService.isLoggedIn()">
+        <app-menu-list-item *ngFor="let item of navItems" [item]="item"></app-menu-list-item>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+
+      <div *ngIf="!modoEdicion" class="card" style="width: 100%;">
+        <div class="card-body">
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"> <button title="Volver" (click)="volver()"
+                  class="left btn btn-outline-primary btn-sm" mat-icon-button color="primary">
+                  <mat-icon aria-label="Example icon-button with a heart icon">keyboard_backspace
+                  </mat-icon>
+                </button>&nbsp;Listado de Clientes</div>
             </div>
-            <mat-divider></mat-divider>
-            <mat-nav-list *ngIf="authService.isLoggedIn()">
-                <app-menu-list-item *ngFor="let item of navItems" [item]="item"></app-menu-list-item>
-            </mat-nav-list>
-        </mat-sidenav>
 
-        <mat-sidenav-content>
+          </div>
 
-            <div *ngIf="!modoEdicion" class="card" style="width: 100%;">
-                <div class="card-body">
+          <div class="card-text">
+            <mat-form-field class="example-full-width">
+              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
+            </mat-form-field>
+            <br>
+            <button title="Agregar Cliente" class="btn btn-outline-primary btn-sm" mat-icon-button color="primary"
+              (click)="modalAdicionarEmpresa()">
+              <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+            </button>
+            <br>
+            <mat-table class="table-responsive" [dataSource]="dataSource" matSort class="mat-elevation-z8 ">
 
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title"> <button title="Volver" (click)="volver()"
-                                    class="left btn btn-outline-primary btn-sm" mat-icon-button color="primary">
-                                    <mat-icon aria-label="Example icon-button with a heart icon">keyboard_backspace
-                                    </mat-icon>
-                                </button>&nbsp;Listado de Clientes</div>
+              <ng-container matColumnDef="nomcliente">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </mat-header-cell>
+                <mat-cell *matCellDef="let element" data-label="Cliente"> {{element.nomcliente}}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="numdocumento">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> N&uacute;mero Documento
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" data-label="Num Doc"> {{element.numdocumento}}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="ciudad">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Ciudad </mat-header-cell>
+                <mat-cell *matCellDef="let element" data-label="Ciudad">{{element.ciudad}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="celular">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Celular </mat-header-cell>
+                <mat-cell *matCellDef="let element" data-label="Celular"> {{element.celular}}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="email">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+                <mat-cell *matCellDef="let element" data-label="Email"> {{element.email}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="direcasa">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Dir Casa </mat-header-cell>
+                <mat-cell *matCellDef="let element" data-label="Dir Casa"> {{element.direcasa}}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="action">
+                <mat-header-cell *matHeaderCellDef>
+
+                </mat-header-cell>
+
+                <mat-cell *matCellDef="let row; let i=index;">
+                  <button title="Editar Cliente" class="float-right btn btn-outline-primary btn-sm" mat-icon-button
+                    color="primary" (click)="modalEditarCliente(row)">
+                    <mat-icon aria-label="Edit">edit</mat-icon>
+                  </button>
+
+                  <button title="Eliminar Cliente" class="float-right btn btn-outline-danger btn-sm" mat-icon-button
+                    color="accent" (click)="modalEliminarCliente(row)">
+                    <mat-icon aria-label="Delete">delete</mat-icon>
+                  </button>
+
+                  <button title="Listado Creditos" class="float-right btn btn-outline-info btn-sm" mat-icon-button
+                    color="accent" (click)="modalListadoCreditos(row)">
+                    <mat-icon aria-label="find_in_page">find_in_page</mat-icon>
+                  </button>
+                </mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20, 25, 50, 100,dataSource.data.length]" showFirstLastButtons>
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+
+
+      <div *ngIf="modoEdicion" class="card" style="width: 100%;">
+        <div class="card-body">
+          <h5 class="card-title">Creaci&oacute;n de Cliente</h5>
+          <div class="card-text">
+
+
+            <form [formGroup]="form" (ngSubmit)="submit()">
+              <mat-tab-group>
+                <mat-tab *ngFor="let tab of tabs;let index = index;" [label]="tab.label"
+                  [disabled]="index !== 0 && !form.at(index - 1)?.valid">
+                  <formly-form [form]="form.at(index)" [model]="model" [fields]="tab.fields" [options]="options[index]">
+                  </formly-form>
+                </mat-tab>
+                <mat-tab label="Firma cliente">
+                  <p>Escriba su firma sobre el cuadro de abajo.</p>
+                  <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()"
+                    (onEndEvent)="drawComplete()"></signature-pad>
+                  <ng-container #fieldComponent></ng-container>
+
+
+                  <button type="button" (click)="drawComplete()" title="Guardar" class="btn btn-primary submit-button">
+                    <mat-icon aria-label="Edit">save</mat-icon>
+                  </button> &nbsp;
+
+                  <button type="button" title="Limpiar" (click)="drawClear()" class="btn btn-primary submit-button">
+                    <mat-icon aria-label="Edit">clear</mat-icon>
+                  </button>
+                </mat-tab>
+
+                <mat-tab label="Archivos">
+                  <p>Seleccione los archivos a cargar (o presione sobre el icono de webcam).</p>
+
+                  <webcam [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="webcam==1 ">
+                  </webcam>
+
+                  <mat-accordion>
+                    <mat-expansion-panel *ngFor="let item of listaTiposDocumento; let i = index"
+                      (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          {{item.nombre}}
+                        </mat-panel-title>
+
+                      </mat-expansion-panel-header>
+
+                      <div class="row">
+                        <div class="col-md-6">
+
+                          <span style="color:red;" *ngIf="message">{{message}}</span>
+                          <mat-divider></mat-divider>
+                          <input #file type="file" accept='image/*' (click)="webcam=0;tomarfoto=0"
+                            (change)="preview(file.files,i)" />
+                          <mat-divider></mat-divider>
+
+                          <button type="button" *ngIf="tomarfoto==0" (click)="webcam=1;listaArchivos[i]='';tomarfoto=1"
+                            class="btn btn-primary submit-button">
+                            <mat-icon aria-label="videocam">videocam</mat-icon>
+                          </button>
+
+                          <button type="button" *ngIf="webcam==1" (click)="triggerSnapshot(i);listaTipoDoc[i]=item.id"
+                            class="btn btn-primary submit-button">
+                            <mat-icon aria-label="videocam">control_camera</mat-icon>
+                          </button>
+
+
                         </div>
+                        <div class="col-md-6">
+                          <mat-divider></mat-divider>
 
-                    </div>
-
-                    <div class="card-text">
-                        <mat-form-field class="example-full-width">
-                            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
-                        </mat-form-field>
-                        <br>
-                        <button title="Agregar Cliente" class="btn btn-outline-primary btn-sm"
-                            mat-icon-button color="primary" (click)="modalAdicionarEmpresa()">
-                            <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
-                        </button>
-                        <br>
-                        <mat-table class="table-responsive" [dataSource]="dataSource" matSort class="mat-elevation-z8 ">
-
-                            <ng-container matColumnDef="nomcliente">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </mat-header-cell>
-                                <mat-cell *matCellDef="let element" data-label="Cliente"> {{element.nomcliente}}
-                                </mat-cell>
-                            </ng-container>
-
-                            <ng-container matColumnDef="numdocumento">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> N&uacute;mero Documento
-                                </mat-header-cell>
-                                <mat-cell *matCellDef="let element" data-label="Num Doc"> {{element.numdocumento}}
-                                </mat-cell>
-                            </ng-container>
-
-                            <ng-container matColumnDef="ciudad">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> Ciudad </mat-header-cell>
-                                <mat-cell *matCellDef="let element" data-label="Ciudad">{{element.ciudad}} </mat-cell>
-                            </ng-container>
-
-                            <ng-container matColumnDef="celular">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> Celular </mat-header-cell>
-                                <mat-cell *matCellDef="let element" data-label="Celular"> {{element.celular}}
-                                </mat-cell>
-                            </ng-container>
-
-                            <ng-container matColumnDef="email">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
-                                <mat-cell *matCellDef="let element" data-label="Email"> {{element.email}} </mat-cell>
-                            </ng-container>
-
-                            <ng-container matColumnDef="direcasa">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> Dir Casa </mat-header-cell>
-                                <mat-cell *matCellDef="let element" data-label="Dir Casa"> {{element.direcasa}}
-                                </mat-cell>
-                            </ng-container>
-
-                            <ng-container matColumnDef="action">
-                                <mat-header-cell *matHeaderCellDef>
-
-                                </mat-header-cell>
-
-                                <mat-cell *matCellDef="let row; let i=index;">
-                                    <button title="Editar Cliente" class="float-right btn btn-outline-primary btn-sm"
-                                        mat-icon-button color="primary" (click)="modalEditarCliente(row)">
-                                        <mat-icon aria-label="Edit">edit</mat-icon>
-                                    </button>
-
-                                    <button title="Eliminar Cliente" class="float-right btn btn-outline-danger btn-sm"
-                                        mat-icon-button color="accent" (click)="modalEliminarCliente(row)">
-                                        <mat-icon aria-label="Delete">delete</mat-icon>
-                                    </button>
-
-                                    <button title="Listado Creditos" class="float-right btn btn-outline-info btn-sm"
-                                        mat-icon-button color="accent" (click)="modalListadoCreditos(row)">
-                                        <mat-icon aria-label="find_in_page">find_in_page</mat-icon>
-                                    </button>
-                                </mat-cell>
-                            </ng-container>
-                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                        </mat-table>
-                        <mat-paginator [pageSizeOptions]="[5, 10, 20, 25, 50, 100,dataSource.data.length]"
-                            showFirstLastButtons>
-                        </mat-paginator>
-                    </div>
-                </div>
-            </div>
-
-
-            <div *ngIf="modoEdicion" class="card" style="width: 100%;">
-                <div class="card-body">
-                    <h5 class="card-title">Creaci&oacute;n de Cliente</h5>
-                    <div class="card-text">
-
-
-                        <form [formGroup]="form" (ngSubmit)="submit()">
-                            <mat-tab-group>
-                                <mat-tab *ngFor="let tab of tabs;let index = index;" [label]="tab.label"
-                                    [disabled]="index !== 0 && !form.at(index - 1)?.valid">
-                                    <formly-form [form]="form.at(index)" [model]="model" [fields]="tab.fields"
-                                        [options]="options[index]">
-                                    </formly-form>
-                                </mat-tab>
-                                <mat-tab label="Firma cliente">
-                                    <p>Escriba su firma sobre el cuadro de abajo.</p>
-                                    <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()"
-                                        (onEndEvent)="drawComplete()"></signature-pad>
-                                    <ng-container #fieldComponent></ng-container>
-
-
-                                    <button type="button" (click)="drawComplete()" title="Guardar"
-                                        class="btn btn-primary submit-button">
-                                        <mat-icon aria-label="Edit">save</mat-icon>
-                                    </button> &nbsp;
-
-                                    <button type="button" title="Limpiar" (click)="drawClear()"
-                                        class="btn btn-primary submit-button">
-                                        <mat-icon aria-label="Edit">clear</mat-icon>
-                                    </button>
-                                </mat-tab>
-
-                                <mat-tab label="Archivos">
-                                    <p>Seleccione los archivos a cargar (o presione sobre el icono de webcam).</p>
-
-                                    <webcam [trigger]="triggerObservable" (imageCapture)="handleImage($event)"
-                                        *ngIf="webcam==1 "></webcam>
-
-                                    <mat-accordion>
-                                        <mat-expansion-panel *ngFor="let item of listaTiposDocumento; let i = index"
-                                            (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-                                            <mat-expansion-panel-header>
-                                                <mat-panel-title>
-                                                    {{item.nombre}}
-                                                </mat-panel-title>
-
-                                            </mat-expansion-panel-header>
-
-                                            <div class="row">
-                                                <div class="col-md-6">
-
-                                                    <span style="color:red;" *ngIf="message">{{message}}</span>
-                                                    <mat-divider></mat-divider>
-                                                    <input #file type="file" accept='image/*'
-                                                        (click)="webcam=0;tomarfoto=0"
-                                                        (change)="preview(file.files,i)" />
-                                                    <mat-divider></mat-divider>
-
-                                                    <button type="button" *ngIf="tomarfoto==0"
-                                                        (click)="webcam=1;listaArchivos[i]='';tomarfoto=1"
-                                                        class="btn btn-primary submit-button">
-                                                        <mat-icon aria-label="videocam">videocam</mat-icon>
-                                                    </button>
-
-                                                    <button type="button" *ngIf="webcam==1"
-                                                        (click)="triggerSnapshot(i);listaTipoDoc[i]=item.id"
-                                                        class="btn btn-primary submit-button">
-                                                        <mat-icon aria-label="videocam">control_camera</mat-icon>
-                                                    </button>
-
-
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <mat-divider></mat-divider>
-
-                                                    <img [src]="listaArchivos[i]" *ngIf="listaArchivos[i]"
-                                                        [attr.file-index]="i" height="200">
-                                                </div>
-                                            </div>
-                                        </mat-expansion-panel>
-                                    </mat-accordion>
-                                </mat-tab>
-                            </mat-tab-group>
-                            <mat-dialog-actions>
-                                <button type="submit" [disabled]="!form.valid" class="btn btn-primary submit-button">
-                                    <mat-icon aria-label="Edit">save</mat-icon>
-                                </button>
-                            </mat-dialog-actions>
-                            <br>
-                        </form>
-                        <br>
-                    </div>
-                </div>
-            </div>
-        </mat-sidenav-content>
-    </mat-sidenav-container>
+                          <img [src]="listaArchivos[i]" *ngIf="listaArchivos[i]" [attr.file-index]="i" height="200">
+                        </div>
+                      </div>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </mat-tab>
+              </mat-tab-group>
+              <mat-dialog-actions>
+                <button type="submit" [disabled]="!form.valid" class="btn btn-primary submit-button">
+                  <mat-icon aria-label="Edit">save</mat-icon>
+                </button>
+              </mat-dialog-actions>
+              <br>
+            </form>
+            <br>
+          </div>
+        </div>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>

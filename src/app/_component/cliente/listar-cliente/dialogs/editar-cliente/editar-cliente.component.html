@@ -3,69 +3,71 @@
 
 
 <mat-dialog-content class="editarCliente">
-    <form [formGroup]="form" (ngSubmit)="submit()">
-        <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
-      
-            <div class="listadoDocumentos">
-                <p>Lista de Documentos.</p>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
+
+    <div class="listadoDocumentos">
+      <p>Lista de Documentos.</p>
 
 
-                                    <webcam [trigger]="triggerObservable" (imageCapture)="handleImage($event)"
-                                        *ngIf="webcam==1 "></webcam>
 
 
-                                    <mat-accordion>
-                                        <mat-expansion-panel *ngFor="let item of listaTiposDocumento; let i = index"
-                                            (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-                                            <mat-expansion-panel-header>
-                                                <mat-panel-title>
-                                                    {{item.nombre}}
-                                                </mat-panel-title>
 
-                                            </mat-expansion-panel-header>
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let item of listaTiposDocumento; let i = index" (opened)="panelOpenState = true"
+          (closed)="panelOpenState = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{item.nombre}}
+            </mat-panel-title>
 
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    
-                                                    <span style="color:red;" *ngIf="message">{{message}}</span>
-                                                    <mat-divider></mat-divider>
-                                                    <input #file type="file" accept='image/*,application/pdf'
-                                                        (click)="webcam=0;tomarfoto=0"
-                                                        (change)="preview(file.files,item.id)" />
-                                                    <mat-divider></mat-divider>
- 
-                                                    <button type="button" *ngIf="tomarfoto==0"
-                                                        (click)="webcam=1;listaArchivos[item.id]='';tomarfoto=1"
-                                                        class="btn btn-primary submit-button">
-                                                        <mat-icon aria-label="videocam">videocam</mat-icon>
-                                                    </button>
+          </mat-expansion-panel-header>
 
-                                                    <button type="button" *ngIf="webcam==1"
-                                                        (click)="triggerSnapshot(item.id);listaTipoDoc[item.id]=item.id"
-                                                        class="btn btn-primary submit-button">
-                                                        <mat-icon aria-label="videocam">control_camera</mat-icon>
-                                                    </button>
+          <div class="row">
+            <div class="col-md-6">
+
+              <span style="color:red;" *ngIf="message">{{message}}</span>
+              <mat-divider></mat-divider>
+              <input #file type="file" accept='image/*' (click)="webcamIndex=null;webcam=0;tomarfoto=0"
+                (change)="preview(file.files,item.id)" />
+              <mat-divider></mat-divider>
+              <webcam [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="webcamIndex==i">
+              </webcam>
+
+              <button type="button" *ngIf="tomarfoto==0"
+                (click)="webcamIndex=i;webcam=1;listaArchivos[item.id]='';tomarfoto=1"
+                class="btn btn-primary submit-button">
+                <mat-icon aria-label="videocam">videocam</mat-icon>
+              </button>
+
+              <button type="button" *ngIf="webcam==1"
+                (click)="triggerSnapshot(item.id);listaTipoDoc[item.id]=item.id;webcamIndex=null"
+                class="btn btn-primary submit-button">
+                <mat-icon aria-label="control_camera">control_camera</mat-icon>
+              </button>
 
 
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <mat-divider></mat-divider>
-                                                    <a href="{{listaArchivos[item.id]}}" *ngIf="listaArchivos[item.id] && validateExtension(listaArchivos[item.id]) == 'pdf'" target="_blank">Visualizar</a>
-                                                    
-                                                    <img [src]="listaArchivos[item.id]" *ngIf=" listaArchivos[item.id] && validateExtension(listaArchivos[item.id]) != 'pdf'"
-                                                        [attr.file-index]="i" height="200">
-                                                </div>
-                                                
-                                            </div>
-
-                                        </mat-expansion-panel>
-
-                                    </mat-accordion>
-                                    <mat-dialog-actions>
-                                        <button type="submit" class="btn btn-primary submit-button" ><mat-icon aria-label="Edit">save</mat-icon></button>
-                                </mat-dialog-actions>
             </div>
-      
-                              </form>
-</mat-dialog-content>
+            <div class="col-md-6">
+              <mat-divider></mat-divider>
+              <a href="{{listaArchivos[item.id]}}"
+                *ngIf="listaArchivos[item.id] && validateExtension(listaArchivos[item.id]) == 'pdf'"
+                target="_blank">Visualizar</a>
 
+              <img [src]="listaArchivos[item.id]"
+                *ngIf=" listaArchivos[item.id] && validateExtension(listaArchivos[item.id]) != 'pdf'"
+                [attr.file-index]="i" height="200">
+            </div>
+
+          </div>
+
+        </mat-expansion-panel>
+
+      </mat-accordion>
+      <mat-dialog-actions>
+        <button type="submit" class="btn btn-primary submit-button"><mat-icon aria-label="Edit">save</mat-icon></button>
+      </mat-dialog-actions>
+    </div>
+
+  </form>
+</mat-dialog-content>

@@ -64,7 +64,7 @@ export class CrearClienteComponent implements AfterViewInit {
   public imagePath;
   imgURL: any;
   public message: string;
-
+  public sign: boolean = false;
   modoEdicion = false;
   listaArchivos: any = [];
   listaTipoDoc: any = [];
@@ -73,14 +73,14 @@ export class CrearClienteComponent implements AfterViewInit {
   webcam = 0;
   tomarfoto = 0;
   currentIndexImage = 0;
-  
+
 
   urlimage: any = {};
 
   model: any = {};
   data: any = {};
 
-  
+
   tabs: TabType[] = [
     {
       label: 'Datos Personales',
@@ -180,9 +180,9 @@ export class CrearClienteComponent implements AfterViewInit {
               },
             },
 
-          
-           
-           
+
+
+
 
 
             {
@@ -198,9 +198,9 @@ export class CrearClienteComponent implements AfterViewInit {
               },
             },
 
-           
 
-            
+
+
 
           ]
 
@@ -386,7 +386,7 @@ export class CrearClienteComponent implements AfterViewInit {
 
 
 
- 
+
 
 
 
@@ -398,7 +398,7 @@ export class CrearClienteComponent implements AfterViewInit {
 
 
   public triggerSnapshot(i): void {
-    
+
     this.currentIndexImage = i;
     this.trigger.next();
   }
@@ -426,7 +426,7 @@ export class CrearClienteComponent implements AfterViewInit {
     this.urlimage = this.webcamImage.imageAsDataUrl;
     this.listaArchivos[this.currentIndexImage] = this.urlimage;
     console.log('como va');
-    console.log (this.listaArchivos);
+    console.log(this.listaArchivos);
 
   }
 
@@ -470,16 +470,17 @@ export class CrearClienteComponent implements AfterViewInit {
 
 
   drawComplete() {
-
+    this.sign = true;
   }
 
   drawStart() {
-
+    this.sign = true;
   }
 
 
   drawClear() {
     this.signaturePad.clear();
+    this.sign = false;
   }
 
   submit() {
@@ -518,8 +519,8 @@ export class CrearClienteComponent implements AfterViewInit {
                       this.data.image = imageBase64;
                       this.data.id_tdocadjunto = this.listaTipoDoc[i];
                       this.data.id_cliente = response.id;
-                      this.data.path =  './upload/documentosAdjuntos/';
-                      
+                      this.data.path = './upload/documentosAdjuntos/';
+
 
                       this.clienteService.uploadFile(this.data).subscribe(
                         response => {
@@ -529,6 +530,19 @@ export class CrearClienteComponent implements AfterViewInit {
                     }
 
                   }
+                  if (this.sign) {
+                    this.data.image = this.signaturePad.toDataURL();
+                    this.data.id_tdocadjunto = 3;
+                    this.data.id_cliente = response.id;
+                    this.data.path = './upload/documentosAdjuntos/';
+                    this.clienteService.uploadFile(this.data).subscribe(
+                      response => {
+                        console.log(response);
+                      }
+                    )
+                    console.log(this.signaturePad.toDataURL())
+                  }
+
 
                   this.model = response;
                   this.router.navigate(['/clientes/listar']);
@@ -562,7 +576,7 @@ export class CrearClienteComponent implements AfterViewInit {
       return;
 
     var mimeType = files[0].type;
-    
+
     if (mimeType.match(/image\/*/) == null && mimeType.match(/application\/pdf/) == null) {
       this.message = "Solo se Aceptan, Imagenes o Documentos PDF.";
       return;
@@ -582,7 +596,7 @@ export class CrearClienteComponent implements AfterViewInit {
     }
   }
 
-  public validateExtension(filename){
+  public validateExtension(filename) {
     if (filename) {
       if (filename != "") {
         return filename.substr(filename.lastIndexOf('.') + 1)
@@ -590,7 +604,7 @@ export class CrearClienteComponent implements AfterViewInit {
     }
   }
 
-  volver () {
+  volver() {
     this.router.navigate(['/dashboard']);
   }
 

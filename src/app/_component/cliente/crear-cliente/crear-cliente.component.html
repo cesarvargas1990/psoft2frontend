@@ -49,14 +49,13 @@
 
                   <br>
                   <p>Escriba su firma sobre el cuadro de abajo.</p>
-                  <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()"
-                    (onEndEvent)="drawComplete()"></signature-pad>
+                  <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()"></signature-pad>
                   <ng-container #fieldComponent></ng-container>
 
 
-                  <button type="button" (click)="drawComplete()" title="Guardar" class="btn btn-primary submit-button">
+                  <!-- <button type="button" (click)="drawComplete()" title="Guardar" class="btn btn-primary submit-button">
                     <mat-icon aria-label="Edit">save</mat-icon>
-                  </button> &nbsp;
+                  </button> &nbsp; -->
 
                   <button type="button" title="Limpiar" (click)="drawClear()" class="btn btn-primary submit-button">
                     <mat-icon aria-label="Edit">clear</mat-icon>

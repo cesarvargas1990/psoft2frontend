@@ -1,4 +1,4 @@
-const BASE_URL = 'https://mipropiedadhorizontal.com.co/api';
+export const BASE_URL = 'https://mipropiedadhorizontal.com.co/api';
 
 export const environment = {
   production: false,

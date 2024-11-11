@@ -1,7 +1,7 @@
-import { Component, OnInit, Inject, AfterViewInit,ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, AfterViewInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Cliente } from '../../../../../_models/cliente';
-import { environment } from '../../../../../../environments/environment';
+import { BASE_URL, environment } from '../../../../../../environments/environment';
 import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { Observable, Subject } from 'rxjs';
@@ -23,7 +23,14 @@ import { SignaturePad } from 'ngx-signaturepad/signature-pad';
 export class EditarClienteComponent implements OnInit {
 
 
-  @ViewChild(SignaturePad, { static: false }) signaturePad: SignaturePad;
+
+  @ViewChild(SignaturePad, { static: false }) public signaturePad: SignaturePad;
+
+  public signaturePadOptions: Object = { // passed through to szimek/signature_pad constructor
+    'minWidth': 5,
+    'canvasWidth': window.innerWidth,
+    'canvasHeight': 300
+  };
 
   public imagePath;
   imgURL: any;
@@ -33,7 +40,9 @@ export class EditarClienteComponent implements OnInit {
   public allowCameraSwitch = true;
   public multipleWebcamsAvailable = false;
   public deviceId: string;
+  public editFirmar: boolean = false;
   listaTipoDoc: any = {};
+
   public videoOptions: MediaTrackConstraints = {
     // width: {ideal: 1024},
     // height: {ideal: 576}
@@ -47,15 +56,15 @@ export class EditarClienteComponent implements OnInit {
   private trigger: Subject<void> = new Subject<void>();
   // switch to next / previous / specific webcam; true/false: forward/backwards, string: deviceId
   private nextWebcam: Subject<boolean | string> = new Subject<boolean | string>();
- 
+
   listaTiposDocumento: [] = [];
   webcam = 0;
   tomarfoto = 0;
   currentIndexImage = 0;
   panelOpenState = false;
-  
+
   public photoPath: string = environment.UPLOADS_CLIENTES;
-  
+
   urlimage: any = {};
 
 
@@ -71,7 +80,6 @@ export class EditarClienteComponent implements OnInit {
   dataImage: any = {};
 
 
-
   isBase64(str) {
     try {
       return btoa(atob(str)) == str;
@@ -82,12 +90,13 @@ export class EditarClienteComponent implements OnInit {
 
   submit() {
 
-
-
     if (this.form.valid) {
-
-
       this.model.id = this.data.id;
+      if (this.editFirmar) {
+        this.listaArchivos[3] = this.signaturePad.toDataURL();
+        this.listaTipoDoc = { ...this.listaTipoDoc, 3: 3 };
+      }
+
       this.clienteServicio.updateCliente(this.model).subscribe(
 
         response => {
@@ -100,7 +109,7 @@ export class EditarClienteComponent implements OnInit {
             this.dataImage.id_tdocadjunto = this.listaTipoDoc;
             this.dataImage.id_cliente = this.data.id;
             this.dataImage.path = './upload/documentosAdjuntos/';
-            
+
 
             this.clienteServicio.editFile(this.dataImage).subscribe(
               response => {
@@ -108,12 +117,13 @@ export class EditarClienteComponent implements OnInit {
               }
             )
 
+
             /*for (let i = 0; i < Object.keys(this.listaArchivos).length; i++) {
 
 
-            
+
               if (this.listaArchivos[i] != '') {
-               
+
                   let imageBase64 = this.listaArchivos[i];
                   ltdoc = this.listaTipoDoc[i];
                   this.dataImage.image = imageBase64;
@@ -122,15 +132,15 @@ export class EditarClienteComponent implements OnInit {
                   this.dataImage.path = './upload/documentosAdjuntos/';
                   this.dataImage.fileExt = 'jpeg';
 
-                
+
                   this.clienteServicio.editFile(this.dataImage).subscribe(
                     response => {
-                    
+
                     }
                   )
 
-                
-                
+
+
               }
 
             }
@@ -406,6 +416,8 @@ export class EditarClienteComponent implements OnInit {
           Object.entries(response).forEach(([key, value]) => {
 
             this.listaTipoDoc[value['id']] = value['id'];
+            console.log('tipodoc')
+            console.log(this.listaTipoDoc)
 
 
           })
@@ -443,7 +455,7 @@ export class EditarClienteComponent implements OnInit {
       response => {
         Object.entries(response).forEach(([key, value]) => {
 
-          
+
           this.listaArchivos[value['id_tdocadjunto']] = this.photoPath + value['nombrearchivo'];
 
 
@@ -467,7 +479,7 @@ export class EditarClienteComponent implements OnInit {
     this.showWebcam = !this.showWebcam;
   }
 
-  public validateExtension(filename){
+  public validateExtension(filename) {
     if (filename) {
       if (filename != "") {
         return filename.substr(filename.lastIndexOf('.') + 1)
@@ -518,7 +530,7 @@ export class EditarClienteComponent implements OnInit {
       return;
 
     var mimeType = files[0].type;
-    
+
     if (mimeType.match(/image\/*/) == null && mimeType.match(/application\/pdf/) == null) {
       this.message = "Solo se Aceptan, Imagenes o Documentos PDF.";
       return;

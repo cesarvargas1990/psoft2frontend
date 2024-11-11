@@ -14,6 +14,31 @@
 
 
       <mat-accordion>
+
+        <mat-expansion-panel [expanded]="true">
+
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Firma cliente
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <br>
+          <p>Escriba su firma sobre el cuadro de abajo.</p>
+          <signature-pad *ngIf="editFirmar" [options]="signaturePadOptions"
+            (onBeginEvent)="drawStart()"></signature-pad>
+
+
+          <ng-container #fieldComponent></ng-container>
+          <img *ngIf="!editFirmar" [src]="listaArchivos[3]" height="200">
+
+          &nbsp;
+
+          <button type="button" title="Limpiar" (click)="editFirmar=true" class="btn btn-primary submit-button">
+            <mat-icon aria-label="Edit">edit</mat-icon>
+          </button>
+        </mat-expansion-panel>
+
         <mat-expansion-panel *ngFor="let item of listaTiposDocumento; let i = index" (opened)="panelOpenState = true"
           (closed)="panelOpenState = false">
           <mat-expansion-panel-header>
@@ -62,6 +87,8 @@
           </div>
 
         </mat-expansion-panel>
+
+
 
       </mat-accordion>
       <mat-dialog-actions>

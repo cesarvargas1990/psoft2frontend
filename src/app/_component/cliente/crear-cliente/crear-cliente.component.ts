@@ -17,7 +17,7 @@ import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { Router } from '@angular/router';
 import { SignaturePad } from 'ngx-signaturepad/signature-pad';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
-
+import { environment } from './../../../environments/environment';
 export interface TabType {
   label: string;
   fields: FormlyFieldConfig[];
@@ -35,6 +35,7 @@ export class CrearClienteComponent implements AfterViewInit {
   public allowCameraSwitch = true;
   public multipleWebcamsAvailable = false;
   public deviceId: string;
+  public webcamIndex: any;
   public videoOptions: MediaTrackConstraints = {
     // width: {ideal: 1024},
     // height: {ideal: 576}
@@ -519,7 +520,7 @@ export class CrearClienteComponent implements AfterViewInit {
                       this.data.image = imageBase64;
                       this.data.id_tdocadjunto = this.listaTipoDoc[i];
                       this.data.id_cliente = response.id;
-                      this.data.path = './upload/documentosAdjuntos/';
+                      this.data.path = environment.GET_UPLOADS_PATH;
 
 
                       this.clienteService.uploadFile(this.data).subscribe(
@@ -534,7 +535,7 @@ export class CrearClienteComponent implements AfterViewInit {
                     this.data.image = this.signaturePad.toDataURL();
                     this.data.id_tdocadjunto = 3;
                     this.data.id_cliente = response.id;
-                    this.data.path = './upload/documentosAdjuntos/';
+                    this.data.path = environment.GET_UPLOADS_PATH;
                     this.clienteService.uploadFile(this.data).subscribe(
                       response => {
                         console.log(response);

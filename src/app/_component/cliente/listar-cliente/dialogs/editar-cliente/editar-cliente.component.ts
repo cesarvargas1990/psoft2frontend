@@ -13,7 +13,7 @@ import { DatePipe } from '@angular/common';
 import { PrestamosService } from '../../../../../_services/prestamos/prestamos.service';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { SignaturePad } from 'ngx-signaturepad/signature-pad';
-
+import { environment } from './../../../environments/environment';
 @Component({
   selector: 'app-editar-cliente',
   templateUrl: './editar-cliente.component.html',
@@ -35,7 +35,8 @@ export class EditarClienteComponent implements OnInit {
   public imagePath;
   imgURL: any;
   public message: string;
-
+  public drawStart: any;
+  public webcamIndex: any;
   public showWebcam = true;
   public allowCameraSwitch = true;
   public multipleWebcamsAvailable = false;
@@ -108,7 +109,7 @@ export class EditarClienteComponent implements OnInit {
             this.dataImage.image = this.listaArchivos;
             this.dataImage.id_tdocadjunto = this.listaTipoDoc;
             this.dataImage.id_cliente = this.data.id;
-            this.dataImage.path = './upload/documentosAdjuntos/';
+            this.dataImage.path = environment.GET_UPLOADS_PATH;
 
 
             this.clienteServicio.editFile(this.dataImage).subscribe(
@@ -129,7 +130,7 @@ export class EditarClienteComponent implements OnInit {
                   this.dataImage.image = imageBase64;
                   this.dataImage.id_tdocadjunto = this.listaTipoDoc[i];
                   this.dataImage.id_cliente = response.id;
-                  this.dataImage.path = './upload/documentosAdjuntos/';
+                  this.dataImage.path = environment.GET_UPLOADS_PATH;
                   this.dataImage.fileExt = 'jpeg';
 
 

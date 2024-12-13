@@ -30,4 +30,4 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Docker
 
-Run `docker-compose up --build` 
+Run `docker-compose build --build-arg BUILD_CONFIGURATION=prod && docker-compose up` change BUILD_CONFIGURATION by prod,local,docker,demo

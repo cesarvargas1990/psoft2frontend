@@ -12,9 +12,10 @@ RUN npm install
 RUN npm install -g @angular/cli@14
 # Copia el resto del código fuente al contenedor
 COPY . .
+ARG BUILD_CONFIGURATION=docker
 
 # Compila la aplicación Angular
-RUN ng build --configuration docker --base-href ./ --aot --buildOptimizer
+RUN ng build --configuration $BUILD_CONFIGURATION  --base-href ./ --aot --buildOptimizer
 
 # Etapa 2: Servir la aplicación con Nginx
 FROM nginx:alpine

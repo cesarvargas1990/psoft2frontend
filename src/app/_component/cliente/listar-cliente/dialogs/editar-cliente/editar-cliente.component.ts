@@ -13,7 +13,7 @@ import { DatePipe } from '@angular/common';
 import { PrestamosService } from '../../../../../_services/prestamos/prestamos.service';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { SignaturePad } from 'ngx-signaturepad/signature-pad';
-import { environment } from './../../../environments/environment';
+
 @Component({
   selector: 'app-editar-cliente',
   templateUrl: './editar-cliente.component.html',

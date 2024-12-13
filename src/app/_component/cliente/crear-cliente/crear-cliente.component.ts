@@ -17,7 +17,9 @@ import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { Router } from '@angular/router';
 import { SignaturePad } from 'ngx-signaturepad/signature-pad';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
-import { environment } from './../../../environments/environment';
+import { environment } from '../../../../environments/environment';
+
+
 export interface TabType {
   label: string;
   fields: FormlyFieldConfig[];

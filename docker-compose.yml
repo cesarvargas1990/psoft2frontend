@@ -5,6 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        BUILD_CONFIGURATION: prod
     ports:
       - "80:80"
     volumes:

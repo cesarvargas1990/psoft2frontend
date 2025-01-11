@@ -27,6 +27,7 @@ export class PrestamosService {
       guardarPrestamo: this.server + '/guardarPrestamo',
       consultaFormasPago : this.server + '/consultaFormasPago',
       consultaFormaPago : this.server + '/consultaFormaPago',
+      pstiposistemaprest: this.server + '/pstiposistemaprest',
       pstdocadjuntos : this.server + '/pstdocadjuntos',
       consultaTipoDocPlantilla : this.server + '/consultaTipoDocPlantilla',
       listadoPrestamos :this.server + '/listadoPrestamos',
@@ -237,6 +238,18 @@ console.log (error);
     data.nitempresa = nitempresa;
     
     return this.http.get<any>(`${this.services.consultaFormaPago }`+'/'+id , this.httpOpts).pipe(
+      retry(2),
+      catchError(this.handleError)
+    )
+  }
+
+  pstiposistemaprest(): Observable<any> {
+    
+    let data: any = {};
+    let nitempresa = localStorage.getItem('nit_empresa');
+    data.nitempresa = nitempresa;
+    
+    return this.http.get<any>(`${this.services.pstiposistemaprest }`, this.httpOpts).pipe(
       retry(2),
       catchError(this.handleError)
     )

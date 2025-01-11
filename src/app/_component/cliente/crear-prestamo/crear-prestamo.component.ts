@@ -15,7 +15,7 @@ import { TipodocidentiService } from '../../../_services/tipodocidenti/tipodocid
 import { UsersService } from '../../../_services/users/users.service';
 import Swal from 'sweetalert2';
 import { PrestamosService } from '../../../_services/prestamos/prestamos.service';
-import {MatTabsModule} from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
@@ -30,20 +30,20 @@ import { Router } from '@angular/router';
 export class CrearPrestamoComponent implements AfterViewInit {
 
   panelOpenState = false;
-  plantillas_html : any = {};
+  plantillas_html: any = {};
   config: any = {};
   listarDocumentosPrestamo = false;
 
   form = new FormGroup({});
-  model: any = {}; 
-  
+  model: any = {};
+
   options: FormlyFormOptions = {};
 
   tiposdocumento: any = {};
   cobradores: any = {};
-  formaspago : any = {};
-  
+  formaspago: any = {};
 
+  sistemaspago: any = {};
 
   mostrarTablaResumen = false;
 
@@ -51,7 +51,6 @@ export class CrearPrestamoComponent implements AfterViewInit {
   ];
 
   fields: FormlyFieldConfig[] = [];
-
 
 
 
@@ -68,7 +67,6 @@ export class CrearPrestamoComponent implements AfterViewInit {
 
 
   datosCliente: any = [];
-
   listaClientes: any = [];
 
 
@@ -94,15 +92,12 @@ export class CrearPrestamoComponent implements AfterViewInit {
 
 
   ngOnInit() {
-    
+
     this.mobileQuery.removeListener(this._mobileQueryListener);
-
-
-
 
   }
 
-  volver () {
+  volver() {
     this.router.navigate(['/dashboard']);
   }
 
@@ -117,7 +112,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
       toolbar: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
       image_advtab: true,
       imagetools_toolbar: 'rotateleft rotateright | flipv fliph | editimage imageoptions',
-      init_instance_callback: function() {},
+      init_instance_callback: function () { },
       content_css: [
         '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
         '//www.tinymce.com/css/codepen.min.css'
@@ -128,10 +123,10 @@ export class CrearPrestamoComponent implements AfterViewInit {
     this.cobradores = await this.usersService.getUsers();
     this.listaClientes = await this.clienteService.getClientes();
     this.formaspago = await this.prestamosService.getFormasPago();
+    this.sistemaspago = await this.prestamosService.getSistemaPrestamo();
     console.log('los clientes');
     console.log(this.listaClientes);
 
-    
 
 
     this.navService.appDrawer = this.appDrawer;
@@ -141,9 +136,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
 
 
       {
-        
 
-      
         fieldGroupClassName: 'row',
         fieldGroup: [
 
@@ -163,7 +156,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
               options: this.listaClientes
             },
           },
-          
+
           {
             key: 'id_forma_pago',
             className: 'col-md-4',
@@ -171,7 +164,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
             modelOptions: {
               updateOn: 'blur',
               debounce: {
-                
+
                 default: 2000,
               },
             },
@@ -182,64 +175,50 @@ export class CrearPrestamoComponent implements AfterViewInit {
               change: (field, $event) => {
 
                 this.form.get('porcint').setValue('');
-             
+
                 this.form.get('numcuotas').setValue('');
                 this.form.get('valorpres').setValue('');
 
-                console.log (field);
-                console.log ($event.value);
+                console.log(field);
+                console.log($event.value);
                 this.prestamosService.consultaFormaPago($event.value).subscribe(
-                  response =>  {
-                    
-                      console.log(response);
-
-
-                      
-                      if (response) {
-                        
-                        this.form.get('porcint').setValue(response[0].porcint);
-                
-                        this.form.get('numcuotas').setValue(response[0].numcuotas);
-                        this.form.get('valorpres').setValue(response[0].valorpres);
-
-                      
-
-                     
-
-                        if (response[0].ind_solicporcint == 0) {
-                          this.form.get('porcint').disable({ onlySelf: true });
-                        }else {
-                          this.form.get('porcint').enable();
-                        }
-
-                        if (response[0].ind_solivalorpres == 0) {
-                          this.form.get('valorpres').disable({ onlySelf: true });
-                        } else {
-                          this.form.get('valorpres').enable();
-                        }
-
-
-                        if (response[0].ind_solivalorpres == 0) {
-                          this.form.get('numcuotas').disable({ onlySelf: true });
-                        } else {
-                          this.form.get('numcuotas').enable();
-                        }
-
-                        
-                
-                        
-                        this.form.updateValueAndValidity();
-                        
-                      }
-                      
-
+                  response => {
+                    console.log(response);
+                    if (response) {
+                      this.form.updateValueAndValidity();
+                    }
                   }
                 )
               }
             },
           },
 
+          {
+            key: 'id_sistema_pago',
+            className: 'col-md-4',
+            type: 'select',
+            modelOptions: {
+              updateOn: 'blur',
+              debounce: {
+                default: 2000,
+              },
+            },
+            templateOptions: {
+              label: 'Sistema de pago',
+              options: this.sistemaspago,
+              required: true,
+              change: (field, $event) => {
+                this.prestamosService.pstiposistemaprest().subscribe(
+                  response => {
+                    if (response) {
+                      this.form.updateValueAndValidity();
+                    }
 
+                  }
+                )
+              }
+            },
+          },
           {
             key: 'valorpres',
             className: 'col-md-4',
@@ -254,7 +233,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
               minLength: 5,
               maxLength: 11
             },
-            
+
             validation: {
               messages: {
                 pattern: (error, field: FormlyFieldConfig) => `"${field.formControl.value}" no es un n\u00FAmero valido`,
@@ -276,8 +255,8 @@ export class CrearPrestamoComponent implements AfterViewInit {
               label: 'Numero de cuotas',
               required: true,
               pattern: /^[0-9]*\.?[0-9]*$/,
-              
-              minLength:1,
+
+              minLength: 1,
               maxLength: 3
             },
             validation: {
@@ -308,8 +287,8 @@ export class CrearPrestamoComponent implements AfterViewInit {
           },
 
 
-      
-        
+
+
 
           {
             key: 'fec_inicial',
@@ -352,7 +331,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
   submit() {
 
 
-console.log (this.form.value)
+    console.log(this.form.value)
 
     if (this.form.valid) {
 
@@ -382,37 +361,37 @@ console.log (this.form.value)
 
   }
 
-  async obtenerCuotasPrestamo () {
-    
-    console.log (this.model);
+  async obtenerCuotasPrestamo() {
 
-    if (this.form.valid) { 
+    console.log(this.model);
+
+    if (this.form.valid) {
       this.mostrarTablaResumen = true;
       this.prestamosService.calcularCuotas(this.form.value).subscribe(
         response => {
-  
-          console.log (response);
-  
+
+          console.log(response);
+
           this.tableCuotasPrestamo = response;
         }
       )
-  } else {
-    Swal.fire({
-      type: 'error',
-      title: 'Error',
-      text: 'Por favor valide los campos obligatorios, para generar la tabla.',
-    })
-  }
+    } else {
+      Swal.fire({
+        type: 'error',
+        title: 'Error',
+        text: 'Por favor valide los campos obligatorios, para generar la tabla.',
+      })
+    }
 
-    
+
   }
 
   getHeaders() {
     let headers: string[] = [];
-    if(this.tableCuotasPrestamo) {
+    if (this.tableCuotasPrestamo) {
       this.tableCuotasPrestamo.forEach((value) => {
         Object.keys(value).forEach((key) => {
-          if(!headers.find((header) => header == key)){
+          if (!headers.find((header) => header == key)) {
             headers.push(key)
           }
         })
@@ -420,14 +399,14 @@ console.log (this.form.value)
     }
     return headers;
   }
-  modalAdicionarEmpresa(){
-    
+  modalAdicionarEmpresa() {
+
   }
-  async guardarPrestamo () {
+  async guardarPrestamo() {
 
     if (this.form.valid) {
 
-    
+
       Swal.fire({
         title: 'Esta seguro?',
         text: "Desea registrar el prestamo?",
@@ -438,52 +417,52 @@ console.log (this.form.value)
         confirmButtonText: 'Si!',
         cancelButtonText: 'No!'
       }).then((result) => {
-  
+
         if (result.value == true) {
-  
-  
+
+
           this.prestamosService.guardarPrestamo(this.model).subscribe(
             response => {
-                console.log (response);
-                if (response) {
-      
-                  Swal.fire({
-                    type: 'info',
-                    title: 'Informaci&oacute;n',
-                    text: 'Se crea satisfactoriamente el prestamo # '+response,
-                  }).then(
-                    (result) => {
-      
-                      if (result.value == true) {
- 
-                          this.listarDocumentosPrestamo = true;
+              console.log(response);
+              if (response) {
 
-                          this.model.id_prestamo = response; 
-                          this.prestamosService.renderTemplates(this.model).subscribe(
-                            response => {
-                              console.log (response);
-                              this.plantillas_html = response;
-                            }
-                          )
+                Swal.fire({
+                  type: 'info',
+                  title: 'Informaci&oacute;n',
+                  text: 'Se crea satisfactoriamente el prestamo # ' + response,
+                }).then(
+                  (result) => {
 
-                        
-                      }
-      
+                    if (result.value == true) {
+
+                      this.listarDocumentosPrestamo = true;
+
+                      this.model.id_prestamo = response;
+                      this.prestamosService.renderTemplates(this.model).subscribe(
+                        response => {
+                          console.log(response);
+                          this.plantillas_html = response;
+                        }
+                      )
+
+
                     }
-                  )
-      
-                }
+
+                  }
+                )
+
+              }
             }
           )
-  
+
 
         }
-  
+
       })
 
 
 
-  
+
     } else {
 
       Swal.fire({
@@ -493,8 +472,6 @@ console.log (this.form.value)
       })
 
     }
-
-    
 
   }
 

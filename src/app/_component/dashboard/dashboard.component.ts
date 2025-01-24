@@ -61,7 +61,7 @@ export class DashboardComponent implements AfterViewInit {
   total_interes_hoy :string;
   total_prestado :string;
   total_interes :string;
-
+  contenidoCombinado: string = '';
   
 
   @ViewChild('appDrawer', {static: false}) appDrawer: ElementRef;
@@ -277,6 +277,7 @@ console.log(row);
                             response => {
                               console.log (response);
                               this.plantillas_html = response;
+                              this.combinarContenido(response);
                             }
                           )
 
@@ -309,6 +310,7 @@ console.log(row);
           text: "Por favor ingrese el valor a cancelar:",
           showCancelButton: true,
       confirmButtonColor: '#3085d6',
+      inputValue: row.valtotal,
       cancelButtonColor: '#d33',
       confirmButtonText: 'Aceptar!',
       cancelButtonText: 'Cancelar!',
@@ -371,6 +373,43 @@ console.log(row);
     })
     
    
+  }
+
+
+  combinarContenido(response: any): void {
+    console.log('Response recibido:', response);
+  
+    if (!Array.isArray(response)) {
+      console.error('Response no es un arreglo:', response);
+      return;
+    }
+  
+    this.contenidoCombinado = response
+      .map((item) => {
+        // Limpia etiquetas <html>, <head>, <body>
+        const contenidoLimpio = this.limpiarHTML(item.plantilla_html);
+        return `
+          <div>
+            
+            ${contenidoLimpio}
+            <hr style="page-break-after: always;">
+          </div>
+        `;
+      })
+      .join('');
+  
+    console.log('Contenido combinado:', this.contenidoCombinado);
+  }
+
+
+  limpiarHTML(html: string): string {
+    // Remueve etiquetas <html>, <head>, y <body>
+    return html
+      .replace(/<html[^>]*>/gi, '')
+      .replace(/<\/html>/gi, '')
+      .replace(/<head[^>]*>.*?<\/head>/gi, '')
+      .replace(/<body[^>]*>/gi, '')
+      .replace(/<\/body>/gi, '');
   }
 
   ngAfterViewInit() {

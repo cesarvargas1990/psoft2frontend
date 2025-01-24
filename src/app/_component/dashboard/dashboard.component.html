@@ -195,15 +195,15 @@
                     <br>
                     <div class="card-text">
                         <mat-accordion multi>
-                            <mat-expansion-panel *ngFor="let item of plantillas_html" [expanded]="true"  (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                            <mat-expansion-panel  [expanded]="true"  (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
-                                        {{item.nombre}}
+                                       Documentos del prestamo
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
                                 <br>
                                 <!-- <div [innerHTML]="item.plantilla_html"></div> -->
-                                <tinymce [(ngModel)]="item.plantilla_html" [config]="config"></tinymce>
+                                <tinymce [(ngModel)]="contenidoCombinado" [config]="config"></tinymce>
                             </mat-expansion-panel>
                         </mat-accordion>
                     </div>

@@ -5,6 +5,16 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ## Development server
 
 Node version use 14
+download for mac, windows, linux https://nodejs.org/en/download (selec 14 old installer)
+
+install node modules
+
+`npm install`
+
+Install angular cli (runw with admin or sudo)
+
+`npm i -g @angular/cli@14`
+
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
@@ -30,4 +40,4 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Docker
 
-Run `docker-compose build --build-arg BUILD_CONFIGURATION=prod && docker-compose up` change BUILD_CONFIGURATION by prod,local,docker,demo
+Run `docker-compose build --build-arg BUILD_CONFIGURATION=docker && docker-compose up` change BUILD_CONFIGURATION by prod,local,docker,demo

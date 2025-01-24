@@ -98,14 +98,14 @@
                 </div>
 
                 <div *ngIf="listarDocumentosPrestamo" class="card-body">
-                    <h5 class="card-title">imprimir Documentos del prestamo</h5>
+                    <h5 class="card-title">Documentos relacionados al prestamo</h5>
                     <div class="card-text">
 
                         <div mat-dialog-content class="mat-typography">
 
-                            <div *ngFor="let item of plantillas_html">
+                            <div >
                                 <br>
-                                <tinymce [(ngModel)]="item.plantilla_html" [config]="config"></tinymce>
+                                <tinymce [(ngModel)]="contenidoCombinado"  [config]="config"></tinymce>
 
                             </div>
                             <br>

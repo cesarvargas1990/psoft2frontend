@@ -63,7 +63,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
   menuUsuario = JSON.parse(localStorage.getItem('menu_usuario'));
 
   navItems: NavItem[] = this.menuUsuario;
-
+  contenidoCombinado: string = '';
 
 
   datosCliente: any = [];
@@ -442,6 +442,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
                         response => {
                           console.log(response);
                           this.plantillas_html = response;
+                          this.combinarContenido(response);
                         }
                       )
 
@@ -473,6 +474,41 @@ export class CrearPrestamoComponent implements AfterViewInit {
 
     }
 
+  }
+
+  combinarContenido(response: any): void {
+    console.log('Response recibido:', response);
+  
+    if (!Array.isArray(response)) {
+      console.error('Response no es un arreglo:', response);
+      return;
+    }
+  
+    this.contenidoCombinado = response
+      .map((item) => {
+        // Limpia etiquetas <html>, <head>, <body>
+        const contenidoLimpio = this.limpiarHTML(item.plantilla_html);
+        return `
+          <div>
+            
+            ${contenidoLimpio}
+            <hr style="page-break-after: always;">
+          </div>
+        `;
+      })
+      .join('');
+  
+    console.log('Contenido combinado:', this.contenidoCombinado);
+  }
+
+  limpiarHTML(html: string): string {
+    // Remueve etiquetas <html>, <head>, y <body>
+    return html
+      .replace(/<html[^>]*>/gi, '')
+      .replace(/<\/html>/gi, '')
+      .replace(/<head[^>]*>.*?<\/head>/gi, '')
+      .replace(/<body[^>]*>/gi, '')
+      .replace(/<\/body>/gi, '');
   }
 
 }

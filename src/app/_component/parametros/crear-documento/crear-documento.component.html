@@ -38,7 +38,7 @@
                             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
                         </mat-form-field>
                         <br>
-                        <button title="Crear Documento" class="btn btn-outline-primary btn-sm" mat-icon-button
+                        <button title="Crear Documento" *ngIf="authService.tienePermiso('documento.crear')"  class="btn btn-outline-primary btn-sm" mat-icon-button
                             color="primary" (click)="modoEdicion=true;this.html='';this.model.nombre=''">
                             <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
                         </button>
@@ -63,12 +63,14 @@
 
                                 <mat-cell *matCellDef="let row; let i=index;">
                                     <button title="Editar Plantilla Documento"
+                                    *ngIf="authService.tienePermiso('documento.editar')" 
                                         class="float-right btn btn-outline-primary btn-sm" mat-icon-button
                                         color="primary" (click)="editItem=true;editarDocumento(row)">
                                         <mat-icon aria-label="Edit">edit</mat-icon>
                                     </button>
 
                                     <button title="Eliminar Plantilla Documento"
+                                    *ngIf="authService.tienePermiso('documento.eliminar')" 
                                         class="float-right btn btn-outline-danger btn-sm" mat-icon-button color="accent"
                                         (click)="eliminarDocumentoPlantilla(row)">
                                         <mat-icon aria-label="Delete">delete</mat-icon>

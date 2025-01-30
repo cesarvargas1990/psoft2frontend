@@ -59,7 +59,7 @@ export class CrearDocumentoComponent implements AfterViewInit {
   version = VERSION;
 
   menuUsuario = JSON.parse (localStorage.getItem('menu_usuario')); 
-  
+  permisos = JSON.parse (localStorage.getItem('permisos')); 
   navItems: NavItem[] = this.menuUsuario; 
 
   

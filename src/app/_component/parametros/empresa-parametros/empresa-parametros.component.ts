@@ -45,6 +45,7 @@ export class EmpresaParametrosComponent implements OnInit {
 
   menuUsuario = JSON.parse(localStorage.getItem('menu_usuario'));
 
+  permisos = JSON.parse (localStorage.getItem('permisos')); 
   navItems: NavItem[] = this.menuUsuario;
 
 

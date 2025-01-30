@@ -69,6 +69,7 @@ console.log (error);
     localStorage.setItem('name', resp.name);
     localStorage.setItem('access_token', resp.access_token);
     localStorage.setItem('menu_usuario', JSON.stringify(resp.menu_usuario));
+    localStorage.setItem('permisos', JSON.stringify(resp.permisos));
     localStorage.setItem('id', JSON.stringify(resp.id));
     localStorage.setItem('id_usuario', JSON.stringify(resp.id));
     localStorage.setItem('nit_empresa', resp.nit_empresa);
@@ -126,5 +127,9 @@ console.log (error);
       catchError(this.handleError)
     );
 }
+
+	tienePermiso(name) {
+	  return localStorage.getItem('permisos').includes(name)
+	}
  
 }

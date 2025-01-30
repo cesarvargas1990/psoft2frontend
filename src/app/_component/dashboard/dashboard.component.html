@@ -14,10 +14,10 @@
         </mat-sidenav>
         <mat-sidenav-content>
 
-            <div class="row" *ngIf="totales==true">
-                <div class="col-md-3">
+            <div class="row" *ngIf="authService.tienePermiso('dashboard.totales')">
+                <div class="col-md-3" >
 
-                    <div class="card">
+                    <div class="card" >
                         <div class="card-header">
                             <div class="card-title">$ Balance</div>
                         </div>
@@ -120,7 +120,7 @@
                             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
                         </mat-form-field>
                         <br>
-                        <button title="Crear Prestamo" class="btn btn-outline-primary btn-sm" mat-icon-button color="primary" (click)="irPantallaCrearPrestamo()">
+                        <button title="Crear Prestamo"  *ngIf="authService.tienePermiso('dashboard.crear_prestamo')" class="btn btn-outline-primary btn-sm" mat-icon-button color="primary" (click)="irPantallaCrearPrestamo()">
                             <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
                           </button>
                         <br>
@@ -166,13 +166,13 @@
 
                                 </mat-header-cell>
                                 <mat-cell *matCellDef="let row; let i=index;">
-                                    <button title="Documentos" class="float-right btn btn-outline-primary btn-sm" mat-icon-button color="primary" (click)="modalListadoDocumentos(row);visualizarListaCuotas=false;totales=false">
+                                    <button title="Documentos"  *ngIf="authService.tienePermiso('dashboard.imprimir_documentos')" class="float-right btn btn-outline-primary btn-sm" mat-icon-button color="primary" (click)="modalListadoDocumentos(row);visualizarListaCuotas=false;totales=false">
                     <mat-icon aria-label="print">print</mat-icon>
                   </button>
-                                    <button title="Listado Cuotas" class="float-right btn btn-outline-info btn-sm" mat-icon-button color="primary" (click)="visualizarListaCuotas=true;visualizarDocumentos=false;listadoPrestamos=false;listadoCuotas(row);totales=false">
+                                    <button title="Listado Cuotas" *ngIf="authService.tienePermiso('dashboard.listado_cuotas')" class="float-right btn btn-outline-info btn-sm" mat-icon-button color="primary" (click)="visualizarListaCuotas=true;visualizarDocumentos=false;listadoPrestamos=false;listadoCuotas(row);totales=false">
                     <mat-icon aria-label="find_in_page">find_in_page</mat-icon>
                   </button>
-                                    <button title="Eliminar Prestamo" class="float-right btn btn-outline-info btn-sm" mat-icon-button color="accent" (click)="eliminarPrestamo(row)">
+                                    <button title="Eliminar Prestamo"  *ngIf="authService.tienePermiso('dashboard.eliminar_prestamo')" class="float-right btn btn-outline-info btn-sm" mat-icon-button color="accent" (click)="eliminarPrestamo(row)">
                     <mat-icon aria-label="delete">delete</mat-icon>
                   </button>
                                 </mat-cell>

@@ -99,6 +99,8 @@ export class DashboardComponent implements AfterViewInit {
   version = VERSION;
 
   menuUsuario = JSON.parse (localStorage.getItem('menu_usuario')); 
+
+  permisos = JSON.parse (localStorage.getItem('permisos')); 
   
   navItems: NavItem[] = this.menuUsuario; 
   
@@ -419,5 +421,7 @@ console.log(row);
   logout(){
     this.authService.logout();
   }
+
+  
  
 }

@@ -35,7 +35,7 @@
               <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
             </mat-form-field>
             <br>
-            <button title="Agregar Cliente" class="btn btn-outline-primary btn-sm" mat-icon-button color="primary"
+            <button title="Agregar Cliente" *ngIf="authService.tienePermiso('cliente.crear')" class="btn btn-outline-primary btn-sm" mat-icon-button color="primary"
               (click)="modalAdicionarEmpresa()">
               <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
             </button>
@@ -83,17 +83,17 @@
                 </mat-header-cell>
 
                 <mat-cell *matCellDef="let row; let i=index;">
-                  <button title="Editar Cliente" class="float-right btn btn-outline-primary btn-sm" mat-icon-button
+                  <button title="Editar Cliente" *ngIf="authService.tienePermiso('cliente.editar')" class="float-right btn btn-outline-primary btn-sm" mat-icon-button
                     color="primary" (click)="modalEditarCliente(row)">
                     <mat-icon aria-label="Edit">edit</mat-icon>
                   </button>
 
-                  <button title="Eliminar Cliente" class="float-right btn btn-outline-danger btn-sm" mat-icon-button
+                  <button title="Eliminar Cliente" *ngIf="authService.tienePermiso('cliente.eliminar')" class="float-right btn btn-outline-danger btn-sm" mat-icon-button
                     color="accent" (click)="modalEliminarCliente(row)">
                     <mat-icon aria-label="Delete">delete</mat-icon>
                   </button>
 
-                  <button title="Listado Creditos" class="float-right btn btn-outline-info btn-sm" mat-icon-button
+                  <button title="Listado Creditos" *ngIf="authService.tienePermiso('cliente.listado_creditos')" class="float-right btn btn-outline-info btn-sm" mat-icon-button
                     color="accent" (click)="modalListadoCreditos(row)">
                     <mat-icon aria-label="find_in_page">find_in_page</mat-icon>
                   </button>

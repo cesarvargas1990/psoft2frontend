@@ -63,6 +63,7 @@ export class ListarClienteComponent implements AfterViewInit {
   private trigger: Subject<void> = new Subject<void>();
 
   menuUsuario = JSON.parse(localStorage.getItem('menu_usuario'));
+  permisos = JSON.parse (localStorage.getItem('permisos')); 
   urlimage: any = {};
   navItems: NavItem[] = this.menuUsuario;
   currentIndexImage = 0;

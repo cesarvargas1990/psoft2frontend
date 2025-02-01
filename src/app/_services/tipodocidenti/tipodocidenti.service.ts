@@ -35,7 +35,7 @@ private server: string = environment.API_URL;
   }
   
   getTipodocidenti(): Observable<any> { 
-	let nitempresa = localStorage.getItem('nit_empresa');
-    return this.http.get(`${this.services.pstipodocidenti}`+'/'+nitempresa, this.httpOpts)
+	
+    return this.http.get(`${this.services.pstipodocidenti}`, this.httpOpts)
   }
 }

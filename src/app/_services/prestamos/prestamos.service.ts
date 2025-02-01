@@ -25,8 +25,6 @@ export class PrestamosService {
       listaformaspago: this.server + '/listaformaspago',
       listaperiodospago: this.server + '/listaperiodopago',
       guardarPrestamo: this.server + '/guardarPrestamo',
-      consultaFormasPago : this.server + '/consultaFormasPago',
-      consultaFormaPago : this.server + '/consultaFormaPago',
       pstiposistemaprest: this.server + '/pstiposistemaprest',
       pstdocadjuntos : this.server + '/pstdocadjuntos',
       consultaTipoDocPlantilla : this.server + '/consultaTipoDocPlantilla',
@@ -207,17 +205,6 @@ console.log (error);
   
   }
 
-  consultaFormasPago(): Observable<any> {
-    
-    let data: any = {};
-    let nitempresa = localStorage.getItem('nit_empresa');
-    data.nitempresa = nitempresa;
-    
-    return this.http.post<any>(`${this.services.consultaFormasPago }` + '/'+nitempresa , data, this.httpOpts).pipe(
-      retry(2),
-      catchError(this.handleError)
-    )
-  }
 
   consultaPlantillasDocumentos(): Observable<any> {
     
@@ -231,17 +218,6 @@ console.log (error);
     )
   }
 
-  consultaFormaPago(id): Observable<any> {
-    
-    let data: any = {};
-    let nitempresa = localStorage.getItem('nit_empresa');
-    data.nitempresa = nitempresa;
-    
-    return this.http.get<any>(`${this.services.consultaFormaPago }`+'/'+id , this.httpOpts).pipe(
-      retry(2),
-      catchError(this.handleError)
-    )
-  }
 
   pstiposistemaprest(): Observable<any> {
     

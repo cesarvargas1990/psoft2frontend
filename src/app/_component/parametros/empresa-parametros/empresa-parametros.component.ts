@@ -277,26 +277,6 @@ console.log (this.datosEmpresa);
           }
         }
       )
-      /* this.prestamosService.guardarFormaPago (this.model).subscribe(
-
-        response => {
-  
-          this.model = response;
-          console.log (response);
-          this.getDatosFormasPago();
-
-          Swal.fire({
-            type: 'info',
-            title: 'Informaci&oacute;n',
-            text: 'Se crea satisfactoriamente la forma de pago.',
-          })
-          //this.router.navigate(['/formaspago/listar']);
-          
-  
-        }
-  
-      ) */
-
     } else {
       Swal.fire({
         type: 'error',
@@ -305,11 +285,7 @@ console.log (this.datosEmpresa);
       })
     }
 
-
-
-
   }
-
 
   
   async ngAfterViewInit() {

@@ -181,14 +181,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
 
                 console.log(field);
                 console.log($event.value);
-                this.prestamosService.consultaFormaPago($event.value).subscribe(
-                  response => {
-                    console.log(response);
-                    if (response) {
-                      this.form.updateValueAndValidity();
-                    }
-                  }
-                )
+                
               }
             },
           },

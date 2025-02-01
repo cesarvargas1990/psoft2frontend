@@ -114,8 +114,7 @@ import { FormlyFieldInput } from './formly-field-input';
 
 import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 
-import { CrearFormapagoComponent } from './_component/parametros/crear-formapago/crear-formapago.component';
-import { EditarFormapagoComponent } from './_component/parametros/crear-formapago/dialogs/editar-formapago/editar-formapago.component';
+
 
 
 import { CrearDocumentoComponent } from './_component/parametros/crear-documento/crear-documento.component';
@@ -295,8 +294,7 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig){
     CrearClienteComponent,
     CrearPrestamoComponent,    
     FormlyFieldInput, 
-    CrearFormapagoComponent, 
-    EditarFormapagoComponent,
+
 
     CrearDocumentoComponent,
     EditarDocumentoComponent,
@@ -319,7 +317,6 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig){
 
     //EdicionarPrefijoComponent, 
     EditarClienteComponent,
-    EditarFormapagoComponent,
     ListaPrestamosComponent,
     //EditarDocumentoComponent,
     ListarPrestamosclienteComponent,

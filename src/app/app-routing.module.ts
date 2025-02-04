@@ -9,6 +9,7 @@ import { ListarClienteComponent } from './_component/cliente/listar-cliente/list
 import { CrearClienteComponent } from './_component/cliente/crear-cliente/crear-cliente.component';
 import { CrearPrestamoComponent } from './_component/cliente/crear-prestamo/crear-prestamo.component';
 import { CrearDocumentoComponent} from './_component/parametros/crear-documento/crear-documento.component';
+import { LogoutComponent } from './logout/logout.component';
 
 const routes: Routes = [ 
 
@@ -20,6 +21,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'logout',
+    component: LogoutComponent,
   },
   {path: 'clientes', children: [
     {path:'crear', component: CrearClienteComponent,

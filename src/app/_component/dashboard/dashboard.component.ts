@@ -207,31 +207,12 @@ console.log(row);
 
 
   refresh () {
-
-   
-    
-    this.prestamosService.capitalprestado().subscribe(response => {
-      
-      this.total_capital_prestado = response;
-    })
-
-    this.prestamosService.totalprestadohoy().subscribe(response => {
-      
-      this.total_prestado_hoy = response;
-    })
-
-    this.prestamosService.totalintereshoy().subscribe(response => {
-      
-      this.total_interes_hoy = response;
-    })
-
-    this.prestamosService.totalinteres().subscribe(response => {
-      
-      this.total_interes = response;
-    })
-
-    this.prestamosService.totalprestado().subscribe(response =>   {
-      this.total_prestado = response; 
+    this.prestamosService.totales_dashboard().subscribe(response =>  {
+      this.total_capital_prestado = response.total_capital_prestado;
+      this.total_prestado_hoy = response.total_prestado_hoy;
+      this.total_interes_hoy = response.total_interes_hoy;
+      this.total_interes = response.total_interes;
+      this.total_prestado = response.total_prestado; 
     })
 
     this.mobileQuery.removeListener(this._mobileQueryListener);
@@ -291,7 +272,6 @@ console.log(row);
  
   pagarCuotaPrestamo (row){
 
-
     Swal.fire({
       title: 'Esta seguro?',
       text: "Se va a realizar pago de la cuota?",
@@ -304,60 +284,15 @@ console.log(row);
     }).then((result) => {
 
       if (result.value == true) {
+        //var currency = row.valtotal;
+        //var number = Number(currency.replace(/[^0-9.-]+/g,""));
 
-
-        Swal.fire({
-          input: 'text',
-          title: 'Valor a pagar',
-          text: "Por favor ingrese el valor a cancelar:",
-          showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      inputValue: row.valtotal,
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Aceptar!',
-      cancelButtonText: 'Cancelar!',
-          inputAttributes: {
-          autocapitalize: 'off',
-         
-            },
-            preConfirm: (response) => {
-
-
-              var currency = row.valtotal;
-              var number = Number(currency.replace(/[^0-9.-]+/g,""));
-
-              
-              alert (row.valtotal);
-              if (isNaN(response)){
-                Swal.fire ({
-                  title: 'Error!',
-                  text: 'El valor ingresado no es númerico!',
-                  cancelButtonColor: '#d33',
-                  type: 'error',
-                })
-                return false;
-              }
-
-              if (response <  number) {
-                Swal.fire ({
-                  title: 'Error!',
-                  text: 'El valor ingresado debe ser mayor o igual al valor de la cuota!',
-                  cancelButtonColor: '#d33',
-                  type: 'error',
-                })
-                return false;
-              }
-
-              console.log (row);
         this.model.fecha_pago = row.fecha_pago;
         this.model.id_prestamo = row.id_prestamo;
         this.model.id_cliente = row.id_cliente;
         this.model.id = row.id;
-        this.model.valor_pago = response;
         this.prestamosService.registrarPagoCuota(this.model).subscribe(
           response => {
-  
-            
             if (response ){
               Swal.fire("Listo!", "El pago ha sido registrado.", "success");
               this.listadoCuotas(row);
@@ -365,11 +300,55 @@ console.log(row);
             }
           }
         )
-              
-            }
-        })
-        
 
+      //   Swal.fire({
+      //     input: 'text',
+      //     title: 'Valor a pagar',
+      //     text: "Por favor ingrese el valor a cancelar:",
+      //     showCancelButton: true,
+      // confirmButtonColor: '#3085d6',
+      // inputValue: row.valtotal,
+      // cancelButtonColor: '#d33',
+      // confirmButtonText: 'Aceptar!',
+      // cancelButtonText: 'Cancelar!',
+      //     inputAttributes: {
+      //     autocapitalize: 'off',
+         
+      //       },
+      //       preConfirm: (response) => {
+
+
+      //         var currency = row.valtotal;
+      //         var number = Number(currency.replace(/[^0-9.-]+/g,""));
+
+              
+      //        // alert (row.valtotal);
+      //         if (isNaN(response)){
+      //           Swal.fire ({
+      //             title: 'Error!',
+      //             text: 'El valor ingresado no es númerico!',
+      //             cancelButtonColor: '#d33',
+      //             type: 'error',
+      //           })
+      //           return false;
+      //         }
+
+      //         if (response <  number) {
+      //           Swal.fire ({
+      //             title: 'Error!',
+      //             text: 'El valor ingresado debe ser mayor o igual al valor de la cuota!',
+      //             cancelButtonColor: '#d33',
+      //             type: 'error',
+      //           })
+      //           return false;
+      //         }
+
+      //         console.log (row);
+        
+              
+      //       }
+      //   })
+        
       }
 
     })

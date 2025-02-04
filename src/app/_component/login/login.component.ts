@@ -15,12 +15,13 @@ export class LoginComponent implements OnInit {
   ) {}
  
   ngOnInit() {
-    this.authService.logout();
+	localStorage.clear();
   }
  
-  login() {
+   login() {
     this.model.action = '/auth/login';
-    this.authService.loginForm(this.model).subscribe(response => {
+  
+     this.authService.loginForm(this.model).subscribe(response => {
       if (response.status === 'success') {
         this.authService.setUser(response);
       }

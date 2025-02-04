@@ -37,15 +37,12 @@ export class PrestamosService {
       pspagos : this.server + '/pspagos',
       eliminarPrestamo : this.server + '/eliminarPrestamo',
       listatiposistemaprest : this.server + '/listatiposistemaprest', 
-      capitalprestado : this.server + '/capitalprestado',
-      totalprestadohoy : this.server + '/totalprestadohoy',
-      totalintereshoy : this.server + '/totalintereshoy',
-      totalinteres : this.server + '/totalinteres',
-      totalprestado : this.server + '/totalprestado'
+      totales_dashboard : this.server + '/totales_dashboard'
     };
 
-
+   
   httpOpts: any = {
+    
     headers: new HttpHeaders({
       'Content-Type': 'application/json', 'Accept': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('access_token')}`
@@ -235,8 +232,10 @@ console.log (error);
     
     let nitempresa = localStorage.getItem('nit_empresa');
     let id_usureg = localStorage.getItem('id_usuario');
+    let fecha = this.obtenerFechaHoraCliente()
     data.nitempresa = nitempresa;
     data.id_usureg = id_usureg;
+    data.fecha = fecha;
     return this.http.post<any>(`${this.services.guardarPrestamo}` , data, this.httpOpts).pipe(
       retry(2),
       catchError(this.handleError)
@@ -293,43 +292,16 @@ console.log (error);
     
     data.nitempresa = localStorage.getItem('nit_empresa');
     data.id_user = localStorage.getItem('id');
+    data.fecha = this.obtenerFechaHoraCliente();
     return this.http.post(`${this.services.pspagos }`, data, this.httpOpts)
   }
 
-  capitalprestado (): Observable<any> {
-    let data: any = {};
-    data.nitempresa = localStorage.getItem('nit_empresa');
-    return this.http.get(`${this.services.capitalprestado }` + '/' + data.nitempresa, this.httpOpts)
-
-  }
-
-  totalprestadohoy (): Observable<any> {
+  totales_dashboard (): Observable<any> {
+    alert (`Bearer ${localStorage.getItem('access_token')}`);
     let data: any = {};
     data.fecha = this.fechaActual();
     data.nitempresa = localStorage.getItem('nit_empresa');
-    return this.http.post(`${this.services.totalprestadohoy }` , data, this.httpOpts)
-
-  }
-  
-  totalintereshoy (): Observable<any> {
-    let data: any = {};
-    data.fecha = this.fechaActual();
-    data.nitempresa = localStorage.getItem('nit_empresa');
-    return this.http.post(`${this.services.totalintereshoy }`,data, this.httpOpts)
-
-  }
-
-  totalinteres (): Observable<any> {
-    let data: any = {};
-    data.nitempresa = localStorage.getItem('nit_empresa');
-    return this.http.post(`${this.services.totalinteres }`,data, this.httpOpts)
-
-  }
-
-  totalprestado (): Observable<any> { 
-    let data: any = {};
-    data.nitempresa = localStorage.getItem('nit_empresa');
-    return this.http.get(`${this.services.totalprestado }` + '/' + data.nitempresa, this.httpOpts)
+    return this.http.post(`${this.services.totales_dashboard }` , data,this.httpOpts)
 
   }
 
@@ -345,6 +317,18 @@ console.log (error);
         day = '0' + day;
 
     return [year, month, day].join('-');
+}
+
+ obtenerFechaHoraCliente() {
+  const fecha = new Date();
+  const offset = -fecha.getTimezoneOffset();
+  const signo = offset >= 0 ? "+" : "-";
+  const horas = String(Math.floor(Math.abs(offset) / 60)).padStart(2, '0');
+  const minutos = String(Math.abs(offset) % 60).padStart(2, '0');
+
+  return `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}-${String(fecha.getDate()).padStart(2, '0')} ` +
+         `${String(fecha.getHours()).padStart(2, '0')}:${String(fecha.getMinutes()).padStart(2, '0')}:${String(fecha.getSeconds()).padStart(2, '0')} ` +
+         `${signo}${horas}:${minutos}`;
 }
 
  

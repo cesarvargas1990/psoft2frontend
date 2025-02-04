@@ -137,6 +137,7 @@ import {WebcamModule} from 'ngx-webcam';
 
 
 import { EmpresaParametrosComponent } from './_component/parametros/empresa-parametros/empresa-parametros.component';
+import { LogoutComponent } from './logout/logout.component';
 
 export function IpValidatorMessage(err, field: FormlyFieldConfig){
   return `"${field.formControl.value}" is not a valid IP Address`;
@@ -306,7 +307,9 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig){
     ListarPrestamosclienteComponent,
     ListarDocumentosprestamoComponent,
     
-    EmpresaParametrosComponent
+    EmpresaParametrosComponent,
+    
+    LogoutComponent
   ],
   bootstrap: [
     AppComponent

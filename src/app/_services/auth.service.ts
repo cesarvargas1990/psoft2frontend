@@ -56,6 +56,7 @@ console.log (error);
  
   // Verify user credentials on server to get token
   loginForm(data): Observable<LoginResponse> {
+    localStorage.clear();
     return this.http
       .post<LoginResponse>(this.basePath +'/auth/login', data, this.httpOptions)
       .pipe(
@@ -88,8 +89,35 @@ console.log (error);
  
   // After clearing localStorage redirect to login screen
   logout() {
-    localStorage.clear();
-    this.router.navigate(['/auth/login']);
+   
+    let data:any={};
+    data.action = '/auth/logout';
+    
+    let httpOptionsAuth = { 
+      headers: new HttpHeaders({
+         'Content-Type': 'application/json', 
+         'Authorization' : 'Bearer '+localStorage.getItem('access_token')
+
+      })  
+    };
+    return this.http
+      .post<LoginResponse>(this.basePath + data.action, data, httpOptionsAuth)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      ).subscribe((resp)=>{
+        localStorage.clear();
+        this.router.navigate(['/auth/login']);
+        if (!localStorage.getItem('hasReloaded')) {
+          // Marca que la página ya se ha recargado
+          localStorage.setItem('hasReloaded', 'true');
+         window.location.reload(); // Recarga la página
+        }
+       
+      }
+
+      )
+      
   }
  
  

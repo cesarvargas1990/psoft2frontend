@@ -14,91 +14,53 @@
         </mat-sidenav>
         <mat-sidenav-content>
 
-            <div class="row" *ngIf="authService.tienePermiso('dashboard.totales')">
-                <div class="col-md-3" >
-
-                    <div class="card" >
+            <div class="row g-3" *ngIf="authService.tienePermiso('dashboard.totales')">
+                <div class="col-12 col-md-6 col-lg-3" *ngIf="total_capital_prestado != 'NA'">
+                    <div class="card h-100">
                         <div class="card-header">
                             <div class="card-title">$ Balance</div>
                         </div>
-        
-                        
-                        <p style="text-align:end">
-                            ${{total_capital_prestado}}
-                        </p>
-                        
+                        <p class="text-end" style="text-align:end">${{total_capital_prestado}}</p>
                     </div>
-
                 </div>
-
-                <div class="col-md-3">
-
-                    <div class="card">
+            
+                <div class="col-12 col-md-6 col-lg-3" *ngIf="total_prestado != 'NA'">
+                    <div class="card h-100">
                         <div class="card-header">
                             <div class="card-title">$ Total prestado</div>
                         </div>
-        
-                        
-                        <p style="text-align:end">
-                            ${{total_prestado}}
-                        </p>
-                        
+                        <p class="text-end" style="text-align:end" style="text-align:end">${{total_prestado}}</p>
                     </div>
-
                 </div>
-
-                <div class="col-md-3">
-
-                    <div class="card">
+            
+                <div class="col-12 col-md-6 col-lg-3" *ngIf="total_interes != 'NA'">
+                    <div class="card h-100">
                         <div class="card-header">
                             <div class="card-title">$ Total intereses</div>
                         </div>
-        
-                        
-                        <p style="text-align:end">
-                            ${{total_interes}}
-                        </p>
-                        
+                        <p class="text-end" style="text-align:end">${{total_interes}}</p>
                     </div>
-
                 </div>
-
-                <div class="col-md-3">
-
-                    <div class="card">
+            
+                <div class="col-12 col-md-6 col-lg-3" *ngIf="total_prestado_hoy != 'NA'">
+                    <div class="card h-100">
                         <div class="card-header">
                             <div class="card-title">$ Prestado hoy</div>
                         </div>
-        
-                        
-                        <p style="text-align:end">
-                            ${{total_prestado_hoy}}
-                        </p>
-                        
+                        <p class="text-end" style="text-align:end">${{total_prestado_hoy}}</p>
                     </div>
-
                 </div>
-
-<br>
-                <div style="margin-top: 30px;" class="col-md-3">
-
-                    <div class="card">
+    <br>        
+                <div class="col-12 col-md-6 col-lg-3" *ngIf="total_interes_hoy != 'NA'">
+                    <div class="card h-100">
                         <div class="card-header">
                             <div class="card-title">$ Ing Interes hoy</div>
                         </div>
-        
-                        
-                        <p style="text-align:end">
-                            ${{total_interes_hoy}}
-                        </p>
-                        
+                        <p class="text-end" style="text-align:end">${{total_interes_hoy}}</p>
                     </div>
-
                 </div>
-
-               
-
             </div>
+            
             
             <br>
             <div *ngIf="!visualizarDocumentos && listadoPrestamos" class="card" style="width: 100%;">

@@ -157,7 +157,11 @@ console.log (error);
 }
 
 	tienePermiso(name) {
-	  return localStorage.getItem('permisos').includes(name)
+	    if (localStorage.getItem('permisos') == null){
+	      return false;
+	    }
+	    let permisos = JSON.parse(localStorage.getItem('permisos'));
+		  return permisos.includes(name);
 	}
  
 }

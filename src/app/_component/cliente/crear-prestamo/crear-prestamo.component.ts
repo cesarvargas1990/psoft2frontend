@@ -234,14 +234,20 @@ export class CrearPrestamoComponent implements AfterViewInit {
             key: 'fec_inicial',
             className: 'col-md-4',
             type: 'datepicker',
+            hooks: {
+              onInit: (field) => {
+                field.formControl.valueChanges.subscribe(newVal => {
+                  setTimeout(() => {
+                    if (field.form.valid) {
+                      this.obtenerCuotasPrestamo();
+                    }
+                  }, 0);
+                });
+              },
+            },
             templateOptions: {
               label: 'Fecha inicial',
               required: true,
-              change: (field, $event) => {
-                if (this.form.valid) {
-                  this.obtenerCuotasPrestamo();
-                }
-              },
             },
           },
           {

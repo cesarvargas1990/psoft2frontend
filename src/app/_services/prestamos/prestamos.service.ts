@@ -297,7 +297,6 @@ console.log (error);
   }
 
   totales_dashboard (): Observable<any> {
-    alert (`Bearer ${localStorage.getItem('access_token')}`);
     let data: any = {};
     data.fecha = this.fechaActual();
     data.nitempresa = localStorage.getItem('nit_empresa');

@@ -36,7 +36,6 @@ export class CrearPrestamoComponent implements AfterViewInit {
   sistemaspago: any = {};
 
   mostrarTablaResumen = false;
-
   tableCuotasPrestamo: any[] = [];
 
   fields: FormlyFieldConfig[] = [];
@@ -100,7 +99,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
 
     this.navService.appDrawer = this.appDrawer;
 
-    // Configuración del formulario con Formly:
+   
     this.fields = [
       {
         fieldGroupClassName: 'row',
@@ -113,7 +112,6 @@ export class CrearPrestamoComponent implements AfterViewInit {
               label: 'Nombre Cliente',
               required: true,
               options: this.listaClientes,
-              // Se llama obtenerCuotasPrestamo() si el form es válido
               change: (field, event) => {
                 if (this.form.valid) {
                   this.obtenerCuotasPrestamo();
@@ -130,12 +128,6 @@ export class CrearPrestamoComponent implements AfterViewInit {
               options: this.formaspago,
               required: true,
               change: (field, $event) => {
-                // Tu lógica actual
-                this.form.get('porcint').setValue('');
-                this.form.get('numcuotas').setValue('');
-                this.form.get('valorpres').setValue('');
-
-                // Y luego llamamos a obtenerCuotasPrestamo() si todo es válido
                 if (this.form.valid) {
                   this.obtenerCuotasPrestamo();
                 }
@@ -151,13 +143,11 @@ export class CrearPrestamoComponent implements AfterViewInit {
               options: this.sistemaspago,
               required: true,
               change: (field, $event) => {
-                // Llamada original
                 this.prestamosService.pstiposistemaprest().subscribe(response => {
                   if (response) {
                     this.form.updateValueAndValidity();
                   }
                 });
-                // Luego invocamos el cálculo si el form está completo
                 if (this.form.valid) {
                   this.obtenerCuotasPrestamo();
                 }
@@ -169,7 +159,6 @@ export class CrearPrestamoComponent implements AfterViewInit {
             className: 'col-md-4',
             type: 'input',
             modelOptions: {
-              // Se invoca al perder el foco; cámbialo a 'change' si lo quieres por cada letra
               updateOn: 'blur',
             },
             templateOptions: {
@@ -178,7 +167,6 @@ export class CrearPrestamoComponent implements AfterViewInit {
               pattern: /^[0-9]*\.?[0-9]*$/,
               minLength: 5,
               maxLength: 11,
-              // Llamamos a obtenerCuotasPrestamo() si el form está completo
               blur: (field, $event) => {
                 if (this.form.valid) {
                   this.obtenerCuotasPrestamo();
@@ -249,7 +237,6 @@ export class CrearPrestamoComponent implements AfterViewInit {
             templateOptions: {
               label: 'Fecha inicial',
               required: true,
-              // Llamamos al cálculo en change (o blur) según prefieras
               change: (field, $event) => {
                 if (this.form.valid) {
                   this.obtenerCuotasPrestamo();
@@ -297,7 +284,6 @@ export class CrearPrestamoComponent implements AfterViewInit {
   }
 
   async obtenerCuotasPrestamo() {
-    // Solo calculamos si el form está completo
     if (this.form.valid) {
       this.mostrarTablaResumen = true;
       this.prestamosService.calcularCuotas(this.form.value).subscribe(response => {

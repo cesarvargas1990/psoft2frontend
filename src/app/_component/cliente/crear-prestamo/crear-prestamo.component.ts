@@ -382,6 +382,10 @@ export class CrearPrestamoComponent implements AfterViewInit {
     console.log('Contenido combinado:', this.contenidoCombinado);
   }
 
+  modalAdicionarEmpresa() {
+    this.router.navigate(['clientes/crear']);
+  }
+
   limpiarHTML(html: string): string {
     return html
       .replace(/<html[^>]*>/gi, '')

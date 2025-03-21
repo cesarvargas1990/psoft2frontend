@@ -9,7 +9,7 @@ import { ListarClienteComponent } from './_component/cliente/listar-cliente/list
 import { CrearClienteComponent } from './_component/cliente/crear-cliente/crear-cliente.component';
 import { CrearPrestamoComponent } from './_component/cliente/crear-prestamo/crear-prestamo.component';
 import { CrearDocumentoComponent} from './_component/parametros/crear-documento/crear-documento.component';
-import { LogoutComponent } from './logout/logout.component';
+import { LogoutComponent } from './_component/logout/logout.component';
 
 const routes: Routes = [ 
 

@@ -73,7 +73,6 @@ export class AuthService {
  
   // After clearing localStorage redirect to login screen
   logout() {
-    localStorage.clear();
     this.router.navigate(['/auth/login']);
   }
  

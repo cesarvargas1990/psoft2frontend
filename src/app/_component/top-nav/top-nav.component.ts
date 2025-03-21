@@ -19,8 +19,9 @@ export class TopNavComponent implements OnInit {
   }
 
   logout() {
-    localStorage.clear();
     this.authService.logout();
+    localStorage.clear();
+    sessionStorage.clear();
   }
 
 }

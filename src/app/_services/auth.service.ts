@@ -106,7 +106,7 @@ console.log (error);
         retry(2),
         catchError(this.handleError)
       ).subscribe((resp)=>{
-        localStorage.clear();
+        //localStorage.clear();
         this.router.navigate(['/auth/login']);
         if (!localStorage.getItem('hasReloaded')) {
           // Marca que la página ya se ha recargado

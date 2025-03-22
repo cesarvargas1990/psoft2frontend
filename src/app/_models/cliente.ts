@@ -14,7 +14,7 @@ export interface Cliente {
     diretrabajo: string;
     ubicasa: string;
     ubictrabajo: string;
-    nitempresa: string;
+    id_empresa: string;
     ref1: string;
     ref2: string;
 }

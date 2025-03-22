@@ -1,6 +1,6 @@
 export interface EmpresaProvFE {
     ID:	number;
-    NIT_EMPRESA: string;
+    id_empresa: string;
     EMPRESA:	string;
     NIT_PROVFE: string;
     PROVEEDOR:	string;

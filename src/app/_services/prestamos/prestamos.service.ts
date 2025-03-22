@@ -84,7 +84,7 @@ console.log (error);
 
   calcularCuotas(data): Observable<any> {
     
-    data.nitempresa = localStorage.getItem('nit_empresa'); 
+    data.id_empresa = localStorage.getItem('id_empresa'); 
     return this.http.post<any>(`${this.services.calcularCuotas}` , data, this.httpOpts).pipe(
       retry(2),
       catchError(this.handleError)
@@ -95,8 +95,8 @@ console.log (error);
   getFormasPago(): Observable<any> {
     console.log('la data');
     
-    let nitempresa = localStorage.getItem('nit_empresa');
-    return this.http.get<any>(`${this.services.listaformaspago}`+'/'+nitempresa , this.httpOpts).pipe(
+    let id_empresa = localStorage.getItem('id_empresa');
+    return this.http.get<any>(`${this.services.listaformaspago}`+'/'+id_empresa , this.httpOpts).pipe(
       retry(2),
       catchError(this.handleError)
     )
@@ -140,9 +140,9 @@ console.log (error);
 
   guardarFormaPago(data): Observable<any> {
     
-    let nitempresa = localStorage.getItem('nit_empresa');
+    let id_empresa = localStorage.getItem('id_empresa');
     let id_usureg = localStorage.getItem('id_usuario');
-    data.nitempresa = nitempresa;
+    data.id_empresa = id_empresa;
     data.id_usureg = id_usureg;
     return this.http.post<any>(`${this.services.psformapago}` , data, this.httpOpts).pipe(
       retry(2),
@@ -152,9 +152,9 @@ console.log (error);
 
   guardarDocumento(data): Observable<any> {
     
-    let nitempresa = localStorage.getItem('nit_empresa');
+    let id_empresa = localStorage.getItem('id_empresa');
     let id_usureg = localStorage.getItem('id_usuario');
-    data.nitempresa = nitempresa;
+    data.id_empresa = id_empresa;
     data.id_usureg = id_usureg;
     return this.http.post<any>(`${this.services.pstdocplant }` , data, this.httpOpts).pipe(
       retry(2),
@@ -164,7 +164,7 @@ console.log (error);
 
   listaTiposDocumento () : Observable<any> {
     let data : any={};
-    let nitempresa = localStorage.getItem('nit_empresa');
+    let id_empresa = localStorage.getItem('id_empresa');
     return this.http.get<any>(`${this.services.pstdocadjuntos  }` , this.httpOpts).pipe(
       retry(2),
       catchError(this.handleError)
@@ -173,8 +173,8 @@ console.log (error);
 
   listaVariablesPlantillas () : Observable<any> {
     
-    let nitempresa = localStorage.getItem('nit_empresa');
-    return this.http.get<any>(`${this.services.generarVariablesPlantillas  }`+'/'+nitempresa, this.httpOpts).pipe(
+    let id_empresa = localStorage.getItem('id_empresa');
+    return this.http.get<any>(`${this.services.generarVariablesPlantillas  }`+'/'+id_empresa, this.httpOpts).pipe(
       retry(2),
       catchError(this.handleError)
     )
@@ -182,7 +182,7 @@ console.log (error);
 
   listaFechasPago (id_prestamo) : Observable<any> {
     
-    let nitempresa = localStorage.getItem('nit_empresa');
+    let id_empresa = localStorage.getItem('id_empresa');
     return this.http.get<any>(`${this.services.psfechaspago  }`+'/'+id_prestamo, this.httpOpts).pipe(
       retry(2),
       catchError(this.handleError)
@@ -192,7 +192,7 @@ console.log (error);
   prueba () : Observable<any> {
     
     let data : any={};
-    let nitempresa = localStorage.getItem('nit_empresa');
+    let id_empresa = localStorage.getItem('id_empresa');
  
     return this.http.get<any>(`${this.services.generarVariablesPlantillas   }` , this.httpOpts).pipe(
       retry(2),
@@ -206,8 +206,8 @@ console.log (error);
   consultaPlantillasDocumentos(): Observable<any> {
     
     let data: any = {};
-    let nitempresa = localStorage.getItem('nit_empresa');
-    data.nitempresa = nitempresa;
+    let id_empresa = localStorage.getItem('id_empresa');
+    data.id_empresa = id_empresa;
     
     return this.http.post<any>(`${this.services.consultaTipoDocPlantilla  }` , data, this.httpOpts).pipe(
       retry(2),
@@ -219,8 +219,8 @@ console.log (error);
   pstiposistemaprest(): Observable<any> {
     
     let data: any = {};
-    let nitempresa = localStorage.getItem('nit_empresa');
-    data.nitempresa = nitempresa;
+    let id_empresa = localStorage.getItem('id_empresa');
+    data.id_empresa = id_empresa;
     
     return this.http.get<any>(`${this.services.pstiposistemaprest }`, this.httpOpts).pipe(
       retry(2),
@@ -230,10 +230,10 @@ console.log (error);
 
   guardarPrestamo(data): Observable<any> {
     
-    let nitempresa = localStorage.getItem('nit_empresa');
+    let id_empresa = localStorage.getItem('id_empresa');
     let id_usureg = localStorage.getItem('id_usuario');
     let fecha = this.obtenerFechaHoraCliente()
-    data.nitempresa = nitempresa;
+    data.id_empresa = id_empresa;
     data.id_usureg = id_usureg;
     data.fecha = fecha;
     return this.http.post<any>(`${this.services.guardarPrestamo}` , data, this.httpOpts).pipe(
@@ -244,9 +244,9 @@ console.log (error);
 
   renderTemplates(data): Observable<any> {
     
-    let nitempresa = localStorage.getItem('nit_empresa');
+    let id_empresa = localStorage.getItem('id_empresa');
     let id_usureg = localStorage.getItem('id_usuario');
-    data.nitempresa = nitempresa;
+    data.id_empresa = id_empresa;
     data.id_usureg = id_usureg;
     return this.http.post<any>(`${this.services.renderTemplates}` , data, this.httpOpts).pipe(
       retry(2),
@@ -258,39 +258,39 @@ console.log (error);
 
   listadoPrestamos(data): Observable<any> {
     
-    data.nitempresa = localStorage.getItem('nit_empresa');
+    data.id_empresa = localStorage.getItem('id_empresa');
     data.id_user = localStorage.getItem('id');
     return this.http.post(`${this.services.listadoPrestamos }`, data, this.httpOpts)
   }
 
   listadoArchivosCliente(id): Observable<any> {
     let data: any = {};
-    data.nitempresa = localStorage.getItem('nit_empresa');
+    data.id_empresa = localStorage.getItem('id_empresa');
     data.id_user = localStorage.getItem('id');
     return this.http.get(`${this.services.psdocadjuntos  }`+'/'+id, this.httpOpts)
   }
 
   saveFormaPago(data): Observable<any> {
-    data.nitempresa = localStorage.getItem('nit_empresa');
+    data.id_empresa = localStorage.getItem('id_empresa');
     data.id_user = localStorage.getItem('id');
     return this.http.post(`${this.services.psformapago }`, data, this.httpOpts)
   }
 
   updateFormaPago(data): Observable<any> {
-    data.nitempresa = localStorage.getItem('nit_empresa');
+    data.id_empresa = localStorage.getItem('id_empresa');
     
     return this.http.put(`${this.services.psformapago }` + '/' + data.id, data, this.httpOpts)
   }
 
   updatePlantillaDocumento(data): Observable<any> {
-    data.nitempresa = localStorage.getItem('nit_empresa');
+    data.id_empresa = localStorage.getItem('id_empresa');
     
     return this.http.put(`${this.services.pstdocplant }` + '/' + data.id, data, this.httpOpts)
   }
 
   registrarPagoCuota(data): Observable<any> {
     
-    data.nitempresa = localStorage.getItem('nit_empresa');
+    data.id_empresa = localStorage.getItem('id_empresa');
     data.id_user = localStorage.getItem('id');
     data.fecha = this.obtenerFechaHoraCliente();
     return this.http.post(`${this.services.pspagos }`, data, this.httpOpts)
@@ -299,7 +299,7 @@ console.log (error);
   totales_dashboard (): Observable<any> {
     let data: any = {};
     data.fecha = this.fechaActual();
-    data.nitempresa = localStorage.getItem('nit_empresa');
+    data.id_empresa = localStorage.getItem('id_empresa');
     return this.http.post(`${this.services.totales_dashboard }` , data,this.httpOpts)
 
   }

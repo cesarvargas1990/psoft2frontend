@@ -66,8 +66,8 @@ console.log (error);
   
   getEmpresa () : Observable<any> {
     
-    let nitempresa = localStorage.getItem('nit_empresa');
-    return this.http.get<any>(`${this.services.psempresa  }`+'/'+nitempresa, this.httpOpts).pipe(
+    let id_empresa = localStorage.getItem('id_empresa');
+    return this.http.get<any>(`${this.services.psempresa  }`+'/'+id_empresa, this.httpOpts).pipe(
       retry(2),
       catchError(this.handleError)
     )

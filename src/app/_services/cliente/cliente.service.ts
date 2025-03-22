@@ -62,13 +62,13 @@ export class ClienteService {
   ) { }
 
   getAllClientes(data): Observable<any> {
-    let nitempresa = localStorage.getItem('nit_empresa'); 
-    return this.http.post(`${this.services.psclientes}` +'/'+nitempresa, data,this.httpOpts)
+    let id_empresa = localStorage.getItem('id_empresa'); 
+    return this.http.post(`${this.services.psclientes}` +'/'+id_empresa, data,this.httpOpts)
   }
 
   getClientes(): Observable<any> {
-    let nitempresa = localStorage.getItem('nit_empresa');
-    return this.http.get(`${this.services.listadoclientes}`+'/'+nitempresa, this.httpOpts)
+    let id_empresa = localStorage.getItem('id_empresa');
+    return this.http.get(`${this.services.listadoclientes}`+'/'+id_empresa, this.httpOpts)
   }
 
   updateCliente(data): Observable<any> {
@@ -80,26 +80,26 @@ export class ClienteService {
   }
 
   saveCliente(data): Observable<any> {
-    data.nitempresa = localStorage.getItem('nit_empresa');
+    data.id_empresa = localStorage.getItem('id_empresa');
     data.id_user = localStorage.getItem('id');
     return this.http.post(`${this.services.psclientes}`, data, this.httpOpts)
   }
 
   uploadFile(data): Observable<any> {
-    data.nitempresa = localStorage.getItem('nit_empresa');
+    data.id_empresa = localStorage.getItem('id_empresa');
     data.id_usuario = localStorage.getItem('id');
     return this.http.post(`${this.services.guardarArchivos}`, data, this.httpOpts);
 }
 
   editFile(data): Observable<any> {
-      data.nitempresa = localStorage.getItem('nit_empresa');
+      data.id_empresa = localStorage.getItem('id_empresa');
       data.id_usuario = localStorage.getItem('id'); 
       return this.http.put(`${this.services.editarArchivos}`, data, this.httpOpts);
   }
 
 
   getPrestamosCliente(data): Observable<any> {
-    data.nitempresa = localStorage.getItem('nit_empresa');
+    data.id_empresa = localStorage.getItem('id_empresa');
     data.id_user = localStorage.getItem('id');
     return this.http.post(`${this.services.prestamosCliente}`, data, this.httpOpts)
   }

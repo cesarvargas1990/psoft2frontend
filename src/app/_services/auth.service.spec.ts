@@ -62,7 +62,7 @@ export class AuthService {
     //localStorage.setItem('menu_usuario', JSON.stringify(resp.menu_usuario));
     //localStorage.setItem('menu_usuario', JSON.parse(resp.menu_usuario));
     this.router.navigate(['/dashboard']);
-    localStorage.setItem('nit_empresa', JSON.stringify(resp.nit_empresa));
+    localStorage.setItem('id_empresa', JSON.stringify(resp.id_empresa));
     localStorage.setItem('is_admin', JSON.stringify(resp.is_admin));
   }
  

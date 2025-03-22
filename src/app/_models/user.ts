@@ -8,8 +8,7 @@ export interface LoginResponse {
     permisos: [];
     id: string;
     is_admin: Number;
-    nit_empresa: string;
-    id_empresa: number;
+    id_empresa: string;
     ind_activo : number;
     id_user : number;
   

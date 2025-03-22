@@ -1,7 +1,7 @@
 export interface Prefijo {
     ID:	number;
     PREFIJO:	string;
-    NIT_EMPRESA:	string;
+    id_empresa:	string;
     // NIT_PROVFE:	string;
     CONSEC:	number;
     TIPODOC: string;

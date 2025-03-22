@@ -9,7 +9,7 @@ export interface formasPago {
     porcint :number;
     ind_solicporcint :number;
     nomfpago :string;
-    nitempresa :string;
+    id_empresa :string;
     codtipsistemap :string;
     valorpres :number;
     ind_solivalorpres :number;

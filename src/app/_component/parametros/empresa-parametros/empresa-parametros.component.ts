@@ -119,7 +119,7 @@ export class EmpresaParametrosComponent implements OnInit {
 
               {
                 key: 'nit',
-                defaultValue: this.datosEmpresa['nit'],
+                defaultValue: this.datosEmpresa['nitempresa'],
                 className: 'col-md-6',
                 type: 'input',
                 modelOptions: {

@@ -3,7 +3,6 @@ export interface formasPago {
 
     id: number;
     id_periodo_pago :number;
-    id_periodo_pago: number;
     numcuotas:number;
     nomperiodopago: string;
     porcint :number;

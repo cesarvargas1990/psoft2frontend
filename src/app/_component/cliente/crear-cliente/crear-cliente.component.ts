@@ -124,7 +124,7 @@ export class CrearClienteComponent implements AfterViewInit {
               },
             },
             {
-              key: 'codtipdocid',
+              key: 'id_tipo_docid',
               className: 'col-md-4',
               type: 'select',
               modelOptions: {

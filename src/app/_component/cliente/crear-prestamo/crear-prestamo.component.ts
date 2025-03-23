@@ -120,7 +120,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
             },
           },
           {
-            key: 'id_forma_pago',
+            key: 'id_periodo_pago',
             className: 'col-md-4',
             type: 'select',
             templateOptions: {

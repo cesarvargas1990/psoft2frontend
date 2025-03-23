@@ -2,7 +2,7 @@ export interface Cliente {
     id: number;
     id_cobrador :string;
     nomcliente: string;
-    codtipdocid : string;
+    id_tipo_docid : string;
     numdocumento : string;
     ciudad: string;
     fch_expdocumento: string;

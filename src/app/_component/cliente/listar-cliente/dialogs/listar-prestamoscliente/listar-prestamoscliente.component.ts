@@ -148,10 +148,10 @@ export class ListarPrestamosclienteComponent implements OnInit {
         },
       },
       {
-        key: 'codtipdocid',
+        key: 'id_tipo_docid',
         className: 'col-md-3',
         type: 'select',
-        defaultValue: this.data.codtipdocid,
+        defaultValue: this.data.id_tipo_docid,
         modelOptions: {
           updateOn: 'blur',
         },

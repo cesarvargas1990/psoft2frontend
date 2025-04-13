@@ -5,7 +5,7 @@ export interface LoginResponse {
     status: string;
     message: string;
     menu_usuario: [];
-    permisos: [];
+    permisos: any[];
     id: string;
     is_admin: Number;
     id_empresa: string;

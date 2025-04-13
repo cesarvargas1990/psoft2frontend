@@ -2,11 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { environment } from './../../../environments/environment';
 import { AuthService } from '../../_services/auth.service'
-import { Observable, throwError } from 'rxjs';
 
 const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-
-
 
 @Injectable({
   providedIn: 'root'

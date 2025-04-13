@@ -118,7 +118,6 @@ import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 
 
 import { CrearDocumentoComponent } from './_component/parametros/crear-documento/crear-documento.component';
-import { EditarDocumentoComponent } from './_component/parametros/crear-documento/dialogs/editar-documento/editar-documento.component';
 
 import { NgxTinymceModule } from 'ngx-tinymce';
 
@@ -295,12 +294,7 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig){
     CrearClienteComponent,
     CrearPrestamoComponent,    
     FormlyFieldInput, 
-
-
     CrearDocumentoComponent,
-    EditarDocumentoComponent,
-
-
     //FirmaWrapperComponent, 
     CargaradjuntosComponent,
     ListaPrestamosComponent,

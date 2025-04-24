@@ -8,6 +8,7 @@ import { PrestamosService } from '../../../../../_services/prestamos/prestamos.s
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 import Swal from 'sweetalert2';
+import { WebcamImage } from 'ngx-webcam'; // ✅ import faltante
 
 describe('EditarClienteComponent', () => {
   let component: EditarClienteComponent;
@@ -37,7 +38,7 @@ describe('EditarClienteComponent', () => {
     const clienteServiceSpy = jasmine.createSpyObj('ClienteService', ['updateCliente', 'editFile', 'listadoArchivosCliente']);
     const tipodocidentiServiceSpy = jasmine.createSpyObj('TipodocidentiService', ['getTipodocidenti']);
     const usersServiceSpy = jasmine.createSpyObj('UsersService', ['getUsers']);
-    const prestamosServiceSpy = jasmine.createSpyObj('PrestamosService', ['listaTiposDocumento']);
+    const prestamosServiceSpy = jasmine.createSpyObj('PrestamosService', ['listaTiposDocumento', 'listadoArchivosCliente']);
 
     await TestBed.configureTestingModule({
       declarations: [EditarClienteComponent],
@@ -54,8 +55,10 @@ describe('EditarClienteComponent', () => {
 
     fixture = TestBed.createComponent(EditarClienteComponent);
     component = fixture.componentInstance;
-    clienteService = TestBed.inject(ClienteService) as jasmine.SpyObj<ClienteService>;
-    prestamosService = TestBed.inject(PrestamosService) as jasmine.SpyObj<PrestamosService>;
+
+    // ✅ Angular 8 compatible
+    clienteService = TestBed.get(ClienteService);
+    prestamosService = TestBed.get(PrestamosService);
   });
 
   it('debe crear el componente', () => {
@@ -66,7 +69,7 @@ describe('EditarClienteComponent', () => {
     spyOn(Swal, 'fire');
     component.form.setErrors({ required: true });
     component.submit();
-    expect(Swal.fire).not.toHaveBeenCalled(); // porque el error se maneja con validación previa
+    expect(Swal.fire).not.toHaveBeenCalled();
   });
 
   it('debe actualizar cliente y llamar a editFile si es válido', fakeAsync(() => {
@@ -74,7 +77,9 @@ describe('EditarClienteComponent', () => {
     component.model = {};
     component.form.setErrors(null);
     component.editFirmar = true;
-    component.signaturePad = { toDataURL: () => 'data:image/png;base64,fake' } as any;
+    component.signaturePad = {
+      toDataURL: () => 'data:image/png;base64,fake'
+    } as any;
 
     clienteService.updateCliente.and.returnValue(of(fakeResponse));
     clienteService.editFile.and.returnValue(of({}));

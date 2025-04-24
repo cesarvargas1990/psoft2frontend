@@ -13,11 +13,8 @@ import { PrestamosService } from '../../_services/prestamos/prestamos.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Swal from 'sweetalert2'; 
-import { ListarDocumentosprestamoComponent} from '../../_component/dashboard/dialogs/listar-documentosprestamo/listar-documentosprestamo.component';
+
 import { 
-  CanActivate, 
-  ActivatedRouteSnapshot, 
-  RouterStateSnapshot, 
   Router 
 } from '@angular/router';
 

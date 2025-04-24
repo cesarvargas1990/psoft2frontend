@@ -16,7 +16,7 @@ import { TipodocidentiService } from '../../../_services/tipodocidenti/tipodocid
 import { UsersService} from '../../../_services/users/users.service';
 import Swal from 'sweetalert2';
 import { MatPaginator } from '@angular/material/paginator';
-import { EditarDocumentoComponent} from '../../../_component/parametros/crear-documento/dialogs/editar-documento/editar-documento.component';
+
  
 import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';

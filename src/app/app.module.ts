@@ -125,7 +125,6 @@ import { SignaturePadModule } from 'ngx-signaturepad';
 
 //import {FirmaWrapperComponent} from './_component/firma/firma-wrapper.component';
 
-import { ListaPrestamosComponent } from './_component/cliente/lista-prestamos/lista-prestamos.component';
 import { ListarPrestamosclienteComponent } from './_component/cliente/listar-cliente/dialogs/listar-prestamoscliente/listar-prestamoscliente.component';
 
 
@@ -297,7 +296,6 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig){
     CrearDocumentoComponent,
     //FirmaWrapperComponent, 
 
-    ListaPrestamosComponent,
     ListarPrestamosclienteComponent,
     ListarDocumentosprestamoComponent,
     
@@ -314,7 +312,6 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig){
 
     //EdicionarPrefijoComponent, 
     EditarClienteComponent,
-    ListaPrestamosComponent,
     //EditarDocumentoComponent,
     ListarPrestamosclienteComponent,
 	  ListarDocumentosprestamoComponent

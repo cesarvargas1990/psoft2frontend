@@ -130,4 +130,68 @@ describe('CrearClienteComponent', () => {
     });
     component.showNextWebcam('testDevice');
   });
+
+  it('debe limpiar firma y cambiar flag', () => {
+    component.sign = true;
+    component.signaturePad = {
+      clear: () => {}
+    } as any;
+    spyOn(component.signaturePad, 'clear');
+    component.drawClear();
+    expect(component.sign).toBe(false);
+    expect(component.signaturePad.clear).toHaveBeenCalled();
+  });
+
+  it('debe establecer sign como true cuando se inicia o completa el trazo', () => {
+    component.sign = false;
+    component.drawStart();
+    expect(component.sign).toBe(true);
+    component.sign = false;
+    component.drawComplete();
+    expect(component.sign).toBe(true);
+  });
+
+  it('debe cargar tipos de documento en ngAfterViewInit', async(() => {
+    spyOn(component, 'tiposDocumentos').and.callThrough();
+    component.ngAfterViewInit();
+    expect(component.tiposDocumentos).toHaveBeenCalled();
+  }));
+
+  it('debe cargar archivo al previsualizar imagen válida', () => {
+    const file = new Blob([''], { type: 'image/png' });
+    const mockFileList = {
+      length: 1,
+      0: file
+    };
+
+    const fileReaderSpy = spyOn(window as any, 'FileReader').and.returnValue({
+      readAsDataURL: () => {},
+      onload: () => {}
+    });
+
+    component.preview(mockFileList as any, 0);
+    expect(fileReaderSpy).toHaveBeenCalled();
+  });
+
+  it('debe rechazar archivos con tipo no soportado', () => {
+    const file = new Blob([''], { type: 'text/plain' });
+    const mockFileList = {
+      length: 1,
+      0: file
+    };
+    component.preview(mockFileList as any, 0);
+    expect(component.message).toBe('Solo se Aceptan, Imagenes o Documentos PDF.');
+  });
+
+  it('debe validar extensión de archivo', () => {
+    const ext = component.validateExtension('documento.pdf');
+    expect(ext).toBe('pdf');
+  });
+
+  it('debe navegar al dashboard al llamar volver()', () => {
+    const router = TestBed.get(Router);
+    spyOn(router, 'navigate');
+    component.volver();
+    expect(router.navigate).toHaveBeenCalledWith(['/dashboard']);
+  });
 });

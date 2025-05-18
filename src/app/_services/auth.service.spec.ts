@@ -1,90 +1,144 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { retry, catchError } from 'rxjs/operators';
-import { LoginResponse } from '../_models/user';
+import { TestBed } from '@angular/core/testing';
+import { AuthService } from './auth.service';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
-import {NavItem} from '../_models/nav-item';
- 
-@Injectable({
-  providedIn: 'root'
-})
-export class AuthService {
- 
-  // API path
-  basePath = 'https://my-site.com/server/';
- 
-  constructor(
-    private router: Router,
-    private http: HttpClient
-  ) { }
- 
-  // Http Options
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  };
- 
-  // Handle API errors
-  handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error.message);
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
-    }
-    // return an observable with a user-facing error message
-    return throwError(
-      'Something bad happened; please try again later.');
-  }
- 
- 
-  // Verify user credentials on server to get token
-  loginForm(data): Observable<LoginResponse> {
-    return this.http
-      .post<LoginResponse>(this.basePath , data, this.httpOptions)
-      .pipe(
-        retry(2),
-        catchError(this.handleError)
-      );
-  }
- 
-  // After login save token and other values(if any) in localStorage
-  setUser(resp: LoginResponse) {
-    localStorage.setItem('name', resp.name);
-    localStorage.setItem('access_token', resp.access_token);
-    localStorage.setItem('id_usuario', resp.id);
-    //localStorage.setItem('menu_usuario', JSON.stringify(resp.menu_usuario));
-    //localStorage.setItem('menu_usuario', JSON.parse(resp.menu_usuario));
-    this.router.navigate(['/dashboard']);
-    localStorage.setItem('id_empresa', JSON.stringify(resp.id_empresa));
-    localStorage.setItem('is_admin', JSON.stringify(resp.is_admin));
-  }
- 
-  // Checking if token is set
-  isLoggedIn() {
-    return localStorage.getItem('access_token') != null;
-  }
- 
-  // After clearing localStorage redirect to login screen
-  logout() {
-    this.router.navigate(['/auth/login']);
-  }
- 
- 
-  // Get data from server for Dashboard
-  getData(data): Observable<LoginResponse> {
-    return this.http
-      .post<LoginResponse>(this.basePath , data, this.httpOptions)
-      .pipe(
-        retry(2),
-        catchError(this.handleError)
-      );
-  }
- 
+import { environment } from '../../environments/environment';
+import { LoginResponse } from '../_models/user';
+
+class MockRouter {
+  navigate = jasmine.createSpy('navigate');
 }
+
+describe('AuthService', () => {
+  let service: AuthService;
+  let httpMock: HttpTestingController;
+  let router: MockRouter;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [
+        AuthService,
+        { provide: Router, useClass: MockRouter }
+      ]
+    });
+
+    service = TestBed.get(AuthService);
+    httpMock = TestBed.get(HttpTestingController);
+    router = TestBed.get(Router);
+  });
+
+  afterEach(() => {
+    httpMock.verify();
+    localStorage.clear();
+  });
+
+  it('debería crearse correctamente', () => {
+    expect(service).toBeTruthy();
+  });
+
+  it('debería verificar que el usuario está logueado si hay token', () => {
+    localStorage.setItem('access_token', '123');
+    expect(service.isLoggedIn()).toBe(true);
+  });
+
+  it('debería devolver false si no hay token', () => {
+    expect(service.isLoggedIn()).toBe(false);
+  });
+
+  it('debería enviar petición de login y recibir token', () => {
+    const mockData = { username: 'user', password: 'pass' };
+    const mockResponse: LoginResponse = {
+      access_token: 'abc123',
+      name: 'User',
+      id: '1',
+      id_empresa: '1',
+      ind_activo: 1,
+      is_admin: 1,
+      id_user: 1,
+      permisos: [],
+      menu_usuario: [],
+      data: null,
+      status: 'success',
+      message: ''
+    };
+
+    service.loginForm(mockData).subscribe(res => {
+      expect(res.access_token).toBe('abc123');
+    });
+
+    const req = httpMock.expectOne(`${environment.API_URL}/auth/login`);
+    expect(req.request.method).toBe('POST');
+    req.flush(mockResponse);
+  });
+
+  it('debería guardar datos del usuario y redirigir al dashboard', () => {
+    const response: LoginResponse = {
+      name: 'Test',
+      access_token: 'token123',
+      menu_usuario: [],
+      permisos: ['permiso.ver'],
+      id: '1',
+      id_empresa: '2',
+      ind_activo: 1,
+      is_admin: 0,
+      id_user: 10,
+      data: null,
+      status: 'success',
+      message: ''
+    };
+
+    service.setUser(response);
+    expect(localStorage.getItem('access_token')).toBe('token123');
+    expect(router.navigate).toHaveBeenCalledWith(['/dashboard']);
+  });
+
+  it('debería validar permisos con tienePermiso', () => {
+    localStorage.setItem('permisos', JSON.stringify(['read', 'write']));
+    expect(service.tienePermiso('read')).toBe(true);
+    expect(service.tienePermiso('admin')).toBe(false);
+  });
+
+  
+
+  it('debería hacer una petición con getData', () => {
+    localStorage.setItem('access_token', 'token123');
+    const data = { action: '/endpoint', value: 'x' };
+    const response: LoginResponse = {
+      access_token: 'abc123',
+      name: 'User',
+      id: '1',
+      id_empresa: '1',
+      ind_activo: 1,
+      is_admin: 1,
+      id_user: 1,
+      permisos: [],
+      menu_usuario: [],
+      data: null,
+      status: 'success',
+      message: ''
+    };
+
+    service.getData(data).subscribe(res => {
+      expect(res).toEqual(response);
+    });
+
+    const req = httpMock.expectOne(`${environment.API_URL}${data.action}`);
+    expect(req.request.method).toBe('POST');
+    req.flush(response);
+  });
+
+  it('debería hacer una petición con getDataAny', () => {
+    localStorage.setItem('access_token', 'token123');
+    const data = { action: '/any-data', param: 1 };
+    const response = { result: true };
+
+    service.getDataAny(data).subscribe(res => {
+      expect(res.result).toBe(true);
+    });
+
+    const req = httpMock.expectOne(`${environment.API_URL}${data.action}`);
+    expect(req.request.method).toBe('POST');
+    req.flush(response);
+  });
+});

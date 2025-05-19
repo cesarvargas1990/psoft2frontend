@@ -91,6 +91,7 @@ describe('CrearPrestamoComponent', () => {
   let fixture: ComponentFixture<CrearPrestamoComponent>;
   let router: Router;
   let prestamosService: PrestamosService;
+  let clienteService: ClienteService;
 
   beforeEach(async(() => {
     localStorage.setItem('menu_usuario', JSON.stringify([{ displayName: 'Test', iconName: 'test' }]));
@@ -116,6 +117,7 @@ describe('CrearPrestamoComponent', () => {
     component = fixture.componentInstance;
     router = TestBed.get(Router);
     prestamosService = TestBed.get(PrestamosService);
+    clienteService = TestBed.get(ClienteService);
     fixture.detectChanges();
   });
 
@@ -138,6 +140,14 @@ describe('CrearPrestamoComponent', () => {
     component.form.setErrors({ invalid: true });
     component.submit();
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('submit debe navegar a prestamos/listar si el formulario es válido', () => {
+    const routerSpy = spyOn(router, 'navigate');
+    component.form.setErrors(null);
+    component.model = {};
+    component.submit();
+    expect(routerSpy).toHaveBeenCalledWith(['/prestamos/listar']);
   });
 
   it('debe llamar guardarPrestamo si formulario es válido', fakeAsync(() => {

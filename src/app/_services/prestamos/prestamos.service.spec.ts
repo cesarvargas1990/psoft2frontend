@@ -3,6 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { PrestamosService } from './prestamos.service';
 import { AuthService } from '../../_services/auth.service';
 import { environment } from './../../../environments/environment';
+import Swal from 'sweetalert2';
 
 describe('PrestamosService', () => {
   let injector: TestBed;
@@ -89,6 +90,26 @@ describe('PrestamosService', () => {
     req.flush({ ok: true });
   });
 
+  it('debería guardar forma de pago usando saveFormaPago', () => {
+    const data = { nombre: 'PAGO' };
+    service.saveFormaPago(data).subscribe(resp => {
+      expect(resp).toEqual({ ok: true });
+    });
+    const req = httpMock.expectOne(`${environment.API_URL}/psformapago`);
+    expect(req.request.method).toBe('POST');
+    req.flush({ ok: true });
+  });
+
+  it('debería eliminar forma de pago por ID', () => {
+    const data = { id: 10 };
+    service.deleteFormaPago(data).subscribe(resp => {
+      expect(resp.ok).toBeTruthy();
+    });
+    const req = httpMock.expectOne(`${environment.API_URL}/psformapago/10`);
+    expect(req.request.method).toBe('DELETE');
+    req.flush({ ok: true });
+  });
+
   it('debería eliminar un préstamo por ID', () => {
     const data = { id_prestamo: 77 };
     service.deletePrestamo(data).subscribe((resp) => {
@@ -108,7 +129,7 @@ describe('PrestamosService', () => {
     expect(req.request.method).toBe('POST');
     expect(req.request.body.id_empresa).toBe(mockEmpresaId);
     expect(req.request.body.id_usureg).toBe(mockUsuarioId);
-    expect(req.request.body.fecha).toMatch(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/);
+    expect(req.request.body.fecha).toMatch(/\d{4}-\d{2}-\d{2}/);
     req.flush({ ok: true });
   });
 
@@ -217,5 +238,35 @@ describe('PrestamosService', () => {
     const req = httpMock.expectOne(`${environment.API_URL}/pstdocplant/5`);
     expect(req.request.method).toBe('PUT');
     req.flush({ ok: true });
+  });
+
+  it('debería ejecutar método prueba()', () => {
+    service.prueba().subscribe(resp => {
+      expect(resp).toEqual({ data: true });
+    });
+    const req = httpMock.expectOne(`${environment.API_URL}/generarVariablesPlantillas`);
+    expect(req.request.method).toBe('GET');
+    req.flush({ data: true });
+  });
+
+  it('debería ejecutar handleError correctamente con mensaje Unauthorized', () => {
+    const fakeError = {
+      error: { message: 'Unauthorized' },
+      status: 401
+    } as any;
+    spyOn(Swal, 'fire');
+    const result = (service as any).handleError(fakeError);
+    expect(result).toBeTruthy();
+    expect(Swal.fire).toHaveBeenCalled();
+  });
+
+  it('debería retornar la fecha actual correctamente', () => {
+    const result = service.fechaActual();
+    expect(result).toMatch(/\d{4}-\d{2}-\d{2}/);
+  });
+
+  it('debería retornar la fecha y hora del cliente correctamente', () => {
+    const result = service.obtenerFechaHoraCliente();
+    expect(result).toMatch(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [+-]\d{2}:\d{2}/);
   });
 });

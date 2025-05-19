@@ -136,15 +136,26 @@ describe('EditarClienteComponent', () => {
     component.triggerSnapshot(0);
   });
 
-  it('debe validar extensión de archivo correctamente', () => {
-    const extension = component.validateExtension('archivo.pdf');
-    expect(extension).toBe('pdf');
+  it('debe emitir nextWebcam correctamente', (done) => {
+    component.nextWebcamObservable.subscribe((value) => {
+      expect(value).toBe('next-device');
+      done();
+    });
+    component.showNextWebcam('next-device');
   });
 
-  it('debe manejar correctamente la carga de archivos con imagen válida', () => {
+  it('debe validar extensión de archivo correctamente', () => {
+    const ext = component.validateExtension('documento.pdf');
+    expect(ext).toBe('pdf');
+  });
+
+  it('debe manejar correctamente la carga de archivos válidos', () => {
     const file = new File(['img'], 'test.png', { type: 'image/png' });
     const readerSpy = jasmine.createSpyObj('FileReader', ['readAsDataURL']);
-    (window as any).FileReader = () => readerSpy;
+    (window as any).FileReader = function () {
+      this.readAsDataURL = readerSpy.readAsDataURL;
+      this.onload = null;
+    };
     component.preview([file], 0);
     expect(component.message).toBeUndefined();
   });

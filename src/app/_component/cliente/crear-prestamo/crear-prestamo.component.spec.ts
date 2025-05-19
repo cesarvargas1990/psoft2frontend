@@ -211,4 +211,12 @@ describe('CrearPrestamoComponent', () => {
     expect(headers).toContain('cuota');
     expect(headers).toContain('valor');
   });
+
+  it('submit debe navegar a prestamos/listar si el formulario es válido', () => {
+    const routerSpy = spyOn(router, 'navigate');
+    component.form.setErrors(null);
+    component.model = {};
+    component.submit();
+    expect(routerSpy).toHaveBeenCalledWith(['/prestamos/listar']);
+  });
 });

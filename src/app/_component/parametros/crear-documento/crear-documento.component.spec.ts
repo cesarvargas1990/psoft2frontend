@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { CrearDocumentoComponent } from './crear-documento.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -122,5 +122,36 @@ describe('CrearDocumentoComponent', () => {
   
     expect(spySwal).toHaveBeenCalled();
     expect(deleteSpy).toHaveBeenCalled();
+  });
+
+  it('debería editar un documento y actualizar con éxito', fakeAsync(() => {
+    component.form.setErrors(null);
+    component.html = '<b>nuevo contenido</b>';
+    component.model = { id: 1, nombre: 'TestDoc' };
+    component.documentoPlantilla = { id: null, nombre: '', plantilla_html: '' };
+
+    const updateSpy = spyOn(component['prestamosService'], 'updatePlantillaDocumento').and.callThrough();
+    spyOn(Swal, 'fire').and.returnValue(Promise.resolve({ value: true }) as any);
+
+    component.editarPlantilla();
+    tick();
+
+    expect(updateSpy).toHaveBeenCalled();
+    expect(component.documentoPlantilla.nombre).toBe('TestDoc');
+  }));
+
+  it('debería aplicar filtro correctamente', () => {
+    const mockData = [{ nombre: 'Test' }];
+    component.dataSource.data = mockData;
+    component.applyFilter('test');
+    expect(component.dataSource.filter).toBe('test');
+  });
+
+  it('debería asignar valores al editarDocumento()', () => {
+    const row = { plantilla_html: '<h1>hola</h1>', nombre: 'plantilla 1', id: 2 };
+    component.editarDocumento(row);
+    expect(component.html).toBe('<h1>hola</h1>');
+    expect(component.model.nombre).toBe('plantilla 1');
+    expect(component.model.id).toBe(2);
   });
 });

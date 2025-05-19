@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { DashboardComponent } from './dashboard.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
@@ -54,6 +54,10 @@ describe('DashboardComponent', () => {
 
     prestamosServiceSpy.totales_dashboard.and.returnValue(of(fakeResponse));
     prestamosServiceSpy.listadoPrestamos.and.returnValue(of([]));
+    prestamosServiceSpy.listaFechasPago.and.returnValue(of([]));
+    prestamosServiceSpy.renderTemplates.and.returnValue(of([]));
+    prestamosServiceSpy.registrarPagoCuota.and.returnValue(of({ success: true }));
+    prestamosServiceSpy.deletePrestamo.and.returnValue(of({}));
 
     await TestBed.configureTestingModule({
       declarations: [DashboardComponent],
@@ -97,4 +101,41 @@ describe('DashboardComponent', () => {
     component.irPantallaCrearPrestamo();
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/clientes/crearPrestamo']);
   });
+
+  it('should call logout method', () => {
+    component.logout();
+    expect(authServiceSpy.logout).toHaveBeenCalled();
+  });
+
+  it('should clean HTML properly', () => {
+    const input = '<html><head></head><body>Contenido</body></html>';
+    const result = component.limpiarHTML(input);
+    expect(result).toBe('Contenido');
+  });
+
+  it('should combine HTML content', () => {
+    const response = [{ plantilla_html: '<html><body>Doc1</body></html>' }];
+    component.combinarContenido(response);
+    expect(component.contenidoCombinado).toContain('Doc1');
+  });
+
+  it('should apply filter to table', () => {
+    component.applyFilter('cliente');
+    expect(component.dataSource.filter).toBe('cliente');
+  });
+
+  
+
+  
+
+  it('should open modalListadoDocumentos and call renderTemplates', () => {
+    const row = { id_prestamo: 1 };
+    component.modalListadoDocumentos(row);
+    expect(prestamosServiceSpy.renderTemplates).toHaveBeenCalled();
+  });
+
+  
+
+  
 });
+

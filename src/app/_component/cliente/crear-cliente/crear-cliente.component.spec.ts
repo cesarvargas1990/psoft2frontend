@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { CrearClienteComponent } from './crear-cliente.component';
-
+import { of } from 'rxjs';
 import { AuthService } from '../../../_services/auth.service';
 import { ClienteService } from '../../../_services/cliente/cliente.service';
 import { NavService } from '../../../_services/nav.service';
@@ -10,7 +10,7 @@ import { TipodocidentiService } from '../../../_services/tipodocidenti/tipodocid
 import { UsersService } from '../../../_services/users/users.service';
 import { PrestamosService } from '../../../_services/prestamos/prestamos.service';
 import { MediaMatcher } from '@angular/cdk/layout';
-
+import Swal from 'sweetalert2';
 // =======================
 // 🧪 Mock Services
 // =======================
@@ -62,6 +62,7 @@ class MockMediaMatcher {
 describe('CrearClienteComponent', () => {
   let component: CrearClienteComponent;
   let fixture: ComponentFixture<CrearClienteComponent>;
+  let clienteService: ClienteService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -76,13 +77,14 @@ describe('CrearClienteComponent', () => {
         { provide: Router, useClass: MockRouter },
         { provide: MediaMatcher, useClass: MockMediaMatcher },
       ],
-      schemas: [NO_ERRORS_SCHEMA] // Ignora errores de plantilla por componentes como ngx-webcam, formly, signature-pad, etc.
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CrearClienteComponent);
     component = fixture.componentInstance;
+    clienteService = TestBed.get(ClienteService);
     fixture.detectChanges();
   });
 
@@ -193,5 +195,40 @@ describe('CrearClienteComponent', () => {
     spyOn(router, 'navigate');
     component.volver();
     expect(router.navigate).toHaveBeenCalledWith(['/dashboard']);
+  });
+
+  it('debe ejecutar submit correctamente con firma y archivos', async () => {
+    component.form = { valid: true } as any;
+    component.model = {};
+    component.sign = true;
+    component.signaturePad = {
+      toDataURL: () => 'data:image/png;base64,firma'
+    } as any;
+    component.listaArchivos = ['data:image/png;base64,archivo'];
+    component.listaTipoDoc = [3];
+  
+    // 👇 Mock que garantiza que response.id esté definido
+    spyOn(clienteService, 'saveCliente').and.returnValue(of({ id: 123 }));
+  
+    const uploadSpy = spyOn(clienteService, 'uploadFile').and.returnValue(of({ status: 'ok' }));
+  
+    spyOn(Swal, 'fire').and.returnValue(Promise.resolve({ value: true }));
+  
+    component.submit();
+    await fixture.whenStable();
+  
+    expect(clienteService.saveCliente).toHaveBeenCalled();
+    expect(uploadSpy).toHaveBeenCalled();
+  });
+
+  it('no debe ejecutar submit si el formulario es inválido', () => {
+    component.form = { valid: false } as any;
+    spyOn(Swal, 'fire');
+    component.submit();
+    expect(Swal.fire).toHaveBeenCalledWith({
+      type: 'error',
+      title: 'Error',
+      text: 'Por favor valide los campos obligatorios, para guardar el cliente.',
+    });
   });
 });

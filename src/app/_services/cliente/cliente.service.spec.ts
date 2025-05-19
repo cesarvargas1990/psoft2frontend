@@ -144,4 +144,11 @@ describe('ClienteService', () => {
     expect(req.request.body.id_user).toEqual(mockId);
     req.flush({ ok: true });
   });
+
+  it('debería convertir dataURL a archivo con dataURLtoFile()', () => {
+    const file = service.dataURLtoFile('data:image/png;base64,aGVsbG8=', 'test.png');
+    expect(file instanceof File).toBeTruthy();
+    expect(file.name).toBe('test.png');
+    expect(file.type).toBe('image/png');
+  });
 });

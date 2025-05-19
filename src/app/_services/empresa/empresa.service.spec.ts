@@ -3,7 +3,8 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { EmpresaService } from './empresa.service';
 import { AuthService } from '../../_services/auth.service';
 import { environment } from './../../../environments/environment';
-
+import Swal from 'sweetalert2';
+import { HttpErrorResponse } from '@angular/common/http';
 describe('EmpresaService', () => {
   let injector: TestBed;
   let service: EmpresaService;
@@ -18,9 +19,11 @@ describe('EmpresaService', () => {
 
   beforeEach(() => {
     spyOn(localStorage, 'getItem').and.callFake((key: string): string | null => {
-      if (key === 'access_token') return 'fake-token';
-      if (key === 'id_empresa') return mockEmpresaId;
-      return null;
+      const mockStorage = {
+        access_token: 'fake-token',
+        id_empresa: mockEmpresaId
+      };
+      return mockStorage[key] || null;
     });
 
     TestBed.configureTestingModule({
@@ -69,5 +72,37 @@ describe('EmpresaService', () => {
     expect(req.request.headers.get('Authorization')).toBe('Bearer fake-token');
 
     req.flush({ ok: true });
+  });
+
+  it('debería manejar errores del cliente (ErrorEvent)', () => {
+    const spy = spyOn(window, 'alert');
+
+    const mockError = new ErrorEvent('Network error', {
+      message: 'Error de red'
+    });
+
+    (service as any).handleError({ error: mockError, status: 0, message: 'error', name: '', headers: null, ok: false, statusText: '', type: null, url: '' }).subscribe({
+      error: (err) => {
+        expect(err).toContain('Error en la respuesta del servidor');
+        expect(spy).toHaveBeenCalledWith('An error occurred:Error de red');
+      }
+    });
+  });
+
+  it('debería manejar errores del servidor (status 401)', () => {
+    const swalSpy = spyOn(Swal, 'fire');
+    const mockErrorResponse = new HttpErrorResponse({
+      error: { message: 'Unauthorized', error: 'Sin autorización' },
+      status: 401,
+      statusText: 'Unauthorized',
+      url: 'http://localhost/api'
+    });
+
+    (service as any).handleError(mockErrorResponse).subscribe({
+      error: (err) => {
+        expect(err).toContain('Error en la respuesta del servidor');
+        expect(swalSpy).toHaveBeenCalled();
+      }
+    });
   });
 });

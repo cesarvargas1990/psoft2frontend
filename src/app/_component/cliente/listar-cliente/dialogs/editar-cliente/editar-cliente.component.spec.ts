@@ -8,7 +8,7 @@ import { PrestamosService } from '../../../../../_services/prestamos/prestamos.s
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
 import Swal from 'sweetalert2';
-import { WebcamImage } from 'ngx-webcam'; // ✅ import faltante
+import { WebcamImage } from 'ngx-webcam';
 
 describe('EditarClienteComponent', () => {
   let component: EditarClienteComponent;
@@ -56,7 +56,6 @@ describe('EditarClienteComponent', () => {
     fixture = TestBed.createComponent(EditarClienteComponent);
     component = fixture.componentInstance;
 
-    // ✅ Angular 8 compatible
     clienteService = TestBed.get(ClienteService);
     prestamosService = TestBed.get(PrestamosService);
   });
@@ -127,5 +126,32 @@ describe('EditarClienteComponent', () => {
   it('debe actualizar deviceId al cambiar cámara', () => {
     component.cameraWasSwitched('new-camera-id');
     expect(component.deviceId).toBe('new-camera-id');
+  });
+
+  it('debe emitir triggerSnapshot correctamente', (done) => {
+    component.triggerObservable.subscribe(() => {
+      expect(true).toBeTruthy()
+      done();
+    });
+    component.triggerSnapshot(0);
+  });
+
+  it('debe validar extensión de archivo correctamente', () => {
+    const extension = component.validateExtension('archivo.pdf');
+    expect(extension).toBe('pdf');
+  });
+
+  it('debe manejar correctamente la carga de archivos con imagen válida', () => {
+    const file = new File(['img'], 'test.png', { type: 'image/png' });
+    const readerSpy = jasmine.createSpyObj('FileReader', ['readAsDataURL']);
+    (window as any).FileReader = () => readerSpy;
+    component.preview([file], 0);
+    expect(component.message).toBeUndefined();
+  });
+
+  it('debe manejar correctamente la carga de archivos inválidos', () => {
+    const file = new File(['doc'], 'test.txt', { type: 'text/plain' });
+    component.preview([file], 0);
+    expect(component.message).toBe('Solo se Aceptan, Imagenes o Documentos PDF.');
   });
 });

@@ -183,4 +183,32 @@ describe('CrearPrestamoComponent', () => {
     const limpio = component.limpiarHTML(`<html><head></head><body>Contenido</body></html>`);
     expect(limpio).toBe('Contenido');
   });
+
+  it('debe generar cuotas y mostrarlas si formulario válido', () => {
+    const modelValido = {
+      id_cliente: 1,
+      valorpres: 100000,
+      numcuotas: 12,
+      porcint: 1.5,
+      fec_inicial: new Date(),
+      id_periodo_pago: 1,
+      id_sistema_pago: 1,
+      id_cobrador: 1
+    };
+    component.form.patchValue(modelValido);
+    component.form.setErrors(null);
+    component.obtenerCuotasPrestamo();
+    expect(component.mostrarTablaResumen).toBe(true);
+    expect(component.tableCuotasPrestamo.length).toBeGreaterThan(0);
+  });
+
+  it('getHeaders debe retornar los headers de la tabla', () => {
+    component.tableCuotasPrestamo = [
+      { cuota: 1, valor: 100000 },
+      { cuota: 2, valor: 120000 }
+    ];
+    const headers = component.getHeaders();
+    expect(headers).toContain('cuota');
+    expect(headers).toContain('valor');
+  });
 });

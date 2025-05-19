@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { ListarClienteComponent } from './listar-cliente.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
@@ -25,16 +26,19 @@ import { ClienteService } from '../../../_services/cliente/cliente.service';
 import { AuthService } from '../../../_services/auth.service';
 import { NavService } from '../../../_services/nav.service';
 import Swal from 'sweetalert2';
+
 describe('ListarClienteComponent', () => {
   let component: ListarClienteComponent;
   let fixture: ComponentFixture<ListarClienteComponent>;
   let clienteServiceSpy: jasmine.SpyObj<ClienteService>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let dialogSpy: jasmine.SpyObj<MatDialog>;
 
   beforeEach(async () => {
     const clienteSpy = jasmine.createSpyObj('ClienteService', ['getAllClientes', 'deleteCliente']);
     const authSpy = jasmine.createSpyObj('AuthService', ['logout', 'isLoggedIn', 'tienePermiso']);
     const navSpy = jasmine.createSpyObj('NavService', ['dummyMethod']);
+    dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
     (navSpy as any).appDrawer = null;
 
     await TestBed.configureTestingModule({
@@ -63,7 +67,8 @@ describe('ListarClienteComponent', () => {
       providers: [
         { provide: ClienteService, useValue: clienteSpy },
         { provide: AuthService, useValue: authSpy },
-        { provide: NavService, useValue: navSpy }
+        { provide: NavService, useValue: navSpy },
+        { provide: MatDialog, useValue: dialogSpy }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
@@ -101,17 +106,54 @@ describe('ListarClienteComponent', () => {
   }));
 
   it('debería eliminar un cliente si se confirma', async () => {
-    // Simula la confirmación positiva de SweetAlert2
     spyOn(Swal, 'fire').and.returnValue(Promise.resolve({ value: true }));
-  
     clienteServiceSpy.deleteCliente.and.returnValue(of({}));
     clienteServiceSpy.getAllClientes.and.returnValue(of([]));
-  
     component.modalEliminarCliente({ id: 1 });
-  
-    // Espera que el flujo de la promesa y el change detection terminen
     await fixture.whenStable();
-  
     expect(clienteServiceSpy.deleteCliente).toHaveBeenCalled();
+  });
+
+  it('debería navegar al crear cliente', () => {
+    const router = TestBed.get(Router);
+    const navigateSpy = spyOn(router, 'navigate');
+    component.modalAdicionarEmpresa();
+    expect(navigateSpy).toHaveBeenCalledWith(['clientes/crear']);
+  });
+
+  it('debería limpiar el canvas de firma', () => {
+    component.signaturePad = jasmine.createSpyObj('SignaturePad', ['clear']);
+    component.drawClear();
+    expect(component.signaturePad.clear).toHaveBeenCalled();
+  });
+
+  it('debería manejar carga de imagen válida', () => {
+    const mockFile = new File(['img'], 'image.png', { type: 'image/png' });
+    spyOn(window as any, 'FileReader').and.returnValue({
+      readAsDataURL: () => {},
+      onload: () => {}
+    });
+    component.preview([mockFile], 0);
+    expect(component.message).toBeUndefined();
+  });
+
+  it('debería manejar carga de archivo inválido', () => {
+    const file = new File(['doc'], 'doc.pdf', { type: 'application/pdf' });
+    component.preview([file], 0);
+    expect(component.message).toBe('Only images are supported.');
+  });
+
+  it('debería capturar imagen desde webcam', () => {
+    const mockImage = { imageAsDataUrl: 'data:image/png;base64,test' } as any;
+    component.handleImage(mockImage);
+    expect(component.listaArchivos[component.currentIndexImage]).toBe('data:image/png;base64,test');
+  });
+
+  it('debería emitir trigger de snapshot', (done) => {
+    component.triggerObservable.subscribe(() => {
+      expect(true).toBe(true);
+      done();
+    });
+    component.triggerSnapshot(0);
   });
 });

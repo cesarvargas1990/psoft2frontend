@@ -42,3 +42,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## Docker
 
 Run `docker-compose build --build-arg BUILD_CONFIGURATION=docker && docker-compose up` change BUILD_CONFIGURATION by prod,local,docker,demo
+
+## Sonar
+Configure sonar.login in sonar-project.properties
+Run `sonar-scanner`

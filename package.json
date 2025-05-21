@@ -1,5 +1,5 @@
 {
-  "name": "visualtechfront",
+  "name": "psoft2frontend",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -73,11 +73,11 @@
   "main": "main.js",
   "repository": {
     "type": "git",
-    "url": "git+https://cesarvargas1990@bitbucket.org/cesarvargas1990/visualtechfrontend.git"
+    "url": "git+https://cesarvargas1990@bitbucket.org/cesarvargas1990/psoft2frontend.git"
   },
   "author": "cesar augusto vargas",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/cesarvargas1990/visualtechfrontend#readme",
+  "homepage": "https://bitbucket.org/cesarvargas1990/psoft2frontend#readme",
   "keywords": [
     "visualtech"
   ]

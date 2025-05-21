@@ -578,7 +578,7 @@ export class CrearClienteComponent implements AfterViewInit {
     if (files.length === 0)
       return;
 
-    var mimeType = files[0].type;
+    let mimeType = files[0].type;
 
     if (mimeType.match(/image\/*/) == null && mimeType.match(/application\/pdf/) == null) {
       this.message = "Solo se Aceptan, Imagenes o Documentos PDF.";

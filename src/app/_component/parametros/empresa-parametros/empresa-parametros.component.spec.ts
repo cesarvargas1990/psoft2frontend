@@ -16,6 +16,7 @@ import { NavService } from '../../../_services/nav.service';
 import { EmpresaService } from '../../../_services/empresa/empresa.service';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { of } from 'rxjs';
+import Swal from 'sweetalert2';
 
 class MockAuthService {
   isLoggedIn() {
@@ -117,6 +118,9 @@ describe('EmpresaParametrosComponent', () => {
       empresaService,
       'actualizarDatosEmpresa'
     ).and.callThrough();
+    const swalSpy = spyOn(Swal, 'fire').and.returnValue(
+      Promise.resolve({ value: true }) as any
+    );
 
     component.ngOnInit();
     tick(200);
@@ -139,6 +143,7 @@ describe('EmpresaParametrosComponent', () => {
     component.submit();
 
     expect(spy).toHaveBeenCalled();
+    expect(swalSpy).toHaveBeenCalled();
 
     // ✅ Limpia timers de Angular Material, Formly o animaciones internas
     flush();
@@ -147,10 +152,45 @@ describe('EmpresaParametrosComponent', () => {
 
   it('no debe llamar actualizarDatosEmpresa si el formulario no es válido', () => {
     const spy = spyOn(empresaService, 'actualizarDatosEmpresa');
+    const swalSpy = spyOn(Swal, 'fire');
     component.form.setErrors({ invalid: true });
 
     component.submit();
 
     expect(spy).not.toHaveBeenCalled();
+    expect(swalSpy).toHaveBeenCalled();
+  });
+
+  it('debe navegar al dashboard cuando se llama volver()', () => {
+    const router = TestBed.get(Router) as Router;
+    const navSpy = spyOn(router, 'navigate');
+
+    component.volver();
+
+    expect(navSpy).toHaveBeenCalledWith(['dashboard']);
+  });
+
+  it('debe remover event listener con removeEventListener si existe', () => {
+    component.mobileQuery = {
+      removeEventListener: jasmine.createSpy('removeEventListener'),
+      addEventListener: jasmine.createSpy('addEventListener'),
+      removeListener: jasmine.createSpy('removeListener'),
+      addListener: jasmine.createSpy('addListener')
+    } as any;
+
+    component.ngOnInit();
+
+    expect(component.mobileQuery.removeEventListener).toHaveBeenCalled();
+  });
+
+  it('debe remover event listener con removeListener si no existe removeEventListener', () => {
+    component.mobileQuery = {
+      removeListener: jasmine.createSpy('removeListener'),
+      addListener: jasmine.createSpy('addListener')
+    } as any;
+
+    component.ngOnInit();
+
+    expect(component.mobileQuery.removeListener).toHaveBeenCalled();
   });
 });

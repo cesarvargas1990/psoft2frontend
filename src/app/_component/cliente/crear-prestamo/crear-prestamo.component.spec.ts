@@ -195,6 +195,13 @@ describe('CrearPrestamoComponent', () => {
     expect(component.contenidoCombinado).toContain('<hr');
   });
 
+  it('debe manejar combinarContenido cuando no recibe un arreglo', () => {
+    const errorSpy = spyOn(console, 'error');
+    component.combinarContenido({} as any);
+    expect(errorSpy).toHaveBeenCalled();
+    expect(component.contenidoCombinado).toBe('');
+  });
+
   it('debe limpiar HTML removiendo body y head', () => {
     const limpio = component.limpiarHTML(
       `<html><head></head><body>Contenido</body></html>`
@@ -230,6 +237,12 @@ describe('CrearPrestamoComponent', () => {
     expect(headers).toContain('valor');
   });
 
+  it('getHeaders debe retornar arreglo vacio si no hay datos', () => {
+    component.tableCuotasPrestamo = [];
+    const headers = component.getHeaders();
+    expect(headers.length).toBe(0);
+  });
+
   it('submit debe navegar a prestamos/listar si el formulario es válido', () => {
     const routerSpy = spyOn(router, 'navigate');
     component.form.setErrors(null);
@@ -249,6 +262,15 @@ describe('CrearPrestamoComponent', () => {
     expect(component.mobileQuery.removeEventListener).toHaveBeenCalled();
   });
 
+  it('debe usar removeListener si removeEventListener no existe', () => {
+    component.mobileQuery = {
+      removeListener: jasmine.createSpy('removeListener'),
+      addListener: jasmine.createSpy('addListener')
+    } as any;
+    component.ngOnInit();
+    expect(component.mobileQuery.removeListener).toHaveBeenCalled();
+  });
+
   it('debe llamar ngAfterViewInit y setear config y fields', async () => {
     component.appDrawer = {} as any;
     const navService = (component as any).navService as NavService;
@@ -256,6 +278,23 @@ describe('CrearPrestamoComponent', () => {
     expect(component.config.height).toBe(500);
     expect(component.fields.length).toBeGreaterThan(0);
     expect(navService.appDrawer).toBe(component.appDrawer);
+  });
+
+  it('debe ejecutar el change de sistema de pago y actualizar validez', async () => {
+    component.appDrawer = {} as any;
+    await component.ngAfterViewInit();
+    const spyUpdate = spyOn(component.form, 'updateValueAndValidity');
+    const spyCuotas = spyOn(component, 'obtenerCuotasPrestamo');
+    component.form.setErrors(null);
+
+    const fieldGroup = component.fields[0].fieldGroup as any[];
+    const sistemaPagoField = fieldGroup.find(
+      (field) => field.key === 'id_sistema_pago'
+    );
+    sistemaPagoField.templateOptions.change({}, {});
+
+    expect(spyUpdate).toHaveBeenCalled();
+    expect(spyCuotas).toHaveBeenCalled();
   });
 
   it('debe navegar al crear cliente al llamar modalAdicionarEmpresa', () => {
@@ -278,6 +317,51 @@ describe('CrearPrestamoComponent', () => {
     component.guardarPrestamo();
     expect(spy).toHaveBeenCalled();
   });
+
+  it('no debe guardar prestamo si el usuario cancela el confirm', fakeAsync(() => {
+    component.form.setErrors(null);
+    const guardarSpy = spyOn(
+      prestamosService,
+      'guardarPrestamo'
+    ).and.callThrough();
+    spyOn(Swal, 'fire').and.returnValue(Promise.resolve({ value: false }));
+
+    component.guardarPrestamo();
+    tick();
+
+    expect(guardarSpy).not.toHaveBeenCalled();
+  }));
+
+  it('debe guardar prestamo y renderizar plantillas al confirmar', fakeAsync(() => {
+    component.form.setErrors(null);
+    component.model = { id_cliente: 1 };
+    const guardarSpy = spyOn(
+      prestamosService,
+      'guardarPrestamo'
+    ).and.callThrough();
+    const renderSpy = spyOn(
+      prestamosService,
+      'renderTemplates'
+    ).and.callThrough();
+
+    let callCount = 0;
+    spyOn(Swal, 'fire').and.callFake(() => {
+      callCount += 1;
+      if (callCount === 1) {
+        return Promise.resolve({ value: true }) as any;
+      }
+      return Promise.resolve({ value: true }) as any;
+    });
+
+    component.guardarPrestamo();
+    tick();
+
+    expect(guardarSpy).toHaveBeenCalled();
+    expect(renderSpy).toHaveBeenCalled();
+    expect(component.listarDocumentosPrestamo).toBe(true);
+    expect(component.model.id_prestamo).toBe(123);
+    expect(component.contenidoCombinado).toContain('Contenido');
+  }));
 
   it('debe llamar obtenerCuotasPrestamo desde Formly field change', () => {
     const spy = spyOn(component, 'obtenerCuotasPrestamo');

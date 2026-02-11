@@ -18,7 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../_services/auth.service';
 import { NavService } from '../../../_services/nav.service';
@@ -41,11 +41,11 @@ class MockClienteService {}
 class MockTipodocidentiService {}
 class MockUsersService {}
 class MockPrestamosService {
-  listaVariablesPlantillas = () => of([]);
+  listaVariablesPlantillas = () => of([{ title: 'Var', description: 'X' }]);
   consultaPlantillasDocumentos = () => of([]);
-  guardarDocumento = () => of({});
+  guardarDocumento = () => of({ id: 1, nombre: 'Test' });
   deleteDocumentoPlantilla = () => of({});
-  updatePlantillaDocumento = () => of({});
+  updatePlantillaDocumento = () => of({ id: 1, nombre: 'Actualizado' });
 }
 
 describe('CrearDocumentoComponent', () => {
@@ -96,17 +96,43 @@ describe('CrearDocumentoComponent', () => {
     expect(component.fields.length).toBeGreaterThan(0);
   });
 
+  it('debería configurar TinyMCE y asignar appDrawer en ngAfterViewInit', async () => {
+    component.appDrawer = {} as any;
+    const navService = (component as any).navService as NavService;
+    const spyDatos = spyOn(component, 'getDatosDocumentos').and.callThrough();
+
+    await component.ngAfterViewInit();
+
+    expect(component.config.height).toBe(500);
+    expect(component.config.templates.length).toBe(1);
+    expect(component.fields.length).toBeGreaterThan(0);
+    expect(navService.appDrawer).toBe(component.appDrawer);
+    expect(spyDatos).toHaveBeenCalled();
+  });
+
   it('debería llamar a getDatosDocumentos() y asignar datos al dataSource', () => {
     const spy = spyOn(component as any, 'getDatosDocumentos').and.callThrough();
     component.getDatosDocumentos();
     expect(spy).toHaveBeenCalled();
   });
 
-  it('debería validar el formulario antes de enviar', () => {
-    component.html = '';
-    component.form.setErrors(null); // Simula formulario inválido
+  it('debería mostrar error si el formulario es inválido', () => {
+    const spy = spyOn(Swal, 'fire');
+    component.form.setErrors({ invalid: true });
+
     component.submit();
-    expect(component.model.plantilla_html).toBeUndefined();
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('debería mostrar error si el formulario es válido pero el HTML está vacío', () => {
+    const spy = spyOn(Swal, 'fire');
+    component.form.setErrors(null);
+    component.html = '';
+
+    component.submit();
+
+    expect(spy).toHaveBeenCalled();
   });
 
   it('debería guardar un documento si el formulario es válido', () => {
@@ -115,8 +141,14 @@ describe('CrearDocumentoComponent', () => {
     component.model = { nombre: 'Test' };
     component.form.markAsTouched();
     spyOn(component.prestamosService, 'guardarDocumento').and.callThrough();
+    const datosSpy = spyOn(component, 'getDatosDocumentos').and.callThrough();
+    const swalSpy = spyOn(Swal, 'fire').and.returnValue(
+      Promise.resolve({ value: true }) as any
+    );
     component.submit();
     expect(component.prestamosService.guardarDocumento).toHaveBeenCalled();
+    expect(datosSpy).toHaveBeenCalled();
+    expect(swalSpy).toHaveBeenCalled();
   });
 
   it('debería eliminar una plantilla de documento', async () => {
@@ -132,6 +164,40 @@ describe('CrearDocumentoComponent', () => {
 
     expect(spySwal).toHaveBeenCalled();
     expect(deleteSpy).toHaveBeenCalled();
+  });
+
+  it('no debería eliminar una plantilla si se cancela el confirm', async () => {
+    const spySwal = spyOn(Swal, 'fire').and.returnValue(
+      Promise.resolve({ value: false }) as any
+    );
+    const deleteSpy = spyOn(
+      component.prestamosService,
+      'deleteDocumentoPlantilla'
+    ).and.callThrough();
+
+    await component.eliminarDocumentoPlantilla({ id: 1 });
+
+    expect(spySwal).toHaveBeenCalled();
+    expect(deleteSpy).not.toHaveBeenCalled();
+  });
+
+  it('debería manejar error al eliminar plantilla', async () => {
+    let callCount = 0;
+    const swalSpy = spyOn(Swal, 'fire').and.callFake(() => {
+      callCount += 1;
+      if (callCount === 1) {
+        return Promise.resolve({ value: true }) as any;
+      }
+      return Promise.resolve({ value: false }) as any;
+    });
+    spyOn(
+      component.prestamosService,
+      'deleteDocumentoPlantilla'
+    ).and.returnValue(throwError('error'));
+
+    await component.eliminarDocumentoPlantilla({ id: 1 });
+
+    expect(swalSpy).toHaveBeenCalled();
   });
 
   it('debería editar un documento y actualizar con éxito', fakeAsync(() => {
@@ -155,11 +221,35 @@ describe('CrearDocumentoComponent', () => {
     expect(component.documentoPlantilla.nombre).toBe('TestDoc');
   }));
 
+  it('no debería actualizar plantilla si el formulario es inválido', () => {
+    component.form.setErrors({ invalid: true });
+    const updateSpy = spyOn(
+      component.prestamosService,
+      'updatePlantillaDocumento'
+    ).and.callThrough();
+
+    component.editarPlantilla();
+
+    expect(updateSpy).not.toHaveBeenCalled();
+  });
+
   it('debería aplicar filtro correctamente', () => {
     const mockData = [{ nombre: 'Test' }];
     component.dataSource.data = mockData;
     component.applyFilter('test');
     expect(component.dataSource.filter).toBe('test');
+  });
+
+  it('debería llamar logout si falla la carga de documentos', () => {
+    const authService = TestBed.get(AuthService) as MockAuthService;
+    spyOn(
+      component.prestamosService,
+      'consultaPlantillasDocumentos'
+    ).and.returnValue(throwError('error'));
+
+    component.getDatosDocumentos();
+
+    expect(authService.logout).toHaveBeenCalled();
   });
 
   it('debería asignar valores al editarDocumento()', () => {

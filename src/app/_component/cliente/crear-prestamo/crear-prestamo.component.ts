@@ -87,7 +87,11 @@ export class CrearPrestamoComponent implements AfterViewInit {
     }
   }
 
-  async ngAfterViewInit() {
+  ngAfterViewInit(): void {
+    void this.initializeAfterViewInit();
+  }
+
+  private async initializeAfterViewInit(): Promise<void> {
     this.config = {
       height: 500,
       theme: 'modern',

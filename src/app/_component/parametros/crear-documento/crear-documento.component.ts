@@ -105,7 +105,11 @@ export class CrearDocumentoComponent implements AfterViewInit {
     }
   }
 
-  async ngAfterViewInit() {
+  ngAfterViewInit(): void {
+    void this.initializeAfterViewInit();
+  }
+
+  private async initializeAfterViewInit(): Promise<void> {
     this.prestamosService.listaVariablesPlantillas().subscribe((response) => {
       this.config = {
         height: 500,

@@ -83,7 +83,7 @@ export class EmpresaParametrosComponent implements OnInit {
   volver() {
     this.router.navigate(['dashboard']);
   }
-  async ngOnInit() {
+  ngOnInit(): void {
     this.empresaService.getEmpresa().subscribe((response) => {
       this.datosEmpresa = response;
       this.fields = [
@@ -243,5 +243,5 @@ export class EmpresaParametrosComponent implements OnInit {
     }
   }
 
-  async ngAfterViewInit() {}
+  ngAfterViewInit(): void {}
 }

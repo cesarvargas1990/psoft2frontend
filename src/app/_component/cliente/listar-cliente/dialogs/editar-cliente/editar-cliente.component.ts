@@ -173,7 +173,11 @@ export class EditarClienteComponent implements OnInit {
     public prestamosService: PrestamosService
   ) {}
 
-  async ngAfterViewInit() {
+  ngAfterViewInit(): void {
+    void this.initializeAfterViewInit();
+  }
+
+  private async initializeAfterViewInit(): Promise<void> {
     this.tiposdocumento = await this.tipodocidentiService.getTipodocidenti();
     this.cobradores = await this.usersService.getUsers();
 
@@ -384,7 +388,7 @@ export class EditarClienteComponent implements OnInit {
       }
     });
   }
-  async ngOnInit() {
+  ngOnInit(): void {
     WebcamUtil.getAvailableVideoInputs().then(
       (mediaDevices: MediaDeviceInfo[]) => {
         this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;

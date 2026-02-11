@@ -282,7 +282,8 @@ describe('CrearPrestamoComponent', () => {
   it('debe llamar ngAfterViewInit y setear config y fields', async () => {
     component.appDrawer = {} as any;
     const navService = (component as any).navService as NavService;
-    await component.ngAfterViewInit();
+    component.ngAfterViewInit();
+    await fixture.whenStable();
     expect(component.config.height).toBe(500);
     expect(component.fields.length).toBeGreaterThan(0);
     expect(navService.appDrawer).toBe(component.appDrawer);
@@ -335,7 +336,8 @@ describe('CrearPrestamoComponent', () => {
 
   it('debe ejecutar el change de sistema de pago y actualizar validez', async () => {
     component.appDrawer = {} as any;
-    await component.ngAfterViewInit();
+    component.ngAfterViewInit();
+    await fixture.whenStable();
     const spyUpdate = spyOn(component.form, 'updateValueAndValidity');
     const spyCuotas = spyOn(component, 'obtenerCuotasPrestamo');
     component.form.setErrors(null);
@@ -352,7 +354,8 @@ describe('CrearPrestamoComponent', () => {
 
   it('no debe recalcular desde changes/blur si el formulario es inválido', async () => {
     component.appDrawer = {} as any;
-    await component.ngAfterViewInit();
+    component.ngAfterViewInit();
+    await fixture.whenStable();
     const spyCuotas = spyOn(component, 'obtenerCuotasPrestamo');
     component.form.setErrors({ invalid: true });
 
@@ -387,7 +390,8 @@ describe('CrearPrestamoComponent', () => {
   it('no debe actualizar validez en sistema de pago cuando pstiposistemaprest responde falso', async () => {
     component.appDrawer = {} as any;
     spyOn(prestamosService, 'pstiposistemaprest').and.returnValue(of(false));
-    await component.ngAfterViewInit();
+    component.ngAfterViewInit();
+    await fixture.whenStable();
     const spyUpdate = spyOn(component.form, 'updateValueAndValidity');
     const spyCuotas = spyOn(component, 'obtenerCuotasPrestamo');
     component.form.setErrors({ invalid: true });

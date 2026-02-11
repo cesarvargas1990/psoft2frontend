@@ -69,7 +69,11 @@ export class ListarPrestamosclienteComponent implements OnInit {
     private datePipe: DatePipe
   ) {}
 
-  async ngAfterViewInit() {
+  ngAfterViewInit(): void {
+    void this.initializeAfterViewInit();
+  }
+
+  private async initializeAfterViewInit(): Promise<void> {
     this.model.id_cliente = this.data.id;
 
     this.clienteServicio
@@ -276,5 +280,5 @@ export class ListarPrestamosclienteComponent implements OnInit {
       }
     ];
   }
-  async ngOnInit() {}
+  ngOnInit(): void {}
 }

@@ -81,7 +81,11 @@ export class ListarDocumentosprestamoComponent implements OnInit {
     }
   }
 
-  async ngAfterViewInit() {
+  ngAfterViewInit(): void {
+    void this.initializeAfterViewInit();
+  }
+
+  private async initializeAfterViewInit(): Promise<void> {
     const datosPrestamo = this.dialogRef.componentInstance.data;
 
     this.model.id_prestamo = datosPrestamo.id_prestamo;
@@ -138,7 +142,7 @@ export class ListarDocumentosprestamoComponent implements OnInit {
       }
     ];
   }
-  async ngOnInit() {}
+  ngOnInit(): void {}
 
   volver() {
     this.router.navigate(['/dashboard']);

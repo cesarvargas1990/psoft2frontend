@@ -79,6 +79,7 @@
     "one-variable-per-declaration": false,
     "prefer-const": false,
     "prefer-for-of": false,
+    "space-before-function-paren": false,
     "triple-equals": false,
     "variable-name": false,
     "use-pipe-transform-interface": true

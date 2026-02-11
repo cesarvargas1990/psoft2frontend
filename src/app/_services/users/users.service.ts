@@ -3,43 +3,43 @@ import {
   HttpClient,
   HttpHeaders,
   HttpParams,
-  HttpErrorResponse,
+  HttpErrorResponse
 } from '@angular/common/http';
 import { environment } from './../../../environments/environment';
 import { AuthService } from '../../_services/auth.service';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class UsersService {
   private server: string = environment.API_URL;
 
   private services = {
-    cobradores: this.server + '/cobradores',
+    cobradores: this.server + '/cobradores'
   };
 
   httpOpts: any = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-    }),
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`
+    })
   };
 
   constructor(
     private http: HttpClient,
-    private authService: AuthService,
+    private authService: AuthService
   ) {}
 
   getUsers() {
     const id_user = localStorage.getItem('id');
     return this.http.get(
       `${this.services.cobradores}` + '/' + id_user,
-      this.httpOpts,
+      this.httpOpts
     );
   }
 }

@@ -5,7 +5,7 @@ import {
   ElementRef,
   OnInit,
   ChangeDetectorRef,
-  AfterViewInit,
+  AfterViewInit
 } from '@angular/core';
 
 import { NavItem } from '../../../_models/nav-item';
@@ -18,7 +18,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import {
   MatDialog,
   MatDialogRef,
-  MAT_DIALOG_DATA,
+  MAT_DIALOG_DATA
 } from '@angular/material/dialog';
 
 import Swal from 'sweetalert2';
@@ -31,7 +31,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-empresa-parametros',
   templateUrl: './empresa-parametros.component.html',
-  styleUrls: ['./empresa-parametros.component.scss'],
+  styleUrls: ['./empresa-parametros.component.scss']
 })
 export class EmpresaParametrosComponent implements OnInit {
   form = new FormGroup({});
@@ -63,7 +63,7 @@ export class EmpresaParametrosComponent implements OnInit {
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
     public router: Router,
-    public empresaService: EmpresaService,
+    public empresaService: EmpresaService
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -96,13 +96,13 @@ export class EmpresaParametrosComponent implements OnInit {
               className: 'col-md-6',
               type: 'input',
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
                 label: 'Nombre',
                 placeholder: 'Nombre de la empresa',
-                required: true,
-              },
+                required: true
+              }
             },
 
             {
@@ -111,13 +111,13 @@ export class EmpresaParametrosComponent implements OnInit {
               className: 'col-md-6',
               type: 'input',
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
                 label: 'Nit',
                 placeholder: 'Nit',
-                required: true,
-              },
+                required: true
+              }
             },
 
             {
@@ -126,13 +126,13 @@ export class EmpresaParametrosComponent implements OnInit {
               className: 'col-md-6',
               type: 'input',
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
                 label: 'Capital Inicial',
                 placeholder: 'Valor de capital inicial',
-                required: true,
-              },
+                required: true
+              }
             },
 
             {
@@ -141,12 +141,12 @@ export class EmpresaParametrosComponent implements OnInit {
               className: 'col-md-6',
               type: 'input',
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
                 label: 'Email',
-                placeholder: 'Email',
-              },
+                placeholder: 'Email'
+              }
             },
 
             {
@@ -155,12 +155,12 @@ export class EmpresaParametrosComponent implements OnInit {
               className: 'col-md-6',
               type: 'input',
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
                 label: 'Pagina Web',
-                placeholder: 'Pagina web',
-              },
+                placeholder: 'Pagina web'
+              }
             },
 
             {
@@ -169,12 +169,12 @@ export class EmpresaParametrosComponent implements OnInit {
               className: 'col-md-6',
               type: 'input',
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
                 label: 'Teléfono',
-                placeholder: 'Teléfono',
-              },
+                placeholder: 'Teléfono'
+              }
             },
 
             {
@@ -183,12 +183,12 @@ export class EmpresaParametrosComponent implements OnInit {
               className: 'col-md-6',
               type: 'input',
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
                 label: 'Ciudad',
-                placeholder: 'Ciudad',
-              },
+                placeholder: 'Ciudad'
+              }
             },
 
             {
@@ -197,15 +197,15 @@ export class EmpresaParametrosComponent implements OnInit {
               className: 'col-md-6',
               type: 'input',
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
                 label: 'Dirección',
-                placeholder: 'Dirección',
-              },
-            },
-          ],
-        },
+                placeholder: 'Dirección'
+              }
+            }
+          ]
+        }
       ];
     });
 
@@ -230,7 +230,7 @@ export class EmpresaParametrosComponent implements OnInit {
             Swal.fire({
               type: 'info',
               title: 'Informaci&oacute;n',
-              text: 'Se actualizo satisfactoriamente la información de la empresa.',
+              text: 'Se actualizo satisfactoriamente la información de la empresa.'
             }).then((result) => {});
           }
         });
@@ -238,7 +238,7 @@ export class EmpresaParametrosComponent implements OnInit {
       Swal.fire({
         type: 'error',
         title: 'Error',
-        text: 'Por favor valide los campos obligatorios, para guardar la información de la empresa.',
+        text: 'Por favor valide los campos obligatorios, para guardar la información de la empresa.'
       });
     }
   }

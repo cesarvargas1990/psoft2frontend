@@ -54,7 +54,7 @@ class MockMediaMatcher {
     return {
       matches: false,
       addListener: () => {},
-      removeListener: () => {},
+      removeListener: () => {}
     };
   }
 }
@@ -75,9 +75,9 @@ describe('CrearClienteComponent', () => {
         { provide: UsersService, useClass: MockUsersService },
         { provide: PrestamosService, useClass: MockPrestamosService },
         { provide: Router, useClass: MockRouter },
-        { provide: MediaMatcher, useClass: MockMediaMatcher },
+        { provide: MediaMatcher, useClass: MockMediaMatcher }
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 
@@ -136,7 +136,7 @@ describe('CrearClienteComponent', () => {
   it('debe limpiar firma y cambiar flag', () => {
     component.sign = true;
     component.signaturePad = {
-      clear: () => {},
+      clear: () => {}
     } as any;
     spyOn(component.signaturePad, 'clear');
     component.drawClear();
@@ -163,12 +163,12 @@ describe('CrearClienteComponent', () => {
     const file = new Blob([''], { type: 'image/png' });
     const mockFileList = {
       length: 1,
-      0: file,
+      0: file
     };
 
     const fileReaderSpy = spyOn(window as any, 'FileReader').and.returnValue({
       readAsDataURL: () => {},
-      onload: () => {},
+      onload: () => {}
     });
 
     component.preview(mockFileList as any, 0);
@@ -179,11 +179,11 @@ describe('CrearClienteComponent', () => {
     const file = new Blob([''], { type: 'text/plain' });
     const mockFileList = {
       length: 1,
-      0: file,
+      0: file
     };
     component.preview(mockFileList as any, 0);
     expect(component.message).toBe(
-      'Solo se Aceptan, Imagenes o Documentos PDF.',
+      'Solo se Aceptan, Imagenes o Documentos PDF.'
     );
   });
 
@@ -204,7 +204,7 @@ describe('CrearClienteComponent', () => {
     component.model = {};
     component.sign = true;
     component.signaturePad = {
-      toDataURL: () => 'data:image/png;base64,firma',
+      toDataURL: () => 'data:image/png;base64,firma'
     } as any;
     component.listaArchivos = ['data:image/png;base64,archivo'];
     component.listaTipoDoc = [3];
@@ -213,7 +213,7 @@ describe('CrearClienteComponent', () => {
     spyOn(clienteService, 'saveCliente').and.returnValue(of({ id: 123 }));
 
     const uploadSpy = spyOn(clienteService, 'uploadFile').and.returnValue(
-      of({ status: 'ok' }),
+      of({ status: 'ok' })
     );
 
     spyOn(Swal, 'fire').and.returnValue(Promise.resolve({ value: true }));
@@ -232,7 +232,7 @@ describe('CrearClienteComponent', () => {
     expect(Swal.fire).toHaveBeenCalledWith({
       type: 'error',
       title: 'Error',
-      text: 'Por favor valide los campos obligatorios, para guardar el cliente.',
+      text: 'Por favor valide los campos obligatorios, para guardar el cliente.'
     });
   });
 });

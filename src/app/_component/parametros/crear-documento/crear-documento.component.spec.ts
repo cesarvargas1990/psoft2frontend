@@ -2,7 +2,7 @@ import {
   ComponentFixture,
   TestBed,
   fakeAsync,
-  tick,
+  tick
 } from '@angular/core/testing';
 import { CrearDocumentoComponent } from './crear-documento.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
@@ -68,7 +68,7 @@ describe('CrearDocumentoComponent', () => {
         MatIconModule,
         MatDialogModule,
         BrowserAnimationsModule,
-        RouterTestingModule,
+        RouterTestingModule
       ],
       providers: [
         { provide: AuthService, useClass: MockAuthService },
@@ -76,9 +76,9 @@ describe('CrearDocumentoComponent', () => {
         { provide: ClienteService, useClass: MockClienteService },
         { provide: TipodocidentiService, useClass: MockTipodocidentiService },
         { provide: UsersService, useClass: MockUsersService },
-        { provide: PrestamosService, useClass: MockPrestamosService },
+        { provide: PrestamosService, useClass: MockPrestamosService }
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
   });
 
@@ -121,11 +121,11 @@ describe('CrearDocumentoComponent', () => {
 
   it('debería eliminar una plantilla de documento', async () => {
     const spySwal = spyOn(Swal, 'fire').and.returnValue(
-      Promise.resolve({ value: true }) as any,
+      Promise.resolve({ value: true }) as any
     );
     const deleteSpy = spyOn(
       component.prestamosService,
-      'deleteDocumentoPlantilla',
+      'deleteDocumentoPlantilla'
     ).and.callThrough();
 
     await component.eliminarDocumentoPlantilla({ id: 1 });
@@ -142,10 +142,10 @@ describe('CrearDocumentoComponent', () => {
 
     const updateSpy = spyOn(
       component.prestamosService,
-      'updatePlantillaDocumento',
+      'updatePlantillaDocumento'
     ).and.callThrough();
     spyOn(Swal, 'fire').and.returnValue(
-      Promise.resolve({ value: true }) as any,
+      Promise.resolve({ value: true }) as any
     );
 
     component.editarPlantilla();
@@ -166,7 +166,7 @@ describe('CrearDocumentoComponent', () => {
     const row = {
       plantilla_html: '<h1>hola</h1>',
       nombre: 'plantilla 1',
-      id: 2,
+      id: 2
     };
     component.editarDocumento(row);
     expect(component.html).toBe('<h1>hola</h1>');

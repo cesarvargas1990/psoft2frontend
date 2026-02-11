@@ -4,7 +4,7 @@ import { AuthService } from '../../_services/auth.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
   model: any = {};
@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
       },
       (error) => {
         console.error(error);
-      },
+      }
     );
   }
 }

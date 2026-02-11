@@ -3,7 +3,7 @@ import {
   HttpClient,
   HttpHeaders,
   HttpParams,
-  HttpErrorResponse,
+  HttpErrorResponse
 } from '@angular/common/http';
 import { environment } from './../../../environments/environment';
 import { AuthService } from '../../_services/auth.service';
@@ -11,16 +11,16 @@ import { Observable, throwError } from 'rxjs';
 import Swal from 'sweetalert2';
 import { map } from 'rxjs/operators';
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ClienteService {
   constructor(
     private http: HttpClient,
-    private authService: AuthService,
+    private authService: AuthService
   ) {}
 
   private server: string = environment.API_URL;
@@ -30,15 +30,15 @@ export class ClienteService {
     listadoclientes: this.server + '/listadoclientes',
     guardarArchivos: this.server + '/guardarArchivoAdjunto',
     editarArchivos: this.server + '/editarArchivoAdjunto',
-    prestamosCliente: this.server + '/prestamosCliente',
+    prestamosCliente: this.server + '/prestamosCliente'
   };
 
   httpOpts: any = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-    }),
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`
+    })
   };
   handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
@@ -49,20 +49,20 @@ export class ClienteService {
       // The response body may contain clues as to what went wrong,
       console.error(
         `Backend returned code ${error.status}, ` +
-          `body was: ${error.error.error}`,
+          `body was: ${error.error.error}`
       );
 
       if (error.error.error == 'Unauthorized') {
         Swal.fire({
           type: 'error',
           title: 'Error al iniciar',
-          text: 'Verifique usuario o password',
+          text: 'Verifique usuario o password'
         });
       }
     }
     // return an observable with a user-facing error message
     return throwError(
-      'Error en la respuesta del servidor (verifique conexion a internet).',
+      'Error en la respuesta del servidor (verifique conexion a internet).'
     );
   }
 
@@ -71,7 +71,7 @@ export class ClienteService {
     return this.http.post(
       `${this.services.psclientes}` + '/' + id_empresa,
       data,
-      this.httpOpts,
+      this.httpOpts
     );
   }
 
@@ -79,7 +79,7 @@ export class ClienteService {
     const id_empresa = localStorage.getItem('id_empresa');
     return this.http.get(
       `${this.services.listadoclientes}` + '/' + id_empresa,
-      this.httpOpts,
+      this.httpOpts
     );
   }
 
@@ -87,14 +87,14 @@ export class ClienteService {
     return this.http.put(
       `${this.services.psclientes}` + '/' + data.id,
       data,
-      this.httpOpts,
+      this.httpOpts
     );
   }
 
   deleteCliente(data): Observable<any> {
     return this.http.delete(
       `${this.services.psclientes}` + '/' + data.id,
-      this.httpOpts,
+      this.httpOpts
     );
   }
 
@@ -110,7 +110,7 @@ export class ClienteService {
     return this.http.post(
       `${this.services.guardarArchivos}`,
       data,
-      this.httpOpts,
+      this.httpOpts
     );
   }
 
@@ -120,7 +120,7 @@ export class ClienteService {
     return this.http.put(
       `${this.services.editarArchivos}`,
       data,
-      this.httpOpts,
+      this.httpOpts
     );
   }
 
@@ -130,7 +130,7 @@ export class ClienteService {
     return this.http.post(
       `${this.services.prestamosCliente}`,
       data,
-      this.httpOpts,
+      this.httpOpts
     );
   }
 

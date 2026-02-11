@@ -4,7 +4,7 @@ import {
   ElementRef,
   OnInit,
   ChangeDetectorRef,
-  AfterViewInit,
+  AfterViewInit
 } from '@angular/core';
 
 import { NavItem } from '../../../_models/nav-item';
@@ -20,7 +20,7 @@ import { PrestamosService } from '../../../_services/prestamos/prestamos.service
 import {
   MatDialog,
   MatDialogRef,
-  MAT_DIALOG_DATA,
+  MAT_DIALOG_DATA
 } from '@angular/material/dialog';
 import { TipodocidentiService } from '../../../_services/tipodocidenti/tipodocidenti.service';
 import { UsersService } from '../../../_services/users/users.service';
@@ -34,7 +34,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-crear-documento',
   templateUrl: './crear-documento.component.html',
-  styleUrls: ['./crear-documento.component.scss'],
+  styleUrls: ['./crear-documento.component.scss']
 })
 export class CrearDocumentoComponent implements AfterViewInit {
   html = ``;
@@ -84,7 +84,7 @@ export class CrearDocumentoComponent implements AfterViewInit {
     public tipodocidentiService: TipodocidentiService,
     public usersService: UsersService,
     public prestamosService: PrestamosService,
-    public dialog: MatDialog,
+    public dialog: MatDialog
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -122,8 +122,8 @@ export class CrearDocumentoComponent implements AfterViewInit {
         init_instance_callback() {},
         content_css: [
           '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-          '//www.tinymce.com/css/codepen.min.css',
-        ],
+          '//www.tinymce.com/css/codepen.min.css'
+        ]
       };
     });
 
@@ -138,15 +138,15 @@ export class CrearDocumentoComponent implements AfterViewInit {
             className: 'col-md-6',
             type: 'input',
             modelOptions: {
-              updateOn: 'blur',
+              updateOn: 'blur'
             },
             templateOptions: {
               label: 'Nombre plantilla',
-              required: true,
-            },
-          },
-        ],
-      },
+              required: true
+            }
+          }
+        ]
+      }
     ];
 
     this.getDatosDocumentos();
@@ -165,7 +165,7 @@ export class CrearDocumentoComponent implements AfterViewInit {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Si!',
-      cancelButtonText: 'No!',
+      cancelButtonText: 'No!'
     }).then((result) => {
       if (result.value == true) {
         this.prestamosService.deleteDocumentoPlantilla(row).subscribe(
@@ -173,7 +173,7 @@ export class CrearDocumentoComponent implements AfterViewInit {
             Swal.fire({
               type: 'info',
               title: 'Informaci&oacute;n',
-              text: 'Se elimino satisfactoriamente el registro.',
+              text: 'Se elimino satisfactoriamente el registro.'
             });
 
             this.getDatosDocumentos();
@@ -183,9 +183,9 @@ export class CrearDocumentoComponent implements AfterViewInit {
             Swal.fire({
               type: 'error',
               title: 'Error',
-              text: error,
+              text: error
             });
-          },
+          }
         );
       }
     });
@@ -205,7 +205,7 @@ export class CrearDocumentoComponent implements AfterViewInit {
         Swal.fire(
           'Error',
           'El contenido de la plantilla no puede estar vacio',
-          'error',
+          'error'
         );
         return false;
       }
@@ -222,7 +222,7 @@ export class CrearDocumentoComponent implements AfterViewInit {
           Swal.fire({
             type: 'info',
             title: 'Informaci&oacute;n',
-            text: 'Se crea satisfactoriamente el documento.',
+            text: 'Se crea satisfactoriamente el documento.'
           });
           // this.router.navigate(['/formaspago/listar']);
         });
@@ -230,7 +230,7 @@ export class CrearDocumentoComponent implements AfterViewInit {
       Swal.fire({
         type: 'error',
         title: 'Error',
-        text: 'Por favor valide los campos obligatorios, para guardar la forma de pago.',
+        text: 'Por favor valide los campos obligatorios, para guardar la forma de pago.'
       });
     }
   }
@@ -247,7 +247,7 @@ export class CrearDocumentoComponent implements AfterViewInit {
       },
       (error) => {
         this.authService.logout();
-      },
+      }
     );
   }
 
@@ -296,7 +296,7 @@ export class CrearDocumentoComponent implements AfterViewInit {
             Swal.fire({
               type: 'info',
               title: 'Informaci&oacute;n',
-              text: 'Se actualizo satisfactoriamente el registro.',
+              text: 'Se actualizo satisfactoriamente el registro.'
             }).then((result) => {
               if (result.value == true) {
                 // this.dialogRef.close();

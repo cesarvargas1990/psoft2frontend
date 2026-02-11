@@ -3,7 +3,7 @@ import {
   ViewChild,
   ElementRef,
   ViewEncapsulation,
-  AfterViewInit,
+  AfterViewInit
 } from '@angular/core';
 import { VERSION } from '@angular/material';
 import { NavItem } from '../app/_models/nav-item';
@@ -14,7 +14,7 @@ import { AuthService } from '../app/_services/auth.service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements AfterViewInit {
   @ViewChild('appDrawer', { static: false }) appDrawer: ElementRef;
@@ -27,7 +27,7 @@ export class AppComponent implements AfterViewInit {
 
   constructor(
     private navService: NavService,
-    public authService: AuthService,
+    public authService: AuthService
   ) {}
 
   ngAfterViewInit() {

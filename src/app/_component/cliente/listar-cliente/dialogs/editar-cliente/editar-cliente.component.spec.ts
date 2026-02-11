@@ -3,7 +3,7 @@ import {
   TestBed,
   fakeAsync,
   tick,
-  flush,
+  flush
 } from '@angular/core/testing';
 import { EditarClienteComponent } from './editar-cliente.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -37,23 +37,23 @@ describe('EditarClienteComponent', () => {
     direcasa: 'calle 123',
     diretrabajo: 'carrera 456',
     ref1: 'Referencia A',
-    ref2: 'Referencia B',
+    ref2: 'Referencia B'
   };
 
   beforeEach(async () => {
     const clienteServiceSpy = jasmine.createSpyObj('ClienteService', [
       'updateCliente',
       'editFile',
-      'listadoArchivosCliente',
+      'listadoArchivosCliente'
     ]);
     const tipodocidentiServiceSpy = jasmine.createSpyObj(
       'TipodocidentiService',
-      ['getTipodocidenti'],
+      ['getTipodocidenti']
     );
     const usersServiceSpy = jasmine.createSpyObj('UsersService', ['getUsers']);
     const prestamosServiceSpy = jasmine.createSpyObj('PrestamosService', [
       'listaTiposDocumento',
-      'listadoArchivosCliente',
+      'listadoArchivosCliente'
     ]);
 
     await TestBed.configureTestingModule({
@@ -64,9 +64,9 @@ describe('EditarClienteComponent', () => {
         { provide: UsersService, useValue: usersServiceSpy },
         { provide: PrestamosService, useValue: prestamosServiceSpy },
         { provide: MatDialogRef, useValue: { close: () => {} } },
-        { provide: MAT_DIALOG_DATA, useValue: mockCliente },
+        { provide: MAT_DIALOG_DATA, useValue: mockCliente }
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
 
     fixture = TestBed.createComponent(EditarClienteComponent);
@@ -93,7 +93,7 @@ describe('EditarClienteComponent', () => {
     component.form.setErrors(null);
     component.editFirmar = true;
     component.signaturePad = {
-      toDataURL: () => 'data:image/png;base64,fake',
+      toDataURL: () => 'data:image/png;base64,fake'
     } as any;
 
     clienteService.updateCliente.and.returnValue(of(fakeResponse));
@@ -117,8 +117,8 @@ describe('EditarClienteComponent', () => {
     prestamosService.listadoArchivosCliente.and.returnValue(
       of([
         { id_tdocadjunto: 1, nombrearchivo: 'archivo1.png' },
-        { id_tdocadjunto: 2, nombrearchivo: 'archivo2.pdf' },
-      ]),
+        { id_tdocadjunto: 2, nombrearchivo: 'archivo2.pdf' }
+      ])
     );
 
     component.ngOnInit();
@@ -137,11 +137,11 @@ describe('EditarClienteComponent', () => {
 
   it('debe guardar imagen capturada en handleImage()', () => {
     const fakeImage = {
-      imageAsDataUrl: 'data:image/png;base64,fakeimage',
+      imageAsDataUrl: 'data:image/png;base64,fakeimage'
     } as WebcamImage;
     component.handleImage(fakeImage);
     expect(component.listaArchivos[component.currentIndexImage]).toBe(
-      'data:image/png;base64,fakeimage',
+      'data:image/png;base64,fakeimage'
     );
   });
 
@@ -186,7 +186,7 @@ describe('EditarClienteComponent', () => {
     const file = new File(['doc'], 'test.txt', { type: 'text/plain' });
     component.preview([file], 0);
     expect(component.message).toBe(
-      'Solo se Aceptan, Imagenes o Documentos PDF.',
+      'Solo se Aceptan, Imagenes o Documentos PDF.'
     );
   });
 });

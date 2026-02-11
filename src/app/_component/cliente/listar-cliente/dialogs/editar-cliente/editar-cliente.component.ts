@@ -3,13 +3,13 @@ import {
   OnInit,
   Inject,
   AfterViewInit,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Cliente } from '../../../../../_models/cliente';
 import {
   BASE_URL,
-  environment,
+  environment
 } from '../../../../../../environments/environment';
 import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
@@ -27,7 +27,7 @@ import { SignaturePad } from 'ngx-signaturepad/signature-pad';
   selector: 'app-editar-cliente',
   templateUrl: './editar-cliente.component.html',
   styleUrls: ['./editar-cliente.component.scss'],
-  providers: [DatePipe],
+  providers: [DatePipe]
 })
 export class EditarClienteComponent implements OnInit {
   @ViewChild(SignaturePad, { static: false }) public signaturePad: SignaturePad;
@@ -36,7 +36,7 @@ export class EditarClienteComponent implements OnInit {
     // passed through to szimek/signature_pad constructor
     minWidth: 5,
     canvasWidth: window.innerWidth,
-    canvasHeight: 300,
+    canvasHeight: 300
   };
 
   public imagePath;
@@ -151,7 +151,7 @@ export class EditarClienteComponent implements OnInit {
             Swal.fire({
               type: 'info',
               title: 'Informaci&oacute;n',
-              text: 'Se actualizo satisfactoriamente el registro.',
+              text: 'Se actualizo satisfactoriamente el registro.'
             }).then((result) => {
               if (result.value == true) {
                 this.dialogRef.close();
@@ -170,7 +170,7 @@ export class EditarClienteComponent implements OnInit {
     public tipodocidentiService: TipodocidentiService,
     public usersService: UsersService,
     private datePipe: DatePipe,
-    public prestamosService: PrestamosService,
+    public prestamosService: PrestamosService
   ) {}
 
   async ngAfterViewInit() {
@@ -185,12 +185,12 @@ export class EditarClienteComponent implements OnInit {
         defaultValue: this.data.nomcliente,
         modelOptions: {
           debounce: {
-            default: 2000,
-          },
+            default: 2000
+          }
         },
         templateOptions: {
-          label: 'Nombre Cliente',
-        },
+          label: 'Nombre Cliente'
+        }
       },
 
       {
@@ -199,14 +199,14 @@ export class EditarClienteComponent implements OnInit {
         type: 'select',
         defaultValue: this.data.id_cobrador,
         modelOptions: {
-          updateOn: 'blur',
+          updateOn: 'blur'
         },
         templateOptions: {
           label: 'Cobrador',
           placeholder: 'Seleccione cobrador',
           required: true,
-          options: this.cobradores,
-        },
+          options: this.cobradores
+        }
       },
       {
         key: 'id_tipo_docid',
@@ -214,13 +214,13 @@ export class EditarClienteComponent implements OnInit {
         type: 'select',
         defaultValue: this.data.id_tipo_docid,
         modelOptions: {
-          updateOn: 'blur',
+          updateOn: 'blur'
         },
         templateOptions: {
           label: 'Tipo Documento',
           required: true,
-          options: this.tiposdocumento,
-        },
+          options: this.tiposdocumento
+        }
       },
       {
         key: 'numdocumento',
@@ -228,12 +228,12 @@ export class EditarClienteComponent implements OnInit {
         type: 'input',
         defaultValue: this.data.numdocumento,
         modelOptions: {
-          updateOn: 'submit',
+          updateOn: 'submit'
         },
         templateOptions: {
           label: 'Numero Documento',
-          required: true,
-        },
+          required: true
+        }
       },
 
       {
@@ -243,13 +243,13 @@ export class EditarClienteComponent implements OnInit {
         type: 'datepicker',
 
         modelOptions: {
-          updateOn: 'blur',
+          updateOn: 'blur'
         },
         templateOptions: {
           label: 'Fecha Expedicion',
           placeholder: 'Fecha Expedicion',
-          required: true,
-        },
+          required: true
+        }
       },
 
       {
@@ -259,13 +259,13 @@ export class EditarClienteComponent implements OnInit {
         type: 'datepicker',
 
         modelOptions: {
-          updateOn: 'blur',
+          updateOn: 'blur'
         },
         templateOptions: {
           label: 'Fecha Nacimiento',
           placeholder: 'Fecha Nacimiento',
-          required: true,
-        },
+          required: true
+        }
       },
 
       {
@@ -274,12 +274,12 @@ export class EditarClienteComponent implements OnInit {
         type: 'input',
         defaultValue: this.data.ciudad,
         modelOptions: {
-          updateOn: 'submit',
+          updateOn: 'submit'
         },
         templateOptions: {
           label: 'Ciudad',
-          required: true,
-        },
+          required: true
+        }
       },
       {
         key: 'telefijo',
@@ -287,11 +287,11 @@ export class EditarClienteComponent implements OnInit {
         type: 'input',
         defaultValue: this.data.telefijo,
         modelOptions: {
-          updateOn: 'submit',
+          updateOn: 'submit'
         },
         templateOptions: {
-          label: 'Telefono Fijo',
-        },
+          label: 'Telefono Fijo'
+        }
       },
       {
         key: 'celular',
@@ -299,12 +299,12 @@ export class EditarClienteComponent implements OnInit {
         type: 'input',
         defaultValue: this.data.celular,
         modelOptions: {
-          updateOn: 'submit',
+          updateOn: 'submit'
         },
         templateOptions: {
           label: 'Celular',
-          required: true,
-        },
+          required: true
+        }
       },
 
       {
@@ -313,12 +313,12 @@ export class EditarClienteComponent implements OnInit {
         type: 'input',
         defaultValue: this.data.email,
         modelOptions: {
-          updateOn: 'submit',
+          updateOn: 'submit'
         },
         templateOptions: {
           label: 'Email',
-          required: true,
-        },
+          required: true
+        }
       },
 
       {
@@ -327,11 +327,11 @@ export class EditarClienteComponent implements OnInit {
         type: 'input',
         defaultValue: this.data.direcasa,
         modelOptions: {
-          updateOn: 'submit',
+          updateOn: 'submit'
         },
         templateOptions: {
-          label: 'Dir Casa',
-        },
+          label: 'Dir Casa'
+        }
       },
 
       {
@@ -340,11 +340,11 @@ export class EditarClienteComponent implements OnInit {
         type: 'input',
         defaultValue: this.data.diretrabajo,
         modelOptions: {
-          updateOn: 'submit',
+          updateOn: 'submit'
         },
         templateOptions: {
-          label: 'Dir Trabajo',
-        },
+          label: 'Dir Trabajo'
+        }
       },
 
       {
@@ -353,11 +353,11 @@ export class EditarClienteComponent implements OnInit {
         type: 'input',
         defaultValue: this.data.ref1,
         modelOptions: {
-          updateOn: 'submit',
+          updateOn: 'submit'
         },
         templateOptions: {
-          label: 'Referencia 1',
-        },
+          label: 'Referencia 1'
+        }
       },
       {
         key: 'ref2',
@@ -365,12 +365,12 @@ export class EditarClienteComponent implements OnInit {
         type: 'input',
         defaultValue: this.data.ref2,
         modelOptions: {
-          updateOn: 'submit',
+          updateOn: 'submit'
         },
         templateOptions: {
-          label: 'Referencia 2',
-        },
-      },
+          label: 'Referencia 2'
+        }
+      }
     ];
 
     this.prestamosService.listaTiposDocumento().subscribe((response) => {
@@ -388,7 +388,7 @@ export class EditarClienteComponent implements OnInit {
     WebcamUtil.getAvailableVideoInputs().then(
       (mediaDevices: MediaDeviceInfo[]) => {
         this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
-      },
+      }
     );
 
     this.prestamosService

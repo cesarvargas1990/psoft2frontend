@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { ClienteService } from './cliente.service';
 import {
   HttpClientTestingModule,
-  HttpTestingController,
+  HttpTestingController
 } from '@angular/common/http/testing';
 import { AuthService } from '../../_services/auth.service';
 import { environment } from './../../../environments/environment';
@@ -20,7 +20,7 @@ describe('ClienteService', () => {
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ClienteService, { provide: AuthService, useValue: authSpy }],
+      providers: [ClienteService, { provide: AuthService, useValue: authSpy }]
     });
 
     service = TestBed.get(ClienteService);
@@ -57,7 +57,7 @@ describe('ClienteService', () => {
     });
 
     const req = httpMock.expectOne(
-      `${environment.API_URL}/psclientes/${mockEmpresa}`,
+      `${environment.API_URL}/psclientes/${mockEmpresa}`
     );
     expect(req.request.method).toBe('POST');
     req.flush({ ok: true });
@@ -69,7 +69,7 @@ describe('ClienteService', () => {
     });
 
     const req = httpMock.expectOne(
-      `${environment.API_URL}/listadoclientes/${mockEmpresa}`,
+      `${environment.API_URL}/listadoclientes/${mockEmpresa}`
     );
     expect(req.request.method).toBe('GET');
     req.flush({ ok: true });
@@ -121,7 +121,7 @@ describe('ClienteService', () => {
     });
 
     const req = httpMock.expectOne(
-      `${environment.API_URL}/guardarArchivoAdjunto`,
+      `${environment.API_URL}/guardarArchivoAdjunto`
     );
     expect(req.request.method).toBe('POST');
     expect(req.request.body.id_empresa).toEqual(mockEmpresa);
@@ -137,7 +137,7 @@ describe('ClienteService', () => {
     });
 
     const req = httpMock.expectOne(
-      `${environment.API_URL}/editarArchivoAdjunto`,
+      `${environment.API_URL}/editarArchivoAdjunto`
     );
     expect(req.request.method).toBe('PUT');
     expect(req.request.body.id_empresa).toEqual(mockEmpresa);
@@ -162,7 +162,7 @@ describe('ClienteService', () => {
   it('debería convertir dataURL a archivo con dataURLtoFile()', () => {
     const file = service.dataURLtoFile(
       'data:image/png;base64,aGVsbG8=',
-      'test.png',
+      'test.png'
     );
     expect(file instanceof File).toBeTruthy();
     expect(file.name).toBe('test.png');

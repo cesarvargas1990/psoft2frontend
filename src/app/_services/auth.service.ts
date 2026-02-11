@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import {
   HttpClient,
   HttpHeaders,
-  HttpErrorResponse,
+  HttpErrorResponse
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
@@ -12,21 +12,21 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthService {
   basePath = environment.API_URL;
 
   constructor(
     private router: Router,
-    private http: HttpClient,
+    private http: HttpClient
   ) {}
 
   // Http Options
   httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-    }),
+      'Content-Type': 'application/json'
+    })
   };
 
   // Handle API errors
@@ -39,20 +39,20 @@ export class AuthService {
       // The response body may contain clues as to what went wrong,
       console.error(
         `Backend returned code ${error.status}, ` +
-          `body was: ${error.error.error}`,
+          `body was: ${error.error.error}`
       );
       console.log(error);
       if (error.error.message == 'Unauthorized') {
         Swal.fire({
           type: 'error',
           title: 'Error al iniciar',
-          text: 'Verifique usuario o password',
+          text: 'Verifique usuario o password'
         });
       }
     }
     // return an observable with a user-facing error message
     return throwError(
-      'Error en la respuesta del servidor (verifique conexion a internet).',
+      'Error en la respuesta del servidor (verifique conexion a internet).'
     );
   }
 
@@ -63,7 +63,7 @@ export class AuthService {
       .post<LoginResponse>(
         this.basePath + '/auth/login',
         data,
-        this.httpOptions,
+        this.httpOptions
       )
       .pipe(retry(2), catchError(this.handleError));
   }
@@ -98,8 +98,8 @@ export class AuthService {
     const httpOptionsAuth = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-      }),
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      })
     };
     return this.http
       .post<LoginResponse>(this.basePath + data.action, data, httpOptionsAuth)
@@ -120,8 +120,8 @@ export class AuthService {
     const httpOptionsAuth = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-      }),
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      })
     };
     return this.http
       .post<LoginResponse>(this.basePath + data.action, data, httpOptionsAuth)
@@ -132,8 +132,8 @@ export class AuthService {
     const httpOptionsAuth = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-      }),
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      })
     };
     return this.http
       .post<any>(this.basePath + data.action, data, httpOptionsAuth)

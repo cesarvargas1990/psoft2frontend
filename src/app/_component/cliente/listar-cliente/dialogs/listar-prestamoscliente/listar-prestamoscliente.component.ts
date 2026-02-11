@@ -14,7 +14,7 @@ import { DatePipe } from '@angular/common';
   selector: 'app-listar-prestamoscliente',
   templateUrl: './listar-prestamoscliente.component.html',
   styleUrls: ['./listar-prestamoscliente.component.scss'],
-  providers: [DatePipe],
+  providers: [DatePipe]
 })
 export class ListarPrestamosclienteComponent implements OnInit {
   form = new FormGroup({});
@@ -35,7 +35,7 @@ export class ListarPrestamosclienteComponent implements OnInit {
           Swal.fire({
             type: 'info',
             title: 'Informaci&oacute;n',
-            text: 'Se actualizo satisfactoriamente el registro.',
+            text: 'Se actualizo satisfactoriamente el registro.'
           }).then((result) => {
             if (result.value == true) {
               this.dialogRef.close();
@@ -66,7 +66,7 @@ export class ListarPrestamosclienteComponent implements OnInit {
     public clienteServicio: ClienteService,
     public tipodocidentiService: TipodocidentiService,
     public usersService: UsersService,
-    private datePipe: DatePipe,
+    private datePipe: DatePipe
   ) {}
 
   async ngAfterViewInit() {
@@ -88,12 +88,12 @@ export class ListarPrestamosclienteComponent implements OnInit {
         defaultValue: this.data.nomcliente,
         modelOptions: {
           debounce: {
-            default: 2000,
-          },
+            default: 2000
+          }
         },
         templateOptions: {
-          label: 'Nombre Cliente',
-        },
+          label: 'Nombre Cliente'
+        }
       },
 
       {
@@ -102,14 +102,14 @@ export class ListarPrestamosclienteComponent implements OnInit {
         type: 'select',
         defaultValue: this.data.id_cobrador,
         modelOptions: {
-          updateOn: 'blur',
+          updateOn: 'blur'
         },
         templateOptions: {
           label: 'Cobrador',
           placeholder: 'Seleccione cobrador',
           required: true,
-          options: this.cobradores,
-        },
+          options: this.cobradores
+        }
       },
       {
         key: 'id_tipo_docid',
@@ -117,13 +117,13 @@ export class ListarPrestamosclienteComponent implements OnInit {
         type: 'select',
         defaultValue: this.data.id_tipo_docid,
         modelOptions: {
-          updateOn: 'blur',
+          updateOn: 'blur'
         },
         templateOptions: {
           label: 'Tipo Documento',
           required: true,
-          options: this.tiposdocumento,
-        },
+          options: this.tiposdocumento
+        }
       },
       {
         key: 'numdocumento',
@@ -131,12 +131,12 @@ export class ListarPrestamosclienteComponent implements OnInit {
         type: 'input',
         defaultValue: this.data.numdocumento,
         modelOptions: {
-          updateOn: 'submit',
+          updateOn: 'submit'
         },
         templateOptions: {
           label: 'Numero Documento',
-          required: true,
-        },
+          required: true
+        }
       },
 
       {
@@ -146,13 +146,13 @@ export class ListarPrestamosclienteComponent implements OnInit {
         type: 'datepicker',
 
         modelOptions: {
-          updateOn: 'blur',
+          updateOn: 'blur'
         },
         templateOptions: {
           label: 'Fecha Expedicion',
           placeholder: 'Fecha Expedicion',
-          required: true,
-        },
+          required: true
+        }
       },
 
       {
@@ -162,13 +162,13 @@ export class ListarPrestamosclienteComponent implements OnInit {
         type: 'datepicker',
 
         modelOptions: {
-          updateOn: 'blur',
+          updateOn: 'blur'
         },
         templateOptions: {
           label: 'Fecha Nacimiento',
           placeholder: 'Fecha Nacimiento',
-          required: true,
-        },
+          required: true
+        }
       },
 
       {
@@ -177,12 +177,12 @@ export class ListarPrestamosclienteComponent implements OnInit {
         type: 'input',
         defaultValue: this.data.ciudad,
         modelOptions: {
-          updateOn: 'submit',
+          updateOn: 'submit'
         },
         templateOptions: {
           label: 'Ciudad',
-          required: true,
-        },
+          required: true
+        }
       },
       {
         key: 'telefijo',
@@ -190,11 +190,11 @@ export class ListarPrestamosclienteComponent implements OnInit {
         type: 'input',
         defaultValue: this.data.telefijo,
         modelOptions: {
-          updateOn: 'submit',
+          updateOn: 'submit'
         },
         templateOptions: {
-          label: 'Telefono Fijo',
-        },
+          label: 'Telefono Fijo'
+        }
       },
       {
         key: 'celular',
@@ -202,12 +202,12 @@ export class ListarPrestamosclienteComponent implements OnInit {
         type: 'input',
         defaultValue: this.data.celular,
         modelOptions: {
-          updateOn: 'submit',
+          updateOn: 'submit'
         },
         templateOptions: {
           label: 'Celular',
-          required: true,
-        },
+          required: true
+        }
       },
 
       {
@@ -216,12 +216,12 @@ export class ListarPrestamosclienteComponent implements OnInit {
         type: 'input',
         defaultValue: this.data.email,
         modelOptions: {
-          updateOn: 'submit',
+          updateOn: 'submit'
         },
         templateOptions: {
           label: 'Email',
-          required: true,
-        },
+          required: true
+        }
       },
 
       {
@@ -230,11 +230,11 @@ export class ListarPrestamosclienteComponent implements OnInit {
         type: 'input',
         defaultValue: this.data.direcasa,
         modelOptions: {
-          updateOn: 'submit',
+          updateOn: 'submit'
         },
         templateOptions: {
-          label: 'Dir Casa',
-        },
+          label: 'Dir Casa'
+        }
       },
 
       {
@@ -243,11 +243,11 @@ export class ListarPrestamosclienteComponent implements OnInit {
         type: 'input',
         defaultValue: this.data.diretrabajo,
         modelOptions: {
-          updateOn: 'submit',
+          updateOn: 'submit'
         },
         templateOptions: {
-          label: 'Dir Trabajo',
-        },
+          label: 'Dir Trabajo'
+        }
       },
 
       {
@@ -256,11 +256,11 @@ export class ListarPrestamosclienteComponent implements OnInit {
         type: 'input',
         defaultValue: this.data.ref1,
         modelOptions: {
-          updateOn: 'submit',
+          updateOn: 'submit'
         },
         templateOptions: {
-          label: 'Referencia 1',
-        },
+          label: 'Referencia 1'
+        }
       },
       {
         key: 'ref2',
@@ -268,12 +268,12 @@ export class ListarPrestamosclienteComponent implements OnInit {
         type: 'input',
         defaultValue: this.data.ref2,
         modelOptions: {
-          updateOn: 'submit',
+          updateOn: 'submit'
         },
         templateOptions: {
-          label: 'Referencia 2',
-        },
-      },
+          label: 'Referencia 2'
+        }
+      }
     ];
   }
   async ngOnInit() {}

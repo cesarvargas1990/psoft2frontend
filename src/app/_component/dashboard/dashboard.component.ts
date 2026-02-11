@@ -3,7 +3,7 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
-  ChangeDetectorRef,
+  ChangeDetectorRef
 } from '@angular/core';
 import { AuthService } from '../../_services/auth.service';
 import { NavItem } from '../../_models/nav-item';
@@ -20,7 +20,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import {
   MatDialog,
   MatDialogRef,
-  MAT_DIALOG_DATA,
+  MAT_DIALOG_DATA
 } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 
@@ -29,7 +29,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
+  styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements AfterViewInit {
   constructor(
@@ -39,7 +39,7 @@ export class DashboardComponent implements AfterViewInit {
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
     public prestamosService: PrestamosService,
-    private router: Router,
+    private router: Router
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -80,14 +80,14 @@ export class DashboardComponent implements AfterViewInit {
     'nomfpago',
     'celular',
     'direcasa',
-    'action',
+    'action'
   ];
   displayedColumnsFecPago: string[] = [
     'fecha_pago',
     'fecha_realpago',
     'valcuota',
     'valtotal',
-    'action',
+    'action'
   ];
 
   dataSource = new MatTableDataSource([]);
@@ -111,17 +111,17 @@ export class DashboardComponent implements AfterViewInit {
   chartOption: EChartOption = {
     xAxis: {
       type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     },
     yAxis: {
-      type: 'value',
+      type: 'value'
     },
     series: [
       {
         data: [820, 932, 901, 934, 1290, 1330, 1320],
-        type: 'line',
-      },
-    ],
+        type: 'line'
+      }
+    ]
   };
 
   mobileQuery: MediaQueryList;
@@ -182,7 +182,7 @@ export class DashboardComponent implements AfterViewInit {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Si!',
-      cancelButtonText: 'No!',
+      cancelButtonText: 'No!'
     }).then((result) => {
       if (result.value == true) {
         this.prestamosService.deletePrestamo(row).subscribe((response) => {
@@ -225,8 +225,8 @@ export class DashboardComponent implements AfterViewInit {
       init_instance_callback() {},
       content_css: [
         '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-        '//www.tinymce.com/css/codepen.min.css',
-      ],
+        '//www.tinymce.com/css/codepen.min.css'
+      ]
     };
     this.refresh();
   }
@@ -255,7 +255,7 @@ export class DashboardComponent implements AfterViewInit {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Si!',
-      cancelButtonText: 'No!',
+      cancelButtonText: 'No!'
     }).then((result) => {
       if (result.value == true) {
         // var currency = row.valtotal;

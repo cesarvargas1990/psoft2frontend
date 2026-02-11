@@ -2,7 +2,7 @@ import {
   ComponentFixture,
   TestBed,
   fakeAsync,
-  tick,
+  tick
 } from '@angular/core/testing';
 import { DashboardComponent } from './dashboard.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -37,13 +37,13 @@ describe('DashboardComponent', () => {
       'listaFechasPago',
       'renderTemplates',
       'registrarPagoCuota',
-      'deletePrestamo',
+      'deletePrestamo'
     ]);
 
     authServiceSpy = jasmine.createSpyObj('AuthService', [
       'logout',
       'isLoggedIn',
-      'tienePermiso',
+      'tienePermiso'
     ]);
 
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
@@ -54,7 +54,7 @@ describe('DashboardComponent', () => {
       total_prestado_hoy: '200',
       total_interes_hoy: '50',
       total_interes: '300',
-      total_prestado: '1200',
+      total_prestado: '1200'
     };
 
     prestamosServiceSpy.totales_dashboard.and.returnValue(of(fakeResponse));
@@ -62,7 +62,7 @@ describe('DashboardComponent', () => {
     prestamosServiceSpy.listaFechasPago.and.returnValue(of([]));
     prestamosServiceSpy.renderTemplates.and.returnValue(of([]));
     prestamosServiceSpy.registrarPagoCuota.and.returnValue(
-      of({ success: true }),
+      of({ success: true })
     );
     prestamosServiceSpy.deletePrestamo.and.returnValue(of({}));
 
@@ -75,16 +75,16 @@ describe('DashboardComponent', () => {
         MatSortModule,
         MatTableModule,
         BrowserAnimationsModule,
-        FormsModule,
+        FormsModule
       ],
       providers: [
         { provide: PrestamosService, useValue: prestamosServiceSpy },
         { provide: AuthService, useValue: authServiceSpy },
         { provide: NavService, useValue: { appDrawer: null } },
         { provide: Router, useValue: routerSpy },
-        { provide: MatDialog, useValue: dialogSpy },
+        { provide: MatDialog, useValue: dialogSpy }
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
   });
 
@@ -107,7 +107,7 @@ describe('DashboardComponent', () => {
   it('should navigate to crear prestamo', () => {
     component.irPantallaCrearPrestamo();
     expect(routerSpy.navigate).toHaveBeenCalledWith([
-      '/clientes/crearPrestamo',
+      '/clientes/crearPrestamo'
     ]);
   });
 

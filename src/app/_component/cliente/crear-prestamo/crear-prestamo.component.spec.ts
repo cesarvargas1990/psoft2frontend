@@ -5,7 +5,7 @@ import {
   fakeAsync,
   tick,
   flush,
-  discardPeriodicTasks,
+  discardPeriodicTasks
 } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
@@ -89,7 +89,7 @@ class MockMediaMatcher {
     return {
       matches: false,
       addListener: () => {},
-      removeListener: () => {},
+      removeListener: () => {}
     };
   }
 }
@@ -103,7 +103,7 @@ describe('CrearPrestamoComponent', () => {
   beforeEach(async(() => {
     localStorage.setItem(
       'menu_usuario',
-      JSON.stringify([{ displayName: 'Test', iconName: 'test' }]),
+      JSON.stringify([{ displayName: 'Test', iconName: 'test' }])
     );
 
     TestBed.configureTestingModule({
@@ -116,9 +116,9 @@ describe('CrearPrestamoComponent', () => {
         { provide: UsersService, useClass: MockUsersService },
         { provide: PrestamosService, useClass: MockPrestamosService },
         { provide: Router, useClass: MockRouter },
-        { provide: MediaMatcher, useClass: MockMediaMatcher },
+        { provide: MediaMatcher, useClass: MockMediaMatcher }
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 
@@ -154,10 +154,10 @@ describe('CrearPrestamoComponent', () => {
   it('debe llamar guardarPrestamo si formulario es válido', fakeAsync(() => {
     const guardarSpy = spyOn(
       prestamosService,
-      'guardarPrestamo',
+      'guardarPrestamo'
     ).and.callThrough();
     const swalSpy = spyOn(Swal, 'fire').and.returnValue(
-      Promise.resolve({ value: true }),
+      Promise.resolve({ value: true })
     );
 
     component.model = {
@@ -168,7 +168,7 @@ describe('CrearPrestamoComponent', () => {
       fec_inicial: new Date(),
       id_periodo_pago: 1,
       id_sistema_pago: 1,
-      id_cobrador: 1,
+      id_cobrador: 1
     };
 
     component.form.patchValue(component.model);
@@ -187,7 +187,7 @@ describe('CrearPrestamoComponent', () => {
   it('debe combinar contenido HTML correctamente', () => {
     const htmlItems = [
       { plantilla_html: '<html><body>Texto A</body></html>' },
-      { plantilla_html: '<html><body>Texto B</body></html>' },
+      { plantilla_html: '<html><body>Texto B</body></html>' }
     ];
     component.combinarContenido(htmlItems);
     expect(component.contenidoCombinado).toContain('Texto A');
@@ -197,7 +197,7 @@ describe('CrearPrestamoComponent', () => {
 
   it('debe limpiar HTML removiendo body y head', () => {
     const limpio = component.limpiarHTML(
-      `<html><head></head><body>Contenido</body></html>`,
+      `<html><head></head><body>Contenido</body></html>`
     );
     expect(limpio).toBe('Contenido');
   });
@@ -211,7 +211,7 @@ describe('CrearPrestamoComponent', () => {
       fec_inicial: new Date(),
       id_periodo_pago: 1,
       id_sistema_pago: 1,
-      id_cobrador: 1,
+      id_cobrador: 1
     };
     component.form.patchValue(modelValido);
     component.form.setErrors(null);
@@ -223,7 +223,7 @@ describe('CrearPrestamoComponent', () => {
   it('getHeaders debe retornar los headers de la tabla', () => {
     component.tableCuotasPrestamo = [
       { cuota: 1, valor: 100000 },
-      { cuota: 2, valor: 120000 },
+      { cuota: 2, valor: 120000 }
     ];
     const headers = component.getHeaders();
     expect(headers).toContain('cuota');

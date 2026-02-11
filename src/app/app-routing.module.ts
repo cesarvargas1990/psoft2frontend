@@ -15,15 +15,15 @@ const routes: Routes = [
   {
     path: 'dashboard',
     canActivate: [AuthGuard],
-    component: DashboardComponent,
+    component: DashboardComponent
   },
   {
     path: 'login',
-    component: LoginComponent,
+    component: LoginComponent
   },
   {
     path: 'logout',
-    component: LogoutComponent,
+    component: LogoutComponent
   },
   {
     path: 'clientes',
@@ -31,19 +31,19 @@ const routes: Routes = [
       {
         path: 'crear',
         component: CrearClienteComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard]
       },
       {
         path: 'listar',
         component: ListarClienteComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard]
       },
       {
         path: 'crearPrestamo',
         component: CrearPrestamoComponent,
-        canActivate: [AuthGuard],
-      },
-    ],
+        canActivate: [AuthGuard]
+      }
+    ]
   },
 
   {
@@ -52,24 +52,24 @@ const routes: Routes = [
       {
         path: 'documentos',
         component: CrearDocumentoComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard]
       },
 
       {
         path: 'empresa',
         component: EmpresaParametrosComponent,
-        canActivate: [AuthGuard],
-      },
-    ],
+        canActivate: [AuthGuard]
+      }
+    ]
   },
 
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: '**', redirectTo: '/login' },
+  { path: '**', redirectTo: '/login' }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers: [],
+  providers: []
 })
 export class AppRoutingModule {}

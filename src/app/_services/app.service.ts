@@ -6,7 +6,7 @@ export class AppService {
     const csvData = this.ConvertToCSV(data, headers, separador);
 
     const blob = new Blob(['\ufeff' + csvData], {
-      type: 'text/csv;charset=utf-8;',
+      type: 'text/csv;charset=utf-8;'
     });
     const dwldLink = document.createElement('a');
     const url = URL.createObjectURL(blob);
@@ -50,7 +50,7 @@ export class AppService {
   downloadFileFromText(
     data,
     filenameWithExtension = 'report.txt',
-    typeFile = 'text/html;charset=utf-8;',
+    typeFile = 'text/html;charset=utf-8;'
   ) {
     const blob = new Blob(['\ufeff' + data], { type: typeFile });
     const dwldLink = document.createElement('a');

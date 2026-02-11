@@ -1,7 +1,7 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 import {
   HttpClientTestingModule,
-  HttpTestingController,
+  HttpTestingController
 } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -17,7 +17,7 @@ describe('UsersService', () => {
   // Mock AuthService si en algún momento se usa internamente
   const mockAuthService = {
     isAuthenticated: () => true,
-    getToken: () => 'fake-token',
+    getToken: () => 'fake-token'
   };
 
   beforeEach(() => {
@@ -26,18 +26,18 @@ describe('UsersService', () => {
       (key: string): string | null => {
         const fakeStorage: { [key: string]: string } = {
           access_token: 'fake-token',
-          id: '123',
+          id: '123'
         };
         return fakeStorage[key] || null;
-      },
+      }
     );
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
         UsersService,
-        { provide: AuthService, useValue: mockAuthService },
-      ],
+        { provide: AuthService, useValue: mockAuthService }
+      ]
     });
 
     injector = getTestBed();

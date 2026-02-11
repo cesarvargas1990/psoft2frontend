@@ -5,7 +5,7 @@ import { LoaderService } from '../loader.service';
 @Component({
   selector: 'app-loading',
   templateUrl: './loader.component.html',
-  styleUrls: ['./loader.component.scss'],
+  styleUrls: ['./loader.component.scss']
 })
 export class LoaderComponent implements OnInit {
   loading: boolean;

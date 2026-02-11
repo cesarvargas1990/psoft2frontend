@@ -13,7 +13,7 @@ describe('NavService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [NavService, { provide: Router, useClass: MockRouter }],
+      providers: [NavService, { provide: Router, useClass: MockRouter }]
     });
 
     service = TestBed.get(NavService);

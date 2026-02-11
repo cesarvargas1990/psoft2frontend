@@ -10,6 +10,6 @@ import { FieldType } from '@ngx-formly/material';
       [formControl]="formControl"
       [formlyAttributes]="field"
     />
-  `,
+  `
 })
 export class FormlyFieldInput extends FieldType {}

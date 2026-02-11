@@ -7,7 +7,7 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor,
+  HttpInterceptor
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LoaderService } from './loader.service';
@@ -18,7 +18,7 @@ export class LoaderInterceptor implements HttpInterceptor {
 
   constructor(
     private loaderService: LoaderService,
-    private router: Router,
+    private router: Router
   ) {}
 
   removeRequest(req: HttpRequest<any>) {
@@ -31,7 +31,7 @@ export class LoaderInterceptor implements HttpInterceptor {
 
   intercept(
     req: HttpRequest<any>,
-    next: HttpHandler,
+    next: HttpHandler
   ): Observable<HttpEvent<any>> {
     this.requests.push(req);
     console.log('No of requests--->' + this.requests.length);
@@ -52,7 +52,7 @@ export class LoaderInterceptor implements HttpInterceptor {
         () => {
           this.removeRequest(req);
           observer.complete();
-        },
+        }
       );
       // remove request from queue when cancelled
       return () => {

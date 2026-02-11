@@ -7,7 +7,7 @@ import {
   state,
   style,
   transition,
-  trigger,
+  trigger
 } from '@angular/animations';
 
 @Component({
@@ -20,10 +20,10 @@ import {
       state('expanded', style({ transform: 'rotate(180deg)' })),
       transition(
         'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4,0.0,0.2,1)'),
-      ),
-    ]),
-  ],
+        animate('225ms cubic-bezier(0.4,0.0,0.2,1)')
+      )
+    ])
+  ]
 })
 export class MenuListItemComponent implements OnInit {
   expanded: boolean;
@@ -33,7 +33,7 @@ export class MenuListItemComponent implements OnInit {
 
   constructor(
     public navService: NavService,
-    public router: Router,
+    public router: Router
   ) {
     if (this.depth === undefined) {
       this.depth = 0;

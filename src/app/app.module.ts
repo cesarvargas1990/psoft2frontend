@@ -26,7 +26,7 @@ import {
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
-  MatTableModule,
+  MatTableModule
 } from '@angular/material';
 
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -82,12 +82,12 @@ import { DatePipe } from '@angular/common';
 // import { MatPaginatorIntlEs } from '../app/_models/paginator_lang_es';
 import {
   MAT_MOMENT_DATE_FORMATS,
-  MomentDateAdapter,
+  MomentDateAdapter
 } from '@angular/material-moment-adapter';
 import {
   DateAdapter,
   MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
+  MAT_DATE_LOCALE
 } from '@angular/material/core';
 
 import { LoaderComponent } from './loader/loader.component';
@@ -185,7 +185,7 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
     MatFormFieldModule,
     MatPaginatorModule,
     MatTableModule,
-    MatSortModule,
+    MatSortModule
   ],
   imports: [
     BrowserModule,
@@ -250,19 +250,19 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
       types: [
         {
           name: 'input',
-          component: FormlyFieldInput,
-        },
+          component: FormlyFieldInput
+        }
       ],
       validationMessages: [
         { name: 'ip', message: IpValidatorMessage },
-        { name: 'required', message: 'El campo es obligatorio' },
-      ],
+        { name: 'required', message: 'El campo es obligatorio' }
+      ]
     }),
     NgxTinymceModule.forRoot({
-      baseURL: './assets/tinymce/',
+      baseURL: './assets/tinymce/'
     }),
     SignaturePadModule,
-    WebcamModule,
+    WebcamModule
   ],
   declarations: [
     AppComponent,
@@ -291,7 +291,7 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
 
     EmpresaParametrosComponent,
 
-    LogoutComponent,
+    LogoutComponent
   ],
   bootstrap: [AppComponent],
   entryComponents: [
@@ -301,7 +301,7 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
     EditarClienteComponent,
     // EditarDocumentoComponent,
     ListarPrestamosclienteComponent,
-    ListarDocumentosprestamoComponent,
+    ListarDocumentosprestamoComponent
   ],
   providers: [
     LoaderService,
@@ -313,18 +313,18 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE],
+      deps: [MAT_DATE_LOCALE]
     },
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
     {
       provide: HIGHLIGHT_OPTIONS,
       useValue: {
-        languages: getHighlightLanguages(),
-      },
+        languages: getHighlightLanguages()
+      }
     },
 
-    AppService,
-  ],
+    AppService
+  ]
 })
 export class AppModule {}
 
@@ -332,6 +332,6 @@ export function getHighlightLanguages() {
   return {
     typescript: () => import('highlight.js/lib/languages/typescript'),
     css: () => import('highlight.js/lib/languages/css'),
-    xml: () => import('highlight.js/lib/languages/xml'),
+    xml: () => import('highlight.js/lib/languages/xml')
   };
 }

@@ -2,7 +2,7 @@ import {
   ComponentFixture,
   TestBed,
   fakeAsync,
-  tick,
+  tick
 } from '@angular/core/testing';
 import { ListarClienteComponent } from './listar-cliente.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
@@ -42,12 +42,12 @@ describe('ListarClienteComponent', () => {
   beforeEach(async () => {
     const clienteSpy = jasmine.createSpyObj('ClienteService', [
       'getAllClientes',
-      'deleteCliente',
+      'deleteCliente'
     ]);
     const authSpy = jasmine.createSpyObj('AuthService', [
       'logout',
       'isLoggedIn',
-      'tienePermiso',
+      'tienePermiso'
     ]);
     const navSpy = jasmine.createSpyObj('NavService', ['dummyMethod']);
     dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
@@ -74,22 +74,22 @@ describe('ListarClienteComponent', () => {
         ReactiveFormsModule,
         FormsModule,
         FormlyModule.forRoot(),
-        FormlyMaterialModule,
+        FormlyMaterialModule
       ],
       providers: [
         { provide: ClienteService, useValue: clienteSpy },
         { provide: AuthService, useValue: authSpy },
         { provide: NavService, useValue: navSpy },
-        { provide: MatDialog, useValue: dialogSpy },
+        { provide: MatDialog, useValue: dialogSpy }
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ListarClienteComponent);
     component = fixture.componentInstance;
 
     clienteServiceSpy = TestBed.get(
-      ClienteService,
+      ClienteService
     ) as jasmine.SpyObj<ClienteService>;
     authServiceSpy = TestBed.get(AuthService) as jasmine.SpyObj<AuthService>;
 
@@ -113,7 +113,7 @@ describe('ListarClienteComponent', () => {
 
   it('debería obtener datos de cliente al inicializar', fakeAsync(() => {
     clienteServiceSpy.getAllClientes.and.returnValue(
-      of([{ nomcliente: 'Prueba' }]),
+      of([{ nomcliente: 'Prueba' }])
     );
     component.getDatosCliente();
     tick();
@@ -147,7 +147,7 @@ describe('ListarClienteComponent', () => {
     const mockFile = new File(['img'], 'image.png', { type: 'image/png' });
     spyOn(window as any, 'FileReader').and.returnValue({
       readAsDataURL: () => {},
-      onload: () => {},
+      onload: () => {}
     });
     component.preview([mockFile], 0);
     expect(component.message).toBeUndefined();
@@ -163,7 +163,7 @@ describe('ListarClienteComponent', () => {
     const mockImage = { imageAsDataUrl: 'data:image/png;base64,test' } as any;
     component.handleImage(mockImage);
     expect(component.listaArchivos[component.currentIndexImage]).toBe(
-      'data:image/png;base64,test',
+      'data:image/png;base64,test'
     );
   });
 

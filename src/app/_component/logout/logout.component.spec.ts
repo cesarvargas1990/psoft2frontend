@@ -13,7 +13,7 @@ describe('LogoutComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [LogoutComponent],
-      providers: [{ provide: AuthService, useValue: authServiceSpy }],
+      providers: [{ provide: AuthService, useValue: authServiceSpy }]
     }).compileComponents();
   });
 

@@ -1,7 +1,7 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 import {
   HttpClientTestingModule,
-  HttpTestingController,
+  HttpTestingController
 } from '@angular/common/http/testing';
 import { PrestamosService } from './prestamos.service';
 import { AuthService } from '../../_services/auth.service';
@@ -17,7 +17,7 @@ describe('PrestamosService', () => {
   const mockUsuarioId = '999';
 
   const mockAuthService = {
-    isAuthenticated: () => true,
+    isAuthenticated: () => true
   };
 
   beforeEach(() => {
@@ -27,18 +27,18 @@ describe('PrestamosService', () => {
           access_token: 'fake-token',
           id_empresa: mockEmpresaId,
           id: mockUsuarioId,
-          id_usuario: mockUsuarioId,
+          id_usuario: mockUsuarioId
         };
         return storage[key] || null;
-      },
+      }
     );
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
         PrestamosService,
-        { provide: AuthService, useValue: mockAuthService },
-      ],
+        { provide: AuthService, useValue: mockAuthService }
+      ]
     });
 
     injector = getTestBed();
@@ -70,7 +70,7 @@ describe('PrestamosService', () => {
       expect(resp).toEqual(['contado', 'cuotas']);
     });
     const req = httpMock.expectOne(
-      `${environment.API_URL}/listaformaspago/${mockEmpresaId}`,
+      `${environment.API_URL}/listaformaspago/${mockEmpresaId}`
     );
     expect(req.request.method).toBe('GET');
     req.flush(['contado', 'cuotas']);
@@ -123,7 +123,7 @@ describe('PrestamosService', () => {
       expect(resp.ok).toBeTruthy();
     });
     const req = httpMock.expectOne(
-      `${environment.API_URL}/eliminarPrestamo/77`,
+      `${environment.API_URL}/eliminarPrestamo/77`
     );
     expect(req.request.method).toBe('DELETE');
     req.flush({ ok: true });
@@ -147,7 +147,7 @@ describe('PrestamosService', () => {
       expect(resp).toBeDefined();
     });
     const req = httpMock.expectOne(
-      `${environment.API_URL}/listatiposistemaprest`,
+      `${environment.API_URL}/listatiposistemaprest`
     );
     expect(req.request.method).toBe('GET');
     req.flush([{ tipo: 'Alemán' }]);
@@ -178,7 +178,7 @@ describe('PrestamosService', () => {
       expect(Array.isArray(resp)).toBe(true);
     });
     const req = httpMock.expectOne(
-      `${environment.API_URL}/consultaTipoDocPlantilla`,
+      `${environment.API_URL}/consultaTipoDocPlantilla`
     );
     expect(req.request.method).toBe('POST');
     req.flush([]);
@@ -199,7 +199,7 @@ describe('PrestamosService', () => {
       expect(resp).toEqual({ vars: [] });
     });
     const req = httpMock.expectOne(
-      `${environment.API_URL}/generarVariablesPlantillas/${mockEmpresaId}`,
+      `${environment.API_URL}/generarVariablesPlantillas/${mockEmpresaId}`
     );
     expect(req.request.method).toBe('GET');
     req.flush({ vars: [] });
@@ -210,7 +210,7 @@ describe('PrestamosService', () => {
       expect(resp).toBeDefined();
     });
     const req = httpMock.expectOne(
-      `${environment.API_URL}/psfechaspago/abc123`,
+      `${environment.API_URL}/psfechaspago/abc123`
     );
     expect(req.request.method).toBe('GET');
     req.flush({ fechas: [] });
@@ -233,7 +233,7 @@ describe('PrestamosService', () => {
       expect(resp).toBeDefined();
     });
     const req = httpMock.expectOne(
-      `${environment.API_URL}/psdocadjuntos/cliente123`,
+      `${environment.API_URL}/psdocadjuntos/cliente123`
     );
     expect(req.request.method).toBe('GET');
     req.flush({ archivos: [] });
@@ -264,7 +264,7 @@ describe('PrestamosService', () => {
       expect(resp).toEqual({ data: true });
     });
     const req = httpMock.expectOne(
-      `${environment.API_URL}/generarVariablesPlantillas`,
+      `${environment.API_URL}/generarVariablesPlantillas`
     );
     expect(req.request.method).toBe('GET');
     req.flush({ data: true });
@@ -273,7 +273,7 @@ describe('PrestamosService', () => {
   it('debería ejecutar handleError correctamente con mensaje Unauthorized', () => {
     const fakeError = {
       error: { message: 'Unauthorized' },
-      status: 401,
+      status: 401
     } as any;
     spyOn(Swal, 'fire');
     const result = (service as any).handleError(fakeError);
@@ -289,7 +289,7 @@ describe('PrestamosService', () => {
   it('debería retornar la fecha y hora del cliente correctamente', () => {
     const result = service.obtenerFechaHoraCliente();
     expect(result).toMatch(
-      /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [+-]\d{2}:\d{2}/,
+      /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [+-]\d{2}:\d{2}/
     );
   });
 });

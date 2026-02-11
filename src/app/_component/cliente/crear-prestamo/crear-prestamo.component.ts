@@ -4,7 +4,7 @@ import {
   ElementRef,
   OnInit,
   ChangeDetectorRef,
-  AfterViewInit,
+  AfterViewInit
 } from '@angular/core';
 import { NavItem } from '../../../_models/nav-item';
 import { NavService } from '../../../_services/nav.service';
@@ -23,7 +23,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-crear-prestamo',
   templateUrl: './crear-prestamo.component.html',
-  styleUrls: ['./crear-prestamo.component.scss'],
+  styleUrls: ['./crear-prestamo.component.scss']
 })
 export class CrearPrestamoComponent implements AfterViewInit {
   panelOpenState = false;
@@ -68,7 +68,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
     public router: Router,
     public tipodocidentiService: TipodocidentiService,
     public usersService: UsersService,
-    public prestamosService: PrestamosService,
+    public prestamosService: PrestamosService
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -101,8 +101,8 @@ export class CrearPrestamoComponent implements AfterViewInit {
       init_instance_callback() {},
       content_css: [
         '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-        '//www.tinymce.com/css/codepen.min.css',
-      ],
+        '//www.tinymce.com/css/codepen.min.css'
+      ]
     };
 
     this.tiposdocumento = await this.tipodocidentiService.getTipodocidenti();
@@ -132,8 +132,8 @@ export class CrearPrestamoComponent implements AfterViewInit {
                 if (this.form.valid) {
                   this.obtenerCuotasPrestamo();
                 }
-              },
-            },
+              }
+            }
           },
           {
             key: 'id_periodo_pago',
@@ -147,8 +147,8 @@ export class CrearPrestamoComponent implements AfterViewInit {
                 if (this.form.valid) {
                   this.obtenerCuotasPrestamo();
                 }
-              },
-            },
+              }
+            }
           },
           {
             key: 'id_sistema_pago',
@@ -169,15 +169,15 @@ export class CrearPrestamoComponent implements AfterViewInit {
                 if (this.form.valid) {
                   this.obtenerCuotasPrestamo();
                 }
-              },
-            },
+              }
+            }
           },
           {
             key: 'valorpres',
             className: 'col-md-4',
             type: 'input',
             modelOptions: {
-              updateOn: 'blur',
+              updateOn: 'blur'
             },
             templateOptions: {
               label: 'Valor del prestamo',
@@ -189,21 +189,21 @@ export class CrearPrestamoComponent implements AfterViewInit {
                 if (this.form.valid) {
                   this.obtenerCuotasPrestamo();
                 }
-              },
+              }
             },
             validation: {
               messages: {
                 pattern: (error, field: FormlyFieldConfig) =>
-                  `"${field.formControl.value}" no es un número válido`,
-              },
-            },
+                  `"${field.formControl.value}" no es un número válido`
+              }
+            }
           },
           {
             key: 'numcuotas',
             className: 'col-md-4',
             type: 'input',
             modelOptions: {
-              updateOn: 'blur',
+              updateOn: 'blur'
             },
             templateOptions: {
               label: 'Número de cuotas',
@@ -215,21 +215,21 @@ export class CrearPrestamoComponent implements AfterViewInit {
                 if (this.form.valid) {
                   this.obtenerCuotasPrestamo();
                 }
-              },
+              }
             },
             validation: {
               messages: {
                 pattern: (error, field: FormlyFieldConfig) =>
-                  `"${field.formControl.value}" no es un número válido`,
-              },
-            },
+                  `"${field.formControl.value}" no es un número válido`
+              }
+            }
           },
           {
             key: 'porcint',
             className: 'col-md-4',
             type: 'input',
             modelOptions: {
-              updateOn: 'blur',
+              updateOn: 'blur'
             },
             templateOptions: {
               label: 'Porcentaje interés',
@@ -239,14 +239,14 @@ export class CrearPrestamoComponent implements AfterViewInit {
                 if (this.form.valid) {
                   this.obtenerCuotasPrestamo();
                 }
-              },
+              }
             },
             validation: {
               messages: {
                 pattern: (error, field: FormlyFieldConfig) =>
-                  `"${field.formControl.value}" no es un número válido`,
-              },
-            },
+                  `"${field.formControl.value}" no es un número válido`
+              }
+            }
           },
           {
             key: 'fec_inicial',
@@ -261,12 +261,12 @@ export class CrearPrestamoComponent implements AfterViewInit {
                     }
                   }, 0);
                 });
-              },
+              }
             },
             templateOptions: {
               label: 'Fecha inicial',
-              required: true,
-            },
+              required: true
+            }
           },
           {
             key: 'id_cobrador',
@@ -280,11 +280,11 @@ export class CrearPrestamoComponent implements AfterViewInit {
                 if (this.form.valid) {
                   this.obtenerCuotasPrestamo();
                 }
-              },
-            },
-          },
-        ],
-      },
+              }
+            }
+          }
+        ]
+      }
     ];
   }
 
@@ -302,7 +302,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
       Swal.fire({
         type: 'error',
         title: 'Error',
-        text: 'Por favor valide los campos obligatorios, para generar la tabla.',
+        text: 'Por favor valide los campos obligatorios, para generar la tabla.'
       });
     }
   }
@@ -319,7 +319,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
       Swal.fire({
         type: 'error',
         title: 'Error',
-        text: 'Por favor valide los campos obligatorios, para generar la tabla.',
+        text: 'Por favor valide los campos obligatorios, para generar la tabla.'
       });
     }
   }
@@ -348,7 +348,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: '¡Sí!',
-        cancelButtonText: '¡No!',
+        cancelButtonText: '¡No!'
       }).then((result) => {
         if (result.value === true) {
           this.prestamosService
@@ -359,7 +359,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
                 Swal.fire({
                   type: 'info',
                   title: 'Información',
-                  text: 'Se crea satisfactoriamente el prestamo # ' + response,
+                  text: 'Se crea satisfactoriamente el prestamo # ' + response
                 }).then((r) => {
                   if (r.value === true) {
                     this.listarDocumentosPrestamo = true;
@@ -381,7 +381,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
       Swal.fire({
         type: 'error',
         title: 'Error',
-        text: 'Por favor valide los campos obligatorios, para generar la tabla.',
+        text: 'Por favor valide los campos obligatorios, para generar la tabla.'
       });
     }
   }

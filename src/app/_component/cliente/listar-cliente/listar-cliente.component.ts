@@ -4,7 +4,7 @@ import {
   ElementRef,
   OnInit,
   ChangeDetectorRef,
-  AfterViewInit,
+  AfterViewInit
 } from '@angular/core';
 
 import { Observable, Subject } from 'rxjs';
@@ -20,7 +20,7 @@ import { ClienteService } from '../../../_services/cliente/cliente.service';
 import {
   MatDialog,
   MatDialogRef,
-  MAT_DIALOG_DATA,
+  MAT_DIALOG_DATA
 } from '@angular/material/dialog';
 import { EditarClienteComponent } from '../.././../_component/cliente/listar-cliente/dialogs/editar-cliente/editar-cliente.component';
 import Swal from 'sweetalert2';
@@ -41,7 +41,7 @@ export interface TabType {
 @Component({
   selector: 'app-listar-cliente',
   templateUrl: './listar-cliente.component.html',
-  styleUrls: ['./listar-cliente.component.scss'],
+  styleUrls: ['./listar-cliente.component.scss']
 })
 export class ListarClienteComponent implements AfterViewInit {
   constructor(
@@ -51,7 +51,7 @@ export class ListarClienteComponent implements AfterViewInit {
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
     public dialog: MatDialog,
-    public router: Router,
+    public router: Router
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -85,7 +85,7 @@ export class ListarClienteComponent implements AfterViewInit {
     // passed through to szimek/signature_pad constructor
     minWidth: 5,
     canvasWidth: window.innerWidth,
-    canvasHeight: 300,
+    canvasHeight: 300
   };
 
   // webcam snapshot trigger
@@ -111,7 +111,7 @@ export class ListarClienteComponent implements AfterViewInit {
     'celular',
     'email',
     'direcasa',
-    'action',
+    'action'
   ];
   public message: string;
 
@@ -177,13 +177,13 @@ export class ListarClienteComponent implements AfterViewInit {
       },
       (error) => {
         this.authService.logout();
-      },
+      }
     );
   }
 
   modalEditarCliente(row: any[]) {
     const dialogRef = this.dialog.open(EditarClienteComponent, {
-      data: row,
+      data: row
     });
     // Subscribirme al evento de cerrar el cuadro de dialogo
     dialogRef.afterClosed().subscribe((result) => {
@@ -193,7 +193,7 @@ export class ListarClienteComponent implements AfterViewInit {
 
   modalListadoCreditos(row) {
     const dialogRef = this.dialog.open(ListarPrestamosclienteComponent, {
-      data: row,
+      data: row
     });
     // Subscribirme al evento de cerrar el cuadro de dialogo
     dialogRef.afterClosed().subscribe((result) => {
@@ -209,7 +209,7 @@ export class ListarClienteComponent implements AfterViewInit {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Si!',
-      cancelButtonText: 'No!',
+      cancelButtonText: 'No!'
     }).then((result) => {
       if (result.value == true) {
         this.clienteService.deleteCliente(row).subscribe(
@@ -217,7 +217,7 @@ export class ListarClienteComponent implements AfterViewInit {
             Swal.fire({
               type: 'info',
               title: 'Informaci&oacute;n',
-              text: 'Se elimino satisfactoriamente el registro.',
+              text: 'Se elimino satisfactoriamente el registro.'
             });
 
             this.getDatosCliente();
@@ -227,9 +227,9 @@ export class ListarClienteComponent implements AfterViewInit {
             Swal.fire({
               type: 'error',
               title: 'Error',
-              text: error,
+              text: error
             });
-          },
+          }
         );
       }
     });

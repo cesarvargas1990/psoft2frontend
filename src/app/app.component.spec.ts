@@ -22,9 +22,9 @@ describe('AppComponent', () => {
       declarations: [AppComponent],
       providers: [
         { provide: NavService, useClass: MockNavService },
-        { provide: AuthService, useClass: MockAuthService },
+        { provide: AuthService, useClass: MockAuthService }
       ],
-      schemas: [NO_ERRORS_SCHEMA], // evita errores por componentes o directivas no declaradas
+      schemas: [NO_ERRORS_SCHEMA] // evita errores por componentes o directivas no declaradas
     }).compileComponents();
   }));
 
@@ -38,9 +38,9 @@ describe('AppComponent', () => {
           iconName: 'dashboard',
           route: '/dashboard',
           disabled: false,
-          children: [],
-        },
-      ]),
+          children: []
+        }
+      ])
     );
 
     fixture = TestBed.createComponent(AppComponent);
@@ -63,8 +63,8 @@ describe('AppComponent', () => {
         iconName: 'dashboard',
         route: '/dashboard',
         disabled: false,
-        children: [],
-      }),
+        children: []
+      })
     );
   });
 

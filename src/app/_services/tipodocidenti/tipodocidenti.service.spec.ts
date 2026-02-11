@@ -1,7 +1,7 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 import {
   HttpClientTestingModule,
-  HttpTestingController,
+  HttpTestingController
 } from '@angular/common/http/testing';
 import { TipodocidentiService } from './tipodocidenti.service';
 import { AuthService } from '../../_services/auth.service';
@@ -13,12 +13,12 @@ describe('TipodocidentiService', () => {
   let httpMock: HttpTestingController;
 
   const mockAuthService = {
-    isAuthenticated: () => true,
+    isAuthenticated: () => true
   };
 
   const dummyResponse = [
     { id: 1, descripcion: 'Cédula de ciudadanía' },
-    { id: 2, descripcion: 'NIT' },
+    { id: 2, descripcion: 'NIT' }
   ];
 
   beforeEach(() => {
@@ -28,15 +28,15 @@ describe('TipodocidentiService', () => {
           return 'fake-token';
         }
         return null;
-      },
+      }
     );
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
         TipodocidentiService,
-        { provide: AuthService, useValue: mockAuthService },
-      ],
+        { provide: AuthService, useValue: mockAuthService }
+      ]
     });
 
     injector = getTestBed();

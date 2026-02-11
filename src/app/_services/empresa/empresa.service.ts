@@ -3,7 +3,7 @@ import {
   HttpClient,
   HttpHeaders,
   HttpParams,
-  HttpErrorResponse,
+  HttpErrorResponse
 } from '@angular/common/http';
 import { environment } from './../../../environments/environment';
 import { AuthService } from '../../_services/auth.service';
@@ -12,30 +12,30 @@ import { retry, catchError } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class EmpresaService {
   private server: string = environment.API_URL;
 
   private services = {
-    psempresa: this.server + '/psempresa',
+    psempresa: this.server + '/psempresa'
   };
 
   httpOpts: any = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-    }),
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`
+    })
   };
 
   constructor(
     private http: HttpClient,
-    private authService: AuthService,
+    private authService: AuthService
   ) {}
 
   handleError(error: HttpErrorResponse) {
@@ -47,20 +47,20 @@ export class EmpresaService {
       // The response body may contain clues as to what went wrong,
       console.error(
         `Backend returned code ${error.status}, ` +
-          `body was: ${error.error.error}`,
+          `body was: ${error.error.error}`
       );
       console.log(error);
       if (error.error.message == 'Unauthorized') {
         Swal.fire({
           type: 'error',
           title: 'Error al iniciar',
-          text: 'Verifique usuario o password',
+          text: 'Verifique usuario o password'
         });
       }
     }
     // return an observable with a user-facing error message
     return throwError(
-      'Error en la respuesta del servidor (verifique conexion a internet).',
+      'Error en la respuesta del servidor (verifique conexion a internet).'
     );
   }
 
@@ -77,7 +77,7 @@ export class EmpresaService {
       .put<any>(
         `${this.services.psempresa}` + '/' + id_empresa,
         data,
-        this.httpOpts,
+        this.httpOpts
       )
       .pipe(retry(2), catchError(this.handleError));
   }

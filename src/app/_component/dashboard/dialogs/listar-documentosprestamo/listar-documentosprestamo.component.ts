@@ -15,7 +15,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'listar-documentosprestamo',
   templateUrl: './listar-documentosprestamo.component.html',
-  styleUrls: ['./listar-documentosprestamo.component.scss'],
+  styleUrls: ['./listar-documentosprestamo.component.scss']
 })
 export class ListarDocumentosprestamoComponent implements OnInit {
   constructor(
@@ -26,7 +26,7 @@ export class ListarDocumentosprestamoComponent implements OnInit {
     public usersService: UsersService,
     public prestamosService: PrestamosService,
     public san: DomSanitizer,
-    public router: Router,
+    public router: Router
   ) {}
 
   html = ``;
@@ -70,7 +70,7 @@ export class ListarDocumentosprestamoComponent implements OnInit {
             Swal.fire({
               type: 'info',
               title: 'Informaci&oacute;n',
-              text: 'Se actualizo satisfactoriamente el registro.',
+              text: 'Se actualizo satisfactoriamente el registro.'
             }).then((result) => {
               if (result.value == true) {
                 this.dialogRef.close();
@@ -106,8 +106,8 @@ export class ListarDocumentosprestamoComponent implements OnInit {
         init_instance_callback() {},
         content_css: [
           '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-          '//www.tinymce.com/css/codepen.min.css',
-        ],
+          '//www.tinymce.com/css/codepen.min.css'
+        ]
       };
     });
 
@@ -126,16 +126,16 @@ export class ListarDocumentosprestamoComponent implements OnInit {
             type: 'input',
             defaultValue: this.data.nombre,
             modelOptions: {
-              updateOn: 'blur',
+              updateOn: 'blur'
             },
             templateOptions: {
               label: 'Nombre Plantilla',
               placeholder: 'Nombre Plantilla',
-              required: true,
-            },
-          },
-        ],
-      },
+              required: true
+            }
+          }
+        ]
+      }
     ];
   }
   async ngOnInit() {}

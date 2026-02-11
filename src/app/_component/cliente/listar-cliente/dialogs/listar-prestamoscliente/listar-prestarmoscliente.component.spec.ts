@@ -5,7 +5,7 @@ import { FormlyModule } from '@ngx-formly/core';
 import {
   MatDialogRef,
   MAT_DIALOG_DATA,
-  MatDialogModule,
+  MatDialogModule
 } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -31,7 +31,7 @@ const mockClienteData = {
   direcasa: 'Calle 123',
   diretrabajo: 'Carrera 45',
   ref1: 'Referencia 1',
-  ref2: 'Referencia 2',
+  ref2: 'Referencia 2'
 };
 
 describe('ListarPrestamosclienteComponent', () => {
@@ -44,10 +44,10 @@ describe('ListarPrestamosclienteComponent', () => {
   beforeEach(async(() => {
     clienteServiceSpy = jasmine.createSpyObj('ClienteService', [
       'getPrestamosCliente',
-      'updateCliente',
+      'updateCliente'
     ]);
     tipodocidentiServiceSpy = jasmine.createSpyObj('TipodocidentiService', [
-      'getTipodocidenti',
+      'getTipodocidenti'
     ]);
     usersServiceSpy = jasmine.createSpyObj('UsersService', ['getUsers']);
 
@@ -58,7 +58,7 @@ describe('ListarPrestamosclienteComponent', () => {
         FormsModule,
         FormlyModule.forRoot(),
         MatDialogModule,
-        BrowserAnimationsModule,
+        BrowserAnimationsModule
       ],
       providers: [
         { provide: ClienteService, useValue: clienteServiceSpy },
@@ -66,11 +66,11 @@ describe('ListarPrestamosclienteComponent', () => {
         { provide: UsersService, useValue: usersServiceSpy },
         {
           provide: MatDialogRef,
-          useValue: { close: jasmine.createSpy('close') },
+          useValue: { close: jasmine.createSpy('close') }
         },
-        { provide: MAT_DIALOG_DATA, useValue: mockClienteData },
+        { provide: MAT_DIALOG_DATA, useValue: mockClienteData }
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 
@@ -78,7 +78,7 @@ describe('ListarPrestamosclienteComponent', () => {
     clienteServiceSpy.getPrestamosCliente.and.returnValue(of([]));
     clienteServiceSpy.updateCliente.and.returnValue(of(mockClienteData));
     tipodocidentiServiceSpy.getTipodocidenti.and.returnValue(
-      Promise.resolve([]),
+      Promise.resolve([])
     );
     usersServiceSpy.getUsers.and.returnValue(Promise.resolve([]));
 
@@ -100,7 +100,7 @@ describe('ListarPrestamosclienteComponent', () => {
   it('debería obtener headers únicos de los prestamos', () => {
     component.consultaPrestamoCliente = [
       { campoA: 'valorA', campoB: 'valorB' },
-      { campoB: 'valorB2', campoC: 'valorC' },
+      { campoB: 'valorB2', campoC: 'valorC' }
     ];
     const headers = component.getHeaders();
     expect(headers).toContain('campoA');

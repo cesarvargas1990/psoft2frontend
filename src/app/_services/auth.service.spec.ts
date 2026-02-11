@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { AuthService } from './auth.service';
 import {
   HttpClientTestingModule,
-  HttpTestingController,
+  HttpTestingController
 } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
@@ -20,7 +20,7 @@ describe('AuthService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [AuthService, { provide: Router, useClass: MockRouter }],
+      providers: [AuthService, { provide: Router, useClass: MockRouter }]
     });
 
     service = TestBed.get(AuthService);
@@ -60,7 +60,7 @@ describe('AuthService', () => {
       menu_usuario: [],
       data: null,
       status: 'success',
-      message: '',
+      message: ''
     };
 
     service.loginForm(mockData).subscribe((res) => {
@@ -85,7 +85,7 @@ describe('AuthService', () => {
       id_user: 10,
       data: null,
       status: 'success',
-      message: '',
+      message: ''
     };
 
     service.setUser(response);
@@ -114,7 +114,7 @@ describe('AuthService', () => {
       menu_usuario: [],
       data: null,
       status: 'success',
-      message: '',
+      message: ''
     };
 
     service.getData(data).subscribe((res) => {

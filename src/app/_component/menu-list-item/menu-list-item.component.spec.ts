@@ -30,7 +30,7 @@ describe('MenuListItemComponent', () => {
     displayName: 'Dashboard',
     iconName: 'dashboard',
     route: 'dashboard',
-    children: [],
+    children: []
   };
 
   beforeEach(async () => {
@@ -41,9 +41,9 @@ describe('MenuListItemComponent', () => {
         NoopAnimationsModule,
         MatIconModule,
         MatListModule,
-        BrowserAnimationsModule,
+        BrowserAnimationsModule
       ],
-      providers: [{ provide: NavService, useClass: MockNavService }],
+      providers: [{ provide: NavService, useClass: MockNavService }]
     }).compileComponents();
   });
 
@@ -82,7 +82,7 @@ describe('MenuListItemComponent', () => {
       displayName: 'Parent',
       iconName: 'folder',
       route: 'parent',
-      children: [mockItem],
+      children: [mockItem]
     };
 
     component.item = itemWithChildren;

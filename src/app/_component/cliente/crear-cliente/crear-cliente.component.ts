@@ -5,7 +5,7 @@ import {
   OnInit,
   ChangeDetectorRef,
   AfterViewInit,
-  ViewContainerRef,
+  ViewContainerRef
 } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
@@ -35,7 +35,7 @@ export interface TabType {
 @Component({
   selector: 'app-crear-cliente',
   templateUrl: './crear-cliente.component.html',
-  styleUrls: ['./crear-cliente.component.scss'],
+  styleUrls: ['./crear-cliente.component.scss']
 })
 export class CrearClienteComponent implements AfterViewInit {
   public showWebcam = true;
@@ -65,7 +65,7 @@ export class CrearClienteComponent implements AfterViewInit {
     // passed through to szimek/signature_pad constructor
     minWidth: 5,
     canvasWidth: window.innerWidth,
-    canvasHeight: 300,
+    canvasHeight: 300
   };
 
   panelOpenState = false;
@@ -101,14 +101,14 @@ export class CrearClienteComponent implements AfterViewInit {
               type: 'input',
               modelOptions: {
                 debounce: {
-                  default: 2000,
-                },
+                  default: 2000
+                }
               },
               templateOptions: {
                 label: 'Nombre del cliente',
                 placeholder: 'Ingrese nombre del cliente',
-                required: true,
-              },
+                required: true
+              }
             },
 
             {
@@ -116,28 +116,28 @@ export class CrearClienteComponent implements AfterViewInit {
               className: 'col-md-4',
               type: 'select',
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
                 label: 'Cobrador',
                 placeholder: 'Seleccione cobrador',
                 required: true,
-                options: this.usersService.getUsers(),
-              },
+                options: this.usersService.getUsers()
+              }
             },
             {
               key: 'id_tipo_docid',
               className: 'col-md-4',
               type: 'select',
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
                 label: 'Tipo Documento',
                 placeholder: 'Seleccione Tipo documento',
                 required: true,
-                options: this.tipodocidentiService.getTipodocidenti(),
-              },
+                options: this.tipodocidentiService.getTipodocidenti()
+              }
             },
             {
               key: 'numdocumento',
@@ -145,13 +145,13 @@ export class CrearClienteComponent implements AfterViewInit {
               type: 'input',
 
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
                 label: 'Numero Documento',
                 placeholder: 'Numero Documento',
-                required: true,
-              },
+                required: true
+              }
             },
             {
               key: 'fch_expdocumento',
@@ -159,12 +159,12 @@ export class CrearClienteComponent implements AfterViewInit {
               type: 'datepicker',
 
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
                 label: 'Fecha Expedicion',
-                placeholder: 'Fecha Expedicion',
-              },
+                placeholder: 'Fecha Expedicion'
+              }
             },
 
             {
@@ -173,13 +173,13 @@ export class CrearClienteComponent implements AfterViewInit {
               type: 'datepicker',
 
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
                 label: 'Fecha Nacimiento',
                 placeholder: 'Fecha Nacimiento',
-                required: true,
-              },
+                required: true
+              }
             },
 
             {
@@ -187,16 +187,16 @@ export class CrearClienteComponent implements AfterViewInit {
               className: 'col-md-4',
               type: 'input',
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
                 label: 'Email',
-                required: true,
-              },
-            },
-          ],
-        },
-      ],
+                required: true
+              }
+            }
+          ]
+        }
+      ]
     },
     {
       label: 'Datos Contacto',
@@ -209,35 +209,35 @@ export class CrearClienteComponent implements AfterViewInit {
               className: 'col-md-4',
               type: 'input',
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
                 label: 'Ciudad',
-                required: true,
-              },
+                required: true
+              }
             },
             {
               key: 'telefijo',
               className: 'col-md-4',
               type: 'input',
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
-                label: 'Telefono Fijo',
-              },
+                label: 'Telefono Fijo'
+              }
             },
             {
               key: 'celular',
               className: 'col-md-4',
               type: 'input',
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
                 label: 'Celular',
-                required: true,
-              },
+                required: true
+              }
             },
 
             {
@@ -245,12 +245,12 @@ export class CrearClienteComponent implements AfterViewInit {
               className: 'col-md-4',
               type: 'input',
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
                 label: 'Dir Casa',
-                required_: true,
-              },
+                required_: true
+              }
             },
 
             {
@@ -258,15 +258,15 @@ export class CrearClienteComponent implements AfterViewInit {
               className: 'col-md-4',
               type: 'input',
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
-                label: 'Dir Trabajo',
-              },
-            },
-          ],
-        },
-      ],
+                label: 'Dir Trabajo'
+              }
+            }
+          ]
+        }
+      ]
     },
 
     {
@@ -280,27 +280,27 @@ export class CrearClienteComponent implements AfterViewInit {
               className: 'col-md-4',
               type: 'input',
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
-                label: 'Referencia 1',
-              },
+                label: 'Referencia 1'
+              }
             },
             {
               key: 'ref2',
               className: 'col-md-4',
               type: 'input',
               modelOptions: {
-                updateOn: 'blur',
+                updateOn: 'blur'
               },
               templateOptions: {
-                label: 'Referencia 2',
-              },
-            },
-          ],
-        },
-      ],
-    },
+                label: 'Referencia 2'
+              }
+            }
+          ]
+        }
+      ]
+    }
   ];
 
   form = new FormArray(this.tabs.map(() => new FormGroup({})));
@@ -332,7 +332,7 @@ export class CrearClienteComponent implements AfterViewInit {
     public router: Router,
     public tipodocidentiService: TipodocidentiService,
     public usersService: UsersService,
-    public prestamosService: PrestamosService,
+    public prestamosService: PrestamosService
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -349,7 +349,7 @@ export class CrearClienteComponent implements AfterViewInit {
     WebcamUtil.getAvailableVideoInputs().then(
       (mediaDevices: MediaDeviceInfo[]) => {
         this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
-      },
+      }
     );
 
     if (this.mobileQuery.removeEventListener) {
@@ -432,7 +432,7 @@ export class CrearClienteComponent implements AfterViewInit {
           Swal.fire({
             type: 'info',
             title: 'Informaci&oacute;n',
-            text: 'Se registro satisfactoriamente el cliente.',
+            text: 'Se registro satisfactoriamente el cliente.'
           }).then((result) => {
             if (result.value == true) {
               let ltdoc;
@@ -477,7 +477,7 @@ export class CrearClienteComponent implements AfterViewInit {
       Swal.fire({
         type: 'error',
         title: 'Error',
-        text: 'Por favor valide los campos obligatorios, para guardar el cliente.',
+        text: 'Por favor valide los campos obligatorios, para guardar el cliente.'
       });
     }
   }

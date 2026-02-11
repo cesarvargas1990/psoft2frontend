@@ -67,7 +67,11 @@ export class EmpresaParametrosComponent implements OnInit {
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addEventListener('change', this._mobileQueryListener);
+    if (this.mobileQuery.addEventListener) {
+      this.mobileQuery.addEventListener('change', this._mobileQueryListener);
+    } else {
+      this.mobileQuery.addListener(this._mobileQueryListener);
+    }
 
     this.empresaService.getEmpresa().subscribe((response) => {
       this.datosEmpresa = response;
@@ -208,7 +212,11 @@ export class EmpresaParametrosComponent implements OnInit {
     console.log('los datos empresa');
     console.log(this.datosEmpresa);
 
-    this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
+    if (this.mobileQuery.removeEventListener) {
+      this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
+    } else {
+      this.mobileQuery.removeListener(this._mobileQueryListener);
+    }
   }
 
   submit() {

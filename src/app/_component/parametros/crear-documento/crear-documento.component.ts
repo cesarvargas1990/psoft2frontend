@@ -88,13 +88,21 @@ export class CrearDocumentoComponent implements AfterViewInit {
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addEventListener('change', this._mobileQueryListener);
+    if (this.mobileQuery.addEventListener) {
+      this.mobileQuery.addEventListener('change', this._mobileQueryListener);
+    } else {
+      this.mobileQuery.addListener(this._mobileQueryListener);
+    }
   }
 
   private _mobileQueryListener: () => void;
 
   ngOnInit() {
-    this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
+    if (this.mobileQuery.removeEventListener) {
+      this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
+    } else {
+      this.mobileQuery.removeListener(this._mobileQueryListener);
+    }
   }
 
   async ngAfterViewInit() {

@@ -376,7 +376,7 @@ export class EditarClienteComponent implements OnInit {
     this.prestamosService.listaTiposDocumento().subscribe((response) => {
       if (response) {
         this.listaTiposDocumento = response;
-        Object.entries(response).forEach(([key, value]) => {
+        Object.entries(response as any).forEach(([, value]: [string, any]) => {
           this.listaTipoDoc[value.id] = value.id;
           console.log('tipodoc');
           console.log(this.listaTipoDoc);
@@ -394,7 +394,7 @@ export class EditarClienteComponent implements OnInit {
     this.prestamosService
       .listadoArchivosCliente(this.data.id)
       .subscribe((response) => {
-        Object.entries(response).forEach(([key, value]) => {
+        Object.entries(response as any).forEach(([, value]: [string, any]) => {
           this.listaArchivos[value.id_tdocadjunto] =
             this.photoPath + value.nombrearchivo;
         });

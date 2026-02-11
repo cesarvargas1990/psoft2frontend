@@ -55,7 +55,11 @@ export class ListarClienteComponent implements AfterViewInit {
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addEventListener('change', this._mobileQueryListener);
+    if (this.mobileQuery.addEventListener) {
+      this.mobileQuery.addEventListener('change', this._mobileQueryListener);
+    } else {
+      this.mobileQuery.addListener(this._mobileQueryListener);
+    }
   }
   public get triggerObservable(): Observable<void> {
     return this.trigger.asObservable();
@@ -149,7 +153,11 @@ export class ListarClienteComponent implements AfterViewInit {
   }
 
   ngOnInit() {
-    this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
+    if (this.mobileQuery.removeEventListener) {
+      this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
+    } else {
+      this.mobileQuery.removeListener(this._mobileQueryListener);
+    }
     this.getDatosCliente();
   }
 

@@ -3,6 +3,7 @@ import {
   HttpClientTestingModule,
   HttpTestingController
 } from '@angular/common/http/testing';
+import { HttpErrorResponse } from '@angular/common/http';
 import { PrestamosService } from './prestamos.service';
 import { AuthService } from '../../_services/auth.service';
 import { environment } from './../../../environments/environment';
@@ -153,6 +154,36 @@ describe('PrestamosService', () => {
     req.flush([{ tipo: 'Alemán' }]);
   });
 
+  it('debería consultar listaTiposDocumento', () => {
+    service.listaTiposDocumento().subscribe((resp) => {
+      expect(resp).toEqual({ ok: true });
+    });
+    const req = httpMock.expectOne(`${environment.API_URL}/pstdocadjuntos`);
+    expect(req.request.method).toBe('GET');
+    req.flush({ ok: true });
+  });
+
+  it('debería llamar pstiposistemaprest', () => {
+    service.pstiposistemaprest().subscribe((resp) => {
+      expect(resp).toEqual([{ id: 1 }]);
+    });
+    const req = httpMock.expectOne(`${environment.API_URL}/pstiposistemaprest`);
+    expect(req.request.method).toBe('GET');
+    req.flush([{ id: 1 }]);
+  });
+
+  it('debería guardar documento con id_empresa e id_usureg', () => {
+    const payload = { nombre: 'Doc' };
+    service.guardarDocumento(payload).subscribe((resp) => {
+      expect(resp).toEqual({ ok: true });
+    });
+    const req = httpMock.expectOne(`${environment.API_URL}/pstdocplant`);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body.id_empresa).toBe(mockEmpresaId);
+    expect(req.request.body.id_usureg).toBe(mockUsuarioId);
+    req.flush({ ok: true });
+  });
+
   it('debería obtener totales para el dashboard', () => {
     service.totales_dashboard().subscribe((resp) => {
       expect(resp.total).toBeGreaterThanOrEqual(0);
@@ -239,6 +270,18 @@ describe('PrestamosService', () => {
     req.flush({ archivos: [] });
   });
 
+  it('debería listar préstamos agregando id_empresa e id_user', () => {
+    const data: any = {};
+    service.listadoPrestamos(data).subscribe((resp) => {
+      expect(resp).toEqual([{ id_prestamo: 1 }]);
+    });
+    const req = httpMock.expectOne(`${environment.API_URL}/listadoPrestamos`);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body.id_empresa).toBe(mockEmpresaId);
+    expect(req.request.body.id_user).toBe(mockUsuarioId);
+    req.flush([{ id_prestamo: 1 }]);
+  });
+
   it('debería actualizar forma de pago', () => {
     const data = { id: 9, nombre: 'Quincenal' };
     service.updateFormaPago(data).subscribe((resp) => {
@@ -279,6 +322,43 @@ describe('PrestamosService', () => {
     const result = (service as any).handleError(fakeError);
     expect(result).toBeTruthy();
     expect(Swal.fire).toHaveBeenCalled();
+  });
+
+  it('debería ejecutar handleError para ErrorEvent del cliente', (done) => {
+    spyOn(window, 'alert');
+    const event = new ErrorEvent('NetworkError', { message: 'sin red' });
+    const fakeError = new HttpErrorResponse({ error: event, status: 0 });
+
+    service.handleError(fakeError).subscribe({
+      next: () => fail('debería fallar'),
+      error: (err) => {
+        expect(window.alert).toHaveBeenCalled();
+        done();
+      }
+    });
+  });
+
+  it('no debería mostrar Swal en handleError si no es Unauthorized', (done) => {
+    const swalSpy = spyOn(Swal, 'fire');
+    const fakeError = new HttpErrorResponse({
+      error: { message: 'Forbidden', error: 'no access' },
+      status: 403
+    });
+
+    service.handleError(fakeError).subscribe({
+      next: () => fail('debería fallar'),
+      error: () => {
+        expect(swalSpy).not.toHaveBeenCalled();
+        done();
+      }
+    });
+  });
+
+  it('fechaActual debería padear mes y día de un dígito', () => {
+    jasmine.clock().install();
+    jasmine.clock().mockDate(new Date(2026, 1, 3, 10, 0, 0));
+    expect(service.fechaActual()).toBe('2026-02-03');
+    jasmine.clock().uninstall();
   });
 
   it('debería retornar la fecha actual correctamente', () => {

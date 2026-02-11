@@ -25,7 +25,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 import { ClienteService } from '../../../_services/cliente/cliente.service';
 import { AuthService } from '../../../_services/auth.service';
@@ -121,6 +121,12 @@ describe('ListarClienteComponent', () => {
     expect(component.dataSource.data[0].nomcliente).toBe('Prueba');
   }));
 
+  it('debería hacer logout cuando getDatosCliente falla', () => {
+    clienteServiceSpy.getAllClientes.and.returnValue(throwError('error'));
+    component.getDatosCliente();
+    expect(authServiceSpy.logout).toHaveBeenCalled();
+  });
+
   it('debería eliminar un cliente si se confirma', async () => {
     spyOn(Swal, 'fire').and.returnValue(Promise.resolve({ value: true }));
     clienteServiceSpy.deleteCliente.and.returnValue(of({}));
@@ -128,6 +134,24 @@ describe('ListarClienteComponent', () => {
     component.modalEliminarCliente({ id: 1 });
     await fixture.whenStable();
     expect(clienteServiceSpy.deleteCliente).toHaveBeenCalled();
+  });
+
+  it('no debería eliminar un cliente si se cancela la confirmación', async () => {
+    spyOn(Swal, 'fire').and.returnValue(Promise.resolve({ value: false }));
+    component.modalEliminarCliente({ id: 1 });
+    await fixture.whenStable();
+    expect(clienteServiceSpy.deleteCliente).not.toHaveBeenCalled();
+  });
+
+  it('debería mostrar error si falla deleteCliente', async () => {
+    const swalSpy = spyOn(Swal, 'fire').and.returnValues(
+      Promise.resolve({ value: true }) as any,
+      Promise.resolve({ value: false }) as any
+    );
+    clienteServiceSpy.deleteCliente.and.returnValue(throwError('fallo'));
+    component.modalEliminarCliente({ id: 1 });
+    await fixture.whenStable();
+    expect(swalSpy).toHaveBeenCalled();
   });
 
   it('debería navegar al crear cliente', () => {
@@ -159,6 +183,28 @@ describe('ListarClienteComponent', () => {
     expect(component.message).toBe('Only images are supported.');
   });
 
+  it('debería retornar sin cambios cuando preview recibe arreglo vacío', () => {
+    component.message = 'previo';
+    component.preview([], 0);
+    expect(component.message).toBe('previo');
+  });
+
+  it('debería asignar listaArchivos e imgURL en reader.onload', () => {
+    const file = new File(['img'], 'image.png', { type: 'image/png' });
+    const fakeReader: any = {
+      result: 'data:image/png;base64,abc',
+      readAsDataURL: () => {},
+      onload: null
+    };
+    spyOn(window as any, 'FileReader').and.returnValue(fakeReader);
+
+    component.preview([file], 2);
+    fakeReader.onload({});
+
+    expect(component.listaArchivos[2]).toBe('data:image/png;base64,abc');
+    expect(component.imgURL).toBe('data:image/png;base64,abc');
+  });
+
   it('debería capturar imagen desde webcam', () => {
     const mockImage = { imageAsDataUrl: 'data:image/png;base64,test' } as any;
     component.handleImage(mockImage);
@@ -173,5 +219,43 @@ describe('ListarClienteComponent', () => {
       done();
     });
     component.triggerSnapshot(0);
+  });
+
+  it('debería refrescar datos al cerrar modalEditarCliente', () => {
+    const getSpy = spyOn(component, 'getDatosCliente');
+    dialogSpy.open.and.returnValue({
+      afterClosed: () => of(true)
+    } as any);
+    component.modalEditarCliente({ id: 1 } as any);
+    expect(dialogSpy.open).toHaveBeenCalled();
+    expect(getSpy).toHaveBeenCalled();
+  });
+
+  it('debería refrescar datos al cerrar modalListadoCreditos', () => {
+    const getSpy = spyOn(component, 'getDatosCliente');
+    dialogSpy.open.and.returnValue({
+      afterClosed: () => of(true)
+    } as any);
+    component.modalListadoCreditos({ id: 1 });
+    expect(dialogSpy.open).toHaveBeenCalled();
+    expect(getSpy).toHaveBeenCalled();
+  });
+
+  it('debería usar removeListener en ngOnInit cuando removeEventListener no existe', () => {
+    component.mobileQuery = {
+      removeListener: jasmine.createSpy('removeListener'),
+      addListener: jasmine.createSpy('addListener')
+    } as any;
+    spyOn(component, 'getDatosCliente');
+    component.ngOnInit();
+    expect(component.mobileQuery.removeListener).toHaveBeenCalled();
+    expect(component.getDatosCliente).toHaveBeenCalled();
+  });
+
+  it('debería navegar al crear cliente al ejecutar volver()', () => {
+    const router = TestBed.get(Router);
+    const navigateSpy = spyOn(router, 'navigate');
+    component.volver();
+    expect(navigateSpy).toHaveBeenCalledWith(['/clientes/crear']);
   });
 });

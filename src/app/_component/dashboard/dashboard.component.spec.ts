@@ -21,6 +21,8 @@ import { PrestamosService } from '../../_services/prestamos/prestamos.service';
 import { AuthService } from '../../_services/auth.service';
 import { NavService } from '../../_services/nav.service';
 import { Router } from '@angular/router';
+import { ChangeDetectorRef } from '@angular/core';
+import { MediaMatcher } from '@angular/cdk/layout';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -230,6 +232,13 @@ describe('DashboardComponent', () => {
     expect(component.dataSource.paginator).toBe(component.paginator);
   });
 
+  it('should not replace dataSource when listadoPrestamos returns null', () => {
+    const original = component.dataSource;
+    prestamosServiceSpy.listadoPrestamos.and.returnValue(of(null as any));
+    component.getDatosPrestamo();
+    expect(component.dataSource).toBe(original);
+  });
+
   it('should call refresh and remove event listener', () => {
     component.mobileQuery = {
       removeEventListener: jasmine.createSpy('removeEventListener'),
@@ -252,5 +261,92 @@ describe('DashboardComponent', () => {
     expect(component.total_capital_prestado).toBe('1000');
     expect(component.mobileQuery.removeEventListener).toHaveBeenCalled();
     expect(component.getDatosPrestamo).toHaveBeenCalled();
+  });
+
+  it('should call refresh and use removeListener fallback', () => {
+    component.mobileQuery = {
+      removeListener: jasmine.createSpy('removeListener'),
+      addListener: jasmine.createSpy('addListener')
+    } as any;
+    spyOn(component, 'getDatosPrestamo');
+    component.refresh();
+    expect(component.mobileQuery.removeListener).toHaveBeenCalled();
+    expect(component.getDatosPrestamo).toHaveBeenCalled();
+  });
+
+  it('should not delete prestamo when confirm is cancelled', fakeAsync(() => {
+    spyOn(Swal, 'fire').and.returnValue(Promise.resolve({ value: false }));
+    component.eliminarPrestamo({ id_prestamo: 1 });
+    tick();
+    expect(prestamosServiceSpy.deletePrestamo).not.toHaveBeenCalled();
+  }));
+
+  it('should not register payment when confirm is cancelled', fakeAsync(() => {
+    spyOn(Swal, 'fire').and.returnValue(Promise.resolve({ value: false }));
+    component.pagarCuotaPrestamo({
+      fecha_pago: '2026-02-11',
+      id_prestamo: 1,
+      id_cliente: 2,
+      id: 3
+    });
+    tick();
+    expect(prestamosServiceSpy.registrarPagoCuota).not.toHaveBeenCalled();
+  }));
+
+  it('should not refresh/listado when registrarPagoCuota returns falsy', fakeAsync(() => {
+    spyOn(Swal, 'fire').and.returnValue(Promise.resolve({ value: true }));
+    prestamosServiceSpy.registrarPagoCuota.and.returnValue(of(null as any));
+    spyOn(component, 'listadoCuotas');
+    spyOn(component, 'refresh');
+
+    const row = {
+      fecha_pago: '2026-02-11',
+      id_prestamo: 1,
+      id_cliente: 2,
+      id: 3
+    };
+    component.pagarCuotaPrestamo(row);
+    tick();
+
+    expect(component.listadoCuotas).not.toHaveBeenCalled();
+    expect(component.refresh).not.toHaveBeenCalled();
+  }));
+
+  it('should not replace cuotas datasource when listaFechasPago returns null', () => {
+    const original = component.dataSourceFecPago;
+    prestamosServiceSpy.listaFechasPago.and.returnValue(of(null as any));
+    component.listadoCuotas({ id_prestamo: 1, nomcliente: 'X' });
+    expect(component.dataSourceFecPago).toBe(original);
+  });
+
+  it('should handle combinarContenido when response is not an array', () => {
+    const errorSpy = spyOn(console, 'error');
+    component.combinarContenido({} as any);
+    expect(errorSpy).toHaveBeenCalled();
+  });
+
+  it('should use addListener when media does not support addEventListener', () => {
+    const mediaMatcher = {
+      matchMedia: (_query: string) => ({
+        matches: false,
+        addListener: jasmine.createSpy('addListener')
+      })
+    } as unknown as MediaMatcher;
+    const changeDetectorRef = {
+      detectChanges: jasmine.createSpy('detectChanges')
+    } as unknown as ChangeDetectorRef;
+
+    const cmp = new DashboardComponent(
+      dialogSpy,
+      authServiceSpy,
+      { appDrawer: null } as any,
+      changeDetectorRef,
+      mediaMatcher,
+      prestamosServiceSpy,
+      routerSpy
+    );
+
+    const mediaQuery = (cmp as any).mobileQuery as any;
+    expect(mediaQuery.addListener).toHaveBeenCalled();
   });
 });

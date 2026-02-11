@@ -350,6 +350,76 @@ describe('CrearPrestamoComponent', () => {
     expect(spyCuotas).toHaveBeenCalled();
   });
 
+  it('no debe recalcular desde changes/blur si el formulario es inválido', async () => {
+    component.appDrawer = {} as any;
+    await component.ngAfterViewInit();
+    const spyCuotas = spyOn(component, 'obtenerCuotasPrestamo');
+    component.form.setErrors({ invalid: true });
+
+    const fieldGroup = component.fields[0].fieldGroup as any[];
+    const idClienteField = fieldGroup.find(
+      (field) => field.key === 'id_cliente'
+    );
+    const periodoField = fieldGroup.find(
+      (field) => field.key === 'id_periodo_pago'
+    );
+    const valorPresField = fieldGroup.find(
+      (field) => field.key === 'valorpres'
+    );
+    const numCuotasField = fieldGroup.find(
+      (field) => field.key === 'numcuotas'
+    );
+    const porcIntField = fieldGroup.find((field) => field.key === 'porcint');
+    const cobradorField = fieldGroup.find(
+      (field) => field.key === 'id_cobrador'
+    );
+
+    idClienteField.templateOptions.change({}, {});
+    periodoField.templateOptions.change({}, {});
+    valorPresField.templateOptions.blur({}, {});
+    numCuotasField.templateOptions.blur({}, {});
+    porcIntField.templateOptions.blur({}, {});
+    cobradorField.templateOptions.change({}, {});
+
+    expect(spyCuotas).not.toHaveBeenCalled();
+  });
+
+  it('no debe actualizar validez en sistema de pago cuando pstiposistemaprest responde falso', async () => {
+    component.appDrawer = {} as any;
+    spyOn(prestamosService, 'pstiposistemaprest').and.returnValue(of(false));
+    await component.ngAfterViewInit();
+    const spyUpdate = spyOn(component.form, 'updateValueAndValidity');
+    const spyCuotas = spyOn(component, 'obtenerCuotasPrestamo');
+    component.form.setErrors({ invalid: true });
+
+    const fieldGroup = component.fields[0].fieldGroup as any[];
+    const sistemaPagoField = fieldGroup.find(
+      (field) => field.key === 'id_sistema_pago'
+    );
+    sistemaPagoField.templateOptions.change({}, {});
+
+    expect(spyUpdate).not.toHaveBeenCalled();
+    expect(spyCuotas).not.toHaveBeenCalled();
+  });
+
+  it('no debe recalcular desde hook de fecha cuando el formulario es inválido', fakeAsync(() => {
+    component.appDrawer = {} as any;
+    component.ngAfterViewInit();
+    flushMicrotasks();
+    const spyCuotas = spyOn(component, 'obtenerCuotasPrestamo');
+    component.form.setErrors({ invalid: true });
+
+    const fieldGroup = component.fields[0].fieldGroup as any[];
+    const fechaField = fieldGroup.find((field) => field.key === 'fec_inicial');
+    const control = new FormControl();
+    fechaField.hooks.onInit({ formControl: control, form: component.form });
+
+    control.setValue(new Date());
+    tick();
+
+    expect(spyCuotas).not.toHaveBeenCalled();
+  }));
+
   it('debe navegar al crear cliente al llamar modalAdicionarEmpresa', () => {
     const spy = spyOn(router, 'navigate');
     component.modalAdicionarEmpresa();

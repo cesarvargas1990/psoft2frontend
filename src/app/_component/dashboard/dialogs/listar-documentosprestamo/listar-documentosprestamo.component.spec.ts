@@ -147,7 +147,9 @@ describe('ListarDocumentosprestamoComponent', () => {
   it('no debería llamar updatePlantillaDocumento si el formulario es inválido', () => {
     component.form.setErrors({ invalid: true });
     component.submit();
-    expect(prestamosServiceMock.updatePlantillaDocumento).not.toHaveBeenCalled();
+    expect(
+      prestamosServiceMock.updatePlantillaDocumento
+    ).not.toHaveBeenCalled();
   });
 
   it('no debería cerrar modal si updatePlantillaDocumento responde null', async () => {

@@ -313,9 +313,10 @@ describe('CrearDocumentoComponent', () => {
     component.form.setErrors(null);
     component.html = '<p>x</p>';
     component.model = { id: 1, nombre: 'Plantilla' };
-    spyOn(component.prestamosService, 'updatePlantillaDocumento').and.returnValue(
-      of(null as any)
-    );
+    spyOn(
+      component.prestamosService,
+      'updatePlantillaDocumento'
+    ).and.returnValue(of(null as any));
     const swalSpy = spyOn(Swal, 'fire');
 
     component.editarPlantilla();

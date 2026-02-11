@@ -4,8 +4,10 @@ import {
   HttpClientTestingModule,
   HttpTestingController
 } from '@angular/common/http/testing';
+import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../_services/auth.service';
 import { environment } from './../../../environments/environment';
+import Swal from 'sweetalert2';
 
 describe('ClienteService', () => {
   let service: ClienteService;
@@ -167,5 +169,41 @@ describe('ClienteService', () => {
     expect(file instanceof File).toBeTruthy();
     expect(file.name).toBe('test.png');
     expect(file.type).toBe('image/png');
+  });
+
+  it('debería manejar error del lado cliente en handleError()', (done) => {
+    const alertSpy = spyOn(window, 'alert');
+    const errorEvent = new ErrorEvent('NetworkError', {
+      message: 'Sin conexion'
+    });
+    const error = new HttpErrorResponse({ error: errorEvent });
+
+    service.handleError(error).subscribe({
+      next: () => done.fail('Se esperaba un error'),
+      error: (err) => {
+        expect(alertSpy).toHaveBeenCalled();
+        expect(err).toContain('Error en la respuesta del servidor');
+        done();
+      }
+    });
+  });
+
+  it('debería manejar error Unauthorized en handleError()', (done) => {
+    const swalSpy = spyOn(Swal, 'fire');
+    const consoleSpy = spyOn(console, 'error');
+    const error = new HttpErrorResponse({
+      status: 401,
+      error: { error: 'Unauthorized' }
+    });
+
+    service.handleError(error).subscribe({
+      next: () => done.fail('Se esperaba un error'),
+      error: (err) => {
+        expect(consoleSpy).toHaveBeenCalled();
+        expect(swalSpy).toHaveBeenCalled();
+        expect(err).toContain('Error en la respuesta del servidor');
+        done();
+      }
+    });
   });
 });

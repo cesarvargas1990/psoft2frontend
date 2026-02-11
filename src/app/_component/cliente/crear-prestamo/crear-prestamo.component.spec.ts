@@ -388,7 +388,10 @@ describe('CrearPrestamoComponent', () => {
   it('no debe continuar si guardarPrestamo retorna falso', fakeAsync(() => {
     component.form.setErrors(null);
     spyOn(prestamosService, 'guardarPrestamo').and.returnValue(of(null));
-    const renderSpy = spyOn(prestamosService, 'renderTemplates').and.callThrough();
+    const renderSpy = spyOn(
+      prestamosService,
+      'renderTemplates'
+    ).and.callThrough();
     spyOn(Swal, 'fire').and.returnValue(Promise.resolve({ value: true }));
 
     component.guardarPrestamo();
@@ -400,7 +403,10 @@ describe('CrearPrestamoComponent', () => {
 
   it('no debe renderizar plantillas si se cancela el segundo confirm', fakeAsync(() => {
     component.form.setErrors(null);
-    const renderSpy = spyOn(prestamosService, 'renderTemplates').and.callThrough();
+    const renderSpy = spyOn(
+      prestamosService,
+      'renderTemplates'
+    ).and.callThrough();
 
     let callCount = 0;
     spyOn(Swal, 'fire').and.callFake(() => {

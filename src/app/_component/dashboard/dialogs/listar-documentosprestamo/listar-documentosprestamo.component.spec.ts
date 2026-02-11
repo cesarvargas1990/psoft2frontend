@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { FormlyModule } from '@ngx-formly/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import Swal from 'sweetalert2';
@@ -96,6 +97,12 @@ describe('ListarDocumentosprestamoComponent', () => {
   }));
 
   beforeEach(async () => {
+    prestamosServiceMock.updatePlantillaDocumento.calls.reset();
+    prestamosServiceMock.renderTemplates.calls.reset();
+    prestamosServiceMock.getPeriodosPago.calls.reset();
+    prestamosServiceMock.listaVariablesPlantillas.calls.reset();
+    mockDialogRef.close.calls.reset();
+
     fixture = TestBed.createComponent(ListarDocumentosprestamoComponent);
     component = fixture.componentInstance;
 
@@ -135,5 +142,44 @@ describe('ListarDocumentosprestamoComponent', () => {
 
     expect(prestamosServiceMock.updatePlantillaDocumento).toHaveBeenCalled();
     expect(Swal.fire).toHaveBeenCalled();
+  });
+
+  it('no debería llamar updatePlantillaDocumento si el formulario es inválido', () => {
+    component.form.setErrors({ invalid: true });
+    component.submit();
+    expect(prestamosServiceMock.updatePlantillaDocumento).not.toHaveBeenCalled();
+  });
+
+  it('no debería cerrar modal si updatePlantillaDocumento responde null', async () => {
+    spyOn(Swal, 'fire');
+    prestamosServiceMock.updatePlantillaDocumento.and.returnValue(of(null));
+
+    component.form.setErrors(null);
+    component.model.nombre = 'Plantilla';
+    component.submit();
+    await fixture.whenStable();
+
+    expect(Swal.fire).not.toHaveBeenCalled();
+    expect(mockDialogRef.close).not.toHaveBeenCalled();
+  });
+
+  it('no debería cerrar modal cuando confirmación es false', async () => {
+    spyOn(Swal, 'fire').and.returnValue(Promise.resolve({ value: false }));
+    prestamosServiceMock.updatePlantillaDocumento.and.returnValue(of(mockData));
+
+    component.form.setErrors(null);
+    component.model.nombre = 'Plantilla';
+    component.submit();
+    await fixture.whenStable();
+
+    expect(prestamosServiceMock.updatePlantillaDocumento).toHaveBeenCalled();
+    expect(mockDialogRef.close).not.toHaveBeenCalled();
+  });
+
+  it('debería navegar al dashboard al llamar volver()', () => {
+    const router = TestBed.get(Router);
+    const navigateSpy = spyOn(router, 'navigate');
+    component.volver();
+    expect(navigateSpy).toHaveBeenCalledWith(['/dashboard']);
   });
 });

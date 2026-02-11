@@ -17,6 +17,7 @@ import { EmpresaService } from '../../../_services/empresa/empresa.service';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { of } from 'rxjs';
 import Swal from 'sweetalert2';
+import { ChangeDetectorRef } from '@angular/core';
 
 class MockAuthService {
   isLoggedIn() {
@@ -192,5 +193,36 @@ describe('EmpresaParametrosComponent', () => {
     component.ngOnInit();
 
     expect(component.mobileQuery.removeListener).toHaveBeenCalled();
+  });
+
+  it('no debe mostrar Swal de éxito cuando actualizarDatosEmpresa responde falsy', () => {
+    spyOn(empresaService, 'actualizarDatosEmpresa').and.returnValue(of(null));
+    const swalSpy = spyOn(Swal, 'fire');
+    component.form.setErrors(null);
+    component.submit();
+    expect(swalSpy).not.toHaveBeenCalled();
+  });
+
+  it('debe usar addEventListener cuando media lo soporta', () => {
+    const mediaMatcher = {
+      matchMedia: (_query: string) => ({
+        matches: false,
+        addEventListener: jasmine.createSpy('addEventListener')
+      })
+    } as unknown as MediaMatcher;
+    const changeDetectorRef = {
+      detectChanges: jasmine.createSpy('detectChanges')
+    } as unknown as ChangeDetectorRef;
+
+    const cmp = new EmpresaParametrosComponent(
+      TestBed.get(AuthService),
+      TestBed.get(NavService),
+      changeDetectorRef,
+      mediaMatcher,
+      TestBed.get(Router),
+      TestBed.get(EmpresaService)
+    );
+    const mediaQuery = (cmp as any).mobileQuery as any;
+    expect(mediaQuery.addEventListener).toHaveBeenCalled();
   });
 });

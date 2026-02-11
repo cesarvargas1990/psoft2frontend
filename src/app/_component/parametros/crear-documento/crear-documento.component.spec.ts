@@ -17,9 +17,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import Swal from 'sweetalert2';
+import { ChangeDetectorRef } from '@angular/core';
+import { MediaMatcher } from '@angular/cdk/layout';
 import { AuthService } from '../../../_services/auth.service';
 import { NavService } from '../../../_services/nav.service';
 import { ClienteService } from '../../../_services/cliente/cliente.service';
@@ -262,5 +266,89 @@ describe('CrearDocumentoComponent', () => {
     expect(component.html).toBe('<h1>hola</h1>');
     expect(component.model.nombre).toBe('plantilla 1');
     expect(component.model.id).toBe(2);
+  });
+
+  it('debería usar removeListener en ngOnInit cuando removeEventListener no existe', () => {
+    component.mobileQuery = {
+      removeListener: jasmine.createSpy('removeListener'),
+      addListener: jasmine.createSpy('addListener')
+    } as any;
+    component.ngOnInit();
+    expect(component.mobileQuery.removeListener).toHaveBeenCalled();
+  });
+
+  it('debería ejecutar guardarFormaPago y actualizar model', () => {
+    const guardarSpy = spyOn(
+      component.prestamosService,
+      'guardarDocumento'
+    ).and.callThrough();
+    component.model = { nombre: 'Nueva' };
+    component.guardarFormaPago();
+    expect(guardarSpy).toHaveBeenCalled();
+    expect(component.model.id).toBe(1);
+  });
+
+  it('debería ejecutar modalEditarFormaPago sin errores', () => {
+    const logSpy = spyOn(console, 'log');
+    component.modalEditarFormaPago([{ id: 1 }] as any);
+    expect(logSpy).toHaveBeenCalled();
+  });
+
+  it('no debería refrescar documentos si confirmación de editarPlantilla es false', fakeAsync(() => {
+    component.form.setErrors(null);
+    component.html = '<p>x</p>';
+    component.model = { id: 1, nombre: 'Plantilla' };
+    spyOn(Swal, 'fire').and.returnValue(
+      Promise.resolve({ value: false }) as any
+    );
+    const getSpy = spyOn(component, 'getDatosDocumentos');
+
+    component.editarPlantilla();
+    tick();
+
+    expect(getSpy).not.toHaveBeenCalled();
+  }));
+
+  it('no debería mostrar mensaje si updatePlantillaDocumento responde null', fakeAsync(() => {
+    component.form.setErrors(null);
+    component.html = '<p>x</p>';
+    component.model = { id: 1, nombre: 'Plantilla' };
+    spyOn(component.prestamosService, 'updatePlantillaDocumento').and.returnValue(
+      of(null as any)
+    );
+    const swalSpy = spyOn(Swal, 'fire');
+
+    component.editarPlantilla();
+    tick();
+
+    expect(swalSpy).not.toHaveBeenCalled();
+  }));
+
+  it('debería usar addListener cuando media no soporta addEventListener', () => {
+    const mediaMatcher = {
+      matchMedia: (_query: string) => ({
+        matches: false,
+        addListener: jasmine.createSpy('addListener')
+      })
+    } as unknown as MediaMatcher;
+    const changeDetectorRef = {
+      detectChanges: jasmine.createSpy('detectChanges')
+    } as unknown as ChangeDetectorRef;
+
+    const cmp = new CrearDocumentoComponent(
+      TestBed.get(AuthService),
+      TestBed.get(NavService),
+      TestBed.get(ClienteService),
+      changeDetectorRef,
+      mediaMatcher,
+      TestBed.get(Router),
+      TestBed.get(TipodocidentiService),
+      TestBed.get(UsersService),
+      TestBed.get(PrestamosService),
+      TestBed.get(MatDialog)
+    );
+
+    const mediaQuery = (cmp as any).mobileQuery as any;
+    expect(mediaQuery.addListener).toHaveBeenCalled();
   });
 });

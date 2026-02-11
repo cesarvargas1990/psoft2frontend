@@ -5,7 +5,7 @@ import {
   ReactiveFormsModule,
   FormsModule,
   NG_VALUE_ACCESSOR,
-  ControlValueAccessor
+  ControlValueAccessor,
 } from '@angular/forms';
 import { FormlyModule } from '@ngx-formly/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -27,11 +27,13 @@ import { PrestamosService } from '../../../../_services/prestamos/prestamos.serv
 @Component({
   selector: 'tinymce',
   template: '<div></div>',
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => MockTinymceComponent),
-    multi: true
-  }]
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => MockTinymceComponent),
+      multi: true,
+    },
+  ],
 })
 class MockTinymceComponent implements ControlValueAccessor {
   @Input() config: any;
@@ -47,24 +49,27 @@ describe('ListarDocumentosprestamoComponent', () => {
   const mockDialogRef = {
     close: jasmine.createSpy('close'),
     componentInstance: {
-      data: { id_prestamo: 1 }
-    }
+      data: { id_prestamo: 1 },
+    },
   };
 
   const mockData = {
     id: 123,
     nombre: 'Plantilla de prueba',
-    plantilla_html: '<p>Contenido</p>'
+    plantilla_html: '<p>Contenido</p>',
   };
 
   const prestamosServiceMock = jasmine.createSpyObj('PrestamosService', [
     'updatePlantillaDocumento',
     'renderTemplates',
     'getPeriodosPago',
-    'listaVariablesPlantillas'
+    'listaVariablesPlantillas',
   ]);
 
-  const tipodocidentiServiceMock = jasmine.createSpyObj('TipodocidentiService', ['getTipodocidenti']);
+  const tipodocidentiServiceMock = jasmine.createSpyObj(
+    'TipodocidentiService',
+    ['getTipodocidenti'],
+  );
   const usersServiceMock = jasmine.createSpyObj('UsersService', ['getUsers']);
 
   beforeEach(async(() => {
@@ -77,7 +82,7 @@ describe('ListarDocumentosprestamoComponent', () => {
         FormlyModule.forRoot(),
         MatExpansionModule,
         MatDialogModule,
-        NoopAnimationsModule // 🔥 clave para evitar errores por animaciones
+        NoopAnimationsModule, // 🔥 clave para evitar errores por animaciones
       ],
       providers: [
         { provide: MatDialogRef, useValue: mockDialogRef },
@@ -85,8 +90,8 @@ describe('ListarDocumentosprestamoComponent', () => {
         { provide: ClienteService, useValue: {} },
         { provide: TipodocidentiService, useValue: tipodocidentiServiceMock },
         { provide: UsersService, useValue: usersServiceMock },
-        { provide: PrestamosService, useValue: prestamosServiceMock }
-      ]
+        { provide: PrestamosService, useValue: prestamosServiceMock },
+      ],
     }).compileComponents();
   }));
 
@@ -94,12 +99,16 @@ describe('ListarDocumentosprestamoComponent', () => {
     fixture = TestBed.createComponent(ListarDocumentosprestamoComponent);
     component = fixture.componentInstance;
 
-    prestamosServiceMock.renderTemplates.and.returnValue(of([
-      { nombre: 'Plantilla demo', plantilla_html: '<p>HTML de prueba</p>' }
-    ]));
+    prestamosServiceMock.renderTemplates.and.returnValue(
+      of([
+        { nombre: 'Plantilla demo', plantilla_html: '<p>HTML de prueba</p>' },
+      ]),
+    );
     prestamosServiceMock.listaVariablesPlantillas.and.returnValue(of([]));
     prestamosServiceMock.getPeriodosPago.and.returnValue(Promise.resolve([]));
-    tipodocidentiServiceMock.getTipodocidenti.and.returnValue(Promise.resolve([]));
+    tipodocidentiServiceMock.getTipodocidenti.and.returnValue(
+      Promise.resolve([]),
+    );
     usersServiceMock.getUsers.and.returnValue(Promise.resolve([]));
 
     await component.ngAfterViewInit();

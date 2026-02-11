@@ -1,7 +1,16 @@
-import { Component, OnInit, Inject, AfterViewInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Inject,
+  AfterViewInit,
+  ViewChild,
+} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Cliente } from '../../../../../_models/cliente';
-import { BASE_URL, environment } from '../../../../../../environments/environment';
+import {
+  BASE_URL,
+  environment,
+} from '../../../../../../environments/environment';
 import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { Observable, Subject } from 'rxjs';
@@ -18,18 +27,16 @@ import { SignaturePad } from 'ngx-signaturepad/signature-pad';
   selector: 'app-editar-cliente',
   templateUrl: './editar-cliente.component.html',
   styleUrls: ['./editar-cliente.component.scss'],
-  providers: [DatePipe]
+  providers: [DatePipe],
 })
 export class EditarClienteComponent implements OnInit {
-
-
-
   @ViewChild(SignaturePad, { static: false }) public signaturePad: SignaturePad;
 
-  public signaturePadOptions: Object = { // passed through to szimek/signature_pad constructor
-    'minWidth': 5,
-    'canvasWidth': window.innerWidth,
-    'canvasHeight': 300
+  public signaturePadOptions: Object = {
+    // passed through to szimek/signature_pad constructor
+    minWidth: 5,
+    canvasWidth: window.innerWidth,
+    canvasHeight: 300,
   };
 
   public imagePath;
@@ -41,7 +48,7 @@ export class EditarClienteComponent implements OnInit {
   public allowCameraSwitch = true;
   public multipleWebcamsAvailable = false;
   public deviceId: string;
-  public editFirmar: boolean = false;
+  public editFirmar = false;
   listaTipoDoc: any = {};
 
   public videoOptions: MediaTrackConstraints = {
@@ -56,7 +63,9 @@ export class EditarClienteComponent implements OnInit {
   // webcam snapshot trigger
   private trigger: Subject<void> = new Subject<void>();
   // switch to next / previous / specific webcam; true/false: forward/backwards, string: deviceId
-  private nextWebcam: Subject<boolean | string> = new Subject<boolean | string>();
+  private nextWebcam: Subject<boolean | string> = new Subject<
+    boolean | string
+  >();
 
   listaTiposDocumento: [] = [];
   webcam = 0;
@@ -67,7 +76,6 @@ export class EditarClienteComponent implements OnInit {
   public photoPath: string = environment.UPLOADS_CLIENTES;
 
   urlimage: any = {};
-
 
   form = new FormGroup({});
   model: any = {};
@@ -80,7 +88,6 @@ export class EditarClienteComponent implements OnInit {
 
   dataImage: any = {};
 
-
   isBase64(str) {
     try {
       return btoa(atob(str)) == str;
@@ -90,7 +97,6 @@ export class EditarClienteComponent implements OnInit {
   }
 
   submit() {
-
     if (this.form.valid) {
       this.model.id = this.data.id;
       if (this.editFirmar) {
@@ -98,28 +104,21 @@ export class EditarClienteComponent implements OnInit {
         this.listaTipoDoc = { ...this.listaTipoDoc, 3: 3 };
       }
 
-      this.clienteServicio.updateCliente(this.model).subscribe(
+      this.clienteServicio.updateCliente(this.model).subscribe((response) => {
+        if (response) {
+          let ltdoc;
+          let imageBase64;
 
-        response => {
+          this.dataImage.image = this.listaArchivos;
+          this.dataImage.id_tdocadjunto = this.listaTipoDoc;
+          this.dataImage.id_cliente = this.data.id;
+          this.dataImage.path = environment.GET_UPLOADS_PATH;
 
-          if (response) {
-            let ltdoc;
-            let imageBase64;
+          this.clienteServicio
+            .editFile(this.dataImage)
+            .subscribe((response) => {});
 
-            this.dataImage.image = this.listaArchivos;
-            this.dataImage.id_tdocadjunto = this.listaTipoDoc;
-            this.dataImage.id_cliente = this.data.id;
-            this.dataImage.path = environment.GET_UPLOADS_PATH;
-
-
-            this.clienteServicio.editFile(this.dataImage).subscribe(
-              response => {
-
-              }
-            )
-
-
-            /*for (let i = 0; i < Object.keys(this.listaArchivos).length; i++) {
+          /*for (let i = 0; i < Object.keys(this.listaArchivos).length; i++) {
 
 
 
@@ -147,35 +146,21 @@ export class EditarClienteComponent implements OnInit {
             }
           }*/
 
-
-
-
-            if (response) {
-
-              this.model = response;
-              Swal.fire({
-                type: 'info',
-                title: 'Informaci&oacute;n',
-                text: 'Se actualizo satisfactoriamente el registro.',
-              }).then(
-                (result) => {
-
-                  if (result.value == true) {
-                    this.dialogRef.close();
-                  }
-
-                }
-              )
-
-
-            }
-
+          if (response) {
+            this.model = response;
+            Swal.fire({
+              type: 'info',
+              title: 'Informaci&oacute;n',
+              text: 'Se actualizo satisfactoriamente el registro.',
+            }).then((result) => {
+              if (result.value == true) {
+                this.dialogRef.close();
+              }
+            });
           }
         }
-
-      )
+      });
     }
-
   }
 
   constructor(
@@ -186,20 +171,13 @@ export class EditarClienteComponent implements OnInit {
     public usersService: UsersService,
     private datePipe: DatePipe,
     public prestamosService: PrestamosService,
-
-  ) { }
-
+  ) {}
 
   async ngAfterViewInit() {
-
     this.tiposdocumento = await this.tipodocidentiService.getTipodocidenti();
     this.cobradores = await this.usersService.getUsers();
 
-
-
     this.fields = [
-
-
       {
         key: 'nomcliente',
         className: 'col-md-3',
@@ -227,7 +205,7 @@ export class EditarClienteComponent implements OnInit {
           label: 'Cobrador',
           placeholder: 'Seleccione cobrador',
           required: true,
-          options: this.cobradores
+          options: this.cobradores,
         },
       },
       {
@@ -241,7 +219,7 @@ export class EditarClienteComponent implements OnInit {
         templateOptions: {
           label: 'Tipo Documento',
           required: true,
-          options: this.tiposdocumento
+          options: this.tiposdocumento,
         },
       },
       {
@@ -266,7 +244,6 @@ export class EditarClienteComponent implements OnInit {
 
         modelOptions: {
           updateOn: 'blur',
-
         },
         templateOptions: {
           label: 'Fecha Expedicion',
@@ -283,7 +260,6 @@ export class EditarClienteComponent implements OnInit {
 
         modelOptions: {
           updateOn: 'blur',
-
         },
         templateOptions: {
           label: 'Fecha Nacimiento',
@@ -291,7 +267,6 @@ export class EditarClienteComponent implements OnInit {
           required: true,
         },
       },
-
 
       {
         key: 'ciudad',
@@ -316,7 +291,6 @@ export class EditarClienteComponent implements OnInit {
         },
         templateOptions: {
           label: 'Telefono Fijo',
-
         },
       },
       {
@@ -357,10 +331,8 @@ export class EditarClienteComponent implements OnInit {
         },
         templateOptions: {
           label: 'Dir Casa',
-
         },
       },
-
 
       {
         key: 'diretrabajo',
@@ -372,10 +344,8 @@ export class EditarClienteComponent implements OnInit {
         },
         templateOptions: {
           label: 'Dir Trabajo',
-
         },
       },
-
 
       {
         key: 'ref1',
@@ -387,7 +357,6 @@ export class EditarClienteComponent implements OnInit {
         },
         templateOptions: {
           label: 'Referencia 1',
-
         },
       },
       {
@@ -402,76 +371,39 @@ export class EditarClienteComponent implements OnInit {
           label: 'Referencia 2',
         },
       },
-
-
     ];
 
-
-    this.prestamosService.listaTiposDocumento().subscribe(
-      response => {
-
-        if (response) {
-
-
-          this.listaTiposDocumento = response;
-          Object.entries(response).forEach(([key, value]) => {
-
-            this.listaTipoDoc[value['id']] = value['id'];
-            console.log('tipodoc')
-            console.log(this.listaTipoDoc)
-
-
-          })
-
-
-
-
-
-        }
-
-
-
-
+    this.prestamosService.listaTiposDocumento().subscribe((response) => {
+      if (response) {
+        this.listaTiposDocumento = response;
+        Object.entries(response).forEach(([key, value]) => {
+          this.listaTipoDoc[value.id] = value.id;
+          console.log('tipodoc');
+          console.log(this.listaTipoDoc);
+        });
       }
-    )
-
-
-
-
+    });
   }
   async ngOnInit() {
-
-
-
-    WebcamUtil.getAvailableVideoInputs()
-      .then((mediaDevices: MediaDeviceInfo[]) => {
+    WebcamUtil.getAvailableVideoInputs().then(
+      (mediaDevices: MediaDeviceInfo[]) => {
         this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
-      });
+      },
+    );
 
-
-
-
-
-    this.prestamosService.listadoArchivosCliente(this.data.id).subscribe(
-      response => {
+    this.prestamosService
+      .listadoArchivosCliente(this.data.id)
+      .subscribe((response) => {
         Object.entries(response).forEach(([key, value]) => {
-
-
-          this.listaArchivos[value['id_tdocadjunto']] = this.photoPath + value['nombrearchivo'];
-
-
-        })
-      }
-    )
-
-
-
+          this.listaArchivos[value.id_tdocadjunto] =
+            this.photoPath + value.nombrearchivo;
+        });
+      });
   }
 
-
   public triggerSnapshot(i): void {
-    //////console.log ('home');
-    //////console.log(i);
+    ////// console.log ('home');
+    ////// console.log(i);
     this.currentIndexImage = i;
     this.trigger.next();
   }
@@ -482,8 +414,8 @@ export class EditarClienteComponent implements OnInit {
 
   public validateExtension(filename) {
     if (filename) {
-      if (filename != "") {
-        return filename.substr(filename.lastIndexOf('.') + 1)
+      if (filename != '') {
+        return filename.substr(filename.lastIndexOf('.') + 1);
       }
     }
   }
@@ -493,26 +425,21 @@ export class EditarClienteComponent implements OnInit {
   }
 
   public showNextWebcam(directionOrDeviceId: boolean | string): void {
-
     this.nextWebcam.next(directionOrDeviceId);
   }
 
   public handleImage(webcamImage: WebcamImage): void {
-
     this.webcam = 0;
     this.tomarfoto = 0;
-
 
     this.webcamImage = webcamImage;
     this.urlimage = this.webcamImage.imageAsDataUrl;
     this.listaArchivos[this.currentIndexImage] = this.urlimage;
-    ////console.log ('lisra archivos');
-    ////console.log (this.listaArchivos);
-
+    //// console.log ('lisra archivos');
+    //// console.log (this.listaArchivos);
   }
 
   public cameraWasSwitched(deviceId: string): void {
-
     this.deviceId = deviceId;
   }
 
@@ -525,30 +452,27 @@ export class EditarClienteComponent implements OnInit {
   }
 
   preview(files, i) {
-
-
-    if (files.length === 0)
-      return;
-
-    var mimeType = files[0].type;
-
-    if (mimeType.match(/image\/*/) == null && mimeType.match(/application\/pdf/) == null) {
-      this.message = "Solo se Aceptan, Imagenes o Documentos PDF.";
+    if (files.length === 0) {
       return;
     }
 
-    var reader = new FileReader();
+    const mimeType = files[0].type;
+
+    if (
+      mimeType.match(/image\/*/) == null &&
+      mimeType.match(/application\/pdf/) == null
+    ) {
+      this.message = 'Solo se Aceptan, Imagenes o Documentos PDF.';
+      return;
+    }
+
+    const reader = new FileReader();
     this.imagePath = files;
     reader.readAsDataURL(files[0]);
     reader.onload = (_event) => {
-
-
-
       this.listaArchivos[i] = reader.result;
 
-
       this.imgURL = reader.result;
-    }
+    };
   }
-
 }

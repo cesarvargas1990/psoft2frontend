@@ -13,7 +13,7 @@ describe('LogoutComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [LogoutComponent],
-      providers: [{ provide: AuthService, useValue: authServiceSpy }]
+      providers: [{ provide: AuthService, useValue: authServiceSpy }],
     }).compileComponents();
   });
 
@@ -32,7 +32,8 @@ describe('LogoutComponent', () => {
   });
 
   it('should render "Cerrando session..!" text', () => {
-    const text = fixture.debugElement.query(By.css('p')).nativeElement.textContent;
+    const text = fixture.debugElement.query(By.css('p')).nativeElement
+      .textContent;
     expect(text).toContain('Cerrando session..!');
   });
 });

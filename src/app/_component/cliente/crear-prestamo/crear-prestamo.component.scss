@@ -1,189 +1,189 @@
 .mat-table__wrapper .mat-table {
-    min-width: auto !important;
-    width: 100% !important;
+  min-width: auto !important;
+  width: 100% !important;
 }
 
 .mat-header-row {
-    width: 100%;
+  width: 100%;
 }
 
 .mat-row {
-    width: 100%;
+  width: 100%;
 }
 
 th.mat-sort-header-sorted {
-    color: black;
+  color: black;
 }
 
 .mat-table {
-    //overflow: auto;
-    //max-height: 500px;
+  //overflow: auto;
+  //max-height: 500px;
 }
 
 .mobile-label {
-    display: none;
+  display: none;
 }
 
-@media(max-width: 600px) {
-    .mobile-label {
-        width: 80px;
-        display: inline-block;
-        font-weight: bold;
-        font-size: 1em;
+@media (max-width: 600px) {
+  .mobile-label {
+    width: 80px;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 1em;
+  }
+  .mat-header-row {
+    display: none;
+  }
+  .mat-table .mat-row {
+    border-bottom: 10px solid #ddd;
+    display: block;
+    align-items: start;
+    flex-direction: column;
+    padding: 8px 24px;
+  }
+  .mat-table {
+    mat-row,
+    mat-header-row,
+    mat-footer-row {
+      padding-left: 24px;
+      padding-right: 24px;
     }
-    .mat-header-row {
-        display: none;
+    mat-cell:first-child,
+    mat-footer-cell:first-child,
+    mat-header-cell:first-child {
+      padding-left: 0;
     }
-    .mat-table .mat-row {
-        border-bottom: 10px solid #ddd;
-        display: block;
-        align-items: start;
-        flex-direction: column;
-        padding: 8px 24px;
+    mat-cell:last-child,
+    mat-footer-cell:last-child,
+    mat-header-cell:last-child {
+      padding-right: 0;
     }
-    .mat-table {
-        mat-row,
-        mat-header-row,
-        mat-footer-row {
-            padding-left: 24px;
-            padding-right: 24px;
-        }
-        mat-cell:first-child,
-        mat-footer-cell:first-child,
-        mat-header-cell:first-child {
-            padding-left: 0;
-        }
-        mat-cell:last-child,
-        mat-footer-cell:last-child,
-        mat-header-cell:last-child {
-            padding-right: 0;
-        }
-    }
+  }
 }
 
 .trend-dialog .mat-dialog-container {
-    overflow-y: hidden !important;
+  overflow-y: hidden !important;
 }
 
 .main-table {
-    width: 100%;
-    max-width: 980px;
-    /* change to suit*/
-    margin: auto;
-    border: 1px solid #eaeaea;
-    border-collapse: collapse;
+  width: 100%;
+  max-width: 980px;
+  /* change to suit*/
+  margin: auto;
+  border: 1px solid #eaeaea;
+  border-collapse: collapse;
 }
 
 .main-table thead th {
-    background: #199ad6;
-    color: #fff;
-    color: #fff;
-    font-size: 0.8rem;
-    padding: 5px 9px 6px 9px;
-    line-height: 1;
+  background: #199ad6;
+  color: #fff;
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 5px 9px 6px 9px;
+  line-height: 1;
 }
 
 .main-table th,
 .main-table td {
-    vertical-align: top;
-    text-align: left;
+  vertical-align: top;
+  text-align: left;
 }
 
 td.numbers {
-    text-align: center;
+  text-align: center;
 }
 
 .main-table td {
-    font-size: 0.7rem;
-    padding: 3px 9px;
-    border-bottom: 1px solid #999;
-    /* dotted borders look bad on tables*/
-    line-height: 1.2;
+  font-size: 0.7rem;
+  padding: 3px 9px;
+  border-bottom: 1px solid #999;
+  /* dotted borders look bad on tables*/
+  line-height: 1.2;
 }
 
 .table-heading {
-    font-size: 0.7rem;
-    margin: 0 0 0.5em;
+  font-size: 0.7rem;
+  margin: 0 0 0.5em;
 }
 
 .item-options {
-    margin: 0 0 0.5rem;
-    overflow: hidden;
-    clear: both;
+  margin: 0 0 0.5rem;
+  overflow: hidden;
+  clear: both;
 }
 
 .item-options dt {
-    margin: 0;
-    font-weight: bold;
+  margin: 0;
+  font-weight: bold;
 }
 
 .item-options dt,
 .item-options dd {
-    display: inline-block;
-    margin: 0;
-    padding: 0 5px 0 0;
-    vertical-align: top;
+  display: inline-block;
+  margin: 0;
+  padding: 0 5px 0 0;
+  vertical-align: top;
 }
 
 .item-options dt:after {
-    content: ":";
+  content: ':';
 }
 
 .main-table tbody tr:nth-child(odd) td {
-    background: #f9f9f9;
+  background: #f9f9f9;
 }
 
 @media screen and (max-width: 540px) {
-    table.mobile-optimised {
-        word-wrap: break-word;
-        font-size: 1rem;
-        border: none;
-    }
-    table.mobile-optimised thead {
-        display: none;
-    }
-    table.mobile-optimised td {
-        display: block;
-        float: left;
-        /* ie9 and under hack */
-        width: 100%;
-        clear: both;
-        background: #ffff;
-        border: none;
-        padding: 10px 5px;
-        box-sizing: border-box;
-        font-size: 1rem;
-    }
-    table.mobile-optimised tbody,
-    table.mobile-optimised tr {
-        display: block;
-    }
-    .mobile-optimised td:before {
-        content: attr(data-th);
-        display: block;
-        font-weight: bold;
-        margin: 0 0 2px;
-        background: #199ad6;
-        color: #fff;
-        padding: 5px;
-    }
-    .mobile-optimised tbody tr {
-        border-bottom: 1px solid #000;
-        overflow: hidden;
-    }
-    .item-options,
-    .table-heading {
-        font-size: 1rem;
-    }
-    .mobile-optimised .numbers {
-        text-align: left;
-    }
-    .main-table tbody tr:nth-child(odd) td {
-        background: #ffff;
-    }
+  table.mobile-optimised {
+    word-wrap: break-word;
+    font-size: 1rem;
+    border: none;
+  }
+  table.mobile-optimised thead {
+    display: none;
+  }
+  table.mobile-optimised td {
+    display: block;
+    float: left;
+    /* ie9 and under hack */
+    width: 100%;
+    clear: both;
+    background: #ffff;
+    border: none;
+    padding: 10px 5px;
+    box-sizing: border-box;
+    font-size: 1rem;
+  }
+  table.mobile-optimised tbody,
+  table.mobile-optimised tr {
+    display: block;
+  }
+  .mobile-optimised td:before {
+    content: attr(data-th);
+    display: block;
+    font-weight: bold;
+    margin: 0 0 2px;
+    background: #199ad6;
+    color: #fff;
+    padding: 5px;
+  }
+  .mobile-optimised tbody tr {
+    border-bottom: 1px solid #000;
+    overflow: hidden;
+  }
+  .item-options,
+  .table-heading {
+    font-size: 1rem;
+  }
+  .mobile-optimised .numbers {
+    text-align: left;
+  }
+  .main-table tbody tr:nth-child(odd) td {
+    background: #ffff;
+  }
 }
 
 .card-header {
-    background-color: rgb(25, 154, 214);
-    color: white;
+  background-color: rgb(25, 154, 214);
+  color: white;
 }

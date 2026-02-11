@@ -23,17 +23,20 @@ describe('LoginComponent', () => {
     ind_activo: true,
     is_admin: true,
     permisos: [],
-    menu_usuario: []
+    menu_usuario: [],
   };
 
   beforeEach(async(() => {
-    authServiceSpy = jasmine.createSpyObj('AuthService', ['loginForm', 'setUser']);
+    authServiceSpy = jasmine.createSpyObj('AuthService', [
+      'loginForm',
+      'setUser',
+    ]);
 
     TestBed.configureTestingModule({
       declarations: [LoginComponent],
       imports: [FormsModule],
       providers: [{ provide: AuthService, useValue: authServiceSpy }],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA] // permite usar <mat-*> y <app-logo> en template
+      schemas: [CUSTOM_ELEMENTS_SCHEMA], // permite usar <mat-*> y <app-logo> en template
     }).compileComponents();
   }));
 

@@ -22,23 +22,26 @@ describe('AppComponent', () => {
       declarations: [AppComponent],
       providers: [
         { provide: NavService, useClass: MockNavService },
-        { provide: AuthService, useClass: MockAuthService }
+        { provide: AuthService, useClass: MockAuthService },
       ],
-      schemas: [NO_ERRORS_SCHEMA] // evita errores por componentes o directivas no declaradas
+      schemas: [NO_ERRORS_SCHEMA], // evita errores por componentes o directivas no declaradas
     }).compileComponents();
   }));
 
   beforeEach(() => {
     // Setear localStorage antes de crear el componente
-    localStorage.setItem('menu_usuario', JSON.stringify([
-      {
-        displayName: 'Dashboard',
-        iconName: 'dashboard',
-        route: '/dashboard',
-        disabled: false,
-        children: []
-      }
-    ]));
+    localStorage.setItem(
+      'menu_usuario',
+      JSON.stringify([
+        {
+          displayName: 'Dashboard',
+          iconName: 'dashboard',
+          route: '/dashboard',
+          disabled: false,
+          children: [],
+        },
+      ]),
+    );
 
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
@@ -54,13 +57,15 @@ describe('AppComponent', () => {
   });
 
   it('debe tener navItems cargados desde localStorage', () => {
-    expect(component.navItems[0]).toEqual(jasmine.objectContaining({
-      displayName: 'Dashboard',
-      iconName: 'dashboard',
-      route: '/dashboard',
-      disabled: false,
-      children: []
-    }));
+    expect(component.navItems[0]).toEqual(
+      jasmine.objectContaining({
+        displayName: 'Dashboard',
+        iconName: 'dashboard',
+        route: '/dashboard',
+        disabled: false,
+        children: [],
+      }),
+    );
   });
 
   it('debe asignar el appDrawer al navService en ngAfterViewInit', () => {

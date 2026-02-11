@@ -8,7 +8,7 @@ describe('LogoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LogoComponent]
+      declarations: [LogoComponent],
     }).compileComponents();
   });
 
@@ -25,7 +25,7 @@ describe('LogoComponent', () => {
   it('should render the logo image with correct src and class', () => {
     const imgEl = fixture.debugElement.query(By.css('img'));
     expect(imgEl).toBeTruthy();
-    expect(imgEl.attributes['src']).toBe('assets/images/logo_app.png');
+    expect(imgEl.attributes.src).toBe('assets/images/logo_app.png');
     expect(imgEl.nativeElement.classList).toContain('responsive');
   });
 });

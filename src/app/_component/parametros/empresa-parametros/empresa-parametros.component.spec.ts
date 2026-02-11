@@ -1,4 +1,12 @@
-import { async, ComponentFixture, TestBed, fakeAsync, tick, flush, discardPeriodicTasks } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+  flush,
+  discardPeriodicTasks,
+} from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { EmpresaParametrosComponent } from './empresa-parametros.component';
@@ -33,7 +41,7 @@ class MockEmpresaService {
       pagina: 'www.miempresa.com',
       telefono: '1234567890',
       ciudad: 'Bogotá',
-      ddirec: 'Calle 123'
+      ddirec: 'Calle 123',
     });
   }
 
@@ -51,7 +59,7 @@ class MockMediaMatcher {
     return {
       matches: false,
       addListener: () => {},
-      removeListener: () => {}
+      removeListener: () => {},
     };
   }
 }
@@ -62,7 +70,10 @@ describe('EmpresaParametrosComponent', () => {
   let empresaService: EmpresaService;
 
   beforeEach(async(() => {
-    localStorage.setItem('menu_usuario', JSON.stringify([{ displayName: 'Test', iconName: 'test' }]));
+    localStorage.setItem(
+      'menu_usuario',
+      JSON.stringify([{ displayName: 'Test', iconName: 'test' }]),
+    );
     localStorage.setItem('permisos', JSON.stringify(['ver_empresa']));
 
     TestBed.configureTestingModule({
@@ -72,9 +83,9 @@ describe('EmpresaParametrosComponent', () => {
         { provide: NavService, useClass: MockNavService },
         { provide: EmpresaService, useClass: MockEmpresaService },
         { provide: Router, useClass: MockRouter },
-        { provide: MediaMatcher, useClass: MockMediaMatcher }
+        { provide: MediaMatcher, useClass: MockMediaMatcher },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));
 
@@ -102,7 +113,10 @@ describe('EmpresaParametrosComponent', () => {
   }));
 
   it('debe llamar actualizarDatosEmpresa cuando el formulario es válido', fakeAsync(() => {
-    const spy = spyOn(empresaService, 'actualizarDatosEmpresa').and.callThrough();
+    const spy = spyOn(
+      empresaService,
+      'actualizarDatosEmpresa',
+    ).and.callThrough();
 
     component.ngOnInit();
     tick(200);
@@ -116,7 +130,7 @@ describe('EmpresaParametrosComponent', () => {
       pagina: 'www.miempresa.com',
       telefono: '1234567890',
       ciudad: 'Bogotá',
-      ddirec: 'Calle 123'
+      ddirec: 'Calle 123',
     };
 
     component.form.patchValue(patch);

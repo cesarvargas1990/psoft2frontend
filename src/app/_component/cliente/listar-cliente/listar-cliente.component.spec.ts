@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 import { ListarClienteComponent } from './listar-cliente.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
@@ -35,8 +40,15 @@ describe('ListarClienteComponent', () => {
   let dialogSpy: jasmine.SpyObj<MatDialog>;
 
   beforeEach(async () => {
-    const clienteSpy = jasmine.createSpyObj('ClienteService', ['getAllClientes', 'deleteCliente']);
-    const authSpy = jasmine.createSpyObj('AuthService', ['logout', 'isLoggedIn', 'tienePermiso']);
+    const clienteSpy = jasmine.createSpyObj('ClienteService', [
+      'getAllClientes',
+      'deleteCliente',
+    ]);
+    const authSpy = jasmine.createSpyObj('AuthService', [
+      'logout',
+      'isLoggedIn',
+      'tienePermiso',
+    ]);
     const navSpy = jasmine.createSpyObj('NavService', ['dummyMethod']);
     dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
     (navSpy as any).appDrawer = null;
@@ -62,21 +74,23 @@ describe('ListarClienteComponent', () => {
         ReactiveFormsModule,
         FormsModule,
         FormlyModule.forRoot(),
-        FormlyMaterialModule
+        FormlyMaterialModule,
       ],
       providers: [
         { provide: ClienteService, useValue: clienteSpy },
         { provide: AuthService, useValue: authSpy },
         { provide: NavService, useValue: navSpy },
-        { provide: MatDialog, useValue: dialogSpy }
+        { provide: MatDialog, useValue: dialogSpy },
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ListarClienteComponent);
     component = fixture.componentInstance;
 
-    clienteServiceSpy = TestBed.get(ClienteService) as jasmine.SpyObj<ClienteService>;
+    clienteServiceSpy = TestBed.get(
+      ClienteService,
+    ) as jasmine.SpyObj<ClienteService>;
     authServiceSpy = TestBed.get(AuthService) as jasmine.SpyObj<AuthService>;
 
     authServiceSpy.isLoggedIn.and.returnValue(true);
@@ -98,7 +112,9 @@ describe('ListarClienteComponent', () => {
   });
 
   it('debería obtener datos de cliente al inicializar', fakeAsync(() => {
-    clienteServiceSpy.getAllClientes.and.returnValue(of([{ nomcliente: 'Prueba' }]));
+    clienteServiceSpy.getAllClientes.and.returnValue(
+      of([{ nomcliente: 'Prueba' }]),
+    );
     component.getDatosCliente();
     tick();
     expect(component.dataSource.data.length).toBe(1);
@@ -131,7 +147,7 @@ describe('ListarClienteComponent', () => {
     const mockFile = new File(['img'], 'image.png', { type: 'image/png' });
     spyOn(window as any, 'FileReader').and.returnValue({
       readAsDataURL: () => {},
-      onload: () => {}
+      onload: () => {},
     });
     component.preview([mockFile], 0);
     expect(component.message).toBeUndefined();
@@ -146,7 +162,9 @@ describe('ListarClienteComponent', () => {
   it('debería capturar imagen desde webcam', () => {
     const mockImage = { imageAsDataUrl: 'data:image/png;base64,test' } as any;
     component.handleImage(mockImage);
-    expect(component.listaArchivos[component.currentIndexImage]).toBe('data:image/png;base64,test');
+    expect(component.listaArchivos[component.currentIndexImage]).toBe(
+      'data:image/png;base64,test',
+    );
   });
 
   it('debería emitir trigger de snapshot', (done) => {

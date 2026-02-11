@@ -1,4 +1,11 @@
-import { Component, ViewChild, ElementRef, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  OnInit,
+  ChangeDetectorRef,
+  AfterViewInit,
+} from '@angular/core';
 import { NavItem } from '../../../_models/nav-item';
 import { NavService } from '../../../_services/nav.service';
 import { VERSION } from '@angular/material';
@@ -16,10 +23,9 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-crear-prestamo',
   templateUrl: './crear-prestamo.component.html',
-  styleUrls: ['./crear-prestamo.component.scss']
+  styleUrls: ['./crear-prestamo.component.scss'],
 })
 export class CrearPrestamoComponent implements AfterViewInit {
-
   panelOpenState = false;
   plantillas_html: any = {};
   config: any = {};
@@ -48,7 +54,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
   version = VERSION;
   menuUsuario = JSON.parse(localStorage.getItem('menu_usuario'));
   navItems: NavItem[] = this.menuUsuario;
-  contenidoCombinado: string = '';
+  contenidoCombinado = '';
 
   datosCliente: any = [];
   listaClientes: any = [];
@@ -57,12 +63,12 @@ export class CrearPrestamoComponent implements AfterViewInit {
     public authService: AuthService,
     private navService: NavService,
     public clienteService: ClienteService,
-    changeDetectorRef: ChangeDetectorRef, 
+    changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
     public router: Router,
     public tipodocidentiService: TipodocidentiService,
     public usersService: UsersService,
-    public prestamosService: PrestamosService
+    public prestamosService: PrestamosService,
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -77,15 +83,18 @@ export class CrearPrestamoComponent implements AfterViewInit {
     this.config = {
       height: 500,
       theme: 'modern',
-      plugins: 'print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image imagetools link media template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists textcolor wordcount contextmenu colorpicker textpattern',
-      toolbar: 'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
+      plugins:
+        'print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen image imagetools link media template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists textcolor wordcount contextmenu colorpicker textpattern',
+      toolbar:
+        'formatselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat',
       image_advtab: true,
-      imagetools_toolbar: 'rotateleft rotateright | flipv fliph | editimage imageoptions',
-      init_instance_callback: function () { },
+      imagetools_toolbar:
+        'rotateleft rotateright | flipv fliph | editimage imageoptions',
+      init_instance_callback() {},
       content_css: [
         '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-        '//www.tinymce.com/css/codepen.min.css'
-      ]
+        '//www.tinymce.com/css/codepen.min.css',
+      ],
     };
 
     this.tiposdocumento = await this.tipodocidentiService.getTipodocidenti();
@@ -99,7 +108,6 @@ export class CrearPrestamoComponent implements AfterViewInit {
 
     this.navService.appDrawer = this.appDrawer;
 
-   
     this.fields = [
       {
         fieldGroupClassName: 'row',
@@ -131,7 +139,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
                 if (this.form.valid) {
                   this.obtenerCuotasPrestamo();
                 }
-              }
+              },
             },
           },
           {
@@ -143,15 +151,17 @@ export class CrearPrestamoComponent implements AfterViewInit {
               options: this.sistemaspago,
               required: true,
               change: (field, $event) => {
-                this.prestamosService.pstiposistemaprest().subscribe(response => {
-                  if (response) {
-                    this.form.updateValueAndValidity();
-                  }
-                });
+                this.prestamosService
+                  .pstiposistemaprest()
+                  .subscribe((response) => {
+                    if (response) {
+                      this.form.updateValueAndValidity();
+                    }
+                  });
                 if (this.form.valid) {
                   this.obtenerCuotasPrestamo();
                 }
-              }
+              },
             },
           },
           {
@@ -236,7 +246,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
             type: 'datepicker',
             hooks: {
               onInit: (field) => {
-                field.formControl.valueChanges.subscribe(newVal => {
+                field.formControl.valueChanges.subscribe((newVal) => {
                   setTimeout(() => {
                     if (field.form.valid) {
                       this.obtenerCuotasPrestamo();
@@ -265,8 +275,8 @@ export class CrearPrestamoComponent implements AfterViewInit {
               },
             },
           },
-        ]
-      }
+        ],
+      },
     ];
   }
 
@@ -276,7 +286,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
 
   submit() {
     if (this.form.valid) {
-      this.clienteService.saveCliente(this.model).subscribe(response => {
+      this.clienteService.saveCliente(this.model).subscribe((response) => {
         this.model = response;
         this.router.navigate(['/prestamos/listar']);
       });
@@ -292,9 +302,11 @@ export class CrearPrestamoComponent implements AfterViewInit {
   async obtenerCuotasPrestamo() {
     if (this.form.valid) {
       this.mostrarTablaResumen = true;
-      this.prestamosService.calcularCuotas(this.form.value).subscribe(response => {
-        this.tableCuotasPrestamo = response;
-      });
+      this.prestamosService
+        .calcularCuotas(this.form.value)
+        .subscribe((response) => {
+          this.tableCuotasPrestamo = response;
+        });
     } else {
       Swal.fire({
         type: 'error',
@@ -305,7 +317,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
   }
 
   getHeaders() {
-    let headers: string[] = [];
+    const headers: string[] = [];
     if (this.tableCuotasPrestamo) {
       this.tableCuotasPrestamo.forEach((value) => {
         Object.keys(value).forEach((key) => {
@@ -328,29 +340,33 @@ export class CrearPrestamoComponent implements AfterViewInit {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: '¡Sí!',
-        cancelButtonText: '¡No!'
+        cancelButtonText: '¡No!',
       }).then((result) => {
         if (result.value === true) {
-          this.prestamosService.guardarPrestamo(this.model).subscribe(response => {
-            console.log(response);
-            if (response) {
-              Swal.fire({
-                type: 'info',
-                title: 'Información',
-                text: 'Se crea satisfactoriamente el prestamo # ' + response,
-              }).then((r) => {
-                if (r.value === true) {
-                  this.listarDocumentosPrestamo = true;
-                  this.model.id_prestamo = response;
-                  this.prestamosService.renderTemplates(this.model).subscribe(resp => {
-                    console.log(resp);
-                    this.plantillas_html = resp;
-                    this.combinarContenido(resp);
-                  });
-                }
-              });
-            }
-          });
+          this.prestamosService
+            .guardarPrestamo(this.model)
+            .subscribe((response) => {
+              console.log(response);
+              if (response) {
+                Swal.fire({
+                  type: 'info',
+                  title: 'Información',
+                  text: 'Se crea satisfactoriamente el prestamo # ' + response,
+                }).then((r) => {
+                  if (r.value === true) {
+                    this.listarDocumentosPrestamo = true;
+                    this.model.id_prestamo = response;
+                    this.prestamosService
+                      .renderTemplates(this.model)
+                      .subscribe((resp) => {
+                        console.log(resp);
+                        this.plantillas_html = resp;
+                        this.combinarContenido(resp);
+                      });
+                  }
+                });
+              }
+            });
         }
       });
     } else {

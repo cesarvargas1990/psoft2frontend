@@ -1,86 +1,85 @@
 @media screen and (max-width: 960px) {
-    .mat-table {
-        border: 0;
-        vertical-align: middle
-    }
-    .mat-table .mat-header-cell {
-        border: 10px solid;
-        clip: rect(0 0 0 0);
-        height: 1px;
-        margin: -1px;
-        padding: 0;
-        position: absolute;
-        width: 1px;
-    }
-    .mat-table .mat-row {
-        border-bottom: 5px solid #ddd;
-        display: block;
-    }
-    .mat-table .mat-cell {
-        border-bottom: 1px solid #ddd;
-        display: block;
-        text-align: right;
-        padding: inherit;
-        height: 30px;
-        margin-bottom: 4%;
-        padding-right: 24px;
-        margin-top: 5%;
-    }
-    .mat-table .mat-cell:before {
-        content: attr(data-label);
-        float: left;
-        font-weight: bold;
-        padding-left: 24px;
-        font-size: .85em;
-    }
-    .mat-table .mat-cell:last-child {
-        border-bottom: 0;
-    }
+  .mat-table {
+    border: 0;
+    vertical-align: middle;
+  }
+  .mat-table .mat-header-cell {
+    border: 10px solid;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  .mat-table .mat-row {
+    border-bottom: 5px solid #ddd;
+    display: block;
+  }
+  .mat-table .mat-cell {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    text-align: right;
+    padding: inherit;
+    height: 30px;
+    margin-bottom: 4%;
+    padding-right: 24px;
+    margin-top: 5%;
+  }
+  .mat-table .mat-cell:before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    padding-left: 24px;
+    font-size: 0.85em;
+  }
+  .mat-table .mat-cell:last-child {
+    border-bottom: 0;
+  }
 }
 
 .mat-column-valorpres {
-    justify-content: right;
-    margin: 20px;
+  justify-content: right;
+  margin: 20px;
 }
 
-
 .mat-column-valcuota {
-    justify-content: right;
-    margin: 20px;
+  justify-content: right;
+  margin: 20px;
 }
 
 .mat-column-nomfpago {
-    justify-content: center;
-    margin: 20px;
+  justify-content: center;
+  margin: 20px;
 }
 
 .mat-column-valtotal {
-    justify-content: right;
-    margin: 20px;
+  justify-content: right;
+  margin: 20px;
 }
 
 .mat-column-action {
-    justify-content: right;
-    margin: 20px;
+  justify-content: right;
+  margin: 20px;
 }
 
-p{
-    margin: 20px;
+p {
+  margin: 20px;
 }
 
 .card-header {
-    background-color: rgb(25, 154, 214);
-    color: white;
+  background-color: rgb(25, 154, 214);
+  color: white;
 }
 
-.mat-expansion-panel-header{
-    background-color : #199ad6!important;
-  }
+.mat-expansion-panel-header {
+  background-color: #199ad6 !important;
+}
 
-  .mat-expansion-panel-header-description{
-    color:white;
-  }
-  
-  .mat-expansion-panel-header-title{
-    color:white;
-  }
+.mat-expansion-panel-header-description {
+  color: white;
+}
+
+.mat-expansion-panel-header-title {
+  color: white;
+}

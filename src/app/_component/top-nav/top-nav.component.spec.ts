@@ -16,11 +16,19 @@ describe('TopNavComponent', () => {
 
   beforeEach(async () => {
     mockNavService = jasmine.createSpyObj('NavService', ['openNav']);
-    mockAuthService = jasmine.createSpyObj('AuthService', ['logout', 'isLoggedIn']);
+    mockAuthService = jasmine.createSpyObj('AuthService', [
+      'logout',
+      'isLoggedIn',
+    ]);
 
     await TestBed.configureTestingModule({
       declarations: [TopNavComponent],
-      imports: [MatToolbarModule, MatIconModule, MatButtonModule, NoopAnimationsModule],
+      imports: [
+        MatToolbarModule,
+        MatIconModule,
+        MatButtonModule,
+        NoopAnimationsModule,
+      ],
       providers: [
         { provide: NavService, useValue: mockNavService },
         { provide: AuthService, useValue: mockAuthService },

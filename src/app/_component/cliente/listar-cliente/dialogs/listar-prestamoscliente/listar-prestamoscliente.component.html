@@ -1,26 +1,27 @@
-<h4 *ngIf="consultaPrestamoCliente.length == 0" mat-dialog-title>No hay prestamos asignados al cliente</h4>
-<h4 *ngIf="consultaPrestamoCliente.length > 0" mat-dialog-title>LISTADO PRESTAMOS {{data.nomcliente}}</h4>
-
-
+<h4 *ngIf="consultaPrestamoCliente.length == 0" mat-dialog-title>
+  No hay prestamos asignados al cliente
+</h4>
+<h4 *ngIf="consultaPrestamoCliente.length > 0" mat-dialog-title>
+  LISTADO PRESTAMOS {{ data.nomcliente }}
+</h4>
 
 <mat-dialog-content>
-    <br>
+  <br />
 
-    <table class="main-table mobile-optimised">
-        <thead>
-            <tr>
-                <th *ngFor="let header of getHeaders()">{{header}}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let item of consultaPrestamoCliente">
-                <td *ngFor="let key of getHeaders()" [attr.data-th]="key">{{item[key]}}</td>
-            </tr>
-        </tbody>
-    </table>
-    <br>
-    <form [formGroup]="form" (ngSubmit)="submit()">
-
-
-    </form>
+  <table class="main-table mobile-optimised">
+    <thead>
+      <tr>
+        <th *ngFor="let header of getHeaders()">{{ header }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of consultaPrestamoCliente">
+        <td *ngFor="let key of getHeaders()" [attr.data-th]="key">
+          {{ item[key] }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <br />
+  <form [formGroup]="form" (ngSubmit)="submit()"></form>
 </mat-dialog-content>

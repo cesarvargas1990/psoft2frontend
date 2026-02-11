@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 import { CrearDocumentoComponent } from './crear-documento.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -23,9 +28,9 @@ import { UsersService } from '../../../_services/users/users.service';
 import { PrestamosService } from '../../../_services/prestamos/prestamos.service';
 
 class MockAuthService {
+  logout = jasmine.createSpy();
   isLoggedIn = () => true;
   tienePermiso = () => true;
-  logout = jasmine.createSpy();
 }
 
 class MockNavService {
@@ -63,7 +68,7 @@ describe('CrearDocumentoComponent', () => {
         MatIconModule,
         MatDialogModule,
         BrowserAnimationsModule,
-        RouterTestingModule
+        RouterTestingModule,
       ],
       providers: [
         { provide: AuthService, useClass: MockAuthService },
@@ -71,9 +76,9 @@ describe('CrearDocumentoComponent', () => {
         { provide: ClienteService, useClass: MockClienteService },
         { provide: TipodocidentiService, useClass: MockTipodocidentiService },
         { provide: UsersService, useClass: MockUsersService },
-        { provide: PrestamosService, useClass: MockPrestamosService }
+        { provide: PrestamosService, useClass: MockPrestamosService },
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     }).compileComponents();
   });
 
@@ -109,17 +114,22 @@ describe('CrearDocumentoComponent', () => {
     component.html = '<p>Plantilla</p>';
     component.model = { nombre: 'Test' };
     component.form.markAsTouched();
-    spyOn(component['prestamosService'], 'guardarDocumento').and.callThrough();
+    spyOn(component.prestamosService, 'guardarDocumento').and.callThrough();
     component.submit();
-    expect(component['prestamosService'].guardarDocumento).toHaveBeenCalled();
+    expect(component.prestamosService.guardarDocumento).toHaveBeenCalled();
   });
 
   it('debería eliminar una plantilla de documento', async () => {
-    const spySwal = spyOn(Swal, 'fire').and.returnValue(Promise.resolve({ value: true }) as any);
-    const deleteSpy = spyOn(component['prestamosService'], 'deleteDocumentoPlantilla').and.callThrough();
-  
+    const spySwal = spyOn(Swal, 'fire').and.returnValue(
+      Promise.resolve({ value: true }) as any,
+    );
+    const deleteSpy = spyOn(
+      component.prestamosService,
+      'deleteDocumentoPlantilla',
+    ).and.callThrough();
+
     await component.eliminarDocumentoPlantilla({ id: 1 });
-  
+
     expect(spySwal).toHaveBeenCalled();
     expect(deleteSpy).toHaveBeenCalled();
   });
@@ -130,8 +140,13 @@ describe('CrearDocumentoComponent', () => {
     component.model = { id: 1, nombre: 'TestDoc' };
     component.documentoPlantilla = { id: null, nombre: '', plantilla_html: '' };
 
-    const updateSpy = spyOn(component['prestamosService'], 'updatePlantillaDocumento').and.callThrough();
-    spyOn(Swal, 'fire').and.returnValue(Promise.resolve({ value: true }) as any);
+    const updateSpy = spyOn(
+      component.prestamosService,
+      'updatePlantillaDocumento',
+    ).and.callThrough();
+    spyOn(Swal, 'fire').and.returnValue(
+      Promise.resolve({ value: true }) as any,
+    );
 
     component.editarPlantilla();
     tick();
@@ -148,7 +163,11 @@ describe('CrearDocumentoComponent', () => {
   });
 
   it('debería asignar valores al editarDocumento()', () => {
-    const row = { plantilla_html: '<h1>hola</h1>', nombre: 'plantilla 1', id: 2 };
+    const row = {
+      plantilla_html: '<h1>hola</h1>',
+      nombre: 'plantilla 1',
+      id: 2,
+    };
     component.editarDocumento(row);
     expect(component.html).toBe('<h1>hola</h1>');
     expect(component.model.nombre).toBe('plantilla 1');

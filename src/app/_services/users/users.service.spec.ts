@@ -1,5 +1,8 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { UsersService } from './users.service';
@@ -14,28 +17,27 @@ describe('UsersService', () => {
   // Mock AuthService si en algún momento se usa internamente
   const mockAuthService = {
     isAuthenticated: () => true,
-    getToken: () => 'fake-token'
+    getToken: () => 'fake-token',
   };
 
   beforeEach(() => {
     // Simulamos valores esperados en localStorage
-    spyOn(localStorage, 'getItem').and.callFake((key: string): string | null => {
-      const fakeStorage: { [key: string]: string } = {
-        'access_token': 'fake-token',
-        'id': '123'
-      };
-      return fakeStorage[key] || null;
-    });
+    spyOn(localStorage, 'getItem').and.callFake(
+      (key: string): string | null => {
+        const fakeStorage: { [key: string]: string } = {
+          access_token: 'fake-token',
+          id: '123',
+        };
+        return fakeStorage[key] || null;
+      },
+    );
 
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule
-      ],
+      imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
         UsersService,
-        { provide: AuthService, useValue: mockAuthService }
-      ]
+        { provide: AuthService, useValue: mockAuthService },
+      ],
     });
 
     injector = getTestBed();

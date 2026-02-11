@@ -1,71 +1,71 @@
 @media screen and (max-width: 960px) {
-    .mat-table {
-        border: 0;
-        vertical-align: middle
-    }
-    .mat-table .mat-header-cell {
-        border: 10px solid;
-        clip: rect(0 0 0 0);
-        height: 1px;
-        margin: -1px;
-        padding: 0;
-        position: absolute;
-        width: 1px;
-    }
-    .mat-table .mat-row {
-        border-bottom: 5px solid #ddd;
-        display: block;
-    }
-    .mat-table .mat-cell {
-        border-bottom: 1px solid #ddd;
-        display: block;
-        text-align: right;
-        padding: inherit;
-        height: 30px;
-        margin-bottom: 4%;
-        padding-right: 24px;
-        margin-top: 5%;
-    }
-    .mat-table .mat-cell:before {
-        content: attr(data-label);
-        float: left;
-        font-weight: bold;
-        padding-left: 24px;
-        font-size: .85em;
-    }
-    .mat-table .mat-cell:last-child {
-        border-bottom: 0;
-    }
+  .mat-table {
+    border: 0;
+    vertical-align: middle;
+  }
+  .mat-table .mat-header-cell {
+    border: 10px solid;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  .mat-table .mat-row {
+    border-bottom: 5px solid #ddd;
+    display: block;
+  }
+  .mat-table .mat-cell {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    text-align: right;
+    padding: inherit;
+    height: 30px;
+    margin-bottom: 4%;
+    padding-right: 24px;
+    margin-top: 5%;
+  }
+  .mat-table .mat-cell:before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    padding-left: 24px;
+    font-size: 0.85em;
+  }
+  .mat-table .mat-cell:last-child {
+    border-bottom: 0;
+  }
 }
 
 .mat-column-nomcliente {
-    word-wrap: break-word !important;
-    white-space: unset !important;
-    width: 100% !important;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    word-break: break-word;
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  width: 100% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .mat-column-email {
-    word-wrap: break-word !important;
-    white-space: unset !important;
-    width: 100% !important;
-    overflow-wrap: break-word !important;
-    word-wrap: break-word !important;
-    word-break: break-word !important;
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  width: 100% !important;
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  word-break: break-word !important;
 }
 
 .mat-column-direcasa {
-    word-wrap: break-word !important;
-    white-space: unset !important;
-    width: 100% !important;
-    overflow-wrap: break-word !important;
-    word-wrap: break-word !important;
-    word-break: break-word !important;
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  width: 100% !important;
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+  word-break: break-word !important;
 }
 
 .card-header {
-    background-color: rgb(25, 154, 214);
-    color: white;
+  background-color: rgb(25, 154, 214);
+  color: white;
 }

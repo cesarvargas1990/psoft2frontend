@@ -3,7 +3,7 @@ export class MatPaginatorIntlEs extends MatPaginatorIntl {
   itemsPerPageLabel = 'Registros por pagina';
   nextPageLabel     = 'Siguiente';
   previousPageLabel = 'Anterior';
- 
+
   getRangeLabel = function (page, pageSize, length) {
     if (length === 0 || pageSize === 0) {
       return '0 de ' + length;
@@ -17,4 +17,4 @@ export class MatPaginatorIntlEs extends MatPaginatorIntl {
     return startIndex + 1 + ' - ' + endIndex + ' de ' + length;
   };
 
-} */ 
+} */

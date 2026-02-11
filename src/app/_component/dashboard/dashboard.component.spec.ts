@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 import { DashboardComponent } from './dashboard.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
@@ -32,13 +37,13 @@ describe('DashboardComponent', () => {
       'listaFechasPago',
       'renderTemplates',
       'registrarPagoCuota',
-      'deletePrestamo'
+      'deletePrestamo',
     ]);
 
     authServiceSpy = jasmine.createSpyObj('AuthService', [
       'logout',
       'isLoggedIn',
-      'tienePermiso'
+      'tienePermiso',
     ]);
 
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
@@ -49,14 +54,16 @@ describe('DashboardComponent', () => {
       total_prestado_hoy: '200',
       total_interes_hoy: '50',
       total_interes: '300',
-      total_prestado: '1200'
+      total_prestado: '1200',
     };
 
     prestamosServiceSpy.totales_dashboard.and.returnValue(of(fakeResponse));
     prestamosServiceSpy.listadoPrestamos.and.returnValue(of([]));
     prestamosServiceSpy.listaFechasPago.and.returnValue(of([]));
     prestamosServiceSpy.renderTemplates.and.returnValue(of([]));
-    prestamosServiceSpy.registrarPagoCuota.and.returnValue(of({ success: true }));
+    prestamosServiceSpy.registrarPagoCuota.and.returnValue(
+      of({ success: true }),
+    );
     prestamosServiceSpy.deletePrestamo.and.returnValue(of({}));
 
     await TestBed.configureTestingModule({
@@ -68,16 +75,16 @@ describe('DashboardComponent', () => {
         MatSortModule,
         MatTableModule,
         BrowserAnimationsModule,
-        FormsModule
+        FormsModule,
       ],
       providers: [
         { provide: PrestamosService, useValue: prestamosServiceSpy },
         { provide: AuthService, useValue: authServiceSpy },
         { provide: NavService, useValue: { appDrawer: null } },
         { provide: Router, useValue: routerSpy },
-        { provide: MatDialog, useValue: dialogSpy }
+        { provide: MatDialog, useValue: dialogSpy },
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     }).compileComponents();
   });
 
@@ -99,7 +106,9 @@ describe('DashboardComponent', () => {
 
   it('should navigate to crear prestamo', () => {
     component.irPantallaCrearPrestamo();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/clientes/crearPrestamo']);
+    expect(routerSpy.navigate).toHaveBeenCalledWith([
+      '/clientes/crearPrestamo',
+    ]);
   });
 
   it('should call logout method', () => {
@@ -124,18 +133,9 @@ describe('DashboardComponent', () => {
     expect(component.dataSource.filter).toBe('cliente');
   });
 
-  
-
-  
-
   it('should open modalListadoDocumentos and call renderTemplates', () => {
     const row = { id_prestamo: 1 };
     component.modalListadoDocumentos(row);
     expect(prestamosServiceSpy.renderTemplates).toHaveBeenCalled();
   });
-
-  
-
-  
 });
-

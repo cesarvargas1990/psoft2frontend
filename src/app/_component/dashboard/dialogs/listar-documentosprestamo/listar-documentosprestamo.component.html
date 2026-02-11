@@ -1,27 +1,20 @@
-<h4 mat-dialog-title>VISUALIZAR DOCUMENTOS </h4>
-
-
-
+<h4 mat-dialog-title>VISUALIZAR DOCUMENTOS</h4>
 
 <mat-accordion>
-  <mat-expansion-panel *ngFor="let item of plantillas_html" (opened)="panelOpenState = true"
-    (closed)="panelOpenState = false">
+  <mat-expansion-panel
+    *ngFor="let item of plantillas_html"
+    (opened)="panelOpenState = true"
+    (closed)="panelOpenState = false"
+  >
     <mat-expansion-panel-header>
       <mat-panel-title>
-        {{item.nombre}}
+        {{ item.nombre }}
       </mat-panel-title>
-
     </mat-expansion-panel-header>
 
-    <br>
+    <br />
     <tinymce [(ngModel)]="item.plantilla_html" [config]="config"></tinymce>
-
   </mat-expansion-panel>
-
 </mat-accordion>
 
-
-
-<mat-dialog-actions>
- 
-</mat-dialog-actions>
+<mat-dialog-actions> </mat-dialog-actions>

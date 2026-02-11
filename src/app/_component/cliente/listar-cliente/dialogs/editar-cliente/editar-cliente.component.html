@@ -1,100 +1,133 @@
 <h4 mat-dialog-title>EDITAR CLIENTE</h4>
 
-
-
 <mat-dialog-content class="editarCliente">
   <form [formGroup]="form" (ngSubmit)="submit()">
-    <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
+    <formly-form
+      [model]="model"
+      [fields]="fields"
+      [options]="options"
+      [form]="form"
+    ></formly-form>
 
     <div class="listadoDocumentos">
       <p>Lista de Documentos.</p>
 
-
-
-
-
       <mat-accordion>
-
         <mat-expansion-panel [expanded]="true">
-
           <mat-expansion-panel-header>
-            <mat-panel-title>
-              Firma cliente
-            </mat-panel-title>
+            <mat-panel-title> Firma cliente </mat-panel-title>
           </mat-expansion-panel-header>
 
-          <br>
+          <br />
           <p>Escriba su firma sobre el cuadro de abajo.</p>
-          <signature-pad *ngIf="editFirmar" [options]="signaturePadOptions"
-            (onBeginEvent)="drawStart()"></signature-pad>
-
+          <signature-pad
+            *ngIf="editFirmar"
+            [options]="signaturePadOptions"
+            (onBeginEvent)="drawStart()"
+          ></signature-pad>
 
           <ng-container #fieldComponent></ng-container>
-          <img *ngIf="!editFirmar" [src]="listaArchivos[3]" height="200">
+          <img *ngIf="!editFirmar" [src]="listaArchivos[3]" height="200" />
 
           &nbsp;
 
-          <button type="button" title="Limpiar" (click)="editFirmar=true" class="btn btn-primary submit-button">
+          <button
+            type="button"
+            title="Limpiar"
+            (click)="editFirmar = true"
+            class="btn btn-primary submit-button"
+          >
             <mat-icon aria-label="Edit">edit</mat-icon>
           </button>
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngFor="let item of listaTiposDocumento; let i = index" (opened)="panelOpenState = true"
-          (closed)="panelOpenState = false">
+        <mat-expansion-panel
+          *ngFor="let item of listaTiposDocumento; let i = index"
+          (opened)="panelOpenState = true"
+          (closed)="panelOpenState = false"
+        >
           <mat-expansion-panel-header>
             <mat-panel-title>
-              {{item.nombre}}
+              {{ item.nombre }}
             </mat-panel-title>
-
           </mat-expansion-panel-header>
 
           <div class="row">
             <div class="col-md-6">
-
-              <span style="color:red;" *ngIf="message">{{message}}</span>
+              <span style="color: red" *ngIf="message">{{ message }}</span>
               <mat-divider></mat-divider>
-              <input #file type="file" accept='image/*' (click)="webcamIndex=null;webcam=0;tomarfoto=0"
-                (change)="preview(file.files,item.id)" />
+              <input
+                #file
+                type="file"
+                accept="image/*"
+                (click)="webcamIndex = null; webcam = 0; tomarfoto = 0"
+                (change)="preview(file.files, item.id)"
+              />
               <mat-divider></mat-divider>
-              <webcam [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="webcamIndex==i">
+              <webcam
+                [trigger]="triggerObservable"
+                (imageCapture)="handleImage($event)"
+                *ngIf="webcamIndex == i"
+              >
               </webcam>
 
-              <button type="button" *ngIf="tomarfoto==0"
-                (click)="webcamIndex=i;webcam=1;listaArchivos[item.id]='';tomarfoto=1"
-                class="btn btn-primary submit-button">
+              <button
+                type="button"
+                *ngIf="tomarfoto == 0"
+                (click)="
+                  webcamIndex = i;
+                  webcam = 1;
+                  listaArchivos[item.id] = '';
+                  tomarfoto = 1
+                "
+                class="btn btn-primary submit-button"
+              >
                 <mat-icon aria-label="videocam">videocam</mat-icon>
               </button>
 
-              <button type="button" *ngIf="webcam==1"
-                (click)="triggerSnapshot(item.id);listaTipoDoc[item.id]=item.id;webcamIndex=null"
-                class="btn btn-primary submit-button">
+              <button
+                type="button"
+                *ngIf="webcam == 1"
+                (click)="
+                  triggerSnapshot(item.id);
+                  listaTipoDoc[item.id] = item.id;
+                  webcamIndex = null
+                "
+                class="btn btn-primary submit-button"
+              >
                 <mat-icon aria-label="control_camera">control_camera</mat-icon>
               </button>
-
-
             </div>
             <div class="col-md-6">
               <mat-divider></mat-divider>
-              <a href="{{listaArchivos[item.id]}}"
-                *ngIf="listaArchivos[item.id] && validateExtension(listaArchivos[item.id]) == 'pdf'"
-                target="_blank">Visualizar</a>
+              <a
+                href="{{ listaArchivos[item.id] }}"
+                *ngIf="
+                  listaArchivos[item.id] &&
+                  validateExtension(listaArchivos[item.id]) == 'pdf'
+                "
+                target="_blank"
+                >Visualizar</a
+              >
 
-              <img [src]="listaArchivos[item.id]"
-                *ngIf=" listaArchivos[item.id] && validateExtension(listaArchivos[item.id]) != 'pdf'"
-                [attr.file-index]="i" height="200">
+              <img
+                [src]="listaArchivos[item.id]"
+                *ngIf="
+                  listaArchivos[item.id] &&
+                  validateExtension(listaArchivos[item.id]) != 'pdf'
+                "
+                [attr.file-index]="i"
+                height="200"
+              />
             </div>
-
           </div>
-
         </mat-expansion-panel>
-
-
-
       </mat-accordion>
       <mat-dialog-actions>
-        <button type="submit" class="btn btn-primary submit-button"><mat-icon aria-label="Edit">save</mat-icon></button>
+        <button type="submit" class="btn btn-primary submit-button">
+          <mat-icon aria-label="Edit">save</mat-icon>
+        </button>
       </mat-dialog-actions>
     </div>
-
   </form>
 </mat-dialog-content>

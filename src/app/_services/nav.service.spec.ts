@@ -13,10 +13,7 @@ describe('NavService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        NavService,
-        { provide: Router, useClass: MockRouter }
-      ]
+      providers: [NavService, { provide: Router, useClass: MockRouter }],
     });
 
     service = TestBed.get(NavService);
@@ -29,7 +26,7 @@ describe('NavService', () => {
 
   it('debería actualizar currentUrl cuando recibe NavigationEnd', () => {
     const newUrl = '/home';
-    service.currentUrl.subscribe(url => {
+    service.currentUrl.subscribe((url) => {
       if (url) {
         expect(url).toBe(newUrl);
       }

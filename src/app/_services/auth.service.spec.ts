@@ -1,6 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { AuthService } from './auth.service';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { LoginResponse } from '../_models/user';
@@ -17,10 +20,7 @@ describe('AuthService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [
-        AuthService,
-        { provide: Router, useClass: MockRouter }
-      ]
+      providers: [AuthService, { provide: Router, useClass: MockRouter }],
     });
 
     service = TestBed.get(AuthService);
@@ -60,10 +60,10 @@ describe('AuthService', () => {
       menu_usuario: [],
       data: null,
       status: 'success',
-      message: ''
+      message: '',
     };
 
-    service.loginForm(mockData).subscribe(res => {
+    service.loginForm(mockData).subscribe((res) => {
       expect(res.access_token).toBe('abc123');
     });
 
@@ -85,7 +85,7 @@ describe('AuthService', () => {
       id_user: 10,
       data: null,
       status: 'success',
-      message: ''
+      message: '',
     };
 
     service.setUser(response);
@@ -98,8 +98,6 @@ describe('AuthService', () => {
     expect(service.tienePermiso('read')).toBe(true);
     expect(service.tienePermiso('admin')).toBe(false);
   });
-
-  
 
   it('debería hacer una petición con getData', () => {
     localStorage.setItem('access_token', 'token123');
@@ -116,10 +114,10 @@ describe('AuthService', () => {
       menu_usuario: [],
       data: null,
       status: 'success',
-      message: ''
+      message: '',
     };
 
-    service.getData(data).subscribe(res => {
+    service.getData(data).subscribe((res) => {
       expect(res).toEqual(response);
     });
 
@@ -133,7 +131,7 @@ describe('AuthService', () => {
     const data = { action: '/any-data', param: 1 };
     const response = { result: true };
 
-    service.getDataAny(data).subscribe(res => {
+    service.getDataAny(data).subscribe((res) => {
       expect(res.result).toBe(true);
     });
 

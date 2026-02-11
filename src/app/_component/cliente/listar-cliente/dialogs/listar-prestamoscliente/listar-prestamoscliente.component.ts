@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject,AfterViewInit } from '@angular/core';
+import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Cliente } from '../../../../../_models/cliente';
 
@@ -8,115 +8,79 @@ import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { ClienteService } from '../../../../../_services/cliente/cliente.service';
 import Swal from 'sweetalert2';
 import { TipodocidentiService } from './../../../../../_services/tipodocidenti/tipodocidenti.service';
-import { UsersService} from '../../../../../_services/users/users.service';
+import { UsersService } from '../../../../../_services/users/users.service';
 import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-listar-prestamoscliente',
   templateUrl: './listar-prestamoscliente.component.html',
   styleUrls: ['./listar-prestamoscliente.component.scss'],
-  providers: [DatePipe]
+  providers: [DatePipe],
 })
 export class ListarPrestamosclienteComponent implements OnInit {
-
   form = new FormGroup({});
   model: any = {};
   options: FormlyFormOptions = {};
-  consultaPrestamoCliente : any[] = [];
+  consultaPrestamoCliente: any[] = [];
 
-  tiposdocumento : any = {};
-  cobradores :any = {};
+  tiposdocumento: any = {};
+  cobradores: any = {};
   fields: FormlyFieldConfig[] = [];
 
   submit() {
-
     if (this.form.valid) {
       this.model.id = this.data.id;
-      this.clienteServicio.updateCliente(this.model).subscribe(
-
-        response => {
-
-
-
-          if (response) {
-
-            this.model = response;
-            Swal.fire({
-              type: 'info',
-              title: 'Informaci&oacute;n',
-              text: 'Se actualizo satisfactoriamente el registro.',
-            }).then(
-              (result) => {
-
-                if (result.value == true) {
-                  this.dialogRef.close();
-                }
-
-              }
-            )
-
-
-          }
-
-
+      this.clienteServicio.updateCliente(this.model).subscribe((response) => {
+        if (response) {
+          this.model = response;
+          Swal.fire({
+            type: 'info',
+            title: 'Informaci&oacute;n',
+            text: 'Se actualizo satisfactoriamente el registro.',
+          }).then((result) => {
+            if (result.value == true) {
+              this.dialogRef.close();
+            }
+          });
         }
-
-      )
+      });
     }
-
-
-
-
-
   }
 
-
   getHeaders() {
-    let headers: string[] = [];
-    if(this.consultaPrestamoCliente) {
+    const headers: string[] = [];
+    if (this.consultaPrestamoCliente) {
       this.consultaPrestamoCliente.forEach((value) => {
         Object.keys(value).forEach((key) => {
-          if(!headers.find((header) => header == key)){
-            headers.push(key)
+          if (!headers.find((header) => header == key)) {
+            headers.push(key);
           }
-        })
-      })
+        });
+      });
     }
     return headers;
   }
-
-
 
   constructor(
     public dialogRef: MatDialogRef<ListarPrestamosclienteComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Cliente,
     public clienteServicio: ClienteService,
-    public tipodocidentiService : TipodocidentiService,
-    public usersService : UsersService,
-    private datePipe: DatePipe
-
-  ) { }
-
+    public tipodocidentiService: TipodocidentiService,
+    public usersService: UsersService,
+    private datePipe: DatePipe,
+  ) {}
 
   async ngAfterViewInit() {
-
-
-
     this.model.id_cliente = this.data.id;
 
-    this.clienteServicio.getPrestamosCliente(this.model).subscribe(
-      response => {
-
-            this.consultaPrestamoCliente = response;
-
-      }
-    )
-
+    this.clienteServicio
+      .getPrestamosCliente(this.model)
+      .subscribe((response) => {
+        this.consultaPrestamoCliente = response;
+      });
 
     this.tiposdocumento = await this.tipodocidentiService.getTipodocidenti();
     this.cobradores = await this.usersService.getUsers();
     this.fields = [
-
-       
       {
         key: 'nomcliente',
         className: 'col-md-3',
@@ -144,7 +108,7 @@ export class ListarPrestamosclienteComponent implements OnInit {
           label: 'Cobrador',
           placeholder: 'Seleccione cobrador',
           required: true,
-          options: this.cobradores
+          options: this.cobradores,
         },
       },
       {
@@ -158,7 +122,7 @@ export class ListarPrestamosclienteComponent implements OnInit {
         templateOptions: {
           label: 'Tipo Documento',
           required: true,
-          options: this.tiposdocumento
+          options: this.tiposdocumento,
         },
       },
       {
@@ -183,7 +147,6 @@ export class ListarPrestamosclienteComponent implements OnInit {
 
         modelOptions: {
           updateOn: 'blur',
-
         },
         templateOptions: {
           label: 'Fecha Expedicion',
@@ -200,7 +163,6 @@ export class ListarPrestamosclienteComponent implements OnInit {
 
         modelOptions: {
           updateOn: 'blur',
-
         },
         templateOptions: {
           label: 'Fecha Nacimiento',
@@ -208,7 +170,6 @@ export class ListarPrestamosclienteComponent implements OnInit {
           required: true,
         },
       },
-      
 
       {
         key: 'ciudad',
@@ -233,7 +194,6 @@ export class ListarPrestamosclienteComponent implements OnInit {
         },
         templateOptions: {
           label: 'Telefono Fijo',
-  
         },
       },
       {
@@ -264,10 +224,6 @@ export class ListarPrestamosclienteComponent implements OnInit {
         },
       },
 
-
-  
-  
-  
       {
         key: 'direcasa',
         className: 'col-md-3',
@@ -278,11 +234,9 @@ export class ListarPrestamosclienteComponent implements OnInit {
         },
         templateOptions: {
           label: 'Dir Casa',
-  
         },
       },
-  
-  
+
       {
         key: 'diretrabajo',
         className: 'col-md-3',
@@ -293,11 +247,9 @@ export class ListarPrestamosclienteComponent implements OnInit {
         },
         templateOptions: {
           label: 'Dir Trabajo',
-  
         },
       },
-  
-  
+
       {
         key: 'ref1',
         className: 'col-md-3',
@@ -308,7 +260,6 @@ export class ListarPrestamosclienteComponent implements OnInit {
         },
         templateOptions: {
           label: 'Referencia 1',
-  
         },
       },
       {
@@ -323,19 +274,7 @@ export class ListarPrestamosclienteComponent implements OnInit {
           label: 'Referencia 2',
         },
       },
-    
-
-  ];
-
-
+    ];
   }
-  async ngOnInit() {
-
-
-    
-
-   
-
-  }
-
+  async ngOnInit() {}
 }

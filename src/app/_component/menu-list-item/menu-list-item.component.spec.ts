@@ -30,7 +30,7 @@ describe('MenuListItemComponent', () => {
     displayName: 'Dashboard',
     iconName: 'dashboard',
     route: 'dashboard',
-    children: []
+    children: [],
   };
 
   beforeEach(async () => {
@@ -41,11 +41,9 @@ describe('MenuListItemComponent', () => {
         NoopAnimationsModule,
         MatIconModule,
         MatListModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
       ],
-      providers: [
-        { provide: NavService, useClass: MockNavService }
-      ]
+      providers: [{ provide: NavService, useClass: MockNavService }],
     }).compileComponents();
   });
 
@@ -79,17 +77,17 @@ describe('MenuListItemComponent', () => {
   it('debería alternar expansión si tiene hijos', () => {
     // Asegura que la ruta actual NO coincida con la del ítem
     navService.currentUrl.next('/otra-ruta');
-  
+
     const itemWithChildren: NavItem = {
       displayName: 'Parent',
       iconName: 'folder',
       route: 'parent',
-      children: [mockItem]
+      children: [mockItem],
     };
-  
+
     component.item = itemWithChildren;
     fixture.detectChanges();
-  
+
     expect(component.expanded).toBe(false); // Asegura estado inicial
     component.onItemSelected(itemWithChildren);
     expect(component.expanded).toBe(true); // Verifica que se expanda correctamente

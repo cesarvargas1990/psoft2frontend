@@ -15,13 +15,13 @@ describe('LoaderComponent', () => {
     loadingSubject = new BehaviorSubject<boolean>(false);
 
     loaderServiceStub = {
-      isLoading: loadingSubject
+      isLoading: loadingSubject,
     };
 
     TestBed.configureTestingModule({
       declarations: [LoaderComponent],
       imports: [MatProgressSpinnerModule],
-      providers: [{ provide: LoaderService, useValue: loaderServiceStub }]
+      providers: [{ provide: LoaderService, useValue: loaderServiceStub }],
     }).compileComponents();
   }));
 

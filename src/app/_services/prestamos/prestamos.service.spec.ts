@@ -1,5 +1,8 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { PrestamosService } from './prestamos.service';
 import { AuthService } from '../../_services/auth.service';
 import { environment } from './../../../environments/environment';
@@ -14,26 +17,28 @@ describe('PrestamosService', () => {
   const mockUsuarioId = '999';
 
   const mockAuthService = {
-    isAuthenticated: () => true
+    isAuthenticated: () => true,
   };
 
   beforeEach(() => {
-    spyOn(localStorage, 'getItem').and.callFake((key: string): string | null => {
-      const storage = {
-        'access_token': 'fake-token',
-        'id_empresa': mockEmpresaId,
-        'id': mockUsuarioId,
-        'id_usuario': mockUsuarioId
-      };
-      return storage[key] || null;
-    });
+    spyOn(localStorage, 'getItem').and.callFake(
+      (key: string): string | null => {
+        const storage = {
+          access_token: 'fake-token',
+          id_empresa: mockEmpresaId,
+          id: mockUsuarioId,
+          id_usuario: mockUsuarioId,
+        };
+        return storage[key] || null;
+      },
+    );
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
         PrestamosService,
-        { provide: AuthService, useValue: mockAuthService }
-      ]
+        { provide: AuthService, useValue: mockAuthService },
+      ],
     });
 
     injector = getTestBed();
@@ -64,7 +69,9 @@ describe('PrestamosService', () => {
     service.getFormasPago().subscribe((resp) => {
       expect(resp).toEqual(['contado', 'cuotas']);
     });
-    const req = httpMock.expectOne(`${environment.API_URL}/listaformaspago/${mockEmpresaId}`);
+    const req = httpMock.expectOne(
+      `${environment.API_URL}/listaformaspago/${mockEmpresaId}`,
+    );
     expect(req.request.method).toBe('GET');
     req.flush(['contado', 'cuotas']);
   });
@@ -92,7 +99,7 @@ describe('PrestamosService', () => {
 
   it('debería guardar forma de pago usando saveFormaPago', () => {
     const data = { nombre: 'PAGO' };
-    service.saveFormaPago(data).subscribe(resp => {
+    service.saveFormaPago(data).subscribe((resp) => {
       expect(resp).toEqual({ ok: true });
     });
     const req = httpMock.expectOne(`${environment.API_URL}/psformapago`);
@@ -102,7 +109,7 @@ describe('PrestamosService', () => {
 
   it('debería eliminar forma de pago por ID', () => {
     const data = { id: 10 };
-    service.deleteFormaPago(data).subscribe(resp => {
+    service.deleteFormaPago(data).subscribe((resp) => {
       expect(resp.ok).toBeTruthy();
     });
     const req = httpMock.expectOne(`${environment.API_URL}/psformapago/10`);
@@ -115,7 +122,9 @@ describe('PrestamosService', () => {
     service.deletePrestamo(data).subscribe((resp) => {
       expect(resp.ok).toBeTruthy();
     });
-    const req = httpMock.expectOne(`${environment.API_URL}/eliminarPrestamo/77`);
+    const req = httpMock.expectOne(
+      `${environment.API_URL}/eliminarPrestamo/77`,
+    );
     expect(req.request.method).toBe('DELETE');
     req.flush({ ok: true });
   });
@@ -137,7 +146,9 @@ describe('PrestamosService', () => {
     service.getSistemaPrestamo().subscribe((resp) => {
       expect(resp).toBeDefined();
     });
-    const req = httpMock.expectOne(`${environment.API_URL}/listatiposistemaprest`);
+    const req = httpMock.expectOne(
+      `${environment.API_URL}/listatiposistemaprest`,
+    );
     expect(req.request.method).toBe('GET');
     req.flush([{ tipo: 'Alemán' }]);
   });
@@ -154,7 +165,7 @@ describe('PrestamosService', () => {
 
   it('debería eliminar documento plantilla por ID', () => {
     const row = { id: 111 };
-    service.deleteDocumentoPlantilla(row).subscribe(resp => {
+    service.deleteDocumentoPlantilla(row).subscribe((resp) => {
       expect(resp.ok).toBe(true);
     });
     const req = httpMock.expectOne(`${environment.API_URL}/pstdocplant/111`);
@@ -163,17 +174,19 @@ describe('PrestamosService', () => {
   });
 
   it('debería consultar plantillas de documentos', () => {
-    service.consultaPlantillasDocumentos().subscribe(resp => {
+    service.consultaPlantillasDocumentos().subscribe((resp) => {
       expect(Array.isArray(resp)).toBe(true);
     });
-    const req = httpMock.expectOne(`${environment.API_URL}/consultaTipoDocPlantilla`);
+    const req = httpMock.expectOne(
+      `${environment.API_URL}/consultaTipoDocPlantilla`,
+    );
     expect(req.request.method).toBe('POST');
     req.flush([]);
   });
 
   it('debería renderizar plantilla con metadata', () => {
     const mockPlantilla = { html: '<b>Hola</b>' };
-    service.renderTemplates(mockPlantilla).subscribe(resp => {
+    service.renderTemplates(mockPlantilla).subscribe((resp) => {
       expect(resp.rendered).toBeDefined();
     });
     const req = httpMock.expectOne(`${environment.API_URL}/renderTemplates`);
@@ -182,26 +195,30 @@ describe('PrestamosService', () => {
   });
 
   it('debería consultar variables de plantilla', () => {
-    service.listaVariablesPlantillas().subscribe(resp => {
+    service.listaVariablesPlantillas().subscribe((resp) => {
       expect(resp).toEqual({ vars: [] });
     });
-    const req = httpMock.expectOne(`${environment.API_URL}/generarVariablesPlantillas/${mockEmpresaId}`);
+    const req = httpMock.expectOne(
+      `${environment.API_URL}/generarVariablesPlantillas/${mockEmpresaId}`,
+    );
     expect(req.request.method).toBe('GET');
     req.flush({ vars: [] });
   });
 
   it('debería consultar fechas de pago de préstamo', () => {
-    service.listaFechasPago('abc123').subscribe(resp => {
+    service.listaFechasPago('abc123').subscribe((resp) => {
       expect(resp).toBeDefined();
     });
-    const req = httpMock.expectOne(`${environment.API_URL}/psfechaspago/abc123`);
+    const req = httpMock.expectOne(
+      `${environment.API_URL}/psfechaspago/abc123`,
+    );
     expect(req.request.method).toBe('GET');
     req.flush({ fechas: [] });
   });
 
   it('debería registrar pago de cuota con fecha y user', () => {
     const data = { monto: 10000 };
-    service.registrarPagoCuota(data).subscribe(resp => {
+    service.registrarPagoCuota(data).subscribe((resp) => {
       expect(resp).toEqual({ ok: true });
     });
     const req = httpMock.expectOne(`${environment.API_URL}/pspagos`);
@@ -212,17 +229,19 @@ describe('PrestamosService', () => {
   });
 
   it('debería listar documentos adjuntos de cliente', () => {
-    service.listadoArchivosCliente('cliente123').subscribe(resp => {
+    service.listadoArchivosCliente('cliente123').subscribe((resp) => {
       expect(resp).toBeDefined();
     });
-    const req = httpMock.expectOne(`${environment.API_URL}/psdocadjuntos/cliente123`);
+    const req = httpMock.expectOne(
+      `${environment.API_URL}/psdocadjuntos/cliente123`,
+    );
     expect(req.request.method).toBe('GET');
     req.flush({ archivos: [] });
   });
 
   it('debería actualizar forma de pago', () => {
     const data = { id: 9, nombre: 'Quincenal' };
-    service.updateFormaPago(data).subscribe(resp => {
+    service.updateFormaPago(data).subscribe((resp) => {
       expect(resp).toBeDefined();
     });
     const req = httpMock.expectOne(`${environment.API_URL}/psformapago/9`);
@@ -232,7 +251,7 @@ describe('PrestamosService', () => {
 
   it('debería actualizar plantilla de documento', () => {
     const data = { id: 5, nombre: 'Nuevo' };
-    service.updatePlantillaDocumento(data).subscribe(resp => {
+    service.updatePlantillaDocumento(data).subscribe((resp) => {
       expect(resp).toEqual({ ok: true });
     });
     const req = httpMock.expectOne(`${environment.API_URL}/pstdocplant/5`);
@@ -241,10 +260,12 @@ describe('PrestamosService', () => {
   });
 
   it('debería ejecutar método prueba()', () => {
-    service.prueba().subscribe(resp => {
+    service.prueba().subscribe((resp) => {
       expect(resp).toEqual({ data: true });
     });
-    const req = httpMock.expectOne(`${environment.API_URL}/generarVariablesPlantillas`);
+    const req = httpMock.expectOne(
+      `${environment.API_URL}/generarVariablesPlantillas`,
+    );
     expect(req.request.method).toBe('GET');
     req.flush({ data: true });
   });
@@ -252,7 +273,7 @@ describe('PrestamosService', () => {
   it('debería ejecutar handleError correctamente con mensaje Unauthorized', () => {
     const fakeError = {
       error: { message: 'Unauthorized' },
-      status: 401
+      status: 401,
     } as any;
     spyOn(Swal, 'fire');
     const result = (service as any).handleError(fakeError);
@@ -267,6 +288,8 @@ describe('PrestamosService', () => {
 
   it('debería retornar la fecha y hora del cliente correctamente', () => {
     const result = service.obtenerFechaHoraCliente();
-    expect(result).toMatch(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [+-]\d{2}:\d{2}/);
+    expect(result).toMatch(
+      /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [+-]\d{2}:\d{2}/,
+    );
   });
 });

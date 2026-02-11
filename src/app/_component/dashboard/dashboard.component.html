@@ -1,358 +1,469 @@
 <div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
-    <app-top-nav fxHide.xs></app-top-nav>
-    <app-top-nav class="fixed-topnav" fxHide.gt-xs></app-top-nav>
+  <app-top-nav fxHide.xs></app-top-nav>
+  <app-top-nav class="fixed-topnav" fxHide.gt-xs></app-top-nav>
+  <app-loading></app-loading>
+  <mat-sidenav-container class="example-sidenav-container">
+    <mat-sidenav
+      #appDrawer
+      [mode]="mobileQuery.matches ? 'over' : 'side'"
+      [fixedInViewport]="mobileQuery.matches"
+      fixedTopGap="56"
+      [opened]="true"
+    >
+      <div class="logo-container" fxFlexAlign="center">
+        <app-logo *ngIf="authService.isLoggedIn()"></app-logo>
+      </div>
+      <mat-divider></mat-divider>
+      <mat-nav-list *ngIf="authService.isLoggedIn()">
+        <app-menu-list-item
+          *ngFor="let item of navItems"
+          [item]="item"
+        ></app-menu-list-item>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="row" *ngIf="authService.tienePermiso('dashboard.totales')">
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">$ Balance</div>
+            </div>
+
+            <p style="text-align: end">${{ total_capital_prestado }}</p>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">$ Total prestado</div>
+            </div>
+
+            <p style="text-align: end">${{ total_prestado }}</p>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">$ Total intereses</div>
+            </div>
+
+            <p style="text-align: end">${{ total_interes }}</p>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">$ Prestado hoy</div>
+            </div>
+
+            <p style="text-align: end">${{ total_prestado_hoy }}</p>
+          </div>
+        </div>
+
+        <br />
+        <div style="margin-top: 30px" class="col-md-3">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">$ Ing Interes hoy</div>
+            </div>
+
+            <p style="text-align: end">${{ total_interes_hoy }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="row"
+        *ngIf="authService.tienePermiso('dashboard.totales_user')"
+      >
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">$ Total intereses</div>
+            </div>
+
+            <p style="text-align: end">${{ total_interes }}</p>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">$ Ing Interes hoy</div>
+            </div>
+
+            <p style="text-align: end">${{ total_interes_hoy }}</p>
+          </div>
+        </div>
+      </div>
+
+      <br />
+      <div
+        *ngIf="!visualizarDocumentos && listadoPrestamos"
+        class="card"
+        style="width: 100%"
+      >
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Listado de prestamos</div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="card-text">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                (keyup)="applyFilter($event.target.value)"
+                placeholder="Buscar"
+              />
+            </mat-form-field>
+            <br />
+            <button
+              title="Crear Prestamo"
+              *ngIf="authService.tienePermiso('dashboard.crear_prestamo')"
+              class="btn btn-outline-primary btn-sm"
+              mat-icon-button
+              color="primary"
+              (click)="irPantallaCrearPrestamo()"
+            >
+              <mat-icon aria-label="Example icon-button with a heart icon"
+                >add</mat-icon
+              >
+            </button>
+            <br />
+            <mat-table
+              class="table-responsive"
+              [dataSource]="dataSource"
+              matSort
+              class="mat-elevation-z8"
+            >
+              <ng-container matColumnDef="id_prestamo">
+                <mat-header-cell *matHeaderCellDef mat-sort-header
+                  >Id Prestamo</mat-header-cell
+                >
+                <mat-cell *matCellDef="let element" data-label="Cliente">
+                  {{ element.id_prestamo }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="nomcliente">
+                <mat-header-cell *matHeaderCellDef mat-sort-header
+                  >Cliente</mat-header-cell
+                >
+                <mat-cell *matCellDef="let element" data-label="Cliente">
+                  {{ element.nomcliente }}
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="nomfpago">
+                <mat-header-cell *matHeaderCellDef mat-sort-header
+                  >Forma Pago</mat-header-cell
+                >
+                <mat-cell *matCellDef="let element" data-label="Forma Pago">
+                  {{ element.nomfpago }}
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="valcuota">
+                <mat-header-cell *matHeaderCellDef mat-sort-header
+                  >V. Cuota</mat-header-cell
+                >
+                <mat-cell *matCellDef="let element" data-label="V. Cuota">
+                  {{ element.valcuota | currency: '' : '' }}
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="valorpres">
+                <mat-header-cell *matHeaderCellDef mat-sort-header
+                  >V. Prestamo</mat-header-cell
+                >
+                <mat-cell *matCellDef="let element" data-label="V. Prestamo">
+                  {{ element.valorpres | currency: '' : '' }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="celular">
+                <mat-header-cell *matHeaderCellDef mat-sort-header
+                  >Celular</mat-header-cell
+                >
+                <mat-cell *matCellDef="let element" data-label="Celular">
+                  {{ element.celular }}
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="direcasa">
+                <mat-header-cell *matHeaderCellDef mat-sort-header
+                  >Direcci&oacute;n Casa</mat-header-cell
+                >
+                <mat-cell *matCellDef="let element" data-label="Dir. Casa">
+                  {{ element.direcasa }}
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="action">
+                <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+                <mat-cell *matCellDef="let row; let i = index">
+                  <button
+                    title="Documentos"
+                    *ngIf="
+                      authService.tienePermiso('dashboard.imprimir_documentos')
+                    "
+                    class="float-right btn btn-outline-primary btn-sm"
+                    mat-icon-button
+                    color="primary"
+                    (click)="
+                      modalListadoDocumentos(row);
+                      visualizarListaCuotas = false;
+                      totales = false
+                    "
+                  >
+                    <mat-icon aria-label="print">print</mat-icon>
+                  </button>
+                  <button
+                    title="Listado Cuotas"
+                    *ngIf="authService.tienePermiso('dashboard.listado_cuotas')"
+                    class="float-right btn btn-outline-info btn-sm"
+                    mat-icon-button
+                    color="primary"
+                    (click)="
+                      visualizarListaCuotas = true;
+                      visualizarDocumentos = false;
+                      listadoPrestamos = false;
+                      listadoCuotas(row);
+                      totales = false
+                    "
+                  >
+                    <mat-icon aria-label="find_in_page">find_in_page</mat-icon>
+                  </button>
+                  <button
+                    title="Eliminar Prestamo"
+                    *ngIf="
+                      authService.tienePermiso('dashboard.eliminar_prestamo')
+                    "
+                    class="float-right btn btn-outline-info btn-sm"
+                    mat-icon-button
+                    color="accent"
+                    (click)="eliminarPrestamo(row)"
+                  >
+                    <mat-icon aria-label="delete">delete</mat-icon>
+                  </button>
+                </mat-cell>
+              </ng-container>
+              <mat-header-row
+                *matHeaderRowDef="displayedColumns"
+              ></mat-header-row>
+              <mat-row
+                *matRowDef="let row; columns: displayedColumns"
+              ></mat-row>
+            </mat-table>
+            <mat-paginator
+              [pageSize]="25"
+              [length]="dataSource.data.length"
+              [pageSizeOptions]="[
+                5,
+                10,
+                20,
+                25,
+                50,
+                100,
+                dataSource.data.length,
+              ]"
+              showFirstLastButtons
+            >
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="visualizarDocumentos" class="card" style="width: 100%">
+        <div class="card-body">
+          <div class="card-header">
+            <h5 class="card-title">
+              <button
+                title="Volver"
+                (click)="visualizarDocumentos = false; totales = true"
+                class="left btn btn-outline-primary btn-sm"
+                mat-icon-button
+                color="primary"
+              >
+                <mat-icon aria-label="Example icon-button with a heart icon"
+                  >keyboard_backspace</mat-icon
+                ></button
+              >&nbsp;Listado de Documentos del prestamo
+            </h5>
+          </div>
+          <br />
+          <div class="card-text">
+            <mat-accordion multi>
+              <mat-expansion-panel
+                [expanded]="true"
+                (opened)="panelOpenState = true"
+                (closed)="panelOpenState = false"
+              >
+                <mat-expansion-panel-header>
+                  <mat-panel-title> Documentos del prestamo </mat-panel-title>
+                </mat-expansion-panel-header>
+                <br />
+                <!-- <div [innerHTML]="item.plantilla_html"></div> -->
+                <tinymce
+                  [(ngModel)]="contenidoCombinado"
+                  [config]="config"
+                ></tinymce>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="visualizarListaCuotas" class="card" style="width: 100%">
+        <div class="card-body">
+          <div class="card-header">
+            <h5 class="card-title">
+              <button
+                title="Volver"
+                (click)="
+                  listadoPrestamos = true;
+                  visualizarListaCuotas = false;
+                  totales = true
+                "
+                class="left btn btn-outline-primary btn-sm"
+                mat-icon-button
+                color="primary"
+              >
+                <mat-icon aria-label="Example icon-button with a heart icon"
+                  >keyboard_backspace</mat-icon
+                ></button
+              >&nbsp;Listado de Cuotas del prestamo #
+              {{ codPrestaSeleccionado }}
+            </h5>
+          </div>
+          <small>{{ clienteSeleccionado }}</small>
+          <div class="card-text">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                (keyup)="applyFilter($event.target.value)"
+                placeholder="Buscar"
+              />
+            </mat-form-field>
+            <mat-table
+              class="main-table mobile-optimised table-responvive"
+              [dataSource]="dataSourceFecPago"
+              matSort
+              class="mat-elevation-z8"
+            >
+              <ng-container matColumnDef="fecha_pago">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Fecha de Pago
+                </mat-header-cell>
+                <mat-cell
+                  [ngStyle]="{
+                    'background-color': element.id_fecha_pago
+                      ? '#00800085'
+                      : '#ff0000bf',
+                  }"
+                  *matCellDef="let element"
+                  data-label="Fecha Pago"
+                >
+                  {{ element.fecha_pago }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="fecha_realpago">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Fecha Realiza Pago
+                </mat-header-cell>
+                <mat-cell
+                  [ngStyle]="{
+                    'background-color': element.id_fecha_pago
+                      ? '#00800085'
+                      : '#ff0000bf',
+                  }"
+                  *matCellDef="let element"
+                  data-label="Fecha Pago"
+                >
+                  {{ element.fecha_realpago }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="valcuota">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Valor Intereses
+                </mat-header-cell>
+                <mat-cell
+                  [ngStyle]="{
+                    'background-color': element.id_fecha_pago
+                      ? '#00800085'
+                      : '#ff0000bf',
+                  }"
+                  *matCellDef="let element"
+                  data-label="Val Cuota Interes"
+                >
+                  {{ element.valcuota }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="valtotal" data-label="Val Total">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Valor Pagar
+                </mat-header-cell>
+                <mat-cell
+                  [ngStyle]="{
+                    'background-color': element.id_fecha_pago
+                      ? '#00800085'
+                      : '#ff0000bf',
+                  }"
+                  *matCellDef="let element"
+                >
+                  {{ element.valtotal }}
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="action">
+                <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+                <mat-cell
+                  [ngStyle]="{
+                    'background-color': row.id_fecha_pago
+                      ? '#00800085'
+                      : '#ff0000bf',
+                  }"
+                  *matCellDef="let row; let i = index"
+                >
+                  <button
+                    *ngIf="!row.id_fecha_pago"
+                    title="PagarCuota"
+                    class="float-right btn btn-outline-primary btn-sm"
+                    mat-icon-button
+                    color="primary"
+                    (click)="pagarCuotaPrestamo(row)"
+                  >
+                    <mat-icon aria-label="money">money</mat-icon>
+                  </button>
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row
+                *matHeaderRowDef="displayedColumnsFecPago"
+              ></mat-header-row>
+              <mat-row
+                *matRowDef="let row; columns: displayedColumnsFecPago"
+              ></mat-row>
+            </mat-table>
+            <mat-paginator
+              [pageSize]="25"
+              [length]="dataSourceFecPago.data.length"
+              [pageSizeOptions]="[
+                5,
+                10,
+                20,
+                25,
+                50,
+                100,
+                dataSourceFecPago.data.length,
+              ]"
+              showFirstLastButtons
+            >
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </mat-sidenav-content>
     <app-loading></app-loading>
-    <mat-sidenav-container class="example-sidenav-container">
-        <mat-sidenav #appDrawer [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches"
-            fixedTopGap="56" [opened]="true">
-            <div class="logo-container" fxFlexAlign="center">
-                <app-logo *ngIf="authService.isLoggedIn()"></app-logo>
-            </div>
-            <mat-divider></mat-divider>
-            <mat-nav-list *ngIf="authService.isLoggedIn()">
-                <app-menu-list-item *ngFor="let item of navItems" [item]="item"></app-menu-list-item>
-            </mat-nav-list>
-        </mat-sidenav>
-        <mat-sidenav-content>
-
-            <div class="row" *ngIf="authService.tienePermiso('dashboard.totales')">
-                <div class="col-md-3">
-
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">$ Balance</div>
-                        </div>
-
-
-                        <p style="text-align:end">
-                            ${{total_capital_prestado}}
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-3">
-
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">$ Total prestado</div>
-                        </div>
-
-
-                        <p style="text-align:end">
-                            ${{total_prestado}}
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-3">
-
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">$ Total intereses</div>
-                        </div>
-
-
-                        <p style="text-align:end">
-                            ${{total_interes}}
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-3">
-
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">$ Prestado hoy</div>
-                        </div>
-
-
-                        <p style="text-align:end">
-                            ${{total_prestado_hoy}}
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <br>
-                <div style="margin-top: 30px;" class="col-md-3">
-
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">$ Ing Interes hoy</div>
-                        </div>
-
-
-                        <p style="text-align:end">
-                            ${{total_interes_hoy}}
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-
-            </div>
-
-            <div class="row" *ngIf="authService.tienePermiso('dashboard.totales_user')">
-                
-
-               
-
-                <div class="col-md-3">
-
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">$ Total intereses</div>
-                        </div>
-
-
-                        <p style="text-align:end">
-                            ${{total_interes}}
-                        </p>
-
-                    </div>
-
-                </div>
-
-                
-
-                
-                <div class="col-md-3">
-
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">$ Ing Interes hoy</div>
-                        </div>
-
-
-                        <p style="text-align:end">
-                            ${{total_interes_hoy}}
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-
-            </div>
-
-            <br>
-            <div *ngIf="!visualizarDocumentos && listadoPrestamos" class="card" style="width: 100%;">
-
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Listado de prestamos</div>
-                    </div>
-
-
-                </div>
-
-                <div class="card-body">
-
-
-
-                    <div class="card-text">
-                        <mat-form-field class="example-full-width">
-                            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
-                        </mat-form-field>
-                        <br>
-                        <button title="Crear Prestamo" *ngIf="authService.tienePermiso('dashboard.crear_prestamo')"
-                            class="btn btn-outline-primary btn-sm" mat-icon-button color="primary"
-                            (click)="irPantallaCrearPrestamo()">
-                            <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
-                        </button>
-                        <br>
-                        <mat-table class="table-responsive" [dataSource]="dataSource" matSort class="mat-elevation-z8 ">
-
-                            <ng-container matColumnDef="id_prestamo">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header>Id Prestamo</mat-header-cell>
-                                <mat-cell *matCellDef="let element" data-label="Cliente"> {{element.id_prestamo}}
-                                </mat-cell>
-                            </ng-container>
-
-                            <ng-container matColumnDef="nomcliente">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
-                                <mat-cell *matCellDef="let element" data-label="Cliente"> {{element.nomcliente}}
-                                </mat-cell>
-                            </ng-container>
-                            <ng-container matColumnDef="nomfpago">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header>Forma Pago</mat-header-cell>
-                                <mat-cell *matCellDef="let element" data-label="Forma Pago"> {{element.nomfpago}}
-                                </mat-cell>
-                            </ng-container>
-                            <ng-container matColumnDef="valcuota">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header>V. Cuota</mat-header-cell>
-                                <mat-cell *matCellDef="let element" data-label="V. Cuota"> {{element.valcuota |
-                                    currency:'':'' }} </mat-cell>
-                            </ng-container>
-                            <ng-container matColumnDef="valorpres">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header>V. Prestamo</mat-header-cell>
-                                <mat-cell *matCellDef="let element" data-label="V. Prestamo"> {{element.valorpres |
-                                    currency:'':''}} </mat-cell>
-                            </ng-container>
-
-                            <ng-container matColumnDef="celular">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header>Celular</mat-header-cell>
-                                <mat-cell *matCellDef="let element" data-label="Celular"> {{element.celular}}
-                                </mat-cell>
-                            </ng-container>
-                            <ng-container matColumnDef="direcasa">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header>Direcci&oacute;n
-                                    Casa</mat-header-cell>
-                                <mat-cell *matCellDef="let element" data-label="Dir. Casa"> {{element.direcasa}}
-                                </mat-cell>
-                            </ng-container>
-                            <ng-container matColumnDef="action">
-                                <mat-header-cell *matHeaderCellDef>
-
-                                </mat-header-cell>
-                                <mat-cell *matCellDef="let row; let i=index;">
-                                    <button title="Documentos"
-                                        *ngIf="authService.tienePermiso('dashboard.imprimir_documentos')"
-                                        class="float-right btn btn-outline-primary btn-sm" mat-icon-button
-                                        color="primary"
-                                        (click)="modalListadoDocumentos(row);visualizarListaCuotas=false;totales=false">
-                                        <mat-icon aria-label="print">print</mat-icon>
-                                    </button>
-                                    <button title="Listado Cuotas"
-                                        *ngIf="authService.tienePermiso('dashboard.listado_cuotas')"
-                                        class="float-right btn btn-outline-info btn-sm" mat-icon-button color="primary"
-                                        (click)="visualizarListaCuotas=true;visualizarDocumentos=false;listadoPrestamos=false;listadoCuotas(row);totales=false">
-                                        <mat-icon aria-label="find_in_page">find_in_page</mat-icon>
-                                    </button>
-                                    <button title="Eliminar Prestamo"
-                                        *ngIf="authService.tienePermiso('dashboard.eliminar_prestamo')"
-                                        class="float-right btn btn-outline-info btn-sm" mat-icon-button color="accent"
-                                        (click)="eliminarPrestamo(row)">
-                                        <mat-icon aria-label="delete">delete</mat-icon>
-                                    </button>
-                                </mat-cell>
-                            </ng-container>
-                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                        </mat-table>
-                        <mat-paginator [pageSize]="25" [length]="dataSource.data.length"
-                            [pageSizeOptions]="[5, 10, 20, 25, 50, 100,dataSource.data.length]" showFirstLastButtons>
-                        </mat-paginator>
-                    </div>
-                </div>
-            </div>
-            <div *ngIf="visualizarDocumentos" class="card" style="width: 100%;">
-                <div class="card-body">
-                    <div class="card-header">
-                        <h5 class="card-title"><button title="Volver" (click)="visualizarDocumentos=false;totales=true"
-                                class="left btn btn-outline-primary btn-sm" mat-icon-button color="primary">
-                                <mat-icon
-                                    aria-label="Example icon-button with a heart icon">keyboard_backspace</mat-icon>
-                            </button>&nbsp;Listado de Documentos del prestamo</h5>
-                    </div>
-                    <br>
-                    <div class="card-text">
-                        <mat-accordion multi>
-                            <mat-expansion-panel [expanded]="true" (opened)="panelOpenState = true"
-                                (closed)="panelOpenState = false">
-                                <mat-expansion-panel-header>
-                                    <mat-panel-title>
-                                        Documentos del prestamo
-                                    </mat-panel-title>
-                                </mat-expansion-panel-header>
-                                <br>
-                                <!-- <div [innerHTML]="item.plantilla_html"></div> -->
-                                <tinymce [(ngModel)]="contenidoCombinado" [config]="config"></tinymce>
-                            </mat-expansion-panel>
-                        </mat-accordion>
-                    </div>
-                </div>
-            </div>
-            <div *ngIf="visualizarListaCuotas" class="card" style="width: 100%;">
-                <div class="card-body">
-                    <div class="card-header">
-
-
-                        <h5 class="card-title"><button title="Volver"
-                                (click)="listadoPrestamos=true;visualizarListaCuotas=false;totales=true"
-                                class="left btn btn-outline-primary btn-sm" mat-icon-button color="primary">
-                                <mat-icon
-                                    aria-label="Example icon-button with a heart icon">keyboard_backspace</mat-icon>
-                            </button>&nbsp;Listado de Cuotas del prestamo # {{codPrestaSeleccionado}}</h5>
-
-                    </div>
-                    <small>{{clienteSeleccionado}}</small>
-                    <div class="card-text">
-                        <mat-form-field class="example-full-width">
-                            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
-                        </mat-form-field>
-                        <mat-table class="main-table mobile-optimised table-responvive" [dataSource]="dataSourceFecPago"
-                            matSort class="mat-elevation-z8 ">
-
-                            <ng-container matColumnDef="fecha_pago">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de Pago </mat-header-cell>
-                                <mat-cell
-                                    [ngStyle]="{'background-color': element.id_fecha_pago? '#00800085' : '#ff0000bf'}"
-                                    *matCellDef="let element" data-label="Fecha Pago"> {{element.fecha_pago}}
-                                </mat-cell>
-                            </ng-container>
-
-                            <ng-container matColumnDef="fecha_realpago">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Realiza Pago
-                                </mat-header-cell>
-                                <mat-cell
-                                    [ngStyle]="{'background-color': element.id_fecha_pago? '#00800085' : '#ff0000bf'}"
-                                    *matCellDef="let element" data-label="Fecha Pago"> {{element.fecha_realpago}}
-                                </mat-cell>
-                            </ng-container>
-
-                            <ng-container matColumnDef="valcuota">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> Valor Intereses </mat-header-cell>
-                                <mat-cell
-                                    [ngStyle]="{'background-color': element.id_fecha_pago? '#00800085' : '#ff0000bf'}"
-                                    *matCellDef="let element" data-label="Val Cuota Interes"> {{element.valcuota}}
-                                </mat-cell>
-                            </ng-container>
-
-
-                            <ng-container matColumnDef="valtotal" data-label="Val Total">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> Valor Pagar </mat-header-cell>
-                                <mat-cell
-                                    [ngStyle]="{'background-color': element.id_fecha_pago? '#00800085' : '#ff0000bf'}"
-                                    *matCellDef="let element"> {{element.valtotal}}
-                                </mat-cell>
-                            </ng-container>
-                            <ng-container matColumnDef="action">
-                                <mat-header-cell *matHeaderCellDef>
-                                </mat-header-cell>
-                                <mat-cell [ngStyle]="{'background-color': row.id_fecha_pago? '#00800085' : '#ff0000bf'}"
-                                    *matCellDef="let row; let i=index;">
-                                    <button *ngIf="!row.id_fecha_pago" title="PagarCuota"
-                                        class="float-right btn btn-outline-primary btn-sm" mat-icon-button
-                                        color="primary" (click)="pagarCuotaPrestamo(row);">
-                                        <mat-icon aria-label="money">money</mat-icon>
-                                    </button>
-                                </mat-cell>
-
-                            </ng-container>
-
-                            <mat-header-row *matHeaderRowDef="displayedColumnsFecPago"></mat-header-row>
-                            <mat-row *matRowDef="let row; columns: displayedColumnsFecPago;"></mat-row>
-                        </mat-table>
-                        <mat-paginator [pageSize]="25" [length]="dataSourceFecPago.data.length"
-                            [pageSizeOptions]="[5, 10, 20, 25, 50, 100,dataSourceFecPago.data.length]"
-                            showFirstLastButtons>
-                        </mat-paginator>
-
-                    </div>
-                </div>
-            </div>
-        </mat-sidenav-content>
-        <app-loading></app-loading>
-    </mat-sidenav-container>
+  </mat-sidenav-container>
 </div>

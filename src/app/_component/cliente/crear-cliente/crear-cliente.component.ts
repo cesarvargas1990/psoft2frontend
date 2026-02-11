@@ -1,4 +1,12 @@
-import { Component, ViewChild, ElementRef, OnInit, ChangeDetectorRef, AfterViewInit, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  OnInit,
+  ChangeDetectorRef,
+  AfterViewInit,
+  ViewContainerRef,
+} from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
 import { NavItem } from '../../../_models/nav-item';
@@ -19,7 +27,6 @@ import { SignaturePad } from 'ngx-signaturepad/signature-pad';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { environment } from '../../../../environments/environment';
 
-
 export interface TabType {
   label: string;
   fields: FormlyFieldConfig[];
@@ -28,11 +35,9 @@ export interface TabType {
 @Component({
   selector: 'app-crear-cliente',
   templateUrl: './crear-cliente.component.html',
-  styleUrls: ['./crear-cliente.component.scss']
+  styleUrls: ['./crear-cliente.component.scss'],
 })
 export class CrearClienteComponent implements AfterViewInit {
-
-
   public showWebcam = true;
   public allowCameraSwitch = true;
   public multipleWebcamsAvailable = false;
@@ -50,16 +55,17 @@ export class CrearClienteComponent implements AfterViewInit {
   // webcam snapshot trigger
   private trigger: Subject<void> = new Subject<void>();
   // switch to next / previous / specific webcam; true/false: forward/backwards, string: deviceId
-  private nextWebcam: Subject<boolean | string> = new Subject<boolean | string>();
-
-
+  private nextWebcam: Subject<boolean | string> = new Subject<
+    boolean | string
+  >();
 
   @ViewChild(SignaturePad, { static: false }) public signaturePad: SignaturePad;
 
-  public signaturePadOptions: Object = { // passed through to szimek/signature_pad constructor
-    'minWidth': 5,
-    'canvasWidth': window.innerWidth,
-    'canvasHeight': 300
+  public signaturePadOptions: Object = {
+    // passed through to szimek/signature_pad constructor
+    minWidth: 5,
+    canvasWidth: window.innerWidth,
+    canvasHeight: 300,
   };
 
   panelOpenState = false;
@@ -67,32 +73,28 @@ export class CrearClienteComponent implements AfterViewInit {
   public imagePath;
   imgURL: any;
   public message: string;
-  public sign: boolean = false;
+  public sign = false;
   modoEdicion = false;
   listaArchivos: any = [];
   listaTipoDoc: any = [];
-  lista: string[] = ["hola", "que", "tal", "estas"];
+  lista: string[] = ['hola', 'que', 'tal', 'estas'];
   listaTiposDocumento: [] = [];
   webcam = 0;
   tomarfoto = 0;
   currentIndexImage = 0;
-
 
   urlimage: any = {};
 
   model: any = {};
   data: any = {};
 
-
   tabs: TabType[] = [
     {
       label: 'Datos Personales',
       fields: [
         {
-
           fieldGroupClassName: 'row',
           fieldGroup: [
-
             {
               key: 'nomcliente',
               className: 'col-md-4',
@@ -105,7 +107,7 @@ export class CrearClienteComponent implements AfterViewInit {
               templateOptions: {
                 label: 'Nombre del cliente',
                 placeholder: 'Ingrese nombre del cliente',
-                required: true
+                required: true,
               },
             },
 
@@ -120,7 +122,7 @@ export class CrearClienteComponent implements AfterViewInit {
                 label: 'Cobrador',
                 placeholder: 'Seleccione cobrador',
                 required: true,
-                options: this.usersService.getUsers()
+                options: this.usersService.getUsers(),
               },
             },
             {
@@ -134,7 +136,7 @@ export class CrearClienteComponent implements AfterViewInit {
                 label: 'Tipo Documento',
                 placeholder: 'Seleccione Tipo documento',
                 required: true,
-                options: this.tipodocidentiService.getTipodocidenti()
+                options: this.tipodocidentiService.getTipodocidenti(),
               },
             },
             {
@@ -144,7 +146,6 @@ export class CrearClienteComponent implements AfterViewInit {
 
               modelOptions: {
                 updateOn: 'blur',
-
               },
               templateOptions: {
                 label: 'Numero Documento',
@@ -159,7 +160,6 @@ export class CrearClienteComponent implements AfterViewInit {
 
               modelOptions: {
                 updateOn: 'blur',
-
               },
               templateOptions: {
                 label: 'Fecha Expedicion',
@@ -174,7 +174,6 @@ export class CrearClienteComponent implements AfterViewInit {
 
               modelOptions: {
                 updateOn: 'blur',
-
               },
               templateOptions: {
                 label: 'Fecha Nacimiento',
@@ -182,11 +181,6 @@ export class CrearClienteComponent implements AfterViewInit {
                 required: true,
               },
             },
-
-
-
-
-
 
             {
               key: 'email',
@@ -200,25 +194,16 @@ export class CrearClienteComponent implements AfterViewInit {
                 required: true,
               },
             },
-
-
-
-
-
-          ]
-
-        }
+          ],
+        },
       ],
     },
     {
       label: 'Datos Contacto',
       fields: [
         {
-
           fieldGroupClassName: 'row',
           fieldGroup: [
-
-
             {
               key: 'ciudad',
               className: 'col-md-4',
@@ -240,7 +225,6 @@ export class CrearClienteComponent implements AfterViewInit {
               },
               templateOptions: {
                 label: 'Telefono Fijo',
-
               },
             },
             {
@@ -265,8 +249,7 @@ export class CrearClienteComponent implements AfterViewInit {
               },
               templateOptions: {
                 label: 'Dir Casa',
-                required_: true
-
+                required_: true,
               },
             },
 
@@ -279,28 +262,19 @@ export class CrearClienteComponent implements AfterViewInit {
               },
               templateOptions: {
                 label: 'Dir Trabajo',
-
               },
             },
-
-
-
-          ]
-
-        }
+          ],
+        },
       ],
     },
 
     {
       label: 'Referencias',
       fields: [
-
-
         {
-
           fieldGroupClassName: 'row',
           fieldGroup: [
-
             {
               key: 'ref1',
               className: 'col-md-4',
@@ -310,7 +284,6 @@ export class CrearClienteComponent implements AfterViewInit {
               },
               templateOptions: {
                 label: 'Referencia 1',
-
               },
             },
             {
@@ -324,24 +297,19 @@ export class CrearClienteComponent implements AfterViewInit {
                 label: 'Referencia 2',
               },
             },
-
-          ]
-
-        }
-
+          ],
+        },
       ],
     },
   ];
 
   form = new FormArray(this.tabs.map(() => new FormGroup({})));
-  options = this.tabs.map(() => <FormlyFormOptions>{});
-
+  options = this.tabs.map(() => ({}) as FormlyFormOptions);
 
   tiposdocumento: any = {};
   cobradores: any = {};
 
   fields: FormlyFieldConfig[] = [];
-
 
   @ViewChild('appDrawer', { static: false }) appDrawer: ElementRef;
 
@@ -353,55 +321,37 @@ export class CrearClienteComponent implements AfterViewInit {
 
   navItems: NavItem[] = this.menuUsuario;
 
-
   datosCliente: any = [];
-
 
   constructor(
     public authService: AuthService,
     private navService: NavService,
     public clienteService: ClienteService,
-    changeDetectorRef: ChangeDetectorRef, media: MediaMatcher,
+    changeDetectorRef: ChangeDetectorRef,
+    media: MediaMatcher,
     public router: Router,
     public tipodocidentiService: TipodocidentiService,
     public usersService: UsersService,
-    public prestamosService: PrestamosService
-
+    public prestamosService: PrestamosService,
   ) {
-
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
-
   }
 
   private _mobileQueryListener: () => void;
 
-
   async ngOnInit() {
-
-
-
-    WebcamUtil.getAvailableVideoInputs()
-      .then((mediaDevices: MediaDeviceInfo[]) => {
+    WebcamUtil.getAvailableVideoInputs().then(
+      (mediaDevices: MediaDeviceInfo[]) => {
         this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
-      });
-
-
-
-
-
-
+      },
+    );
 
     this.mobileQuery.removeListener(this._mobileQueryListener);
-
-
-
   }
 
-
   public triggerSnapshot(i): void {
-
     this.currentIndexImage = i;
     this.trigger.next();
   }
@@ -415,26 +365,21 @@ export class CrearClienteComponent implements AfterViewInit {
   }
 
   public showNextWebcam(directionOrDeviceId: boolean | string): void {
-
     this.nextWebcam.next(directionOrDeviceId);
   }
 
   public handleImage(webcamImage: WebcamImage): void {
-
     this.webcam = 0;
     this.tomarfoto = 0;
-
 
     this.webcamImage = webcamImage;
     this.urlimage = this.webcamImage.imageAsDataUrl;
     this.listaArchivos[this.currentIndexImage] = this.urlimage;
     console.log('como va');
     console.log(this.listaArchivos);
-
   }
 
   public cameraWasSwitched(deviceId: string): void {
-
     this.deviceId = deviceId;
   }
 
@@ -446,31 +391,17 @@ export class CrearClienteComponent implements AfterViewInit {
     return this.nextWebcam.asObservable();
   }
 
-
   async tiposDocumentos() {
-
-    this.prestamosService.listaTiposDocumento().subscribe(
-      response => {
-
-        this.listaTiposDocumento = response;
-      }
-    )
-
+    this.prestamosService.listaTiposDocumento().subscribe((response) => {
+      this.listaTiposDocumento = response;
+    });
   }
-
 
   async ngAfterViewInit() {
-
     this.tiposDocumentos();
 
-
-
     this.navService.appDrawer = this.appDrawer;
-
-
-
   }
-
 
   drawComplete() {
     this.sign = true;
@@ -480,129 +411,98 @@ export class CrearClienteComponent implements AfterViewInit {
     this.sign = true;
   }
 
-
   drawClear() {
     this.signaturePad.clear();
     this.sign = false;
   }
 
   submit() {
-
-
     if (this.form.valid) {
+      this.clienteService.saveCliente(this.model).subscribe((response) => {
+        if (response) {
+          this.model = response;
+          Swal.fire({
+            type: 'info',
+            title: 'Informaci&oacute;n',
+            text: 'Se registro satisfactoriamente el cliente.',
+          }).then((result) => {
+            if (result.value == true) {
+              let ltdoc;
 
-      this.clienteService.saveCliente(this.model).subscribe(
+              for (let i = 0; i < Object.keys(this.listaArchivos).length; i++) {
+                const imageBase64 = this.listaArchivos[i];
+                ltdoc = this.listaTipoDoc[i];
 
-        response => {
+                if (this.listaArchivos[i] != '') {
+                  this.data.image = imageBase64;
+                  this.data.id_tdocadjunto = this.listaTipoDoc[i];
+                  this.data.id_cliente = response.id;
+                  this.data.path = environment.GET_UPLOADS_PATH;
 
-
-          if (response) {
-
-            this.model = response;
-            Swal.fire({
-              type: 'info',
-              title: 'Informaci&oacute;n',
-              text: 'Se registro satisfactoriamente el cliente.',
-            }).then(
-              (result) => {
-
-                if (result.value == true) {
-
-
-                  let ltdoc;
-
-                  for (let i = 0; i < Object.keys(this.listaArchivos).length; i++) {
-
-
-                    let imageBase64 = this.listaArchivos[i];
-                    ltdoc = this.listaTipoDoc[i];
-
-
-                    if (this.listaArchivos[i] != '') {
-                      this.data.image = imageBase64;
-                      this.data.id_tdocadjunto = this.listaTipoDoc[i];
-                      this.data.id_cliente = response.id;
-                      this.data.path = environment.GET_UPLOADS_PATH;
-
-
-                      this.clienteService.uploadFile(this.data).subscribe(
-                        response => {
-                          console.log(response);
-                        }
-                      )
-                    }
-
-                  }
-                  if (this.sign) {
-                    this.data.image = this.signaturePad.toDataURL();
-                    this.data.id_tdocadjunto = 3;
-                    this.data.id_cliente = response.id;
-                    this.data.path = environment.GET_UPLOADS_PATH;
-                    this.clienteService.uploadFile(this.data).subscribe(
-                      response => {
-                        console.log(response);
-                      }
-                    )
-                    console.log(this.signaturePad.toDataURL())
-                  }
-
-
-                  this.model = response;
-                  this.router.navigate(['/clientes/listar']);
+                  this.clienteService
+                    .uploadFile(this.data)
+                    .subscribe((response) => {
+                      console.log(response);
+                    });
                 }
-
               }
-            )
+              if (this.sign) {
+                this.data.image = this.signaturePad.toDataURL();
+                this.data.id_tdocadjunto = 3;
+                this.data.id_cliente = response.id;
+                this.data.path = environment.GET_UPLOADS_PATH;
+                this.clienteService
+                  .uploadFile(this.data)
+                  .subscribe((response) => {
+                    console.log(response);
+                  });
+                console.log(this.signaturePad.toDataURL());
+              }
 
-          }
-
+              this.model = response;
+              this.router.navigate(['/clientes/listar']);
+            }
+          });
         }
-
-      )
-
+      });
     } else {
       Swal.fire({
         type: 'error',
         title: 'Error',
         text: 'Por favor valide los campos obligatorios, para guardar el cliente.',
-      })
+      });
     }
-
-
-
   }
 
   preview(files, i) {
-
-
-    if (files.length === 0)
-      return;
-
-    let mimeType = files[0].type;
-
-    if (mimeType.match(/image\/*/) == null && mimeType.match(/application\/pdf/) == null) {
-      this.message = "Solo se Aceptan, Imagenes o Documentos PDF.";
+    if (files.length === 0) {
       return;
     }
 
-    var reader = new FileReader();
+    const mimeType = files[0].type;
+
+    if (
+      mimeType.match(/image\/*/) == null &&
+      mimeType.match(/application\/pdf/) == null
+    ) {
+      this.message = 'Solo se Aceptan, Imagenes o Documentos PDF.';
+      return;
+    }
+
+    const reader = new FileReader();
     this.imagePath = files;
     reader.readAsDataURL(files[0]);
     reader.onload = (_event) => {
-
-
-
       this.listaArchivos[i] = reader.result;
 
-
       this.imgURL = reader.result;
-    }
+    };
   }
 
   public validateExtension(filename) {
     if (filename) {
-      if (filename != "") {
-        return filename.substr(filename.lastIndexOf('.') + 1)
+      if (filename != '') {
+        return filename.substr(filename.lastIndexOf('.') + 1);
       }
     }
   }
@@ -610,7 +510,4 @@ export class CrearClienteComponent implements AfterViewInit {
   volver() {
     this.router.navigate(['/dashboard']);
   }
-
-
-
 }

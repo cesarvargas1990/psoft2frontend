@@ -2,7 +2,11 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { ListarPrestamosclienteComponent } from './listar-prestamoscliente.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FormlyModule } from '@ngx-formly/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+} from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
@@ -27,7 +31,7 @@ const mockClienteData = {
   direcasa: 'Calle 123',
   diretrabajo: 'Carrera 45',
   ref1: 'Referencia 1',
-  ref2: 'Referencia 2'
+  ref2: 'Referencia 2',
 };
 
 describe('ListarPrestamosclienteComponent', () => {
@@ -38,8 +42,13 @@ describe('ListarPrestamosclienteComponent', () => {
   let usersServiceSpy: any;
 
   beforeEach(async(() => {
-    clienteServiceSpy = jasmine.createSpyObj('ClienteService', ['getPrestamosCliente', 'updateCliente']);
-    tipodocidentiServiceSpy = jasmine.createSpyObj('TipodocidentiService', ['getTipodocidenti']);
+    clienteServiceSpy = jasmine.createSpyObj('ClienteService', [
+      'getPrestamosCliente',
+      'updateCliente',
+    ]);
+    tipodocidentiServiceSpy = jasmine.createSpyObj('TipodocidentiService', [
+      'getTipodocidenti',
+    ]);
     usersServiceSpy = jasmine.createSpyObj('UsersService', ['getUsers']);
 
     TestBed.configureTestingModule({
@@ -49,23 +58,28 @@ describe('ListarPrestamosclienteComponent', () => {
         FormsModule,
         FormlyModule.forRoot(),
         MatDialogModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
       ],
       providers: [
         { provide: ClienteService, useValue: clienteServiceSpy },
         { provide: TipodocidentiService, useValue: tipodocidentiServiceSpy },
         { provide: UsersService, useValue: usersServiceSpy },
-        { provide: MatDialogRef, useValue: { close: jasmine.createSpy('close') } },
-        { provide: MAT_DIALOG_DATA, useValue: mockClienteData }
+        {
+          provide: MatDialogRef,
+          useValue: { close: jasmine.createSpy('close') },
+        },
+        { provide: MAT_DIALOG_DATA, useValue: mockClienteData },
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   }));
 
   beforeEach(async () => {
     clienteServiceSpy.getPrestamosCliente.and.returnValue(of([]));
     clienteServiceSpy.updateCliente.and.returnValue(of(mockClienteData));
-    tipodocidentiServiceSpy.getTipodocidenti.and.returnValue(Promise.resolve([]));
+    tipodocidentiServiceSpy.getTipodocidenti.and.returnValue(
+      Promise.resolve([]),
+    );
     usersServiceSpy.getUsers.and.returnValue(Promise.resolve([]));
 
     fixture = TestBed.createComponent(ListarPrestamosclienteComponent);
@@ -86,7 +100,7 @@ describe('ListarPrestamosclienteComponent', () => {
   it('debería obtener headers únicos de los prestamos', () => {
     component.consultaPrestamoCliente = [
       { campoA: 'valorA', campoB: 'valorB' },
-      { campoB: 'valorB2', campoC: 'valorC' }
+      { campoB: 'valorB2', campoC: 'valorC' },
     ];
     const headers = component.getHeaders();
     expect(headers).toContain('campoA');

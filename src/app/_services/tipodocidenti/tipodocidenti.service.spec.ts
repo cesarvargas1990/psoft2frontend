@@ -1,5 +1,8 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { TipodocidentiService } from './tipodocidenti.service';
 import { AuthService } from '../../_services/auth.service';
 import { environment } from './../../../environments/environment';
@@ -10,26 +13,30 @@ describe('TipodocidentiService', () => {
   let httpMock: HttpTestingController;
 
   const mockAuthService = {
-    isAuthenticated: () => true
+    isAuthenticated: () => true,
   };
 
   const dummyResponse = [
     { id: 1, descripcion: 'Cédula de ciudadanía' },
-    { id: 2, descripcion: 'NIT' }
+    { id: 2, descripcion: 'NIT' },
   ];
 
   beforeEach(() => {
-    spyOn(localStorage, 'getItem').and.callFake((key: string): string | null => {
-      if (key === 'access_token') return 'fake-token';
-      return null;
-    });
+    spyOn(localStorage, 'getItem').and.callFake(
+      (key: string): string | null => {
+        if (key === 'access_token') {
+          return 'fake-token';
+        }
+        return null;
+      },
+    );
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
         TipodocidentiService,
-        { provide: AuthService, useValue: mockAuthService }
-      ]
+        { provide: AuthService, useValue: mockAuthService },
+      ],
     });
 
     injector = getTestBed();

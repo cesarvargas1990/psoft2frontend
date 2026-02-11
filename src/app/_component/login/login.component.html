@@ -2,28 +2,51 @@
   <span>Prestasoft</span>
 </mat-toolbar>
 
-<div class="login-page" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="50px">
+<div
+  class="login-page"
+  fxLayout="row"
+  fxLayout.xs="column"
+  fxLayoutAlign="center"
+  fxLayoutGap="50px"
+>
   <div class="logo-container" fxFlexAlign="center">
     <app-logo></app-logo>
   </div>
   <mat-card fxFlexAlign="center">
-    <mat-card-title>
-      Iniciar Sesi&oacute;n Prestasoft 
-    </mat-card-title>
+    <mat-card-title> Iniciar Sesi&oacute;n Prestasoft </mat-card-title>
     <mat-card-content>
       <form (ngSubmit)="login()" #form="ngForm">
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="E-mail" name="email" id="exampleInputEmail1" [(ngModel)]="model.email" required>
+          <input
+            matInput
+            placeholder="E-mail"
+            name="email"
+            id="exampleInputEmail1"
+            [(ngModel)]="model.email"
+            required
+          />
         </mat-form-field>
 
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="Password" type="password" name="password" [(ngModel)]="model.password"
-            id="exampleInputPassword1" required>
+          <input
+            matInput
+            placeholder="Password"
+            type="password"
+            name="password"
+            [(ngModel)]="model.password"
+            id="exampleInputPassword1"
+            required
+          />
         </mat-form-field>
-        <button type="submit" class="btn btn-primary" [disabled]="submitted || !form.valid">Iniciar</button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="submitted || !form.valid"
+        >
+          Iniciar
+        </button>
       </form>
     </mat-card-content>
-
   </mat-card>
 </div>
 <app-loading></app-loading>

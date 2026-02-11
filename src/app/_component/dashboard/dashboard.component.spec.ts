@@ -142,7 +142,17 @@ describe('DashboardComponent', () => {
 
   it('should call listadoCuotas and update dataSourceFecPago', () => {
     const row = { id_prestamo: 1, nomcliente: 'Cliente' };
-    prestamosServiceSpy.listaFechasPago.and.returnValue(of([{ fecha_pago: '2026-02-11', fecha_realpago: '2026-02-11', valcuota: 100, valtotal: 100, action: '' }]));
+    prestamosServiceSpy.listaFechasPago.and.returnValue(
+      of([
+        {
+          fecha_pago: '2026-02-11',
+          fecha_realpago: '2026-02-11',
+          valcuota: 100,
+          valtotal: 100,
+          action: ''
+        }
+      ])
+    );
     component.listadoCuotas(row);
     expect(component.codPrestaSeleccionado).toBe(1);
     expect(component.clienteSeleccionado).toBe('Cliente');
@@ -168,7 +178,12 @@ describe('DashboardComponent', () => {
     prestamosServiceSpy.registrarPagoCuota.and.returnValue(of({}));
     spyOn(component, 'listadoCuotas');
     spyOn(component, 'refresh');
-    const row = { fecha_pago: '2026-02-11', id_prestamo: 1, id_cliente: 2, id: 3 };
+    const row = {
+      fecha_pago: '2026-02-11',
+      id_prestamo: 1,
+      id_cliente: 2,
+      id: 3
+    };
     component.pagarCuotaPrestamo(row);
     tick();
     expect(prestamosServiceSpy.registrarPagoCuota).toHaveBeenCalled();
@@ -192,9 +207,24 @@ describe('DashboardComponent', () => {
   });
 
   it('should call getDatosPrestamo and update dataSource', () => {
-    prestamosServiceSpy.listadoPrestamos.and.returnValue(of([{ id_prestamo: 1, nomcliente: 'Cliente', valorpres: 1000, valcuota: 100, nomfpago: 'Mensual', celular: '123456789', direcasa: 'Calle 1', action: '' }]));
+    prestamosServiceSpy.listadoPrestamos.and.returnValue(
+      of([
+        {
+          id_prestamo: 1,
+          nomcliente: 'Cliente',
+          valorpres: 1000,
+          valcuota: 100,
+          nomfpago: 'Mensual',
+          celular: '123456789',
+          direcasa: 'Calle 1',
+          action: ''
+        }
+      ])
+    );
     component.getDatosPrestamo();
-    expect(prestamosServiceSpy.listadoPrestamos).toHaveBeenCalledWith(component.data);
+    expect(prestamosServiceSpy.listadoPrestamos).toHaveBeenCalledWith(
+      component.data
+    );
     expect(component.dataSource.data.length).toBeGreaterThan(0);
     expect(component.dataSource.sort).toBe(component.sort);
     expect(component.dataSource.paginator).toBe(component.paginator);
@@ -208,13 +238,15 @@ describe('DashboardComponent', () => {
       addListener: jasmine.createSpy('addListener')
     } as any;
     spyOn(component, 'getDatosPrestamo');
-    prestamosServiceSpy.totales_dashboard.and.returnValue(of({
-      total_capital_prestado: '1000',
-      total_prestado_hoy: '200',
-      total_interes_hoy: '50',
-      total_interes: '300',
-      total_prestado: '1200'
-    }));
+    prestamosServiceSpy.totales_dashboard.and.returnValue(
+      of({
+        total_capital_prestado: '1000',
+        total_prestado_hoy: '200',
+        total_interes_hoy: '50',
+        total_interes: '300',
+        total_prestado: '1200'
+      })
+    );
     component.refresh();
     expect(prestamosServiceSpy.totales_dashboard).toHaveBeenCalled();
     expect(component.total_capital_prestado).toBe('1000');

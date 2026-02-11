@@ -306,7 +306,9 @@ describe('CrearPrestamoComponent', () => {
 
   it('debe actualizar model y navegar tras submit válido', () => {
     const routerSpy = spyOn(router, 'navigate');
-    spyOn(component.clienteService, 'saveCliente').and.returnValue(of({ id: 99 }));
+    spyOn(component.clienteService, 'saveCliente').and.returnValue(
+      of({ id: 99 })
+    );
     component.form.setErrors(null);
     component.model = { id_cliente: 1 };
     component.submit();

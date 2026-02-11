@@ -6,6 +6,7 @@
     "start": "NODE_OPTIONS=--openssl-legacy-provider ng serve",
     "build": "NODE_OPTIONS=--openssl-legacy-provider ng build",
     "test": "NODE_OPTIONS=--openssl-legacy-provider ng test --watch=false",
+    "test:coverage": "NODE_OPTIONS=--openssl-legacy-provider ng test --watch=false --code-coverage=true",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "start:electron": "ng build --base-href ./ && electron .",

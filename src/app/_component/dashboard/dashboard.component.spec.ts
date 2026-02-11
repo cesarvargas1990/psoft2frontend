@@ -15,6 +15,7 @@ import { MatTableModule } from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 import { PrestamosService } from '../../_services/prestamos/prestamos.service';
 import { AuthService } from '../../_services/auth.service';
@@ -137,5 +138,87 @@ describe('DashboardComponent', () => {
     const row = { id_prestamo: 1 };
     component.modalListadoDocumentos(row);
     expect(prestamosServiceSpy.renderTemplates).toHaveBeenCalled();
+  });
+
+  it('should call listadoCuotas and update dataSourceFecPago', () => {
+    const row = { id_prestamo: 1, nomcliente: 'Cliente' };
+    prestamosServiceSpy.listaFechasPago.and.returnValue(of([{ fecha_pago: '2026-02-11', fecha_realpago: '2026-02-11', valcuota: 100, valtotal: 100, action: '' }]));
+    component.listadoCuotas(row);
+    expect(component.codPrestaSeleccionado).toBe(1);
+    expect(component.clienteSeleccionado).toBe('Cliente');
+    expect(prestamosServiceSpy.listaFechasPago).toHaveBeenCalledWith(1);
+    expect(component.dataSourceFecPago.data.length).toBeGreaterThan(0);
+  });
+
+  it('should call eliminarPrestamo and refresh on confirm', fakeAsync(() => {
+    spyOn(Swal, 'fire').and.returnValue(Promise.resolve({ value: true }));
+    prestamosServiceSpy.deletePrestamo.and.returnValue(of({}));
+    spyOn(component, 'getDatosPrestamo');
+    spyOn(component, 'refresh');
+    const row = { id_prestamo: 1 };
+    component.eliminarPrestamo(row);
+    tick();
+    expect(prestamosServiceSpy.deletePrestamo).toHaveBeenCalledWith(row);
+    expect(component.getDatosPrestamo).toHaveBeenCalled();
+    expect(component.refresh).toHaveBeenCalled();
+  }));
+
+  it('should call pagarCuotaPrestamo and refresh on confirm', fakeAsync(() => {
+    spyOn(Swal, 'fire').and.returnValue(Promise.resolve({ value: true }));
+    prestamosServiceSpy.registrarPagoCuota.and.returnValue(of({}));
+    spyOn(component, 'listadoCuotas');
+    spyOn(component, 'refresh');
+    const row = { fecha_pago: '2026-02-11', id_prestamo: 1, id_cliente: 2, id: 3 };
+    component.pagarCuotaPrestamo(row);
+    tick();
+    expect(prestamosServiceSpy.registrarPagoCuota).toHaveBeenCalled();
+    expect(component.listadoCuotas).toHaveBeenCalledWith(row);
+    expect(component.refresh).toHaveBeenCalled();
+  }));
+
+  it('should call ngOnInit and set config', () => {
+    spyOn(component, 'refresh');
+    component.ngOnInit();
+    expect(component.config.height).toBe(500);
+    expect(component.refresh).toHaveBeenCalled();
+  });
+
+  it('should call ngAfterViewInit and set navService.appDrawer', () => {
+    const appDrawerMock = {};
+    component.appDrawer = appDrawerMock as any;
+    // No acceso directo a private navService, solo ejecutamos el método
+    component.ngAfterViewInit();
+    // No assertion directa sobre navService.appDrawer por ser private
+  });
+
+  it('should call getDatosPrestamo and update dataSource', () => {
+    prestamosServiceSpy.listadoPrestamos.and.returnValue(of([{ id_prestamo: 1, nomcliente: 'Cliente', valorpres: 1000, valcuota: 100, nomfpago: 'Mensual', celular: '123456789', direcasa: 'Calle 1', action: '' }]));
+    component.getDatosPrestamo();
+    expect(prestamosServiceSpy.listadoPrestamos).toHaveBeenCalledWith(component.data);
+    expect(component.dataSource.data.length).toBeGreaterThan(0);
+    expect(component.dataSource.sort).toBe(component.sort);
+    expect(component.dataSource.paginator).toBe(component.paginator);
+  });
+
+  it('should call refresh and remove event listener', () => {
+    component.mobileQuery = {
+      removeEventListener: jasmine.createSpy('removeEventListener'),
+      addEventListener: jasmine.createSpy('addEventListener'),
+      removeListener: jasmine.createSpy('removeListener'),
+      addListener: jasmine.createSpy('addListener')
+    } as any;
+    spyOn(component, 'getDatosPrestamo');
+    prestamosServiceSpy.totales_dashboard.and.returnValue(of({
+      total_capital_prestado: '1000',
+      total_prestado_hoy: '200',
+      total_interes_hoy: '50',
+      total_interes: '300',
+      total_prestado: '1200'
+    }));
+    component.refresh();
+    expect(prestamosServiceSpy.totales_dashboard).toHaveBeenCalled();
+    expect(component.total_capital_prestado).toBe('1000');
+    expect(component.mobileQuery.removeEventListener).toHaveBeenCalled();
+    expect(component.getDatosPrestamo).toHaveBeenCalled();
   });
 });

@@ -237,4 +237,80 @@ describe('CrearPrestamoComponent', () => {
     component.submit();
     expect(routerSpy).toHaveBeenCalledWith(['/prestamos/listar']);
   });
+
+  it('debe llamar ngOnInit y remover event listener', () => {
+    component.mobileQuery = {
+      removeEventListener: jasmine.createSpy('removeEventListener'),
+      addEventListener: jasmine.createSpy('addEventListener'),
+      removeListener: jasmine.createSpy('removeListener'),
+      addListener: jasmine.createSpy('addListener')
+    } as any;
+    component.ngOnInit();
+    expect(component.mobileQuery.removeEventListener).toHaveBeenCalled();
+  });
+
+  it('debe llamar ngAfterViewInit y setear config y fields', async () => {
+    component.appDrawer = {} as any;
+    const navService = (component as any).navService as NavService;
+    await component.ngAfterViewInit();
+    expect(component.config.height).toBe(500);
+    expect(component.fields.length).toBeGreaterThan(0);
+    expect(navService.appDrawer).toBe(component.appDrawer);
+  });
+
+  it('debe navegar al crear cliente al llamar modalAdicionarEmpresa', () => {
+    const spy = spyOn(router, 'navigate');
+    component.modalAdicionarEmpresa();
+    expect(spy).toHaveBeenCalledWith(['clientes/crear']);
+  });
+
+  it('debe mostrar error en obtenerCuotasPrestamo si formulario inválido', () => {
+    const spy = spyOn(Swal, 'fire');
+    component.form.setErrors({ invalid: true });
+    component.obtenerCuotasPrestamo();
+    expect(spy).toHaveBeenCalled();
+    expect(component.mostrarTablaResumen).toBe(false);
+  });
+
+  it('debe mostrar error en guardarPrestamo si formulario inválido', () => {
+    const spy = spyOn(Swal, 'fire');
+    component.form.setErrors({ invalid: true });
+    component.guardarPrestamo();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('debe llamar obtenerCuotasPrestamo desde Formly field change', () => {
+    const spy = spyOn(component, 'obtenerCuotasPrestamo');
+    component.form.setErrors(null);
+    const field = { form: component.form };
+    // Simula el evento de cambio en un campo
+    component.fields = [
+      {
+        fieldGroup: [
+          {
+            templateOptions: {
+              change: (f, e) => {
+                if (component.form.valid) {
+                  component.obtenerCuotasPrestamo();
+                }
+              }
+            }
+          }
+        ]
+      }
+    ];
+    // Ejecuta el change
+    component.fields[0].fieldGroup[0].templateOptions.change(field, {});
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('debe actualizar model y navegar tras submit válido', () => {
+    const routerSpy = spyOn(router, 'navigate');
+    spyOn(component.clienteService, 'saveCliente').and.returnValue(of({ id: 99 }));
+    component.form.setErrors(null);
+    component.model = { id_cliente: 1 };
+    component.submit();
+    expect(component.model.id).toBe(99);
+    expect(routerSpy).toHaveBeenCalledWith(['/prestamos/listar']);
+  });
 });

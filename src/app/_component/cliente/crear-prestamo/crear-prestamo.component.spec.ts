@@ -4,10 +4,11 @@ import {
   TestBed,
   fakeAsync,
   tick,
+  flushMicrotasks,
   flush,
   discardPeriodicTasks
 } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA, ElementRef } from '@angular/core';
+import { NO_ERRORS_SCHEMA, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { CrearPrestamoComponent } from './crear-prestamo.component';
@@ -19,6 +20,7 @@ import { UsersService } from '../../../_services/users/users.service';
 import { PrestamosService } from '../../../_services/prestamos/prestamos.service';
 import { MediaMatcher } from '@angular/cdk/layout';
 import Swal from 'sweetalert2';
+import { FormControl } from '@angular/forms';
 
 class MockAuthService {
   isLoggedIn() {
@@ -243,6 +245,12 @@ describe('CrearPrestamoComponent', () => {
     expect(headers.length).toBe(0);
   });
 
+  it('getHeaders debe retornar arreglo vacio si tableCuotasPrestamo es null', () => {
+    component.tableCuotasPrestamo = null as any;
+    const headers = component.getHeaders();
+    expect(headers.length).toBe(0);
+  });
+
   it('submit debe navegar a prestamos/listar si el formulario es válido', () => {
     const routerSpy = spyOn(router, 'navigate');
     component.form.setErrors(null);
@@ -279,6 +287,51 @@ describe('CrearPrestamoComponent', () => {
     expect(component.fields.length).toBeGreaterThan(0);
     expect(navService.appDrawer).toBe(component.appDrawer);
   });
+
+  it('debe usar addEventListener cuando el media lo soporta', () => {
+    const mediaMatcher = {
+      matchMedia: (_query: string) => ({
+        matches: false,
+        addEventListener: jasmine.createSpy('addEventListener')
+      })
+    } as unknown as MediaMatcher;
+    const changeDetectorRef = {
+      detectChanges: jasmine.createSpy('detectChanges')
+    } as unknown as ChangeDetectorRef;
+
+    const cmp = new CrearPrestamoComponent(
+      TestBed.get(AuthService),
+      TestBed.get(NavService),
+      TestBed.get(ClienteService),
+      changeDetectorRef,
+      mediaMatcher,
+      TestBed.get(Router),
+      TestBed.get(TipodocidentiService),
+      TestBed.get(UsersService),
+      TestBed.get(PrestamosService)
+    );
+
+    const mediaQuery = (cmp as any).mobileQuery as any;
+    expect(mediaQuery.addEventListener).toHaveBeenCalled();
+  });
+
+  it('debe ejecutar hook de fecha y recalcular cuotas', fakeAsync(() => {
+    component.appDrawer = {} as any;
+    component.ngAfterViewInit();
+    flushMicrotasks();
+    const spyCuotas = spyOn(component, 'obtenerCuotasPrestamo');
+    component.form.setErrors(null);
+
+    const fieldGroup = component.fields[0].fieldGroup as any[];
+    const fechaField = fieldGroup.find((field) => field.key === 'fec_inicial');
+    const control = new FormControl();
+    fechaField.hooks.onInit({ formControl: control, form: component.form });
+
+    control.setValue(new Date());
+    tick();
+
+    expect(spyCuotas).toHaveBeenCalled();
+  }));
 
   it('debe ejecutar el change de sistema de pago y actualizar validez', async () => {
     component.appDrawer = {} as any;
@@ -330,6 +383,39 @@ describe('CrearPrestamoComponent', () => {
     tick();
 
     expect(guardarSpy).not.toHaveBeenCalled();
+  }));
+
+  it('no debe continuar si guardarPrestamo retorna falso', fakeAsync(() => {
+    component.form.setErrors(null);
+    spyOn(prestamosService, 'guardarPrestamo').and.returnValue(of(null));
+    const renderSpy = spyOn(prestamosService, 'renderTemplates').and.callThrough();
+    spyOn(Swal, 'fire').and.returnValue(Promise.resolve({ value: true }));
+
+    component.guardarPrestamo();
+    tick();
+
+    expect(renderSpy).not.toHaveBeenCalled();
+    expect(component.listarDocumentosPrestamo).toBe(false);
+  }));
+
+  it('no debe renderizar plantillas si se cancela el segundo confirm', fakeAsync(() => {
+    component.form.setErrors(null);
+    const renderSpy = spyOn(prestamosService, 'renderTemplates').and.callThrough();
+
+    let callCount = 0;
+    spyOn(Swal, 'fire').and.callFake(() => {
+      callCount += 1;
+      if (callCount === 1) {
+        return Promise.resolve({ value: true }) as any;
+      }
+      return Promise.resolve({ value: false }) as any;
+    });
+
+    component.guardarPrestamo();
+    tick();
+
+    expect(renderSpy).not.toHaveBeenCalled();
+    expect(component.listarDocumentosPrestamo).toBe(false);
   }));
 
   it('debe guardar prestamo y renderizar plantillas al confirmar', fakeAsync(() => {

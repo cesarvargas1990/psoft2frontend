@@ -1,48 +1,111 @@
 # psoft2frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.8.
+Frontend Angular de `psoft2frontend`.
 
-## Development server
+## Requisitos
 
-Node version use 14
-download for mac, windows, linux https://nodejs.org/en/download (selec 14 old installer)
+- Node.js 14 recomendado para desarrollo local.
+- npm.
+- Docker y Docker Compose (opcional, para despliegue local con contenedor).
 
-install node modules
+## Instalación
 
-`npm install`
+```bash
+npm install
+```
 
-Install angular cli (runw with admin or sudo)
+No es obligatorio instalar Angular CLI globalmente. Puedes usar los scripts del proyecto (`npm run ...`), que ya invocan `ng`.
 
-`npm i -g @angular/cli@14`
+## Levantar en local
 
+Comando base:
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+```bash
+npm start
+```
 
-## Code scaffolding
+La app queda en:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- `http://localhost:4200`
 
-## Build
+## Levantar con environment específico
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Este proyecto tiene configuraciones en `angular.json` como `local`, `docker`, `demo`, `prod`.
 
-## Running unit tests
+Ejemplo con `environment.docker.ts`:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-Run `ng test --no-watch --code-coverage`
+```bash
+npm start -- --configuration=docker
+```
 
-## Running end-to-end tests
+## Scripts útiles
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+- `npm start`: servidor de desarrollo.
+- `npm run build`: build.
+- `npm run test`: pruebas unitarias sin watch.
+- `npm run test:coverage`: pruebas con cobertura.
+- `npm run lint`: lint.
+- `npm run format`: formateo con Prettier.
 
-## Further help
+## Build por ambiente
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+```bash
+npm run build -- --configuration=prod
+```
+
+También puedes usar: `local`, `docker`, `demo`, `docker-contabo`.
 
 ## Docker
 
-Run `docker-compose build --build-arg BUILD_CONFIGURATION=docker && docker-compose up` change BUILD_CONFIGURATION by prod,local,docker,demo,docker-contabo
+El `docker-compose.yml` construye y levanta `angular-app` exponiendo `81:80`.
 
-## Sonar
-Configure sonar.login in sonar-project.properties
-Run `sonar-scanner`
+```bash
+docker compose up --build -d
+```
+
+Para cambiar el ambiente de build en Docker, ajusta `BUILD_CONFIGURATION` en `docker-compose.yml`.
+
+## Pruebas
+
+```bash
+npm run test
+```
+
+Cobertura:
+
+```bash
+npm run test:coverage
+```
+
+## Calidad (SonarCloud)
+
+El análisis usa `sonar-project.properties`.
+
+Para ejecutar scanner manualmente:
+
+```bash
+sonar-scanner
+```
+
+Requiere token/configuración de Sonar en el entorno.
+
+## CI/CD
+
+Workflows en `.github/workflows`:
+
+- `github-flow.yml`: formato, lint, tests, SonarCloud.
+- `deploy-ssh.yml`: despliegue por SSH al completar CI exitoso en `main`.
+
+Secrets esperados para deploy SSH:
+
+- `SSH_HOST`
+- `SSH_USER`
+- `SSH_PASSWORD`
+- `SSH_PORT`
+
+## Estructura relevante
+
+- `src/environments/`: variables por ambiente.
+- `docker-compose.yml`: despliegue Docker.
+- `nginx.conf`: configuración de Nginx para contenedor.
+- `sonar-project.properties`: configuración de Sonar.

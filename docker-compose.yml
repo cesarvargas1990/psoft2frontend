@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        BUILD_CONFIGURATION: docker
+        BUILD_CONFIGURATION: docker-contabo
     ports:
       - "81:80"
     volumes:

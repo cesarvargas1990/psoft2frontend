@@ -30,22 +30,34 @@ La app queda en:
 
 ## Levantar con environment específico
 
-Este proyecto tiene configuraciones en `angular.json` como `local`, `docker`, `demo`, `prod`.
+Este proyecto tiene configuraciones en `angular.json` como:
 
-Ejemplo con `environment.docker.ts`:
+- `local`
+- `docker`
+- `demo`
+- `prod`
+- `docker-contabo`
+
+Ejemplo con `docker` (`environment.docker.ts`):
 
 ```bash
 npm start -- --configuration=docker
 ```
 
+Para ejecutar con `docker-contabo`:
+
+```bash
+npm start -- --configuration=docker-contabo
+```
+
 ## Scripts útiles
 
-- `npm start`: servidor de desarrollo.
-- `npm run build`: build.
-- `npm run test`: pruebas unitarias sin watch.
-- `npm run test:coverage`: pruebas con cobertura.
-- `npm run lint`: lint.
-- `npm run format`: formateo con Prettier.
+- `npm start` → servidor de desarrollo.
+- `npm run build` → build.
+- `npm run test` → pruebas unitarias sin watch.
+- `npm run test:coverage` → pruebas con cobertura.
+- `npm run lint` → lint.
+- `npm run format` → formateo con Prettier.
 
 ## Build por ambiente
 
@@ -66,6 +78,8 @@ docker compose up --build -d
 Para cambiar el ambiente de build en Docker, ajusta `BUILD_CONFIGURATION` en `docker-compose.yml`.
 
 ## Pruebas
+
+Unit tests:
 
 ```bash
 npm run test

@@ -2,3 +2,21 @@
   background-color: rgb(25, 154, 214);
   color: white;
 }
+
+.firma-label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.firma-preview {
+  max-height: 200px;
+  max-width: 100%;
+  border: 1px solid #ddd;
+  padding: 4px;
+}
+
+.firma-error {
+  color: #dc3545;
+  display: inline-block;
+  margin-top: 6px;
+}

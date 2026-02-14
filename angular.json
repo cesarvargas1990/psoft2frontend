@@ -227,6 +227,9 @@
             "docker": {
               "browserTarget": "psoft2frontend:build:docker"
             },
+            "docker-contabo": {
+              "browserTarget": "psoft2frontend:build:docker-contabo"
+            },
             "demo": {
               "browserTarget": "psoft2frontend:build:demo"
             },

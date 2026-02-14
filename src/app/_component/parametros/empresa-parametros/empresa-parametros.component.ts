@@ -4,22 +4,14 @@ import {
   ViewChild,
   ElementRef,
   OnInit,
-  ChangeDetectorRef,
-  AfterViewInit
+  ChangeDetectorRef
 } from '@angular/core';
 
 import { NavItem } from '../../../_models/nav-item';
 import { NavService } from '../../../_services/nav.service';
 import { VERSION } from '@angular/material';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { MatSort } from '@angular/material/sort';
 import { AuthService } from '../../../_services/auth.service';
-import { MatTableDataSource } from '@angular/material/table';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA
-} from '@angular/material/dialog';
 
 import Swal from 'sweetalert2';
 import { MatPaginator } from '@angular/material/paginator';
@@ -27,6 +19,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { Router } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-empresa-parametros',
@@ -36,6 +29,10 @@ import { Router } from '@angular/router';
 export class EmpresaParametrosComponent implements OnInit {
   form = new FormGroup({});
   model: any = {};
+  firmaPreview = '';
+  firmaMensaje = '';
+  firmaBase64 = '';
+  firmaCambiada = false;
 
   datosEmpresa: any = [];
 
@@ -59,7 +56,7 @@ export class EmpresaParametrosComponent implements OnInit {
 
   constructor(
     public authService: AuthService,
-    private navService: NavService,
+    private readonly navService: NavService,
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
     public router: Router,
@@ -78,7 +75,7 @@ export class EmpresaParametrosComponent implements OnInit {
     });
   }
 
-  private _mobileQueryListener: () => void;
+  private readonly _mobileQueryListener: () => void;
 
   volver() {
     this.router.navigate(['dashboard']);
@@ -86,6 +83,9 @@ export class EmpresaParametrosComponent implements OnInit {
   ngOnInit(): void {
     this.empresaService.getEmpresa().subscribe((response) => {
       this.datosEmpresa = response;
+      this.firmaPreview = this.construirPreviewFirma(
+        this.datosEmpresa.firma || ''
+      );
       this.fields = [
         {
           fieldGroupClassName: 'row',
@@ -221,19 +221,33 @@ export class EmpresaParametrosComponent implements OnInit {
 
   submit() {
     if (this.form.valid) {
-      console.log(this.model);
+      if (this.firmaCambiada && this.firmaBase64) {
+        const dataFile: any = {
+          image: this.firmaBase64,
+          path: environment.GET_UPLOADS_PATH
+        };
 
-      this.empresaService
-        .actualizarDatosEmpresa(this.form.value)
-        .subscribe((response) => {
-          if (response) {
-            Swal.fire({
-              type: 'info',
-              title: 'Informaci&oacute;n',
-              text: 'Se actualizo satisfactoriamente la información de la empresa.'
-            }).then((result) => {});
-          }
-        });
+        this.empresaService
+          .subirArchivoFirma(dataFile)
+          .subscribe((fileResp) => {
+            const rutaFirma = this.extraerRutaFirma(fileResp);
+            if (!rutaFirma) {
+              Swal.fire({
+                type: 'error',
+                title: 'Error',
+                text: 'No se pudo obtener la ruta de la firma cargada.'
+              });
+              return;
+            }
+
+            this.enviarActualizacionEmpresa(rutaFirma);
+          });
+        return;
+      }
+
+      this.enviarActualizacionEmpresa(
+        this.datosEmpresa.firma || this.firmaPreview
+      );
     } else {
       Swal.fire({
         type: 'error',
@@ -243,5 +257,165 @@ export class EmpresaParametrosComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit(): void {}
+  previewFirma(files: FileList) {
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    const mimeType = files[0].type;
+    if (/image\/*/.exec(mimeType) == null) {
+      this.firmaMensaje = 'Solo se aceptan imágenes.';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(files[0]);
+    reader.onload = () => {
+      this.firmaPreview = reader.result as string;
+      this.firmaBase64 = reader.result as string;
+      this.firmaCambiada = true;
+      this.firmaMensaje = '';
+    };
+  }
+
+  private enviarActualizacionEmpresa(firmaRuta: string) {
+    const data = {
+      ...this.form.value,
+      firma: this.normalizarRutaFirma(firmaRuta) || null
+    };
+
+    this.empresaService.actualizarDatosEmpresa(data).subscribe((response) => {
+      if (response) {
+        this.datosEmpresa.firma = data.firma;
+        this.firmaPreview = this.construirPreviewFirma(data.firma);
+        this.firmaBase64 = '';
+        this.firmaCambiada = false;
+
+        Swal.fire({
+          type: 'info',
+          title: 'Informaci&oacute;n',
+          text: 'Se actualizo satisfactoriamente la información de la empresa.'
+        }).then((result) => {});
+      }
+    });
+  }
+
+  private extraerRutaFirma(response: any): string {
+    if (!response) {
+      return '';
+    }
+
+    if (typeof response === 'string') {
+      if (this.tieneNombreArchivo(response)) {
+        return this.normalizarRutaDesdeArchivo(response);
+      }
+      return '';
+    }
+
+    const payload =
+      response.data || response.result || response.respuesta || response;
+
+    if (typeof payload === 'string') {
+      if (this.tieneNombreArchivo(payload)) {
+        return this.normalizarRutaDesdeArchivo(payload);
+      }
+      return '';
+    }
+
+    if (Array.isArray(payload) && payload.length > 0) {
+      return this.extraerRutaFirma(payload[0]);
+    }
+
+    const rutaDirecta =
+      payload.firma ||
+      payload.ruta ||
+      payload.url ||
+      payload.file ||
+      payload.filename ||
+      payload.nombrearchivo ||
+      payload.path;
+
+    if (rutaDirecta && this.tieneNombreArchivo(String(rutaDirecta))) {
+      return this.normalizarRutaDesdeArchivo(String(rutaDirecta));
+    }
+
+    const nombreArchivo =
+      payload.nombrearchivo ||
+      payload.filename ||
+      payload.fileName ||
+      payload.name;
+    const rutaBase = payload.path || payload.basePath || payload.uploadPath;
+
+    if (nombreArchivo && this.tieneNombreArchivo(String(nombreArchivo))) {
+      const base = rutaBase || environment.GET_UPLOADS_PATH;
+      const rutaCompuesta = `${base}/${nombreArchivo}`.split('//').join('/');
+      return this.normalizarRutaFirma(rutaCompuesta);
+    }
+
+    return '';
+  }
+
+  private tieneNombreArchivo(valor: string): boolean {
+    if (!valor) {
+      return false;
+    }
+
+    return /\.[a-z0-9]{2,5}(\?.*)?$/i.test(valor);
+  }
+
+  private normalizarRutaFirma(ruta: string): string {
+    if (!ruta) {
+      return '';
+    }
+
+    if (ruta.startsWith('data:')) {
+      return '';
+    }
+
+    const uploadIndex = ruta.indexOf('upload/');
+    if (uploadIndex >= 0) {
+      return ruta.substring(uploadIndex);
+    }
+
+    const documentosAdjuntosIndex = ruta.indexOf('documentosAdjuntos/');
+    if (documentosAdjuntosIndex >= 0) {
+      return 'upload/' + ruta.substring(documentosAdjuntosIndex);
+    }
+
+    return ruta;
+  }
+
+  private normalizarRutaDesdeArchivo(rutaArchivo: string): string {
+    if (
+      rutaArchivo.indexOf('upload/') >= 0 ||
+      rutaArchivo.indexOf('documentosAdjuntos/') >= 0 ||
+      rutaArchivo.startsWith('http')
+    ) {
+      return this.normalizarRutaFirma(rutaArchivo);
+    }
+
+    return this.normalizarRutaFirma(
+      `${environment.GET_UPLOADS_PATH}${rutaArchivo}`
+    );
+  }
+
+  private construirPreviewFirma(ruta: string): string {
+    if (!ruta) {
+      return '';
+    }
+
+    if (ruta.startsWith('http') || ruta.startsWith('data:')) {
+      return ruta;
+    }
+
+    const rutaNormalizada = this.normalizarRutaFirma(ruta);
+    const segmentos = rutaNormalizada.split('/');
+    const nombreArchivo = segmentos[segmentos.length - 1];
+
+    if (!this.tieneNombreArchivo(nombreArchivo)) {
+      return ruta;
+    }
+
+    return `${environment.UPLOADS_CLIENTES}${nombreArchivo}`;
+  }
 }

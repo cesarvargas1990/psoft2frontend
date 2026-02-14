@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {
   HttpClient,
   HttpHeaders,
-  HttpParams,
   HttpErrorResponse
 } from '@angular/common/http';
 import { environment } from './../../../environments/environment';
@@ -19,10 +18,11 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class EmpresaService {
-  private server: string = environment.API_URL;
+  private readonly server: string = environment.API_URL;
 
-  private services = {
-    psempresa: this.server + '/psempresa'
+  private readonly services = {
+    psempresa: this.server + '/psempresa',
+    guardarArchivos: this.server + '/guardarArchivoAdjunto'
   };
 
   httpOpts: any = {
@@ -34,8 +34,8 @@ export class EmpresaService {
   };
 
   constructor(
-    private http: HttpClient,
-    private authService: AuthService
+    private readonly http: HttpClient,
+    private readonly authService: AuthService
   ) {}
 
   handleError(error: HttpErrorResponse) {
@@ -79,6 +79,14 @@ export class EmpresaService {
         data,
         this.httpOpts
       )
+      .pipe(retry(2), catchError(this.handleError));
+  }
+
+  subirArchivoFirma(data: any): Observable<any> {
+    data.id_empresa = localStorage.getItem('id_empresa');
+    data.id_usuario = localStorage.getItem('id');
+    return this.http
+      .post<any>(`${this.services.guardarArchivos}`, data, this.httpOpts)
       .pipe(retry(2), catchError(this.handleError));
   }
 }

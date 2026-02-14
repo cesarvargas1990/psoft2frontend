@@ -7,7 +7,7 @@ import {
   flush,
   discardPeriodicTasks
 } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA, ElementRef } from '@angular/core';
+import { NO_ERRORS_SCHEMA, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { EmpresaParametrosComponent } from './empresa-parametros.component';
 
@@ -17,7 +17,6 @@ import { EmpresaService } from '../../../_services/empresa/empresa.service';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { of } from 'rxjs';
 import Swal from 'sweetalert2';
-import { ChangeDetectorRef } from '@angular/core';
 
 class MockAuthService {
   isLoggedIn() {
@@ -43,8 +42,13 @@ class MockEmpresaService {
       pagina: 'www.miempresa.com',
       telefono: '1234567890',
       ciudad: 'Bogotá',
-      ddirec: 'Calle 123'
+      ddirec: 'Calle 123',
+      firma: 'https://api.demo.com/firma.png'
     });
+  }
+
+  subirArchivoFirma() {
+    return of({ nombrearchivo: '1-1770937470.png' });
   }
 
   actualizarDatosEmpresa() {
@@ -53,7 +57,9 @@ class MockEmpresaService {
 }
 
 class MockRouter {
-  navigate(path: string[]) {}
+  navigate(_path: string[]) {
+    return;
+  }
 }
 
 class MockMediaMatcher {
@@ -111,6 +117,7 @@ describe('EmpresaParametrosComponent', () => {
     tick(200);
     fixture.detectChanges();
     expect(component.datosEmpresa.nombre).toBe('Mi Empresa');
+    expect(component.firmaPreview).toBe('https://api.demo.com/firma.png');
     expect(component.fields.length).toBeGreaterThan(0);
   }));
 
@@ -143,7 +150,11 @@ describe('EmpresaParametrosComponent', () => {
 
     component.submit();
 
-    expect(spy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        firma: 'https://api.demo.com/firma.png'
+      })
+    );
     expect(swalSpy).toHaveBeenCalled();
 
     // ✅ Limpia timers de Angular Material, Formly o animaciones internas
@@ -222,7 +233,74 @@ describe('EmpresaParametrosComponent', () => {
       TestBed.get(Router),
       TestBed.get(EmpresaService)
     );
-    const mediaQuery = (cmp as any).mobileQuery as any;
+    const mediaQuery = (cmp as any).mobileQuery;
     expect(mediaQuery.addEventListener).toHaveBeenCalled();
   });
+
+  it('debe actualizar la previsualización de firma al cargar imagen válida', () => {
+    const file = new File(['firma'], 'firma.png', { type: 'image/png' });
+    const fakeReader: any = {
+      result: 'data:image/png;base64,abc',
+      readAsDataURL(_f: File) {},
+      onload: () => {}
+    };
+    spyOn(globalThis as any, 'FileReader').and.returnValue(fakeReader);
+
+    component.previewFirma([file] as unknown as FileList);
+    fakeReader.onload();
+
+    expect(component.firmaPreview).toBe('data:image/png;base64,abc');
+    expect(component.firmaMensaje).toBe('');
+  });
+
+  it('debe mostrar mensaje al cargar archivo inválido para firma', () => {
+    const file = new File(['texto'], 'firma.txt', { type: 'text/plain' });
+
+    component.previewFirma([file] as unknown as FileList);
+
+    expect(component.firmaMensaje).toBe('Solo se aceptan imágenes.');
+  });
+
+  it('debe subir firma y guardar solo la ruta cuando se actualiza la firma', fakeAsync(() => {
+    const uploadSpy = spyOn(
+      empresaService,
+      'subirArchivoFirma'
+    ).and.returnValue(of({ nombrearchivo: '1-1770937470.png' }));
+    const updateSpy = spyOn(
+      empresaService,
+      'actualizarDatosEmpresa'
+    ).and.callThrough();
+
+    component.firmaBase64 = 'data:image/png;base64,abc';
+    component.firmaCambiada = true;
+
+    component.submit();
+    tick();
+
+    expect(uploadSpy).toHaveBeenCalled();
+    expect(updateSpy).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        firma: 'upload/documentosAdjuntos/1-1770937470.png'
+      })
+    );
+  }));
+
+  it('no debe actualizar empresa si upload no retorna nombre de archivo', fakeAsync(() => {
+    const uploadSpy = spyOn(
+      empresaService,
+      'subirArchivoFirma'
+    ).and.returnValue(of({ path: './upload/documentosAdjuntos/' }));
+    const updateSpy = spyOn(empresaService, 'actualizarDatosEmpresa');
+    const swalSpy = spyOn(Swal, 'fire');
+
+    component.firmaBase64 = 'data:image/png;base64,abc';
+    component.firmaCambiada = true;
+
+    component.submit();
+    tick();
+
+    expect(uploadSpy).toHaveBeenCalled();
+    expect(updateSpy).not.toHaveBeenCalled();
+    expect(swalSpy).toHaveBeenCalled();
+  }));
 });

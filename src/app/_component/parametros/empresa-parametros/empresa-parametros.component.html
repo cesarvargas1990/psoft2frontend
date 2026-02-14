@@ -52,6 +52,30 @@
                 [form]="form"
               >
               </formly-form>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <label class="firma-label" for="firmaInput">Firma</label>
+                  <input
+                    #firmaFile
+                    id="firmaInput"
+                    type="file"
+                    accept="image/*"
+                    class="form-control"
+                    (change)="previewFirma(firmaFile.files)"
+                  />
+                  <span class="firma-error" *ngIf="firmaMensaje">{{
+                    firmaMensaje
+                  }}</span>
+                </div>
+
+                <div class="col-md-6" *ngIf="firmaPreview">
+                  <span class="firma-label">Previsualización firma</span>
+                  <img [src]="firmaPreview" class="firma-preview" alt="Firma" />
+                </div>
+              </div>
+
+              <br />
               <mat-dialog-actions>
                 <button
                   *ngIf="

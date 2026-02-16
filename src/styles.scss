@@ -116,6 +116,32 @@ h1.example-app-name {
 .mat-sidenav {
   background-color: #f8fbff;
   border-right: 1px solid var(--color-border);
+  padding: 14px 12px;
+}
+
+.mat-sidenav .mat-divider {
+  margin: 6px 8px 14px;
+}
+
+.mat-sidenav .mat-nav-list {
+  padding: 10px 8px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 10px 14px;
+}
+
+.logo-container app-logo {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .card {

@@ -8,21 +8,52 @@
 
   .mat-list-item.active {
     background-color: mat-color($app-primary, 50);
-  }
-  &:hover,
-  &:focus {
-    > .mat-list-item:not(.expanded) {
-      background-color: mat-color($app-primary, 100) !important;
-    }
+    color: mat-color($app-primary, 800);
   }
 }
 
-.mat-list-item {
-  padding: 8px 0;
+.menu-list-item.mat-list-item {
+  min-height: 50px;
+  padding: 0 12px;
+  margin: 4px 6px;
+  border-radius: 10px;
   display: flex;
+  align-items: center;
   width: auto;
+  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease;
 
   .routeIcon {
-    margin-right: 40px;
+    margin-right: 14px;
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    color: inherit;
+  }
+
+  .menu-label {
+    flex: 1 1 auto;
+  }
+
+  .menu-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 8px;
+  }
+
+  .indicator-icon {
+    font-size: 26px;
+    width: 26px;
+    height: 26px;
+  }
+
+  &:hover,
+  &:focus {
+    background-color: mat-color($app-primary, 100) !important;
+  }
+
+  &.expanded {
+    background-color: mat-color($app-primary, 50);
   }
 }

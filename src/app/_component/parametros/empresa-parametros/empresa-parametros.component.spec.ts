@@ -303,4 +303,23 @@ describe('EmpresaParametrosComponent', () => {
     expect(updateSpy).not.toHaveBeenCalled();
     expect(swalSpy).toHaveBeenCalled();
   }));
+
+  it('debe limpiar firma y enviar null al guardar', () => {
+    const updateSpy = spyOn(
+      empresaService,
+      'actualizarDatosEmpresa'
+    ).and.callThrough();
+
+    const fakeInput = { value: 'firma.png' } as HTMLInputElement;
+    component.limpiarFirma(fakeInput);
+    component.submit();
+
+    expect(component.firmaPreview).toBe('');
+    expect(fakeInput.value).toBe('');
+    expect(updateSpy).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        firma: null
+      })
+    );
+  });
 });

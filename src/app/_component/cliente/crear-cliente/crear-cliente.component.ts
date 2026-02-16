@@ -63,7 +63,8 @@ export class CrearClienteComponent implements AfterViewInit {
 
   public signaturePadOptions: Object = {
     // passed through to szimek/signature_pad constructor
-    minWidth: 5,
+    minWidth: 1,
+    maxWidth: 2,
     canvasWidth: window.innerWidth,
     canvasHeight: 300
   };

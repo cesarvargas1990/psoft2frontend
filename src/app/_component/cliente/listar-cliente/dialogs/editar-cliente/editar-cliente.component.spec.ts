@@ -87,7 +87,7 @@ describe('EditarClienteComponent', () => {
     expect(Swal.fire).not.toHaveBeenCalled();
   });
 
-  it('debe actualizar cliente y llamar a editFile si es válido', fakeAsync(() => {
+  it('debe actualizar cliente y llamar a editFile si es válido sin cerrar modal', fakeAsync(() => {
     const fakeResponse = { id: 1 };
     component.model = {};
     component.form.setErrors(null);
@@ -108,7 +108,8 @@ describe('EditarClienteComponent', () => {
     expect(clienteService.updateCliente).toHaveBeenCalled();
     expect(clienteService.editFile).toHaveBeenCalled();
     expect(Swal.fire).toHaveBeenCalled();
-    expect(component.dialogRef.close).toHaveBeenCalled();
+    expect(component.editFirmar).toBe(false);
+    expect(component.dialogRef.close).not.toHaveBeenCalled();
 
     flush();
   }));

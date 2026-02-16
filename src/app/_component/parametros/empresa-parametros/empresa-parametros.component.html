@@ -64,6 +64,16 @@
                     class="form-control"
                     (change)="previewFirma(firmaFile.files)"
                   />
+                  <button
+                    type="button"
+                    mat-stroked-button
+                    color="warn"
+                    class="firma-clear-btn"
+                    (click)="limpiarFirma(firmaFile)"
+                  >
+                    <mat-icon aria-label="Limpiar firma">delete</mat-icon>
+                    Limpiar firma
+                  </button>
                   <span class="firma-error" *ngIf="firmaMensaje">{{
                     firmaMensaje
                   }}</span>
@@ -72,6 +82,16 @@
                 <div class="col-md-6" *ngIf="firmaPreview">
                   <span class="firma-label">Previsualización firma</span>
                   <img [src]="firmaPreview" class="firma-preview" alt="Firma" />
+                  <button
+                    type="button"
+                    mat-stroked-button
+                    color="warn"
+                    class="firma-clear-btn"
+                    (click)="limpiarFirma(firmaFile)"
+                  >
+                    <mat-icon aria-label="Limpiar firma">delete</mat-icon>
+                    Limpiar firma
+                  </button>
                 </div>
               </div>
 

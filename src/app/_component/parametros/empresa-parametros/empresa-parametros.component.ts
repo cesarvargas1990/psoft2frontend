@@ -221,27 +221,32 @@ export class EmpresaParametrosComponent implements OnInit {
 
   submit() {
     if (this.form.valid) {
-      if (this.firmaCambiada && this.firmaBase64) {
-        const dataFile: any = {
-          image: this.firmaBase64,
-          path: environment.GET_UPLOADS_PATH
-        };
+      if (this.firmaCambiada) {
+        if (this.firmaBase64) {
+          const dataFile: any = {
+            image: this.firmaBase64,
+            path: environment.GET_UPLOADS_PATH
+          };
 
-        this.empresaService
-          .subirArchivoFirma(dataFile)
-          .subscribe((fileResp) => {
-            const rutaFirma = this.extraerRutaFirma(fileResp);
-            if (!rutaFirma) {
-              Swal.fire({
-                type: 'error',
-                title: 'Error',
-                text: 'No se pudo obtener la ruta de la firma cargada.'
-              });
-              return;
-            }
+          this.empresaService
+            .subirArchivoFirma(dataFile)
+            .subscribe((fileResp) => {
+              const rutaFirma = this.extraerRutaFirma(fileResp);
+              if (!rutaFirma) {
+                Swal.fire({
+                  type: 'error',
+                  title: 'Error',
+                  text: 'No se pudo obtener la ruta de la firma cargada.'
+                });
+                return;
+              }
 
-            this.enviarActualizacionEmpresa(rutaFirma);
-          });
+              this.enviarActualizacionEmpresa(rutaFirma);
+            });
+          return;
+        }
+
+        this.enviarActualizacionEmpresa('');
         return;
       }
 
@@ -276,6 +281,17 @@ export class EmpresaParametrosComponent implements OnInit {
       this.firmaCambiada = true;
       this.firmaMensaje = '';
     };
+  }
+
+  limpiarFirma(inputFile?: HTMLInputElement) {
+    this.firmaPreview = '';
+    this.firmaBase64 = '';
+    this.firmaCambiada = true;
+    this.firmaMensaje = '';
+
+    if (inputFile) {
+      inputFile.value = '';
+    }
   }
 
   private enviarActualizacionEmpresa(firmaRuta: string) {
@@ -387,8 +403,8 @@ export class EmpresaParametrosComponent implements OnInit {
 
   private normalizarRutaDesdeArchivo(rutaArchivo: string): string {
     if (
-      rutaArchivo.indexOf('upload/') >= 0 ||
-      rutaArchivo.indexOf('documentosAdjuntos/') >= 0 ||
+      rutaArchivo.includes('upload/') ||
+      rutaArchivo.includes('documentosAdjuntos/') ||
       rutaArchivo.startsWith('http')
     ) {
       return this.normalizarRutaFirma(rutaArchivo);

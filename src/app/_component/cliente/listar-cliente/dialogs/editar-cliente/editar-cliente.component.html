@@ -27,18 +27,31 @@
           ></signature-pad>
 
           <ng-container #fieldComponent></ng-container>
-          <img *ngIf="!editFirmar" [src]="listaArchivos[3]" height="200" />
+          <img
+            *ngIf="!editFirmar"
+            [src]="listaArchivos[3]"
+            height="200"
+            alt="Firma cliente"
+          />
 
-          &nbsp;
+          <div class="firma-actions">
+            <button
+              type="button"
+              title="Limpiar firma"
+              (click)="limpiarFirma()"
+              class="btn btn-outline-danger submit-button"
+            >
+              <mat-icon aria-label="Limpiar">delete</mat-icon>
+            </button>
 
-          <button
-            type="button"
-            title="Limpiar"
-            (click)="editFirmar = true"
-            class="btn btn-primary submit-button"
-          >
-            <mat-icon aria-label="Edit">edit</mat-icon>
-          </button>
+            <button
+              type="submit"
+              title="Guardar"
+              class="btn btn-success submit-button"
+            >
+              <mat-icon aria-label="Guardar">save</mat-icon>
+            </button>
+          </div>
         </mat-expansion-panel>
 
         <mat-expansion-panel
@@ -118,6 +131,7 @@
                 "
                 [attr.file-index]="i"
                 height="200"
+                alt="Documento adjunto"
               />
             </div>
           </div>

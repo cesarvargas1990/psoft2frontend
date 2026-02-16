@@ -34,7 +34,8 @@ export class EditarClienteComponent implements OnInit {
 
   public signaturePadOptions: Object = {
     // passed through to szimek/signature_pad constructor
-    minWidth: 5,
+    minWidth: 1,
+    maxWidth: 2,
     canvasWidth: window.innerWidth,
     canvasHeight: 300
   };
@@ -96,6 +97,16 @@ export class EditarClienteComponent implements OnInit {
     }
   }
 
+  limpiarFirma() {
+    this.editFirmar = true;
+
+    setTimeout(() => {
+      if (this.signaturePad) {
+        this.signaturePad.clear();
+      }
+    }, 0);
+  }
+
   submit() {
     if (this.form.valid) {
       this.model.id = this.data.id;
@@ -148,14 +159,11 @@ export class EditarClienteComponent implements OnInit {
 
           if (response) {
             this.model = response;
+            this.editFirmar = false;
             Swal.fire({
               type: 'info',
               title: 'Informaci&oacute;n',
               text: 'Se actualizo satisfactoriamente el registro.'
-            }).then((result) => {
-              if (result.value == true) {
-                this.dialogRef.close();
-              }
             });
           }
         }

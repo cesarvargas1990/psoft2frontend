@@ -21,7 +21,9 @@
   align-items: center;
   width: auto;
   font-weight: 500;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 
   .routeIcon {
     margin-right: 14px;

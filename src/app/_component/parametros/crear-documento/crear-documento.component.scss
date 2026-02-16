@@ -38,7 +38,7 @@ th.mat-sort-header-sorted {
 }
 
 .main-table thead th {
-  background: #199ad6;
+  background: var(--color-primary);
   color: #fff;
   color: #fff;
   font-size: 0.8rem;
@@ -137,6 +137,6 @@ td.numbers {
 }
 
 .card-header {
-  background-color: rgb(25, 154, 214);
+  background: linear-gradient(135deg, var(--color-primary), #3b82f6);
   color: white;
 }

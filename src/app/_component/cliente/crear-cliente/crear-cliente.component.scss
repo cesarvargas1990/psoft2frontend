@@ -75,7 +75,7 @@ th.mat-sort-header-sorted {
 }
 
 .main-table thead th {
-  background: #199ad6;
+  background: var(--color-primary);
   color: #fff;
   color: #fff;
   font-size: 0.8rem;
@@ -163,7 +163,7 @@ td.numbers {
     display: block;
     font-weight: bold;
     margin: 0 0 2px;
-    background: #199ad6;
+    background: var(--color-primary);
     color: #fff;
     padding: 5px;
   }
@@ -188,7 +188,7 @@ td.numbers {
 }
 
 .mat-expansion-panel-header {
-  background-color: #199ad6 !important;
+  background-color: var(--color-primary) !important;
 }
 
 .mat-expansion-panel-header-description {
@@ -200,6 +200,6 @@ td.numbers {
 }
 
 .card-header {
-  background-color: rgb(25, 154, 214);
+  background: linear-gradient(135deg, var(--color-primary), #3b82f6);
   color: white;
 }

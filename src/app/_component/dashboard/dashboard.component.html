@@ -136,10 +136,9 @@
             </button>
             <br />
             <mat-table
-              class="table-responsive"
+              class="table-responsive mat-elevation-z8 app-data-table"
               [dataSource]="dataSource"
               matSort
-              class="mat-elevation-z8"
             >
               <ng-container matColumnDef="id_prestamo">
                 <mat-header-cell *matHeaderCellDef mat-sort-header
@@ -302,7 +301,6 @@
                   <mat-panel-title> Documentos del prestamo </mat-panel-title>
                 </mat-expansion-panel-header>
                 <br />
-                <!-- <div [innerHTML]="item.plantilla_html"></div> -->
                 <tinymce
                   [(ngModel)]="contenidoCombinado"
                   [config]="config"
@@ -354,11 +352,9 @@
                   Fecha de Pago
                 </mat-header-cell>
                 <mat-cell
-                  [ngStyle]="{
-                    'background-color': element.id_fecha_pago
-                      ? '#00800085'
-                      : '#ff0000bf'
-                  }"
+                  [ngClass]="
+                    element.id_fecha_pago ? 'estado-pagado' : 'estado-pendiente'
+                  "
                   *matCellDef="let element"
                   data-label="Fecha Pago"
                 >
@@ -371,11 +367,9 @@
                   Fecha Realiza Pago
                 </mat-header-cell>
                 <mat-cell
-                  [ngStyle]="{
-                    'background-color': element.id_fecha_pago
-                      ? '#00800085'
-                      : '#ff0000bf'
-                  }"
+                  [ngClass]="
+                    element.id_fecha_pago ? 'estado-pagado' : 'estado-pendiente'
+                  "
                   *matCellDef="let element"
                   data-label="Fecha Pago"
                 >
@@ -388,11 +382,9 @@
                   Valor Intereses
                 </mat-header-cell>
                 <mat-cell
-                  [ngStyle]="{
-                    'background-color': element.id_fecha_pago
-                      ? '#00800085'
-                      : '#ff0000bf'
-                  }"
+                  [ngClass]="
+                    element.id_fecha_pago ? 'estado-pagado' : 'estado-pendiente'
+                  "
                   *matCellDef="let element"
                   data-label="Val Cuota Interes"
                 >
@@ -405,11 +397,9 @@
                   Valor Pagar
                 </mat-header-cell>
                 <mat-cell
-                  [ngStyle]="{
-                    'background-color': element.id_fecha_pago
-                      ? '#00800085'
-                      : '#ff0000bf'
-                  }"
+                  [ngClass]="
+                    element.id_fecha_pago ? 'estado-pagado' : 'estado-pendiente'
+                  "
                   *matCellDef="let element"
                 >
                   {{ element.valtotal }}
@@ -418,17 +408,18 @@
               <ng-container matColumnDef="action">
                 <mat-header-cell *matHeaderCellDef> </mat-header-cell>
                 <mat-cell
-                  [ngStyle]="{
-                    'background-color': row.id_fecha_pago
-                      ? '#00800085'
-                      : '#ff0000bf'
-                  }"
+                  [ngClass]="
+                    row.id_fecha_pago ? 'estado-pagado' : 'estado-pendiente'
+                  "
                   *matCellDef="let row; let i = index"
                 >
+                  <span *ngIf="row.id_fecha_pago" class="estado-texto-pagado"
+                    >Pagado</span
+                  >
                   <button
                     *ngIf="!row.id_fecha_pago"
                     title="PagarCuota"
-                    class="float-right btn btn-outline-primary btn-sm"
+                    class="float-right btn btn-light btn-sm"
                     mat-icon-button
                     color="primary"
                     (click)="pagarCuotaPrestamo(row)"

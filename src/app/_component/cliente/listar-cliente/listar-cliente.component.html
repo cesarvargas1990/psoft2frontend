@@ -66,10 +66,9 @@
             </button>
             <br />
             <mat-table
-              class="table-responsive"
+              class="table-responsive mat-elevation-z8 app-data-table"
               [dataSource]="dataSource"
               matSort
-              class="mat-elevation-z8"
             >
               <ng-container matColumnDef="nomcliente">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -306,6 +305,7 @@
                             [src]="listaArchivos[i]"
                             *ngIf="listaArchivos[i]"
                             [attr.file-index]="i"
+                            alt="Vista previa del archivo"
                             height="200"
                           />
                         </div>

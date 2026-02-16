@@ -83,7 +83,7 @@ th.mat-sort-header-sorted {
   border-collapse: collapse;
 }
 .main-table thead th {
-  background: #199ad6;
+  background: var(--color-primary);
   color: #fff;
   color: #fff;
   font-size: 0.8rem;
@@ -159,7 +159,7 @@ td.numbers {
     display: block;
     font-weight: bold;
     margin: 0 0 2px;
-    background: #199ad6;
+    background: var(--color-primary);
     color: #fff;
     padding: 5px;
   }

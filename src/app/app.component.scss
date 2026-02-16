@@ -5,12 +5,12 @@
   width: 360px;
 }
 .mat-sidenav-container {
-  background-color: white !important;
+  background-color: transparent !important;
   //height: 100vh;
 }
 .sidenav-toolbar {
   height: 64px;
-  background-color: mat-color($app-primary);
+  background: linear-gradient(135deg, mat-color($app-primary), #1d4ed8);
   display: flex;
   flex-direction: row;
 
@@ -20,6 +20,8 @@
 }
 .mat-nav-list {
   padding-top: 0;
+  background-color: #ffffff;
+  border-radius: 12px;
 }
 @include breakpoint-max(600px) {
   .fixed-topnav {

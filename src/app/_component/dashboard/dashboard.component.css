@@ -38,29 +38,46 @@
   }
 }
 
+.mat-column-fecha_pago {
+  justify-content: flex-start;
+  margin: 8px;
+}
+
+.mat-column-fecha_realpago {
+  justify-content: flex-start;
+  margin: 8px;
+}
+
 .mat-column-valorpres {
   justify-content: right;
-  margin: 20px;
+  margin: 8px;
 }
 
 .mat-column-valcuota {
   justify-content: right;
-  margin: 20px;
+  margin: 8px;
 }
 
 .mat-column-nomfpago {
   justify-content: center;
-  margin: 20px;
+  margin: 8px;
 }
 
 .mat-column-valtotal {
   justify-content: right;
-  margin: 20px;
+  margin: 8px;
 }
 
 .mat-column-action {
-  justify-content: right;
-  margin: 20px;
+  justify-content: center;
+  margin: 8px;
+}
+
+.main-table .mat-header-cell,
+.main-table .mat-cell {
+  padding-left: 12px;
+  padding-right: 12px;
+  box-sizing: border-box;
 }
 
 p {
@@ -68,12 +85,12 @@ p {
 }
 
 .card-header {
-  background-color: rgb(25, 154, 214);
+  background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
   color: white;
 }
 
 .mat-expansion-panel-header {
-  background-color: #199ad6 !important;
+  background-color: var(--color-primary) !important;
 }
 
 .mat-expansion-panel-header-description {
@@ -82,4 +99,29 @@ p {
 
 .mat-expansion-panel-header-title {
   color: white;
+}
+
+.estado-pagado {
+  background-color: #dcfce7;
+  color: #14532d;
+  border: 1px solid #86efac;
+  border-radius: 8px;
+  padding: 10px 16px !important;
+  min-height: 54px;
+  align-items: center;
+}
+
+.estado-pendiente {
+  background-color: #fee2e2;
+  color: #7f1d1d;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 10px 16px !important;
+  min-height: 54px;
+  align-items: center;
+}
+
+.estado-texto-pagado {
+  font-weight: 600;
+  color: #166534;
 }

@@ -10,7 +10,7 @@ import {
 import { Observable, Subject } from 'rxjs';
 import { NavItem } from '../../../_models/nav-item';
 import { NavService } from '../../../_services/nav.service';
-import { VERSION } from '@angular/material';
+import { VERSION } from '@angular/material/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { MatSort } from '@angular/material/sort';
 import { AuthService } from '../../../_services/auth.service';
@@ -65,10 +65,10 @@ export class ListarClienteComponent implements AfterViewInit {
     return this.trigger.asObservable();
   }
 
-  @ViewChild('appDrawer', { static: false }) appDrawer: ElementRef;
+  @ViewChild('appDrawer') appDrawer: ElementRef;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  @ViewChild(SignaturePad, { static: false }) public signaturePad: SignaturePad;
+  @ViewChild(SignaturePad) public signaturePad: SignaturePad;
   imagePath: any = {};
   imgURL: any = {};
 

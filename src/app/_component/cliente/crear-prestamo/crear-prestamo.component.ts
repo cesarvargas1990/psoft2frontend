@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { NavItem } from '../../../_models/nav-item';
 import { NavService } from '../../../_services/nav.service';
-import { VERSION } from '@angular/material';
+import { VERSION } from '@angular/material/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { AuthService } from '../../../_services/auth.service';
 import { ClienteService } from '../../../_services/cliente/cliente.service';
@@ -48,7 +48,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
 
   fields: FormlyFieldConfig[] = [];
 
-  @ViewChild('appDrawer', { static: false }) appDrawer: ElementRef;
+  @ViewChild('appDrawer') appDrawer: ElementRef;
 
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;

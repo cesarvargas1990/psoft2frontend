@@ -8,7 +8,7 @@ import {
 import { AuthService } from '../../_services/auth.service';
 import { NavItem } from '../../_models/nav-item';
 import { NavService } from '../../_services/nav.service';
-import { VERSION } from '@angular/material';
+import { VERSION } from '@angular/material/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { EChartOption } from 'echarts';
 import { MatTableDataSource } from '@angular/material/table';
@@ -100,7 +100,7 @@ export class DashboardComponent implements AfterViewInit {
   total_interes: string;
   contenidoCombinado = '';
 
-  @ViewChild('appDrawer', { static: false }) appDrawer: ElementRef;
+  @ViewChild('appDrawer') appDrawer: ElementRef;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;

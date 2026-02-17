@@ -30,7 +30,7 @@ import { SignaturePad } from 'ngx-signaturepad/signature-pad';
   providers: [DatePipe]
 })
 export class EditarClienteComponent implements OnInit {
-  @ViewChild(SignaturePad, { static: false }) public signaturePad: SignaturePad;
+  @ViewChild(SignaturePad) public signaturePad: SignaturePad;
 
   public signaturePadOptions: Object = {
     // passed through to szimek/signature_pad constructor

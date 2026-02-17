@@ -9,7 +9,7 @@ import {
 
 import { NavItem } from '../../../_models/nav-item';
 import { NavService } from '../../../_services/nav.service';
-import { VERSION } from '@angular/material';
+import { VERSION } from '@angular/material/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { AuthService } from '../../../_services/auth.service';
 
@@ -39,7 +39,7 @@ export class EmpresaParametrosComponent implements OnInit {
 
   options: FormlyFormOptions = {};
 
-  @ViewChild('appDrawer', { static: false }) appDrawer: ElementRef;
+  @ViewChild('appDrawer') appDrawer: ElementRef;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   mobileQuery: MediaQueryList;

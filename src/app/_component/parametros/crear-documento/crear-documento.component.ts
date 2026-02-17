@@ -9,7 +9,7 @@ import {
 
 import { NavItem } from '../../../_models/nav-item';
 import { NavService } from '../../../_services/nav.service';
-import { VERSION } from '@angular/material';
+import { VERSION } from '@angular/material/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { MatSort } from '@angular/material/sort';
 import { AuthService } from '../../../_services/auth.service';
@@ -56,7 +56,7 @@ export class CrearDocumentoComponent implements AfterViewInit {
   modoEdicion = false;
   editItem = false;
 
-  @ViewChild('appDrawer', { static: false }) appDrawer: ElementRef;
+  @ViewChild('appDrawer') appDrawer: ElementRef;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   mobileQuery: MediaQueryList;

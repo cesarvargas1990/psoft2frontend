@@ -5,7 +5,7 @@ import {
   ViewEncapsulation,
   AfterViewInit
 } from '@angular/core';
-import { VERSION } from '@angular/material';
+import { VERSION } from '@angular/material/core';
 import { NavItem } from '../app/_models/nav-item';
 import { NavService } from './_services/nav.service';
 import { AuthService } from '../app/_services/auth.service';
@@ -17,7 +17,7 @@ import { AuthService } from '../app/_services/auth.service';
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements AfterViewInit {
-  @ViewChild('appDrawer', { static: false }) appDrawer: ElementRef;
+  @ViewChild('appDrawer') appDrawer: ElementRef;
 
   version = VERSION;
 

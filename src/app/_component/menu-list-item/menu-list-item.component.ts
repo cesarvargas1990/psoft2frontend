@@ -26,8 +26,11 @@ import {
   ]
 })
 export class MenuListItemComponent implements OnInit {
-  expanded: boolean;
-  @HostBinding('attr.aria-expanded') ariaExpanded = this.expanded;
+  expanded = false;
+  @HostBinding('attr.aria-expanded')
+  get ariaExpanded() {
+    return this.expanded;
+  }
   @Input() item: NavItem;
   @Input() depth: number;
 
@@ -44,7 +47,6 @@ export class MenuListItemComponent implements OnInit {
     this.navService.currentUrl.subscribe((url: string) => {
       if (this.item.route && url) {
         this.expanded = url.indexOf(`/${this.item.route}`) === 0;
-        this.ariaExpanded = this.expanded;
       }
     });
   }

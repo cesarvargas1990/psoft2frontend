@@ -229,7 +229,9 @@ describe('EditarClienteComponent', () => {
   });
 
   it('getSelectedFileName debe retornar valor por defecto cuando no hay archivo', () => {
-    expect(component.getSelectedFileName(99)).toBe('Ningún archivo seleccionado');
+    expect(component.getSelectedFileName(99)).toBe(
+      'Ningún archivo seleccionado'
+    );
     component.selectedFileNames[99] = 'archivo.png';
     expect(component.getSelectedFileName(99)).toBe('archivo.png');
   });

@@ -350,7 +350,9 @@ describe('EmpresaParametrosComponent', () => {
     const respString = { data: 'otro.png' };
     const respArray = { data: [{ nombrearchivo: 'item.jpg' }] };
 
-    expect((component as any).extraerRutaFirma(respString)).toContain('upload/');
+    expect((component as any).extraerRutaFirma(respString)).toContain(
+      'upload/'
+    );
     expect((component as any).extraerRutaFirma(respArray)).toContain('upload/');
   });
 
@@ -370,19 +372,27 @@ describe('EmpresaParametrosComponent', () => {
 
   it('extraerRutaFirma debe retornar vacío cuando no hay datos válidos', () => {
     expect((component as any).extraerRutaFirma(null)).toBe('');
-    expect((component as any).extraerRutaFirma({ data: { ruta: 'sin_archivo' } })).toBe('');
+    expect(
+      (component as any).extraerRutaFirma({ data: { ruta: 'sin_archivo' } })
+    ).toBe('');
   });
 
   it('normalizarRutaFirma debe cubrir casos data, upload, documentosAdjuntos y ruta simple', () => {
     expect((component as any).normalizarRutaFirma('')).toBe('');
-    expect((component as any).normalizarRutaFirma('data:image/png;base64,abc')).toBe('');
     expect(
-      (component as any).normalizarRutaFirma('https://x.com/upload/documentosAdjuntos/f.png')
+      (component as any).normalizarRutaFirma('data:image/png;base64,abc')
+    ).toBe('');
+    expect(
+      (component as any).normalizarRutaFirma(
+        'https://x.com/upload/documentosAdjuntos/f.png'
+      )
     ).toBe('upload/documentosAdjuntos/f.png');
-    expect((component as any).normalizarRutaFirma('documentosAdjuntos/f.png')).toBe(
-      'upload/documentosAdjuntos/f.png'
+    expect(
+      (component as any).normalizarRutaFirma('documentosAdjuntos/f.png')
+    ).toBe('upload/documentosAdjuntos/f.png');
+    expect((component as any).normalizarRutaFirma('firma.png')).toBe(
+      'firma.png'
     );
-    expect((component as any).normalizarRutaFirma('firma.png')).toBe('firma.png');
   });
 
   it('normalizarRutaDesdeArchivo debe cubrir archivo suelto y rutas completas', () => {
@@ -390,20 +400,24 @@ describe('EmpresaParametrosComponent', () => {
       'upload/documentosAdjuntos/'
     );
     expect(
-      (component as any).normalizarRutaDesdeArchivo('upload/documentosAdjuntos/ya.png')
+      (component as any).normalizarRutaDesdeArchivo(
+        'upload/documentosAdjuntos/ya.png'
+      )
     ).toBe('upload/documentosAdjuntos/ya.png');
   });
 
   it('construirPreviewFirma debe cubrir vacío, http, data y rutas relativas', () => {
     expect((component as any).construirPreviewFirma('')).toBe('');
-    expect((component as any).construirPreviewFirma('http://site/firma.png')).toBe(
-      'http://site/firma.png'
-    );
-    expect((component as any).construirPreviewFirma('data:image/png;base64,abc')).toBe(
-      'data:image/png;base64,abc'
-    );
     expect(
-      (component as any).construirPreviewFirma('upload/documentosAdjuntos/firma.png')
+      (component as any).construirPreviewFirma('http://site/firma.png')
+    ).toBe('http://site/firma.png');
+    expect(
+      (component as any).construirPreviewFirma('data:image/png;base64,abc')
+    ).toBe('data:image/png;base64,abc');
+    expect(
+      (component as any).construirPreviewFirma(
+        'upload/documentosAdjuntos/firma.png'
+      )
     ).toContain('firma.png');
     expect((component as any).construirPreviewFirma('ruta/sin_extension')).toBe(
       'ruta/sin_extension'

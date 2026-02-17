@@ -240,7 +240,9 @@ describe('CrearClienteComponent', () => {
     expect(component.isPdfFile(1)).toBe(false);
     expect(component.isPdfFile(2)).toBe(false);
     expect(component.getSelectedFileName(7)).toBe('doc.pdf');
-    expect(component.getSelectedFileName(8)).toBe('Ningún archivo seleccionado');
+    expect(component.getSelectedFileName(8)).toBe(
+      'Ningún archivo seleccionado'
+    );
   });
 
   it('debe navegar al dashboard al llamar volver()', () => {

@@ -110,6 +110,7 @@ import { CrearClienteComponent } from './_component/cliente/crear-cliente/crear-
 import { CrearPrestamoComponent } from './_component/cliente/crear-prestamo/crear-prestamo.component';
 
 import { FormlyFieldInput } from './formly-field-input';
+import { FormlyFieldActionButton } from './formly-field-action-button';
 
 import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 
@@ -251,6 +252,10 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
         {
           name: 'input',
           component: FormlyFieldInput
+        },
+        {
+          name: 'action-button',
+          component: FormlyFieldActionButton
         }
       ],
       validationMessages: [
@@ -283,6 +288,7 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
     CrearClienteComponent,
     CrearPrestamoComponent,
     FormlyFieldInput,
+    FormlyFieldActionButton,
     CrearDocumentoComponent,
     // FirmaWrapperComponent,
 

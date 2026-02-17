@@ -23,137 +23,146 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <div class="card" *ngIf="!modoEdicion && !editItem" style="width: 100%">
-        <div class="card-body">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">
-                <button
-                  title="Volver"
-                  (click)="volver()"
-                  class="left btn btn-outline-primary btn-sm"
-                  mat-icon-button
-                  color="primary"
-                >
-                  <mat-icon aria-label="Example icon-button with a heart icon"
-                    >keyboard_backspace
-                  </mat-icon></button
-                >&nbsp;Listado plantillas de documentos
-              </div>
-            </div>
-          </div>
-
-          <div class="card-text">
-            <mat-form-field class="example-full-width">
-              <input
-                matInput
-                (keyup)="applyFilter($event.target.value)"
-                placeholder="Buscar"
-              />
-            </mat-form-field>
-            <br />
+      <div class="documentos-page" *ngIf="!modoEdicion && !editItem">
+        <section class="card documentos-hero-card">
+          <div class="card-header documentos-hero-header">
             <button
-              title="Crear Documento"
-              *ngIf="authService.tienePermiso('documento.crear')"
-              class="btn btn-outline-primary btn-sm"
+              title="Volver"
+              (click)="volver()"
+              class="left btn btn-outline-primary btn-sm documentos-back-button"
               mat-icon-button
               color="primary"
-              (click)="
-                modoEdicion = true; this.html = ''; this.model.nombre = ''
-              "
             >
-              <mat-icon aria-label="Example icon-button with a heart icon"
-                >add</mat-icon
-              >
+              <mat-icon aria-label="Volver">keyboard_backspace</mat-icon>
             </button>
-            <br />
-            <mat-table
-              class="table-responsive"
-              [dataSource]="dataSource"
-              matSort
-              class="mat-elevation-z8"
-            >
-              <ng-container matColumnDef="nombre">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>
-                  Nombre Documento
-                </mat-header-cell>
-                <mat-cell
-                  *matCellDef="let element"
-                  data-label="Nombre Documento"
-                >
-                  <span class="mobile-label">Nombre:</span>{{ element.nombre }}
-                </mat-cell>
-              </ng-container>
-
-              <ng-container></ng-container>
-
-              <ng-container matColumnDef="action">
-                <mat-cell *matHeaderCellDef> </mat-cell>
-
-                <mat-cell *matCellDef="let row; let i = index">
-                  <button
-                    title="Editar Plantilla Documento"
-                    *ngIf="authService.tienePermiso('documento.editar')"
-                    class="float-right btn btn-outline-primary btn-sm"
-                    mat-icon-button
-                    color="primary"
-                    (click)="editItem = true; editarDocumento(row)"
-                  >
-                    <mat-icon aria-label="Edit">edit</mat-icon>
-                  </button>
-
-                  <button
-                    title="Eliminar Plantilla Documento"
-                    *ngIf="authService.tienePermiso('documento.eliminar')"
-                    class="float-right btn btn-outline-danger btn-sm"
-                    mat-icon-button
-                    color="accent"
-                    (click)="eliminarDocumentoPlantilla(row)"
-                  >
-                    <mat-icon aria-label="Delete">delete</mat-icon>
-                  </button>
-                </mat-cell>
-              </ng-container>
-              <mat-header-row
-                *matHeaderRowDef="displayedColumns"
-              ></mat-header-row>
-              <mat-row
-                *matRowDef="let row; columns: displayedColumns"
-              ></mat-row>
-            </mat-table>
-            <mat-paginator
-              [pageSizeOptions]="[
-                5,
-                10,
-                20,
-                25,
-                50,
-                100,
-                dataSource.data.length
-              ]"
-              showFirstLastButtons
-            >
-            </mat-paginator>
+            <div class="documentos-hero-title-wrap">
+              <h2 class="documentos-hero-title">
+                Listado plantillas de documentos
+              </h2>
+              <p class="documentos-hero-subtitle">
+                Administra, busca y actualiza plantillas de forma centralizada.
+              </p>
+            </div>
           </div>
-        </div>
+        </section>
+
+        <section class="card documentos-content-card">
+          <div class="card-body">
+            <div class="card-text">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  (keyup)="applyFilter($event.target.value)"
+                  placeholder="Buscar"
+                />
+              </mat-form-field>
+              <br />
+              <button
+                title="Crear Documento"
+                *ngIf="authService.tienePermiso('documento.crear')"
+                class="btn btn-outline-primary btn-sm"
+                mat-icon-button
+                color="primary"
+                (click)="
+                  modoEdicion = true; this.html = ''; this.model.nombre = ''
+                "
+              >
+                <mat-icon aria-label="Example icon-button with a heart icon"
+                  >add</mat-icon
+                >
+              </button>
+              <br />
+              <mat-table
+                class="table-responsive"
+                [dataSource]="dataSource"
+                matSort
+                class="mat-elevation-z8"
+              >
+                <ng-container matColumnDef="nombre">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Nombre Documento
+                  </mat-header-cell>
+                  <mat-cell
+                    *matCellDef="let element"
+                    data-label="Nombre Documento"
+                  >
+                    <span class="mobile-label">Nombre:</span
+                    >{{ element.nombre }}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container></ng-container>
+
+                <ng-container matColumnDef="action">
+                  <mat-cell *matHeaderCellDef> </mat-cell>
+
+                  <mat-cell *matCellDef="let row; let i = index">
+                    <button
+                      title="Editar Plantilla Documento"
+                      *ngIf="authService.tienePermiso('documento.editar')"
+                      class="float-right btn btn-outline-primary btn-sm"
+                      mat-icon-button
+                      color="primary"
+                      (click)="editItem = true; editarDocumento(row)"
+                    >
+                      <mat-icon aria-label="Edit">edit</mat-icon>
+                    </button>
+
+                    <button
+                      title="Eliminar Plantilla Documento"
+                      *ngIf="authService.tienePermiso('documento.eliminar')"
+                      class="float-right btn btn-outline-danger btn-sm"
+                      mat-icon-button
+                      color="accent"
+                      (click)="eliminarDocumentoPlantilla(row)"
+                    >
+                      <mat-icon aria-label="Delete">delete</mat-icon>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row
+                  *matHeaderRowDef="displayedColumns"
+                ></mat-header-row>
+                <mat-row
+                  *matRowDef="let row; columns: displayedColumns"
+                ></mat-row>
+              </mat-table>
+              <mat-paginator
+                [pageSizeOptions]="[
+                  5,
+                  10,
+                  20,
+                  25,
+                  50,
+                  100,
+                  dataSource.data.length
+                ]"
+                showFirstLastButtons
+              >
+              </mat-paginator>
+            </div>
+          </div>
+        </section>
       </div>
       <br />
       <div *ngIf="modoEdicion" class="card" style="width: 100%">
         <div class="card-body">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">
-                <button
-                  title="Volver"
-                  (click)="volver()"
-                  class="left btn btn-outline-primary btn-sm"
-                  mat-icon-button
-                  color="primary"
-                >
-                  <mat-icon aria-label="Example icon-button with a heart icon"
-                    >keyboard_backspace
-                  </mat-icon></button
-                >&nbsp;Titulo del Documento
+          <div class="card editor-form-card">
+            <div class="editor-section-header">
+              <button
+                title="Volver"
+                (click)="volver()"
+                class="left btn btn-outline-primary btn-sm documentos-back-button"
+                mat-icon-button
+                color="primary"
+              >
+                <mat-icon aria-label="Volver">keyboard_backspace</mat-icon>
+              </button>
+              <div class="documentos-hero-title-wrap">
+                <h2 class="documentos-hero-title">Título del documento</h2>
+                <p class="documentos-hero-subtitle">
+                  Define el nombre de la plantilla a crear.
+                </p>
               </div>
             </div>
           </div>
@@ -173,20 +182,22 @@
       </div>
       <div *ngIf="editItem" class="card" style="width: 100%">
         <div class="card-body">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">
-                <button
-                  title="Volver"
-                  (click)="volver(); editItem = false"
-                  class="left btn btn-outline-primary btn-sm"
-                  mat-icon-button
-                  color="primary"
-                >
-                  <mat-icon aria-label="Example icon-button with a heart icon"
-                    >keyboard_backspace
-                  </mat-icon></button
-                >&nbsp;Titulo del Documento
+          <div class="card editor-form-card">
+            <div class="editor-section-header">
+              <button
+                title="Volver"
+                (click)="volver(); editItem = false"
+                class="left btn btn-outline-primary btn-sm documentos-back-button"
+                mat-icon-button
+                color="primary"
+              >
+                <mat-icon aria-label="Volver">keyboard_backspace</mat-icon>
+              </button>
+              <div class="documentos-hero-title-wrap">
+                <h2 class="documentos-hero-title">Título del documento</h2>
+                <p class="documentos-hero-subtitle">
+                  Ajusta los datos de la plantilla seleccionada.
+                </p>
               </div>
             </div>
           </div>
@@ -206,10 +217,8 @@
       <br />
       <div *ngIf="editItem" class="card" style="width: 100%">
         <div class="card-body">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">&nbsp;Plantilla del Documento</div>
-            </div>
+          <div class="card editor-form-card">
+            <div class="editor-block-title">Plantilla del documento</div>
           </div>
           <div class="card-text">
             <tinymce [(ngModel)]="html" [config]="config"></tinymce>
@@ -230,10 +239,8 @@
       <br />
       <div *ngIf="modoEdicion" class="card" style="width: 100%">
         <div class="card-body">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">&nbsp;Plantilla del Documento</div>
-            </div>
+          <div class="card editor-form-card">
+            <div class="editor-block-title">Plantilla del documento</div>
           </div>
           <div class="card-text">
             <tinymce [(ngModel)]="html" [config]="config"></tinymce>

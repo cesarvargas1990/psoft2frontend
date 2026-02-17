@@ -2,6 +2,59 @@
   background: linear-gradient(135deg, var(--color-primary), #3b82f6);
 }
 
+.empresa-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.empresa-hero-card,
+.empresa-form-card {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.empresa-hero-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+}
+
+.empresa-back-button {
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+}
+
+.empresa-hero-copy {
+  display: flex;
+  flex-direction: column;
+}
+
+.empresa-hero-title {
+  margin: 0;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.empresa-hero-subtitle {
+  margin: 2px 0 0;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.87rem;
+}
+
+.empresa-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0;
+}
+
 .firma-viewer-row {
   margin-top: 6px;
 }
@@ -109,6 +162,19 @@
 }
 
 @media (max-width: 768px) {
+  .empresa-page {
+    padding: 10px;
+    gap: 12px;
+  }
+
+  .empresa-hero-title {
+    font-size: 1.03rem;
+  }
+
+  .empresa-hero-subtitle {
+    font-size: 0.8rem;
+  }
+
   .upload-shell {
     flex-direction: column;
     align-items: stretch;

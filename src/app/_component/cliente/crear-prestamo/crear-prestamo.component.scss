@@ -228,18 +228,91 @@ td.numbers {
   color: white;
 }
 
+.loan-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.loan-hero,
+.loan-form-card,
+.loan-result-card {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.loan-hero-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+}
+
+.loan-hero-title-wrap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.loan-hero-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.loan-hero-subtitle {
+  margin: 2px 0 0;
+  font-size: 0.87rem;
+  opacity: 0.92;
+}
+
+.section-title {
+  margin: 0 0 14px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.loan-actions {
+  margin-top: 8px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.loan-actions .submit-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.loan-tabs {
+  margin-top: 4px;
+}
+
+.documents-pane {
+  margin-top: 12px;
+}
+
+.empty-result-state {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px dashed var(--color-border);
+  background: rgba(148, 163, 184, 0.08);
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
 :host ::ng-deep .cliente-plus-field {
-  display: none;
+  display: flex;
+  align-items: flex-end;
 }
 
-.prestamo-form-wrapper {
-  position: relative;
-}
-
-.add-client-float-btn {
-  position: absolute;
-  top: 48px;
-  left: calc(33.333% - 48px);
+:host ::ng-deep .add-client-inline-btn {
   height: 40px;
   width: 40px;
   min-width: 40px;
@@ -248,18 +321,48 @@ td.numbers {
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  z-index: 2;
 }
 
-.add-client-float-btn .mat-icon {
+:host ::ng-deep .add-client-inline-btn .mat-icon {
   font-size: 22px;
   width: 22px;
   height: 22px;
 }
 
 @media (max-width: 768px) {
-  .add-client-float-btn {
-    position: static;
-    margin: 0 0 8px;
+  .loan-page {
+    padding: 10px;
+    gap: 12px;
+  }
+
+  .loan-hero-header {
+    align-items: center;
+  }
+
+  .loan-hero-title {
+    font-size: 1.03rem;
+  }
+
+  .loan-hero-subtitle {
+    font-size: 0.82rem;
+  }
+
+  .loan-actions {
+    justify-content: stretch;
+    flex-direction: column;
+  }
+
+  .loan-actions .submit-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  :host ::ng-deep .cliente-plus-field {
+    align-items: center;
+  }
+
+  :host ::ng-deep .add-client-inline-btn {
+    width: 100%;
+    min-width: 0;
   }
 }

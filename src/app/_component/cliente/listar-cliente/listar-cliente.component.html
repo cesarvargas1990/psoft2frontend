@@ -23,167 +23,175 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <div *ngIf="!modoEdicion" class="card" style="width: 100%">
-        <div class="card-body">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">
-                <button
-                  title="Volver"
-                  (click)="volver()"
-                  class="left btn btn-outline-primary btn-sm"
-                  mat-icon-button
-                  color="primary"
-                >
-                  <mat-icon aria-label="Example icon-button with a heart icon"
-                    >keyboard_backspace
-                  </mat-icon></button
-                >&nbsp;Listado de Clientes
-              </div>
-            </div>
-          </div>
-
-          <div class="card-text">
-            <mat-form-field class="example-full-width">
-              <input
-                matInput
-                (keyup)="applyFilter($event.target.value)"
-                placeholder="Buscar"
-              />
-            </mat-form-field>
-            <br />
+      <div *ngIf="!modoEdicion" class="clientes-page">
+        <section class="card clientes-hero-card">
+          <div class="card-header clientes-hero-header">
             <button
-              title="Agregar Cliente"
-              *ngIf="authService.tienePermiso('cliente.crear')"
-              class="btn btn-outline-primary btn-sm"
+              title="Volver"
+              (click)="volver()"
+              class="left btn btn-outline-primary btn-sm clientes-back-button"
               mat-icon-button
               color="primary"
-              (click)="modalAdicionarEmpresa()"
             >
-              <mat-icon aria-label="Example icon-button with a heart icon"
-                >add</mat-icon
-              >
+              <mat-icon aria-label="Volver">keyboard_backspace</mat-icon>
             </button>
-            <br />
-            <mat-table
-              class="table-responsive mat-elevation-z8 app-data-table"
-              [dataSource]="dataSource"
-              matSort
-            >
-              <ng-container matColumnDef="nomcliente">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>
-                  Cliente
-                </mat-header-cell>
-                <mat-cell *matCellDef="let element" data-label="Cliente">
-                  {{ element.nomcliente }}
-                </mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="numdocumento">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>
-                  N&uacute;mero Documento
-                </mat-header-cell>
-                <mat-cell *matCellDef="let element" data-label="Num Doc">
-                  {{ element.numdocumento }}
-                </mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="ciudad">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>
-                  Ciudad
-                </mat-header-cell>
-                <mat-cell *matCellDef="let element" data-label="Ciudad"
-                  >{{ element.ciudad }}
-                </mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="celular">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>
-                  Celular
-                </mat-header-cell>
-                <mat-cell *matCellDef="let element" data-label="Celular">
-                  {{ element.celular }}
-                </mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="email">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>
-                  Email
-                </mat-header-cell>
-                <mat-cell *matCellDef="let element" data-label="Email">
-                  {{ element.email }}
-                </mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="direcasa">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>
-                  Dir Casa
-                </mat-header-cell>
-                <mat-cell *matCellDef="let element" data-label="Dir Casa">
-                  {{ element.direcasa }}
-                </mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="action">
-                <mat-header-cell *matHeaderCellDef> </mat-header-cell>
-
-                <mat-cell *matCellDef="let row; let i = index">
-                  <button
-                    title="Editar Cliente"
-                    *ngIf="authService.tienePermiso('cliente.editar')"
-                    class="float-right btn btn-outline-primary btn-sm"
-                    mat-icon-button
-                    color="primary"
-                    (click)="modalEditarCliente(row)"
-                  >
-                    <mat-icon aria-label="Edit">edit</mat-icon>
-                  </button>
-
-                  <button
-                    title="Eliminar Cliente"
-                    *ngIf="authService.tienePermiso('cliente.eliminar')"
-                    class="float-right btn btn-outline-danger btn-sm"
-                    mat-icon-button
-                    color="accent"
-                    (click)="modalEliminarCliente(row)"
-                  >
-                    <mat-icon aria-label="Delete">delete</mat-icon>
-                  </button>
-
-                  <button
-                    title="Listado Creditos"
-                    *ngIf="authService.tienePermiso('cliente.listado_creditos')"
-                    class="float-right btn btn-outline-info btn-sm"
-                    mat-icon-button
-                    color="accent"
-                    (click)="modalListadoCreditos(row)"
-                  >
-                    <mat-icon aria-label="find_in_page">find_in_page</mat-icon>
-                  </button>
-                </mat-cell>
-              </ng-container>
-              <mat-header-row
-                *matHeaderRowDef="displayedColumns"
-              ></mat-header-row>
-              <mat-row
-                *matRowDef="let row; columns: displayedColumns"
-              ></mat-row>
-            </mat-table>
-            <mat-paginator
-              [pageSizeOptions]="[
-                5,
-                10,
-                20,
-                25,
-                50,
-                100,
-                dataSource.data.length
-              ]"
-              showFirstLastButtons
-            >
-            </mat-paginator>
+            <div class="clientes-hero-title-wrap">
+              <h2 class="clientes-hero-title">Listado de clientes</h2>
+              <p class="clientes-hero-subtitle">
+                Busca, gestiona y consulta créditos de forma rápida.
+              </p>
+            </div>
           </div>
-        </div>
+        </section>
+
+        <section class="card clientes-content-card">
+          <div class="card-body">
+            <div class="card-text">
+              <mat-form-field class="example-full-width">
+                <input
+                  matInput
+                  (keyup)="applyFilter($event.target.value)"
+                  placeholder="Buscar"
+                />
+              </mat-form-field>
+              <br />
+              <button
+                title="Agregar Cliente"
+                *ngIf="authService.tienePermiso('cliente.crear')"
+                class="btn btn-outline-primary btn-sm"
+                mat-icon-button
+                color="primary"
+                (click)="modalAdicionarEmpresa()"
+              >
+                <mat-icon aria-label="Example icon-button with a heart icon"
+                  >add</mat-icon
+                >
+              </button>
+              <br />
+              <mat-table
+                class="table-responsive mat-elevation-z8 app-data-table"
+                [dataSource]="dataSource"
+                matSort
+              >
+                <ng-container matColumnDef="nomcliente">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Cliente
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" data-label="Cliente">
+                    {{ element.nomcliente }}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="numdocumento">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>
+                    N&uacute;mero Documento
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" data-label="Num Doc">
+                    {{ element.numdocumento }}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="ciudad">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Ciudad
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" data-label="Ciudad"
+                    >{{ element.ciudad }}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="celular">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Celular
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" data-label="Celular">
+                    {{ element.celular }}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="email">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Email
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" data-label="Email">
+                    {{ element.email }}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="direcasa">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Dir Casa
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" data-label="Dir Casa">
+                    {{ element.direcasa }}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                  <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+
+                  <mat-cell *matCellDef="let row; let i = index">
+                    <button
+                      title="Editar Cliente"
+                      *ngIf="authService.tienePermiso('cliente.editar')"
+                      class="float-right btn btn-outline-primary btn-sm"
+                      mat-icon-button
+                      color="primary"
+                      (click)="modalEditarCliente(row)"
+                    >
+                      <mat-icon aria-label="Edit">edit</mat-icon>
+                    </button>
+
+                    <button
+                      title="Eliminar Cliente"
+                      *ngIf="authService.tienePermiso('cliente.eliminar')"
+                      class="float-right btn btn-outline-danger btn-sm"
+                      mat-icon-button
+                      color="accent"
+                      (click)="modalEliminarCliente(row)"
+                    >
+                      <mat-icon aria-label="Delete">delete</mat-icon>
+                    </button>
+
+                    <button
+                      title="Listado Creditos"
+                      *ngIf="
+                        authService.tienePermiso('cliente.listado_creditos')
+                      "
+                      class="float-right btn btn-outline-info btn-sm"
+                      mat-icon-button
+                      color="accent"
+                      (click)="modalListadoCreditos(row)"
+                    >
+                      <mat-icon aria-label="find_in_page"
+                        >find_in_page</mat-icon
+                      >
+                    </button>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row
+                  *matHeaderRowDef="displayedColumns"
+                ></mat-header-row>
+                <mat-row
+                  *matRowDef="let row; columns: displayedColumns"
+                ></mat-row>
+              </mat-table>
+              <mat-paginator
+                [pageSizeOptions]="[
+                  5,
+                  10,
+                  20,
+                  25,
+                  50,
+                  100,
+                  dataSource.data.length
+                ]"
+                showFirstLastButtons
+              >
+              </mat-paginator>
+            </div>
+          </div>
+        </section>
       </div>
 
       <div *ngIf="modoEdicion" class="card" style="width: 100%">

@@ -23,58 +23,50 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <div class="card" style="width: 100%">
-        <div class="card-body">
-          <div></div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">
-                <button
-                  title="Volver"
-                  (click)="volver()"
-                  class="left btn btn-outline-primary btn-sm"
-                  mat-icon-button
-                  color="primary"
-                >
-                  <mat-icon aria-label="Example icon-button with a heart icon"
-                    >keyboard_backspace
-                  </mat-icon></button
-                >&nbsp;Creaci&oacute;n de prestamo
-              </div>
+      <div class="loan-page">
+        <section class="loan-hero card">
+          <div class="card-header loan-hero-header">
+            <button
+              title="Volver"
+              (click)="volver()"
+              class="left btn btn-outline-primary btn-sm"
+              mat-icon-button
+              color="primary"
+            >
+              <mat-icon aria-label="Volver">keyboard_backspace</mat-icon>
+            </button>
+            <div class="loan-hero-title-wrap">
+              <h2 class="loan-hero-title">Creación de préstamo</h2>
+              <p class="loan-hero-subtitle">
+                Complete los datos, simule cuotas y luego confirme el registro.
+              </p>
             </div>
           </div>
-          <div class="card-text">
+        </section>
+
+        <section class="card loan-form-card">
+          <div class="card-body">
+            <h5 class="section-title">Datos del préstamo</h5>
             <form [formGroup]="form" (ngSubmit)="submit()">
-              <div class="prestamo-form-wrapper">
-                <button
-                  type="button"
-                  class="btn btn-outline-primary add-client-float-btn"
-                  title="Crear cliente"
-                  (click)="modalAdicionarEmpresa()"
-                >
-                  <mat-icon aria-label="Agregar cliente">add</mat-icon>
-                </button>
+              <formly-form
+                [model]="model"
+                [fields]="fields"
+                [options]="options"
+                [form]="form"
+              >
+              </formly-form>
 
-                <formly-form
-                  [model]="model"
-                  [fields]="fields"
-                  [options]="options"
-                  [form]="form"
-                >
-                </formly-form>
-              </div>
-
-              <mat-dialog-actions>
+              <mat-dialog-actions class="loan-actions">
                 <button
                   type="button"
                   (click)="obtenerCuotasPrestamo()"
                   title="Obtener cuotas del prestamo"
                   class="btn btn-primary submit-button"
                 >
-                  <mat-icon aria-label="Edit">table_chart</mat-icon>
+                  <mat-icon aria-label="Calcular">table_chart</mat-icon>
+                  Simular cuotas
                 </button>
-                &nbsp;
+
                 <button
                   *ngIf="mostrarTablaResumen && !listarDocumentosPrestamo"
                   type="button"
@@ -82,61 +74,70 @@
                   (click)="guardarPrestamo()"
                   title="Guardar Prestamo"
                 >
-                  <mat-icon aria-label="Edit">save</mat-icon>
+                  <mat-icon aria-label="Guardar">save</mat-icon>
+                  Guardar préstamo
                 </button>
-                &nbsp;
               </mat-dialog-actions>
             </form>
-
-            <!-- <tinymce [(ngModel)]="html" [config]="config"></tinymce> -->
           </div>
-        </div>
-      </div>
+        </section>
 
-      <br />
+        <section *ngIf="mostrarTablaResumen" class="card loan-result-card">
+          <div class="card-body">
+            <h5 class="section-title">Resultado</h5>
 
-      <div *ngIf="mostrarTablaResumen" class="card" style="width: 100%">
-        <div
-          *ngIf="!listarDocumentosPrestamo"
-          class="card-body table-responsive"
-        >
-          <h5 class="card-title">Tabla de Resumen del prestamo</h5>
-          <div class="card-text">
-            <div mat-dialog-content class="mat-typography">
-              <table class="main-table mobile-optimised table-responvive">
-                <thead>
-                  <tr>
-                    <th *ngFor="let header of getHeaders()">{{ header }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of tableCuotasPrestamo">
-                    <td *ngFor="let key of getHeaders()" [attr.data-th]="key">
-                      {{ item[key] }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <br />
-            </div>
+            <mat-tab-group animationDuration="0ms" class="loan-tabs">
+              <mat-tab label="Resumen de cuotas">
+                <div *ngIf="!listarDocumentosPrestamo" class="table-responsive">
+                  <table class="main-table mobile-optimised table-responvive">
+                    <thead>
+                      <tr>
+                        <th *ngFor="let header of getHeaders()">
+                          {{ header }}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of tableCuotasPrestamo">
+                        <td
+                          *ngFor="let key of getHeaders()"
+                          [attr.data-th]="key"
+                        >
+                          {{ item[key] }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div
+                  *ngIf="listarDocumentosPrestamo"
+                  class="empty-result-state"
+                >
+                  El préstamo fue registrado. Revise los documentos en la
+                  pestaña "Documentos".
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Documentos">
+                <div *ngIf="listarDocumentosPrestamo" class="documents-pane">
+                  <tinymce
+                    [(ngModel)]="contenidoCombinado"
+                    [config]="config"
+                  ></tinymce>
+                </div>
+
+                <div
+                  *ngIf="!listarDocumentosPrestamo"
+                  class="empty-result-state"
+                >
+                  Los documentos estarán disponibles después de guardar el
+                  préstamo.
+                </div>
+              </mat-tab>
+            </mat-tab-group>
           </div>
-        </div>
-
-        <div *ngIf="listarDocumentosPrestamo" class="card-body">
-          <h5 class="card-title">Documentos relacionados al prestamo</h5>
-          <div class="card-text">
-            <div mat-dialog-content class="mat-typography">
-              <div>
-                <br />
-                <tinymce
-                  [(ngModel)]="contenidoCombinado"
-                  [config]="config"
-                ></tinymce>
-              </div>
-              <br />
-            </div>
-          </div>
-        </div>
+        </section>
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>

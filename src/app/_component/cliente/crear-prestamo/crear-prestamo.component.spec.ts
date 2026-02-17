@@ -21,6 +21,8 @@ import { PrestamosService } from '../../../_services/prestamos/prestamos.service
 import { MediaMatcher } from '@angular/cdk/layout';
 import Swal from 'sweetalert2';
 import { FormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { CrearClienteComponent } from '../crear-cliente/crear-cliente.component';
 
 class MockAuthService {
   isLoggedIn() {
@@ -96,11 +98,20 @@ class MockMediaMatcher {
   }
 }
 
+class MockMatDialog {
+  open() {
+    return {
+      afterClosed: () => of(null)
+    };
+  }
+}
+
 describe('CrearPrestamoComponent', () => {
   let component: CrearPrestamoComponent;
   let fixture: ComponentFixture<CrearPrestamoComponent>;
   let router: Router;
   let prestamosService: PrestamosService;
+  let dialog: MatDialog;
 
   beforeEach(async(() => {
     localStorage.setItem(
@@ -118,7 +129,8 @@ describe('CrearPrestamoComponent', () => {
         { provide: UsersService, useClass: MockUsersService },
         { provide: PrestamosService, useClass: MockPrestamosService },
         { provide: Router, useClass: MockRouter },
-        { provide: MediaMatcher, useClass: MockMediaMatcher }
+        { provide: MediaMatcher, useClass: MockMediaMatcher },
+        { provide: MatDialog, useClass: MockMatDialog }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
@@ -129,6 +141,7 @@ describe('CrearPrestamoComponent', () => {
     component = fixture.componentInstance;
     router = TestBed.get(Router);
     prestamosService = TestBed.get(PrestamosService);
+    dialog = TestBed.get(MatDialog);
     fixture.detectChanges();
   });
 
@@ -307,6 +320,7 @@ describe('CrearPrestamoComponent', () => {
       changeDetectorRef,
       mediaMatcher,
       TestBed.get(Router),
+      TestBed.get(MatDialog),
       TestBed.get(TipodocidentiService),
       TestBed.get(UsersService),
       TestBed.get(PrestamosService)
@@ -424,10 +438,15 @@ describe('CrearPrestamoComponent', () => {
     expect(spyCuotas).not.toHaveBeenCalled();
   }));
 
-  it('debe navegar al crear cliente al llamar modalAdicionarEmpresa', () => {
-    const spy = spyOn(router, 'navigate');
+  it('debe abrir modal de crear cliente al llamar modalAdicionarEmpresa', () => {
+    const spy = spyOn(dialog, 'open').and.callThrough();
     component.modalAdicionarEmpresa();
-    expect(spy).toHaveBeenCalledWith(['clientes/crear']);
+    expect(spy).toHaveBeenCalledWith(
+      CrearClienteComponent,
+      jasmine.objectContaining({
+        panelClass: 'crear-cliente-dialog'
+      })
+    );
   });
 
   it('debe mostrar error en obtenerCuotasPrestamo si formulario inválido', () => {

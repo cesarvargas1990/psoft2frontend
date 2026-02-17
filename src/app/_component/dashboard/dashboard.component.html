@@ -274,20 +274,26 @@
       </div>
       <div *ngIf="visualizarDocumentos" class="card" style="width: 100%">
         <div class="card-body">
-          <div class="card-header">
-            <h5 class="card-title">
+          <div class="card-header dashboard-hero-header">
+            <div class="dashboard-hero-title-wrap">
               <button
                 title="Volver"
                 (click)="visualizarDocumentos = false; totales = true"
-                class="left btn btn-outline-primary btn-sm"
+                class="left btn btn-outline-primary btn-sm dashboard-back-button"
                 mat-icon-button
                 color="primary"
               >
-                <mat-icon aria-label="Example icon-button with a heart icon"
-                  >keyboard_backspace</mat-icon
-                ></button
-              >&nbsp;Listado de Documentos del prestamo
-            </h5>
+                <mat-icon aria-label="Volver">keyboard_backspace</mat-icon>
+              </button>
+              <div class="dashboard-hero-copy">
+                <h2 class="dashboard-hero-title">
+                  Listado de documentos del préstamo
+                </h2>
+                <p class="dashboard-hero-subtitle">
+                  Revisa y consulta los documentos generados del crédito.
+                </p>
+              </div>
+            </div>
           </div>
           <br />
           <div class="card-text">
@@ -312,8 +318,8 @@
       </div>
       <div *ngIf="visualizarListaCuotas" class="card" style="width: 100%">
         <div class="card-body">
-          <div class="card-header">
-            <h5 class="card-title">
+          <div class="card-header dashboard-hero-header">
+            <div class="dashboard-hero-title-wrap">
               <button
                 title="Volver"
                 (click)="
@@ -321,18 +327,22 @@
                   visualizarListaCuotas = false;
                   totales = true
                 "
-                class="left btn btn-outline-primary btn-sm"
+                class="left btn btn-outline-primary btn-sm dashboard-back-button"
                 mat-icon-button
                 color="primary"
               >
-                <mat-icon aria-label="Example icon-button with a heart icon"
-                  >keyboard_backspace</mat-icon
-                ></button
-              >&nbsp;Listado de Cuotas del prestamo #
-              {{ codPrestaSeleccionado }}
-            </h5>
+                <mat-icon aria-label="Volver">keyboard_backspace</mat-icon>
+              </button>
+              <div class="dashboard-hero-copy">
+                <h2 class="dashboard-hero-title">
+                  Listado de cuotas del préstamo #{{ codPrestaSeleccionado }}
+                </h2>
+                <p class="dashboard-hero-subtitle">
+                  {{ clienteSeleccionado }}
+                </p>
+              </div>
+            </div>
           </div>
-          <small>{{ clienteSeleccionado }}</small>
           <div class="card-text">
             <mat-form-field class="example-full-width">
               <input

@@ -23,127 +23,131 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <div class="card" style="width: 100%">
-        <div class="card-body">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">
-                <button
-                  title="Volver"
-                  (click)="volver()"
-                  class="left btn btn-outline-primary btn-sm"
-                  mat-icon-button
-                  color="primary"
-                >
-                  <mat-icon aria-label="Example icon-button with a heart icon"
-                    >keyboard_backspace</mat-icon
-                  ></button
-                >&nbsp;Modificación de datos empresa
-              </div>
+      <div class="empresa-page">
+        <section class="card empresa-hero-card">
+          <div class="card-header empresa-hero-header">
+            <button
+              title="Volver"
+              (click)="volver()"
+              class="left btn btn-outline-primary btn-sm empresa-back-button"
+              mat-icon-button
+              color="primary"
+            >
+              <mat-icon aria-label="Volver">keyboard_backspace</mat-icon>
+            </button>
+            <div class="empresa-hero-copy">
+              <h2 class="empresa-hero-title">Modificación de datos empresa</h2>
+              <p class="empresa-hero-subtitle">
+                Actualiza la información principal y la firma oficial.
+              </p>
             </div>
           </div>
-          <br />
-          <div class="card-text">
-            <form [formGroup]="form" (ngSubmit)="submit()">
-              <formly-form
-                [model]="model"
-                [fields]="fields"
-                [options]="options"
-                [form]="form"
-              >
-              </formly-form>
+        </section>
 
-              <div class="row firma-viewer-row">
-                <div class="col-md-6 upload-column">
-                  <label class="firma-label" for="firmaInput">Firma</label>
-
-                  <div class="upload-shell">
-                    <input
-                      #firmaFile
-                      id="firmaInput"
-                      type="file"
-                      accept="image/*"
-                      class="file-input"
-                      (change)="previewFirma(firmaFile.files)"
-                    />
-                    <button
-                      type="button"
-                      class="btn btn-outline-primary submit-button file-trigger"
-                      (click)="firmaFile.click()"
-                    >
-                      <mat-icon aria-label="Seleccionar firma"
-                        >upload_file</mat-icon
-                      >
-                      Seleccionar firma
-                    </button>
-                    <span
-                      class="selected-file"
-                      [class.empty]="!firmaFileName"
-                      [title]="getFirmaFileName()"
-                    >
-                      {{ getFirmaFileName() }}
-                    </span>
-                  </div>
-
-                  <span class="firma-error" *ngIf="firmaMensaje">{{
-                    firmaMensaje
-                  }}</span>
-
-                  <div class="upload-actions">
-                    <button
-                      type="button"
-                      mat-stroked-button
-                      color="warn"
-                      class="firma-clear-btn"
-                      (click)="limpiarFirma(firmaFile)"
-                    >
-                      <mat-icon aria-label="Limpiar firma">delete</mat-icon>
-                      Limpiar firma
-                    </button>
-                  </div>
-                </div>
-
-                <div class="col-md-6 preview-column">
-                  <span class="firma-label">Previsualización firma</span>
-
-                  <div
-                    class="preview-shell"
-                    *ngIf="firmaPreview; else firmaVacia"
-                  >
-                    <img
-                      [src]="firmaPreview"
-                      class="firma-preview"
-                      alt="Firma"
-                    />
-                  </div>
-
-                  <ng-template #firmaVacia>
-                    <div class="preview-empty">
-                      <mat-icon aria-label="Sin firma">draw</mat-icon>
-                      <span>Sube una imagen para visualizar la firma</span>
-                    </div>
-                  </ng-template>
-                </div>
-              </div>
-
-              <br />
-              <mat-dialog-actions>
-                <button
-                  *ngIf="
-                    authService.tienePermiso('empresa.modificar_datos_empresa')
-                  "
-                  type="submit"
-                  class="btn btn-primary submit-button"
+        <section class="card empresa-form-card">
+          <div class="card-body">
+            <div class="card-text">
+              <form [formGroup]="form" (ngSubmit)="submit()">
+                <formly-form
+                  [model]="model"
+                  [fields]="fields"
+                  [options]="options"
+                  [form]="form"
                 >
-                  <mat-icon aria-label="Edit">save</mat-icon>
-                </button>
-              </mat-dialog-actions>
-            </form>
-          </div>
-        </div>
-      </div>
+                </formly-form>
 
-      <br />
+                <div class="row firma-viewer-row">
+                  <div class="col-md-6 upload-column">
+                    <label class="firma-label" for="firmaInput">Firma</label>
+
+                    <div class="upload-shell">
+                      <input
+                        #firmaFile
+                        id="firmaInput"
+                        type="file"
+                        accept="image/*"
+                        class="file-input"
+                        (change)="previewFirma(firmaFile.files)"
+                      />
+                      <button
+                        type="button"
+                        class="btn btn-outline-primary submit-button file-trigger"
+                        (click)="firmaFile.click()"
+                      >
+                        <mat-icon aria-label="Seleccionar firma"
+                          >upload_file</mat-icon
+                        >
+                        Seleccionar firma
+                      </button>
+                      <span
+                        class="selected-file"
+                        [class.empty]="!firmaFileName"
+                        [title]="getFirmaFileName()"
+                      >
+                        {{ getFirmaFileName() }}
+                      </span>
+                    </div>
+
+                    <span class="firma-error" *ngIf="firmaMensaje">{{
+                      firmaMensaje
+                    }}</span>
+
+                    <div class="upload-actions">
+                      <button
+                        type="button"
+                        mat-stroked-button
+                        color="warn"
+                        class="firma-clear-btn"
+                        (click)="limpiarFirma(firmaFile)"
+                      >
+                        <mat-icon aria-label="Limpiar firma">delete</mat-icon>
+                        Limpiar firma
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 preview-column">
+                    <span class="firma-label">Previsualización firma</span>
+
+                    <div
+                      class="preview-shell"
+                      *ngIf="firmaPreview; else firmaVacia"
+                    >
+                      <img
+                        [src]="firmaPreview"
+                        class="firma-preview"
+                        alt="Firma"
+                      />
+                    </div>
+
+                    <ng-template #firmaVacia>
+                      <div class="preview-empty">
+                        <mat-icon aria-label="Sin firma">draw</mat-icon>
+                        <span>Sube una imagen para visualizar la firma</span>
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+
+                <br />
+                <mat-dialog-actions class="empresa-actions">
+                  <button
+                    *ngIf="
+                      authService.tienePermiso(
+                        'empresa.modificar_datos_empresa'
+                      )
+                    "
+                    type="submit"
+                    class="btn btn-primary submit-button"
+                  >
+                    <mat-icon aria-label="Edit">save</mat-icon>
+                  </button>
+                </mat-dialog-actions>
+              </form>
+            </div>
+          </div>
+        </section>
+      </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

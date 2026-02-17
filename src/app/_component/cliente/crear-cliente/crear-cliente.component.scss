@@ -232,13 +232,18 @@ td.numbers {
 
 .form-hero {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
-  margin-bottom: 12px;
-  padding: 12px;
-  background: rgba(0, 0, 0, 0.02);
-  border-left: 4px solid var(--color-primary);
-  border-radius: 6px;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-dark),
+    var(--color-primary)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
 }
 
 .hero-copy {
@@ -249,18 +254,22 @@ td.numbers {
 
 .hero-title {
   margin: 0;
-  font-size: 1.25rem;
+  color: #fff;
+  font-size: 1.2rem;
   font-weight: 600;
 }
 
 .hero-subtitle {
   margin: 0;
+  color: rgba(255, 255, 255, 0.92);
   font-size: 0.9rem;
-  opacity: 0.8;
 }
 
 .back-button {
   flex-shrink: 0;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  background: transparent;
 }
 
 .cliente-tabs {
@@ -429,6 +438,11 @@ td.numbers {
   justify-content: flex-end;
   margin-top: 16px;
   padding: 0;
+  gap: 8px;
+}
+
+.cancel-button {
+  min-width: 110px;
 }
 
 :host ::ng-deep .cliente-tabs .mat-tab-header,
@@ -463,7 +477,6 @@ td.numbers {
   }
 
   .form-hero {
-    align-items: flex-start;
     padding: 10px;
   }
 

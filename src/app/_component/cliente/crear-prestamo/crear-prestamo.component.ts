@@ -128,7 +128,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
         fieldGroup: [
           {
             key: 'id_cliente',
-            className: 'col-md-4',
+            className: 'col-md-3',
             type: 'select',
             templateOptions: {
               label: 'Nombre Cliente',
@@ -139,6 +139,15 @@ export class CrearPrestamoComponent implements AfterViewInit {
                   this.obtenerCuotasPrestamo();
                 }
               }
+            }
+          },
+          {
+            className: 'col-md-1 cliente-plus-field',
+            type: 'action-button',
+            templateOptions: {
+              label: 'Crear cliente',
+              icon: 'add',
+              onClick: () => this.modalAdicionarEmpresa()
             }
           },
           {

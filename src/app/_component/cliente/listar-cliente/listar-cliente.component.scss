@@ -67,5 +67,76 @@
 
 .card-header {
   background: linear-gradient(135deg, var(--color-primary), #3b82f6);
-  color: white;
+}
+
+.clientes-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.clientes-hero-card,
+.clientes-content-card {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.clientes-hero-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-dark),
+    var(--color-primary)
+  );
+}
+
+.clientes-back-button {
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  background: transparent;
+}
+
+.clientes-hero-title-wrap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.clientes-hero-title {
+  margin: 0;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.clientes-hero-subtitle {
+  margin: 2px 0 0;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.87rem;
+}
+
+@media (max-width: 768px) {
+  .clientes-page {
+    padding: 10px;
+    gap: 12px;
+  }
+
+  .clientes-hero-header {
+    align-items: center;
+  }
+
+  .clientes-hero-title {
+    font-size: 1.03rem;
+  }
+
+  .clientes-hero-subtitle {
+    font-size: 0.8rem;
+  }
 }

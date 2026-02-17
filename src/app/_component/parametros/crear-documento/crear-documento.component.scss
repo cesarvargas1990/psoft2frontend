@@ -15,11 +15,6 @@ th.mat-sort-header-sorted {
   color: black;
 }
 
-.mat-table {
-  //overflow: auto;
-  //max-height: 500px;
-}
-
 .mobile-label {
   display: none;
 }
@@ -39,7 +34,6 @@ th.mat-sort-header-sorted {
 
 .main-table thead th {
   background: var(--color-primary);
-  color: #fff;
   color: #fff;
   font-size: 0.8rem;
   padding: 5px 9px 6px 9px;
@@ -138,5 +132,115 @@ td.numbers {
 
 .card-header {
   background: linear-gradient(135deg, var(--color-primary), #3b82f6);
-  color: white;
+}
+
+.documentos-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.documentos-hero-card,
+.documentos-content-card {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.documentos-hero-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-dark),
+    var(--color-primary)
+  );
+}
+
+.documentos-back-button {
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  background: transparent;
+}
+
+.documentos-hero-title-wrap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.documentos-hero-title {
+  margin: 0;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.documentos-hero-subtitle {
+  margin: 2px 0 0;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.87rem;
+}
+
+.editor-form-card {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.editor-section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-dark),
+    var(--color-primary)
+  );
+}
+
+.editor-block-title {
+  padding: 12px 14px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-dark),
+    var(--color-primary)
+  );
+}
+
+@media (max-width: 768px) {
+  .documentos-page {
+    padding: 10px;
+    gap: 12px;
+  }
+
+  .documentos-hero-header {
+    align-items: center;
+  }
+
+  .documentos-hero-title {
+    font-size: 1.03rem;
+  }
+
+  .documentos-hero-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .editor-section-header {
+    align-items: center;
+  }
+
+  .editor-block-title {
+    font-size: 0.95rem;
+  }
 }

@@ -1,9 +1,14 @@
 <h4 mat-dialog-title class="dialog-title">
-  {{
-    consultaPrestamoCliente.length > 0
-      ? 'Listado préstamos ' + data.nomcliente
-      : 'No hay préstamos asignados al cliente'
-  }}
+  <span class="dialog-title-main">
+    {{
+      consultaPrestamoCliente.length > 0
+        ? 'Listado préstamos ' + data.nomcliente
+        : 'No hay préstamos asignados al cliente'
+    }}
+  </span>
+  <span class="dialog-title-sub" *ngIf="consultaPrestamoCliente.length > 0"
+    >Consulta rápida del historial del cliente.</span
+  >
 </h4>
 
 <mat-dialog-content class="prestamos-dialog-content">

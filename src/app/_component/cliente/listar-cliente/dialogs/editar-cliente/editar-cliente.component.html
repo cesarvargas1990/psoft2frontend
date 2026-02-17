@@ -1,4 +1,9 @@
-<h4 mat-dialog-title class="dialog-title">Editar cliente</h4>
+<h4 mat-dialog-title class="dialog-title">
+  <span class="dialog-title-main">Editar cliente</span>
+  <span class="dialog-title-sub"
+    >Actualiza datos y documentos del cliente.</span
+  >
+</h4>
 
 <mat-dialog-content class="editarCliente modern-dialog">
   <form [formGroup]="form" (ngSubmit)="submit()" class="edit-form">

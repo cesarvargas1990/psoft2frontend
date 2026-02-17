@@ -1,6 +1,286 @@
-.firma-actions {
+.dialog-title {
+  margin: 0;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.modern-dialog {
+  max-height: 78vh;
+}
+
+.edit-form {
+  display: block;
+}
+
+.edit-tabs {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.tab-pane {
+  padding: 14px;
+}
+
+.data-pane-card {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.015);
+  padding: 12px;
+}
+
+.docs-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.signature-card,
+.documents-card {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.015);
+}
+
+.card-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.section-help-text {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.signature-surface {
+  border: 1px dashed rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  background: #fff;
+  padding: 6px;
+}
+
+.signature-image {
+  max-width: 100%;
+  max-height: 220px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  background: #fff;
+  padding: 4px;
+}
+
+.doc-tabs {
+  margin-top: 8px;
+}
+
+.doc-tab-content {
+  padding: 12px 4px;
+}
+
+.file-panel-content {
+  align-items: flex-start;
+  row-gap: 12px;
+}
+
+.upload-column,
+.preview-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.upload-error {
+  color: #d32f2f;
+  font-size: 0.86rem;
+}
+
+.upload-shell {
   display: flex;
   align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.file-input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.file-trigger {
+  flex-shrink: 0;
+}
+
+.selected-file {
+  min-width: 0;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
+}
+
+.selected-file.empty {
+  opacity: 0.65;
+}
+
+.upload-actions,
+.firma-actions {
+  display: flex;
   gap: 8px;
-  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.preview-shell {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  background: #fff;
+  padding: 10px;
+}
+
+.preview-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.preview-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 220px;
+  object-fit: contain;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  padding: 4px;
+}
+
+.pdf-preview,
+.preview-empty {
+  min-height: 190px;
+  border: 1px dashed rgba(0, 0, 0, 0.18);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 10px;
+  color: rgba(0, 0, 0, 0.72);
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 0;
+}
+
+.submit-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+:host ::ng-deep .edit-tabs .mat-tab-header,
+:host ::ng-deep .doc-tabs .mat-tab-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+:host ::ng-deep .data-pane-card .row {
+  margin-bottom: 8px;
+}
+
+:host ::ng-deep .data-pane-card .row:last-child {
+  margin-bottom: 0;
+}
+
+:host ::ng-deep .data-pane-card .formly-field {
+  margin-bottom: 4px;
+}
+
+:host ::ng-deep .data-pane-card .mat-form-field {
+  width: 100%;
+}
+
+:host ::ng-deep .edit-tabs .mat-tab-label,
+:host ::ng-deep .doc-tabs .mat-tab-label {
+  min-width: 120px;
+  opacity: 1;
+}
+
+:host ::ng-deep .edit-tabs .mat-tab-label-active,
+:host ::ng-deep .doc-tabs .mat-tab-label-active {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+:host ::ng-deep .edit-tabs .mat-ink-bar,
+:host ::ng-deep .doc-tabs .mat-ink-bar {
+  background-color: var(--color-primary);
+}
+
+@media (max-width: 768px) {
+  .tab-pane {
+    padding: 10px;
+  }
+
+  .card-title-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .upload-shell {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .selected-file {
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .upload-actions,
+  .firma-actions,
+  .dialog-actions {
+    flex-direction: column;
+  }
+
+  .upload-actions .submit-button,
+  .firma-actions .submit-button,
+  .dialog-actions button,
+  .file-trigger {
+    width: 100%;
+    justify-content: center;
+  }
+
+  :host ::ng-deep .edit-tabs .mat-tab-label,
+  :host ::ng-deep .doc-tabs .mat-tab-label {
+    min-width: 90px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
 }

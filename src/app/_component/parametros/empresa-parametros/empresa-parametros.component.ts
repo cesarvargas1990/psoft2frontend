@@ -33,6 +33,7 @@ export class EmpresaParametrosComponent implements OnInit {
   firmaMensaje = '';
   firmaBase64 = '';
   firmaCambiada = false;
+  firmaFileName = '';
 
   datosEmpresa: any = [];
 
@@ -264,14 +265,18 @@ export class EmpresaParametrosComponent implements OnInit {
 
   previewFirma(files: FileList) {
     if (!files || files.length === 0) {
+      this.firmaFileName = '';
       return;
     }
 
     const mimeType = files[0].type;
     if (/image\/*/.exec(mimeType) == null) {
       this.firmaMensaje = 'Solo se aceptan imágenes.';
+      this.firmaFileName = '';
       return;
     }
+
+    this.firmaFileName = files[0].name;
 
     const reader = new FileReader();
     reader.readAsDataURL(files[0]);
@@ -286,12 +291,17 @@ export class EmpresaParametrosComponent implements OnInit {
   limpiarFirma(inputFile?: HTMLInputElement) {
     this.firmaPreview = '';
     this.firmaBase64 = '';
+    this.firmaFileName = '';
     this.firmaCambiada = true;
     this.firmaMensaje = '';
 
     if (inputFile) {
       inputFile.value = '';
     }
+  }
+
+  getFirmaFileName(): string {
+    return this.firmaFileName || 'Ningún archivo seleccionado';
   }
 
   private enviarActualizacionEmpresa(firmaRuta: string) {

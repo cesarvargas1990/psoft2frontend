@@ -1,147 +1,252 @@
-<h4 mat-dialog-title>EDITAR CLIENTE</h4>
+<h4 mat-dialog-title class="dialog-title">Editar cliente</h4>
 
-<mat-dialog-content class="editarCliente">
-  <form [formGroup]="form" (ngSubmit)="submit()">
-    <formly-form
-      [model]="model"
-      [fields]="fields"
-      [options]="options"
-      [form]="form"
-    ></formly-form>
-
-    <div class="listadoDocumentos">
-      <p>Lista de Documentos.</p>
-
-      <mat-accordion>
-        <mat-expansion-panel [expanded]="true">
-          <mat-expansion-panel-header>
-            <mat-panel-title> Firma cliente </mat-panel-title>
-          </mat-expansion-panel-header>
-
-          <br />
-          <p>Escriba su firma sobre el cuadro de abajo.</p>
-          <signature-pad
-            *ngIf="editFirmar"
-            [options]="signaturePadOptions"
-            (onBeginEvent)="drawStart()"
-          ></signature-pad>
-
-          <ng-container #fieldComponent></ng-container>
-          <img
-            *ngIf="!editFirmar"
-            [src]="listaArchivos[3]"
-            height="200"
-            alt="Firma cliente"
-          />
-
-          <div class="firma-actions">
-            <button
-              type="button"
-              title="Limpiar firma"
-              (click)="limpiarFirma()"
-              class="btn btn-outline-danger submit-button"
-            >
-              <mat-icon aria-label="Limpiar">delete</mat-icon>
-            </button>
-
-            <button
-              type="submit"
-              title="Guardar"
-              class="btn btn-success submit-button"
-            >
-              <mat-icon aria-label="Guardar">save</mat-icon>
-            </button>
+<mat-dialog-content class="editarCliente modern-dialog">
+  <form [formGroup]="form" (ngSubmit)="submit()" class="edit-form">
+    <mat-tab-group class="edit-tabs" [dynamicHeight]="true">
+      <mat-tab label="Datos">
+        <div class="tab-pane">
+          <div class="data-pane-card">
+            <formly-form
+              [model]="model"
+              [fields]="fields"
+              [options]="options"
+              [form]="form"
+            ></formly-form>
           </div>
-        </mat-expansion-panel>
+        </div>
+      </mat-tab>
 
-        <mat-expansion-panel
-          *ngFor="let item of listaTiposDocumento; let i = index"
-          (opened)="panelOpenState = true"
-          (closed)="panelOpenState = false"
-        >
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              {{ item.nombre }}
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-
-          <div class="row">
-            <div class="col-md-6">
-              <span style="color: red" *ngIf="message">{{ message }}</span>
-              <mat-divider></mat-divider>
-              <input
-                #file
-                type="file"
-                accept="image/*"
-                (click)="webcamIndex = null; webcam = 0; tomarfoto = 0"
-                (change)="preview(file.files, item.id)"
-              />
-              <mat-divider></mat-divider>
-              <webcam
-                [trigger]="triggerObservable"
-                (imageCapture)="handleImage($event)"
-                *ngIf="webcamIndex == i"
-              >
-              </webcam>
-
-              <button
-                type="button"
-                *ngIf="tomarfoto == 0"
-                (click)="
-                  webcamIndex = i;
-                  webcam = 1;
-                  listaArchivos[item.id] = '';
-                  tomarfoto = 1
-                "
-                class="btn btn-primary submit-button"
-              >
-                <mat-icon aria-label="videocam">videocam</mat-icon>
-              </button>
-
-              <button
-                type="button"
-                *ngIf="webcam == 1"
-                (click)="
-                  triggerSnapshot(item.id);
-                  listaTipoDoc[item.id] = item.id;
-                  webcamIndex = null
-                "
-                class="btn btn-primary submit-button"
-              >
-                <mat-icon aria-label="control_camera">control_camera</mat-icon>
-              </button>
+      <mat-tab label="Documentos">
+        <div class="tab-pane docs-pane">
+          <div class="signature-card">
+            <div class="card-title-row">
+              <h5 class="card-title">Firma cliente</h5>
+              <div class="firma-actions">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary submit-button"
+                  (click)="editFirmar = true"
+                  *ngIf="!editFirmar"
+                >
+                  <mat-icon aria-label="Editar firma">draw</mat-icon>
+                  Editar firma
+                </button>
+                <button
+                  type="button"
+                  title="Limpiar firma"
+                  (click)="limpiarFirma()"
+                  class="btn btn-outline-danger submit-button"
+                >
+                  <mat-icon aria-label="Limpiar">delete</mat-icon>
+                  Limpiar firma
+                </button>
+              </div>
             </div>
-            <div class="col-md-6">
-              <mat-divider></mat-divider>
-              <a
-                href="{{ listaArchivos[item.id] }}"
-                *ngIf="
-                  listaArchivos[item.id] &&
-                  validateExtension(listaArchivos[item.id]) == 'pdf'
-                "
-                target="_blank"
-                >Visualizar</a
-              >
 
+            <p class="section-help-text">
+              Escriba su firma sobre el cuadro de abajo.
+            </p>
+
+            <div
+              class="signature-surface"
+              *ngIf="editFirmar; else signaturePreview"
+            >
+              <signature-pad
+                [options]="signaturePadOptions"
+                (onBeginEvent)="drawStart()"
+              ></signature-pad>
+              <ng-container #fieldComponent></ng-container>
+            </div>
+
+            <ng-template #signaturePreview>
+              <div class="preview-empty" *ngIf="!listaArchivos[3]">
+                <mat-icon aria-label="Sin firma">draw</mat-icon>
+                <span>Sin firma registrada</span>
+              </div>
               <img
-                [src]="listaArchivos[item.id]"
-                *ngIf="
-                  listaArchivos[item.id] &&
-                  validateExtension(listaArchivos[item.id]) != 'pdf'
-                "
-                [attr.file-index]="i"
-                height="200"
-                alt="Documento adjunto"
+                *ngIf="listaArchivos[3]"
+                [src]="listaArchivos[3]"
+                class="signature-image"
+                alt="Firma cliente"
               />
-            </div>
+            </ng-template>
           </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-      <mat-dialog-actions>
-        <button type="submit" class="btn btn-primary submit-button">
-          <mat-icon aria-label="Edit">save</mat-icon>
-        </button>
-      </mat-dialog-actions>
-    </div>
+
+          <div class="documents-card">
+            <h5 class="card-title">Documentos adjuntos</h5>
+
+            <mat-tab-group
+              class="doc-tabs"
+              [dynamicHeight]="true"
+              *ngIf="
+                listaTiposDocumento && listaTiposDocumento.length;
+                else emptyDocs
+              "
+            >
+              <mat-tab
+                *ngFor="let item of listaTiposDocumento; let i = index"
+                [label]="item.nombre"
+              >
+                <div class="doc-tab-content">
+                  <div class="row file-panel-content">
+                    <div class="col-md-6 upload-column">
+                      <span class="upload-error" *ngIf="message">{{
+                        message
+                      }}</span>
+
+                      <div class="upload-shell">
+                        <input
+                          class="file-input"
+                          #fileInput
+                          type="file"
+                          accept="image/*,application/pdf"
+                          (change)="onFileChange(fileInput.files, item.id)"
+                        />
+                        <button
+                          type="button"
+                          class="btn btn-outline-primary submit-button file-trigger"
+                          (click)="fileInput.click()"
+                        >
+                          <mat-icon aria-label="Seleccionar archivo"
+                            >upload_file</mat-icon
+                          >
+                          Seleccionar archivo
+                        </button>
+                        <span
+                          class="selected-file"
+                          [class.empty]="!selectedFileNames[item.id]"
+                          [title]="getSelectedFileName(item.id)"
+                        >
+                          {{ getSelectedFileName(item.id) }}
+                        </span>
+                      </div>
+
+                      <webcam
+                        [trigger]="triggerObservable"
+                        (imageCapture)="handleImage($event)"
+                        *ngIf="webcamIndex == i"
+                      >
+                      </webcam>
+
+                      <div class="upload-actions">
+                        <button
+                          type="button"
+                          *ngIf="tomarfoto == 0"
+                          (click)="
+                            webcamIndex = i;
+                            webcam = 1;
+                            listaArchivos[item.id] = '';
+                            tomarfoto = 1
+                          "
+                          class="btn btn-primary submit-button"
+                        >
+                          <mat-icon aria-label="Abrir cámara"
+                            >videocam</mat-icon
+                          >
+                          Cámara
+                        </button>
+
+                        <button
+                          type="button"
+                          *ngIf="webcam == 1"
+                          (click)="
+                            triggerSnapshot(item.id);
+                            listaTipoDoc[item.id] = item.id;
+                            webcamIndex = null
+                          "
+                          class="btn btn-primary submit-button"
+                        >
+                          <mat-icon aria-label="Capturar"
+                            >control_camera</mat-icon
+                          >
+                          Capturar
+                        </button>
+
+                        <button
+                          type="button"
+                          *ngIf="listaArchivos[item.id]"
+                          (click)="clearSelectedFile(item.id)"
+                          class="btn btn-outline-secondary submit-button"
+                        >
+                          <mat-icon aria-label="Limpiar archivo"
+                            >delete</mat-icon
+                          >
+                          Limpiar
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 preview-column">
+                      <div
+                        class="preview-shell"
+                        *ngIf="listaArchivos[item.id]; else emptyPreview"
+                      >
+                        <div class="preview-toolbar">
+                          <a
+                            class="preview-link"
+                            [href]="listaArchivos[item.id]"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            *ngIf="isPdfFile(item.id)"
+                          >
+                            <mat-icon aria-label="Abrir archivo"
+                              >open_in_new</mat-icon
+                            >
+                            Abrir PDF
+                          </a>
+                        </div>
+
+                        <div class="pdf-preview" *ngIf="isPdfFile(item.id)">
+                          <mat-icon aria-label="Vista PDF"
+                            >picture_as_pdf</mat-icon
+                          >
+                          <span>Vista previa disponible en nueva pestaña</span>
+                        </div>
+
+                        <img
+                          [src]="listaArchivos[item.id]"
+                          *ngIf="!isPdfFile(item.id)"
+                          [attr.file-index]="i"
+                          class="preview-image"
+                          [attr.alt]="'Documento adjunto ' + item.nombre"
+                        />
+                      </div>
+
+                      <ng-template #emptyPreview>
+                        <div class="preview-empty">
+                          <mat-icon aria-label="Sin archivo"
+                            >insert_drive_file</mat-icon
+                          >
+                          <span
+                            >Sube o captura un archivo para visualizarlo</span
+                          >
+                        </div>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+
+            <ng-template #emptyDocs>
+              <div class="preview-empty">
+                <mat-icon aria-label="Sin documentos">description</mat-icon>
+                <span>No hay tipos de documento disponibles</span>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+    <mat-dialog-actions class="dialog-actions">
+      <button type="button" mat-stroked-button (click)="dialogRef.close()">
+        Cerrar
+      </button>
+      <button type="submit" class="btn btn-primary submit-button">
+        <mat-icon aria-label="Guardar">save</mat-icon>
+        Guardar cambios
+      </button>
+    </mat-dialog-actions>
   </form>
 </mat-dialog-content>

@@ -78,6 +78,7 @@ export class CrearClienteComponent implements AfterViewInit {
   modoEdicion = false;
   listaArchivos: any = [];
   listaTipoDoc: any = [];
+  selectedFileNames: any = [];
   lista: string[] = ['hola', 'que', 'tal', 'estas'];
   listaTiposDocumento: [] = [];
   webcam = 0;
@@ -384,8 +385,44 @@ export class CrearClienteComponent implements AfterViewInit {
     this.webcamImage = webcamImage;
     this.urlimage = this.webcamImage.imageAsDataUrl;
     this.listaArchivos[this.currentIndexImage] = this.urlimage;
+    this.selectedFileNames[this.currentIndexImage] = 'Captura de cámara';
     console.log('como va');
     console.log(this.listaArchivos);
+  }
+
+  onFileChange(files: FileList, index: number, tipoDocumentoId: number): void {
+    this.webcamIndex = null;
+    this.webcam = 0;
+    this.tomarfoto = 0;
+    this.listaTipoDoc[index] = tipoDocumentoId;
+    this.listaArchivos[index] = '';
+    this.message = '';
+
+    if (!files || files.length === 0) {
+      this.selectedFileNames[index] = '';
+      return;
+    }
+
+    this.selectedFileNames[index] = files[0].name;
+    this.preview(files, index);
+  }
+
+  clearSelectedFile(index: number): void {
+    this.listaArchivos[index] = '';
+    this.selectedFileNames[index] = '';
+    this.message = '';
+  }
+
+  isPdfFile(index: number): boolean {
+    const fileData = this.listaArchivos[index];
+    return (
+      typeof fileData === 'string' &&
+      fileData.startsWith('data:application/pdf')
+    );
+  }
+
+  getSelectedFileName(index: number): string {
+    return this.selectedFileNames[index] || 'Ningún archivo seleccionado';
   }
 
   public cameraWasSwitched(deviceId: string): void {

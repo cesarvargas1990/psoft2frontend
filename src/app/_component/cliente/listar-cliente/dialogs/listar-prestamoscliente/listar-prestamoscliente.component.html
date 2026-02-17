@@ -1,27 +1,38 @@
-<h4 *ngIf="consultaPrestamoCliente.length == 0" mat-dialog-title>
-  No hay prestamos asignados al cliente
-</h4>
-<h4 *ngIf="consultaPrestamoCliente.length > 0" mat-dialog-title>
-  LISTADO PRESTAMOS {{ data.nomcliente }}
+<h4 mat-dialog-title class="dialog-title">
+  {{
+    consultaPrestamoCliente.length > 0
+      ? 'Listado préstamos ' + data.nomcliente
+      : 'No hay préstamos asignados al cliente'
+  }}
 </h4>
 
-<mat-dialog-content>
-  <br />
+<mat-dialog-content class="prestamos-dialog-content">
+  <div
+    class="table-shell"
+    *ngIf="consultaPrestamoCliente.length > 0; else emptyState"
+  >
+    <table class="main-table mobile-optimised modern-table">
+      <thead>
+        <tr>
+          <th *ngFor="let header of getHeaders()">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of consultaPrestamoCliente">
+          <td *ngFor="let key of getHeaders()" [attr.data-th]="key">
+            {{ item[key] }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-  <table class="main-table mobile-optimised">
-    <thead>
-      <tr>
-        <th *ngFor="let header of getHeaders()">{{ header }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of consultaPrestamoCliente">
-        <td *ngFor="let key of getHeaders()" [attr.data-th]="key">
-          {{ item[key] }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <br />
+  <ng-template #emptyState>
+    <div class="empty-state">
+      <mat-icon aria-label="Sin préstamos">receipt_long</mat-icon>
+      <span>No se encontraron préstamos para este cliente.</span>
+    </div>
+  </ng-template>
+
   <form [formGroup]="form" (ngSubmit)="submit()"></form>
 </mat-dialog-content>

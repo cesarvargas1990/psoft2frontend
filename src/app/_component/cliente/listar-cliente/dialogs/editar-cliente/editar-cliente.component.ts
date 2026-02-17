@@ -86,6 +86,7 @@ export class EditarClienteComponent implements OnInit {
   cobradores: any = {};
   fields: FormlyFieldConfig[] = [];
   listaArchivos: any = {};
+  selectedFileNames: any = {};
 
   dataImage: any = {};
 
@@ -99,12 +100,53 @@ export class EditarClienteComponent implements OnInit {
 
   limpiarFirma() {
     this.editFirmar = true;
+    this.listaArchivos[3] = '';
 
     setTimeout(() => {
       if (this.signaturePad) {
         this.signaturePad.clear();
       }
     }, 0);
+  }
+
+  onFileChange(files: FileList, docId: number): void {
+    this.webcamIndex = null;
+    this.webcam = 0;
+    this.tomarfoto = 0;
+    this.message = '';
+    this.listaTipoDoc[docId] = docId;
+
+    if (!files || files.length === 0) {
+      this.selectedFileNames[docId] = '';
+      this.listaArchivos[docId] = '';
+      return;
+    }
+
+    this.selectedFileNames[docId] = files[0].name;
+    this.preview(files, docId);
+  }
+
+  clearSelectedFile(docId: number): void {
+    this.listaArchivos[docId] = '';
+    this.selectedFileNames[docId] = '';
+    this.listaTipoDoc[docId] = docId;
+    this.message = '';
+  }
+
+  getSelectedFileName(docId: number): string {
+    return this.selectedFileNames[docId] || 'Ningún archivo seleccionado';
+  }
+
+  isPdfFile(docId: number): boolean {
+    const fileData = this.listaArchivos[docId];
+    if (typeof fileData !== 'string') {
+      return false;
+    }
+
+    return (
+      fileData.startsWith('data:application/pdf') ||
+      fileData.toLowerCase().includes('.pdf')
+    );
   }
 
   submit() {
@@ -191,197 +233,217 @@ export class EditarClienteComponent implements OnInit {
 
     this.fields = [
       {
-        key: 'nomcliente',
-        className: 'col-md-3',
-        type: 'input',
-        defaultValue: this.data.nomcliente,
-        modelOptions: {
-          debounce: {
-            default: 2000
+        fieldGroupClassName: 'row',
+        fieldGroup: [
+          {
+            key: 'nomcliente',
+            className: 'col-md-8',
+            type: 'input',
+            defaultValue: this.data.nomcliente,
+            modelOptions: {
+              debounce: {
+                default: 2000
+              }
+            },
+            templateOptions: {
+              label: 'Nombre Cliente'
+            }
+          },
+          {
+            key: 'id_cobrador',
+            className: 'col-md-4',
+            type: 'select',
+            defaultValue: this.data.id_cobrador,
+            modelOptions: {
+              updateOn: 'blur'
+            },
+            templateOptions: {
+              label: 'Cobrador',
+              placeholder: 'Seleccione cobrador',
+              required: true,
+              options: this.cobradores
+            }
           }
-        },
-        templateOptions: {
-          label: 'Nombre Cliente'
-        }
-      },
-
-      {
-        key: 'id_cobrador',
-        className: 'col-md-3',
-        type: 'select',
-        defaultValue: this.data.id_cobrador,
-        modelOptions: {
-          updateOn: 'blur'
-        },
-        templateOptions: {
-          label: 'Cobrador',
-          placeholder: 'Seleccione cobrador',
-          required: true,
-          options: this.cobradores
-        }
+        ]
       },
       {
-        key: 'id_tipo_docid',
-        className: 'col-md-3',
-        type: 'select',
-        defaultValue: this.data.id_tipo_docid,
-        modelOptions: {
-          updateOn: 'blur'
-        },
-        templateOptions: {
-          label: 'Tipo Documento',
-          required: true,
-          options: this.tiposdocumento
-        }
+        fieldGroupClassName: 'row',
+        fieldGroup: [
+          {
+            key: 'id_tipo_docid',
+            className: 'col-md-4',
+            type: 'select',
+            defaultValue: this.data.id_tipo_docid,
+            modelOptions: {
+              updateOn: 'blur'
+            },
+            templateOptions: {
+              label: 'Tipo Documento',
+              required: true,
+              options: this.tiposdocumento
+            }
+          },
+          {
+            key: 'numdocumento',
+            className: 'col-md-4',
+            type: 'input',
+            defaultValue: this.data.numdocumento,
+            modelOptions: {
+              updateOn: 'submit'
+            },
+            templateOptions: {
+              label: 'Numero Documento',
+              required: true
+            }
+          },
+          {
+            key: 'email',
+            className: 'col-md-4',
+            type: 'input',
+            defaultValue: this.data.email,
+            modelOptions: {
+              updateOn: 'submit'
+            },
+            templateOptions: {
+              label: 'Email',
+              required: true
+            }
+          }
+        ]
       },
       {
-        key: 'numdocumento',
-        className: 'col-md-3',
-        type: 'input',
-        defaultValue: this.data.numdocumento,
-        modelOptions: {
-          updateOn: 'submit'
-        },
-        templateOptions: {
-          label: 'Numero Documento',
-          required: true
-        }
-      },
-
-      {
-        key: 'fch_expdocumento',
-        className: 'col-md-4',
-        defaultValue: this.data.fch_expdocumento,
-        type: 'datepicker',
-
-        modelOptions: {
-          updateOn: 'blur'
-        },
-        templateOptions: {
-          label: 'Fecha Expedicion',
-          placeholder: 'Fecha Expedicion',
-          required: true
-        }
-      },
-
-      {
-        key: 'fch_nacimiento',
-        className: 'col-md-4',
-        defaultValue: this.data.fch_nacimiento,
-        type: 'datepicker',
-
-        modelOptions: {
-          updateOn: 'blur'
-        },
-        templateOptions: {
-          label: 'Fecha Nacimiento',
-          placeholder: 'Fecha Nacimiento',
-          required: true
-        }
-      },
-
-      {
-        key: 'ciudad',
-        className: 'col-md-3',
-        type: 'input',
-        defaultValue: this.data.ciudad,
-        modelOptions: {
-          updateOn: 'submit'
-        },
-        templateOptions: {
-          label: 'Ciudad',
-          required: true
-        }
+        fieldGroupClassName: 'row',
+        fieldGroup: [
+          {
+            key: 'fch_expdocumento',
+            className: 'col-md-6',
+            defaultValue: this.data.fch_expdocumento,
+            type: 'datepicker',
+            modelOptions: {
+              updateOn: 'blur'
+            },
+            templateOptions: {
+              label: 'Fecha Expedicion',
+              placeholder: 'Fecha Expedicion',
+              required: true
+            }
+          },
+          {
+            key: 'fch_nacimiento',
+            className: 'col-md-6',
+            defaultValue: this.data.fch_nacimiento,
+            type: 'datepicker',
+            modelOptions: {
+              updateOn: 'blur'
+            },
+            templateOptions: {
+              label: 'Fecha Nacimiento',
+              placeholder: 'Fecha Nacimiento',
+              required: true
+            }
+          }
+        ]
       },
       {
-        key: 'telefijo',
-        className: 'col-md-3',
-        type: 'input',
-        defaultValue: this.data.telefijo,
-        modelOptions: {
-          updateOn: 'submit'
-        },
-        templateOptions: {
-          label: 'Telefono Fijo'
-        }
+        fieldGroupClassName: 'row',
+        fieldGroup: [
+          {
+            key: 'ciudad',
+            className: 'col-md-4',
+            type: 'input',
+            defaultValue: this.data.ciudad,
+            modelOptions: {
+              updateOn: 'submit'
+            },
+            templateOptions: {
+              label: 'Ciudad',
+              required: true
+            }
+          },
+          {
+            key: 'telefijo',
+            className: 'col-md-4',
+            type: 'input',
+            defaultValue: this.data.telefijo,
+            modelOptions: {
+              updateOn: 'submit'
+            },
+            templateOptions: {
+              label: 'Telefono Fijo'
+            }
+          },
+          {
+            key: 'celular',
+            className: 'col-md-4',
+            type: 'input',
+            defaultValue: this.data.celular,
+            modelOptions: {
+              updateOn: 'submit'
+            },
+            templateOptions: {
+              label: 'Celular',
+              required: true
+            }
+          }
+        ]
       },
       {
-        key: 'celular',
-        className: 'col-md-3',
-        type: 'input',
-        defaultValue: this.data.celular,
-        modelOptions: {
-          updateOn: 'submit'
-        },
-        templateOptions: {
-          label: 'Celular',
-          required: true
-        }
-      },
-
-      {
-        key: 'email',
-        className: 'col-md-3',
-        type: 'input',
-        defaultValue: this.data.email,
-        modelOptions: {
-          updateOn: 'submit'
-        },
-        templateOptions: {
-          label: 'Email',
-          required: true
-        }
-      },
-
-      {
-        key: 'direcasa',
-        className: 'col-md-3',
-        type: 'input',
-        defaultValue: this.data.direcasa,
-        modelOptions: {
-          updateOn: 'submit'
-        },
-        templateOptions: {
-          label: 'Dir Casa'
-        }
-      },
-
-      {
-        key: 'diretrabajo',
-        className: 'col-md-3',
-        type: 'input',
-        defaultValue: this.data.diretrabajo,
-        modelOptions: {
-          updateOn: 'submit'
-        },
-        templateOptions: {
-          label: 'Dir Trabajo'
-        }
-      },
-
-      {
-        key: 'ref1',
-        className: 'col-md-3',
-        type: 'input',
-        defaultValue: this.data.ref1,
-        modelOptions: {
-          updateOn: 'submit'
-        },
-        templateOptions: {
-          label: 'Referencia 1'
-        }
+        fieldGroupClassName: 'row',
+        fieldGroup: [
+          {
+            key: 'direcasa',
+            className: 'col-md-6',
+            type: 'input',
+            defaultValue: this.data.direcasa,
+            modelOptions: {
+              updateOn: 'submit'
+            },
+            templateOptions: {
+              label: 'Dir Casa'
+            }
+          },
+          {
+            key: 'diretrabajo',
+            className: 'col-md-6',
+            type: 'input',
+            defaultValue: this.data.diretrabajo,
+            modelOptions: {
+              updateOn: 'submit'
+            },
+            templateOptions: {
+              label: 'Dir Trabajo'
+            }
+          }
+        ]
       },
       {
-        key: 'ref2',
-        className: 'col-md-3',
-        type: 'input',
-        defaultValue: this.data.ref2,
-        modelOptions: {
-          updateOn: 'submit'
-        },
-        templateOptions: {
-          label: 'Referencia 2'
-        }
+        fieldGroupClassName: 'row',
+        fieldGroup: [
+          {
+            key: 'ref1',
+            className: 'col-md-6',
+            type: 'input',
+            defaultValue: this.data.ref1,
+            modelOptions: {
+              updateOn: 'submit'
+            },
+            templateOptions: {
+              label: 'Referencia 1'
+            }
+          },
+          {
+            key: 'ref2',
+            className: 'col-md-6',
+            type: 'input',
+            defaultValue: this.data.ref2,
+            modelOptions: {
+              updateOn: 'submit'
+            },
+            templateOptions: {
+              label: 'Referencia 2'
+            }
+          }
+        ]
       }
     ];
 
@@ -407,8 +469,10 @@ export class EditarClienteComponent implements OnInit {
       .listadoArchivosCliente(this.data.id)
       .subscribe((response) => {
         Object.entries(response as any).forEach(([, value]: [string, any]) => {
-          this.listaArchivos[value.id_tdocadjunto] =
+          const documentoId = value.id_tdocadjunto;
+          this.listaArchivos[documentoId] =
             this.photoPath + value.nombrearchivo;
+          this.selectedFileNames[documentoId] = value.nombrearchivo;
         });
       });
   }
@@ -483,6 +547,7 @@ export class EditarClienteComponent implements OnInit {
     reader.readAsDataURL(files[0]);
     reader.onload = (_event) => {
       this.listaArchivos[i] = reader.result;
+      this.selectedFileNames[i] = files[0].name;
 
       this.imgURL = reader.result;
     };

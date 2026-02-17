@@ -449,6 +449,112 @@ describe('CrearPrestamoComponent', () => {
     );
   });
 
+  it('debe recargar clientes y mostrar alerta cuando el modal retorna cliente creado', fakeAsync(() => {
+    const swalSpy = spyOn(Swal, 'fire');
+    const openSpy = spyOn(dialog, 'open').and.returnValue({
+      afterClosed: () => of({ id: 7 })
+    } as any);
+    const getClientesSpy = spyOn(
+      component.clienteService,
+      'getClientes'
+    ).and.returnValue(
+      Promise.resolve([{ id: 7, name: 'Nuevo Cliente' }]) as any
+    );
+
+    component.fields = [
+      {
+        fieldGroup: [
+          {
+            key: 'id_cliente',
+            templateOptions: {
+              options: []
+            }
+          }
+        ]
+      } as any
+    ];
+
+    const patchSpy = spyOn(component.form, 'patchValue').and.callThrough();
+    const updateSpy = spyOn(
+      component.form,
+      'updateValueAndValidity'
+    ).and.callThrough();
+
+    component.modalAdicionarEmpresa();
+    flushMicrotasks();
+
+    expect(openSpy).toHaveBeenCalled();
+    expect(getClientesSpy).toHaveBeenCalled();
+    expect(component.model.id_cliente).toBe(7);
+    expect(patchSpy).toHaveBeenCalledWith({ id_cliente: 7 });
+    expect(updateSpy).toHaveBeenCalled();
+    expect(swalSpy).toHaveBeenCalledWith(
+      jasmine.objectContaining({ type: 'success', title: 'Cliente creado' })
+    );
+  }));
+
+  it('no debe recargar ni mostrar alerta cuando el modal cierra sin cliente', fakeAsync(() => {
+    const swalSpy = spyOn(Swal, 'fire');
+    const getClientesSpy = spyOn(
+      component.clienteService,
+      'getClientes'
+    ).and.callThrough();
+    spyOn(dialog, 'open').and.returnValue({
+      afterClosed: () => of(null)
+    } as any);
+
+    component.modalAdicionarEmpresa();
+    flushMicrotasks();
+
+    expect(getClientesSpy).not.toHaveBeenCalled();
+    expect(swalSpy).not.toHaveBeenCalled();
+  }));
+
+  it('recargarClientes debe actualizar validez aun cuando no existan fields', fakeAsync(() => {
+    component.fields = [];
+    const updateSpy = spyOn(
+      component.form,
+      'updateValueAndValidity'
+    ).and.callThrough();
+    const patchSpy = spyOn(component.form, 'patchValue').and.callThrough();
+    spyOn(component.clienteService, 'getClientes').and.returnValue(
+      Promise.resolve([{ id: 1, name: 'Cliente Uno' }]) as any
+    );
+
+    (component as any).recargarClientes();
+    flushMicrotasks();
+
+    expect(updateSpy).toHaveBeenCalled();
+    expect(patchSpy).not.toHaveBeenCalled();
+    expect(component.model.id_cliente).toBeUndefined();
+  }));
+
+  it('recargarClientes no debe asignar cliente cuando id es 0', fakeAsync(() => {
+    component.fields = [
+      {
+        fieldGroup: [
+          {
+            key: 'id_cliente',
+            templateOptions: {
+              options: []
+            }
+          }
+        ]
+      } as any
+    ];
+
+    const patchSpy = spyOn(component.form, 'patchValue').and.callThrough();
+    spyOn(component.clienteService, 'getClientes').and.returnValue(
+      Promise.resolve([{ id: 1, name: 'Cliente Uno' }]) as any
+    );
+
+    (component as any).recargarClientes(0);
+    flushMicrotasks();
+
+    expect(patchSpy).not.toHaveBeenCalled();
+    expect(component.model.id_cliente).toBeUndefined();
+  }));
+
   it('debe mostrar error en obtenerCuotasPrestamo si formulario inválido', () => {
     const spy = spyOn(Swal, 'fire');
     component.form.setErrors({ invalid: true });

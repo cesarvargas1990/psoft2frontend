@@ -40,6 +40,7 @@ describe('ListarPrestamosclienteComponent', () => {
   let clienteServiceSpy: any;
   let tipodocidentiServiceSpy: any;
   let usersServiceSpy: any;
+  let dialogRefSpy: any;
 
   beforeEach(async(() => {
     clienteServiceSpy = jasmine.createSpyObj('ClienteService', [
@@ -82,6 +83,8 @@ describe('ListarPrestamosclienteComponent', () => {
     );
     usersServiceSpy.getUsers.and.returnValue(Promise.resolve([]));
 
+    dialogRefSpy = TestBed.get(MatDialogRef);
+
     fixture = TestBed.createComponent(ListarPrestamosclienteComponent);
     component = fixture.componentInstance;
     await component.ngAfterViewInit();
@@ -94,6 +97,11 @@ describe('ListarPrestamosclienteComponent', () => {
 
   it('debería obtener headers vacíos cuando no hay prestamos', () => {
     component.consultaPrestamoCliente = [];
+    expect(component.getHeaders()).toEqual([]);
+  });
+
+  it('debería obtener headers vacíos cuando consultaPrestamoCliente es null', () => {
+    component.consultaPrestamoCliente = null as any;
     expect(component.getHeaders()).toEqual([]);
   });
 
@@ -119,5 +127,49 @@ describe('ListarPrestamosclienteComponent', () => {
     await component.submit();
     expect(clienteServiceSpy.updateCliente).toHaveBeenCalled();
     expect(Swal.fire).toHaveBeenCalled();
+    expect(dialogRefSpy.close).toHaveBeenCalled();
+  });
+
+  it('no debería cerrar diálogo si el usuario no confirma la alerta', async () => {
+    spyOn(Swal, 'fire').and.returnValue(Promise.resolve({ value: false }));
+
+    component.form.setErrors(null);
+    component.model = { id: mockClienteData.id };
+
+    await component.submit();
+    expect(clienteServiceSpy.updateCliente).toHaveBeenCalled();
+    expect(dialogRefSpy.close).not.toHaveBeenCalled();
+  });
+
+  it('no debería mostrar alerta si updateCliente responde falsy', async () => {
+    clienteServiceSpy.updateCliente.and.returnValue(of(null));
+    const swalSpy = spyOn(Swal, 'fire');
+
+    component.form.setErrors(null);
+    component.model = { id: mockClienteData.id };
+
+    await component.submit();
+    expect(clienteServiceSpy.updateCliente).toHaveBeenCalled();
+    expect(swalSpy).not.toHaveBeenCalled();
+  });
+
+  it('no debería llamar updateCliente si el formulario es inválido', async () => {
+    component.form.setErrors({ invalid: true });
+
+    await component.submit();
+    expect(clienteServiceSpy.updateCliente).not.toHaveBeenCalled();
+  });
+
+  it('ngAfterViewInit debería inicializar id_cliente y campos', async () => {
+    component.model = {};
+    component.fields = [];
+
+    await component.ngAfterViewInit();
+
+    expect(component.model.id_cliente).toBe(mockClienteData.id);
+    expect(component.fields.length).toBeGreaterThan(0);
+    expect(clienteServiceSpy.getPrestamosCliente).toHaveBeenCalled();
+    expect(tipodocidentiServiceSpy.getTipodocidenti).toHaveBeenCalled();
+    expect(usersServiceSpy.getUsers).toHaveBeenCalled();
   });
 });

@@ -172,6 +172,90 @@ describe('EditarClienteComponent', () => {
     expect(ext).toBe('pdf');
   });
 
+  it('isBase64 debe retornar true para string base64 válido y false para inválido', () => {
+    const valido = btoa('hola');
+    expect(component.isBase64(valido)).toBe(true);
+    expect(component.isBase64('@@@no-base64@@@')).toBe(false);
+  });
+
+  it('limpiarFirma debe limpiar pad y resetear firma en lista', fakeAsync(() => {
+    component.editFirmar = false;
+    component.listaArchivos[3] = 'firma.png';
+    component.signaturePad = {
+      clear: jasmine.createSpy('clear')
+    } as any;
+
+    component.limpiarFirma();
+    tick();
+
+    expect(component.editFirmar).toBe(true);
+    expect(component.listaArchivos[3]).toBe('');
+    expect(component.signaturePad.clear).toHaveBeenCalled();
+    flush();
+  }));
+
+  it('onFileChange debe limpiar estado cuando no hay archivos', () => {
+    component.listaArchivos[5] = 'algo';
+    component.selectedFileNames[5] = 'algo.pdf';
+
+    component.onFileChange([] as any, 5);
+
+    expect(component.selectedFileNames[5]).toBe('');
+    expect(component.listaArchivos[5]).toBe('');
+    expect(component.listaTipoDoc[5]).toBe(5);
+  });
+
+  it('onFileChange debe delegar a preview cuando sí hay archivo', () => {
+    const file = new File(['x'], 'archivo.pdf', { type: 'application/pdf' });
+    const previewSpy = spyOn(component, 'preview');
+
+    component.onFileChange([file] as any, 4);
+
+    expect(component.selectedFileNames[4]).toBe('archivo.pdf');
+    expect(previewSpy).toHaveBeenCalledWith([file] as any, 4);
+  });
+
+  it('clearSelectedFile debe limpiar nombre, archivo y mensaje', () => {
+    component.listaArchivos[2] = 'doc';
+    component.selectedFileNames[2] = 'doc.pdf';
+    component.message = 'error';
+
+    component.clearSelectedFile(2);
+
+    expect(component.listaArchivos[2]).toBe('');
+    expect(component.selectedFileNames[2]).toBe('');
+    expect(component.listaTipoDoc[2]).toBe(2);
+    expect(component.message).toBe('');
+  });
+
+  it('getSelectedFileName debe retornar valor por defecto cuando no hay archivo', () => {
+    expect(component.getSelectedFileName(99)).toBe('Ningún archivo seleccionado');
+    component.selectedFileNames[99] = 'archivo.png';
+    expect(component.getSelectedFileName(99)).toBe('archivo.png');
+  });
+
+  it('isPdfFile debe evaluar correctamente data/pdf, nombre pdf y valores no string', () => {
+    component.listaArchivos[1] = 'data:application/pdf;base64,abc';
+    component.listaArchivos[2] = 'https://server.com/documento.PDF';
+    component.listaArchivos[3] = 123 as any;
+
+    expect(component.isPdfFile(1)).toBe(true);
+    expect(component.isPdfFile(2)).toBe(true);
+    expect(component.isPdfFile(3)).toBe(false);
+    expect(component.isPdfFile(4)).toBe(false);
+  });
+
+  it('toggleWebcam debe cambiar el estado showWebcam', () => {
+    const estadoInicial = component.showWebcam;
+    component.toggleWebcam();
+    expect(component.showWebcam).toBe(!estadoInicial);
+  });
+
+  it('validateExtension debe retornar undefined para nombre vacío o nulo', () => {
+    expect(component.validateExtension('')).toBeUndefined();
+    expect(component.validateExtension(null)).toBeUndefined();
+  });
+
   it('debe manejar correctamente la carga de archivos válidos', () => {
     const file = new File(['img'], 'test.png', { type: 'image/png' });
     const readerSpy = jasmine.createSpyObj('FileReader', ['readAsDataURL']);

@@ -36,7 +36,6 @@
                   class="left btn btn-outline-primary btn-sm"
                   mat-icon-button
                   color="primary"
-                  (click)="modalAdicionarEmpresa()"
                 >
                   <mat-icon aria-label="Example icon-button with a heart icon"
                     >keyboard_backspace
@@ -47,13 +46,24 @@
           </div>
           <div class="card-text">
             <form [formGroup]="form" (ngSubmit)="submit()">
-              <formly-form
-                [model]="model"
-                [fields]="fields"
-                [options]="options"
-                [form]="form"
-              >
-              </formly-form>
+              <div class="prestamo-form-wrapper">
+                <button
+                  type="button"
+                  class="btn btn-outline-primary add-client-float-btn"
+                  title="Crear cliente"
+                  (click)="modalAdicionarEmpresa()"
+                >
+                  <mat-icon aria-label="Agregar cliente">add</mat-icon>
+                </button>
+
+                <formly-form
+                  [model]="model"
+                  [fields]="fields"
+                  [options]="options"
+                  [form]="form"
+                >
+                </formly-form>
+              </div>
 
               <mat-dialog-actions>
                 <button

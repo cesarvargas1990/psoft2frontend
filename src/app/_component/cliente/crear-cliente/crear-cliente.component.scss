@@ -197,6 +197,26 @@ td.numbers {
   background: var(--color-primary);
 }
 
+.dialog-mode-wrapper {
+  display: block;
+}
+
+.dialog-mode-title {
+  margin: 0;
+  padding: 4px 24px 0;
+  font-weight: 700;
+}
+
+.dialog-mode-content {
+  display: block;
+  max-height: calc(92vh - 56px);
+}
+
+.dialog-form-card {
+  border: 0;
+  box-shadow: none;
+}
+
 .form-card {
   width: 100%;
   max-width: 1500px;

@@ -5,7 +5,9 @@ import {
   OnInit,
   ChangeDetectorRef,
   AfterViewInit,
-  ViewContainerRef
+  ViewContainerRef,
+  Optional,
+  Inject
 } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
@@ -26,6 +28,7 @@ import { Router } from '@angular/router';
 import { SignaturePad } from 'ngx-signaturepad/signature-pad';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { environment } from '../../../../environments/environment';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export interface TabType {
   label: string;
@@ -38,6 +41,7 @@ export interface TabType {
   styleUrls: ['./crear-cliente.component.scss']
 })
 export class CrearClienteComponent implements AfterViewInit {
+  public isDialogMode = false;
   public showWebcam = true;
   public allowCameraSwitch = true;
   public multipleWebcamsAvailable = false;
@@ -334,8 +338,11 @@ export class CrearClienteComponent implements AfterViewInit {
     public router: Router,
     public tipodocidentiService: TipodocidentiService,
     public usersService: UsersService,
-    public prestamosService: PrestamosService
+    public prestamosService: PrestamosService,
+    @Optional() public dialogRef?: MatDialogRef<CrearClienteComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public dialogData?: any
   ) {
+    this.isDialogMode = !!this.dialogRef;
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     if (this.mobileQuery.addEventListener) {
@@ -506,7 +513,11 @@ export class CrearClienteComponent implements AfterViewInit {
               }
 
               this.model = response;
-              this.router.navigate(['/clientes/listar']);
+              if (this.isDialogMode) {
+                this.dialogRef.close(response);
+              } else {
+                this.router.navigate(['/clientes/listar']);
+              }
             }
           });
         }
@@ -554,6 +565,11 @@ export class CrearClienteComponent implements AfterViewInit {
   }
 
   volver() {
+    if (this.isDialogMode) {
+      this.dialogRef.close();
+      return;
+    }
+
     this.router.navigate(['/dashboard']);
   }
 }

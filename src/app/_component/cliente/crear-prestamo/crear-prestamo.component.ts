@@ -19,6 +19,8 @@ import { PrestamosService } from '../../../_services/prestamos/prestamos.service
 import { FormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { CrearClienteComponent } from '../crear-cliente/crear-cliente.component';
 
 @Component({
   selector: 'app-crear-prestamo',
@@ -66,6 +68,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
     public router: Router,
+    public dialog: MatDialog,
     public tipodocidentiService: TipodocidentiService,
     public usersService: UsersService,
     public prestamosService: PrestamosService
@@ -114,7 +117,6 @@ export class CrearPrestamoComponent implements AfterViewInit {
     this.listaClientes = await this.clienteService.getClientes();
     this.formaspago = await this.prestamosService.getFormasPago();
     this.sistemaspago = await this.prestamosService.getSistemaPrestamo();
-
     console.log('los clientes');
     console.log(this.listaClientes);
 
@@ -411,7 +413,48 @@ export class CrearPrestamoComponent implements AfterViewInit {
   }
 
   modalAdicionarEmpresa() {
-    this.router.navigate(['clientes/crear']);
+    const dialogRef = this.dialog.open(CrearClienteComponent, {
+      width: '95vw',
+      maxWidth: '1400px',
+      height: '92vh',
+      autoFocus: false,
+      disableClose: true,
+      panelClass: 'crear-cliente-dialog'
+    });
+
+    dialogRef.afterClosed().subscribe(async (clienteCreado) => {
+      if (!clienteCreado) {
+        return;
+      }
+
+      await this.recargarClientes(clienteCreado.id || null);
+      Swal.fire({
+        type: 'success',
+        title: 'Cliente creado',
+        text: 'El cliente nuevo ya está disponible para seleccionar.'
+      });
+    });
+  }
+
+  private async recargarClientes(clienteId?: number): Promise<void> {
+    this.listaClientes = await this.clienteService.getClientes();
+
+    const raiz = this.fields && this.fields.length ? this.fields[0] : null;
+    const fieldCliente =
+      raiz && raiz.fieldGroup
+        ? raiz.fieldGroup.find((field) => field.key === 'id_cliente')
+        : null;
+
+    if (fieldCliente && fieldCliente.templateOptions) {
+      fieldCliente.templateOptions.options = this.listaClientes;
+    }
+
+    if (clienteId) {
+      this.model.id_cliente = clienteId;
+      this.form.patchValue({ id_cliente: clienteId });
+    }
+
+    this.form.updateValueAndValidity();
   }
 
   limpiarHTML(html: string): string {

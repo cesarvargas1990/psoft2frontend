@@ -299,6 +299,7 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
 
     // EdicionarPrefijoComponent,
     EditarClienteComponent,
+    CrearClienteComponent,
     // EditarDocumentoComponent,
     ListarPrestamosclienteComponent,
     ListarDocumentosprestamoComponent

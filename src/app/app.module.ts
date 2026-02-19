@@ -197,7 +197,6 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
     MatPaginatorModule,
     MatTableModule,
     MatSortModule,
-
     A11yModule,
     BidiModule,
     ObserversModule,
@@ -274,11 +273,8 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
     TopNavComponent,
     // Se Declaran Componentes que de alguna manera implementan angular van aqui
     // (dialogos, o componentes de entrada)
-
     LoaderComponent,
-
     LogoComponent,
-
     ListarClienteComponent,
     EditarClienteComponent,
     CrearClienteComponent,
@@ -287,25 +283,12 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
     FormlyFieldActionButton,
     CrearDocumentoComponent,
     // FirmaWrapperComponent,
-
     ListarPrestamosclienteComponent,
     ListarDocumentosprestamoComponent,
-
     EmpresaParametrosComponent,
-
     LogoutComponent
   ],
   bootstrap: [AppComponent],
-  entryComponents: [
-    // Se registra como Componentes de entrada (dialogos o componentes que implementaron angular module)
-
-    // EdicionarPrefijoComponent,
-    EditarClienteComponent,
-    CrearClienteComponent,
-    // EditarDocumentoComponent,
-    ListarPrestamosclienteComponent,
-    ListarDocumentosprestamoComponent
-  ],
   providers: [
     LoaderService,
     NavService,
@@ -325,7 +308,6 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
         languages: getHighlightLanguages()
       }
     },
-
     AppService
   ]
 })

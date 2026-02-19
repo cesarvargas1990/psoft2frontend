@@ -66,8 +66,7 @@
                 }
               ]
             },
-			
-			"local": {
+            "local": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -94,7 +93,6 @@
                 }
               ]
             },
-
             "docker": {
               "fileReplacements": [
                 {
@@ -176,7 +174,7 @@
                 }
               ]
             },
-			"demo": {
+            "demo": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -229,7 +227,6 @@
             "prod": {
               "browserTarget": "psoft2frontend:build:prod"
             }
-
           }
         },
         "extract-i18n": {
@@ -262,19 +259,6 @@
             "scripts": []
           }
         },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        },
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
@@ -286,12 +270,24 @@
               "devServerTarget": "psoft2frontend:serve:production"
             }
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
   },
   "defaultProject": "psoft2frontend",
   "cli": {
-    "analytics": "3236ef83-2489-4545-8778-fa0323749e18"
+    "analytics": "3236ef83-2489-4545-8778-fa0323749e18",
+    "schematicCollections": [
+      "angular-eslint"
+    ]
   }
 }

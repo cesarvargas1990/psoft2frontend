@@ -30,7 +30,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { SignaturePad } from 'ngx-signaturepad/signature-pad';
 
-import { FormArray, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 
 export interface TabType {
@@ -119,7 +119,7 @@ export class ListarClienteComponent implements AfterViewInit {
   dataSource = new MatTableDataSource([]);
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  form = new FormArray(this.tabs.map(() => new FormGroup({})));
+  form = new UntypedFormArray(this.tabs.map(() => new UntypedFormGroup({})));
   options = this.tabs.map(() => ({}) as FormlyFormOptions);
 
   private _mobileQueryListener: () => void;

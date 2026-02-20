@@ -16,7 +16,7 @@ import { TipodocidentiService } from '../../../_services/tipodocidenti/tipodocid
 import { UsersService } from '../../../_services/users/users.service';
 import Swal from 'sweetalert2';
 import { PrestamosService } from '../../../_services/prestamos/prestamos.service';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -33,7 +33,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
   config: any = {};
   listarDocumentosPrestamo = false;
 
-  form = new FormGroup({});
+  form = new UntypedFormGroup({});
   model: any = {};
 
   options: FormlyFormOptions = {};

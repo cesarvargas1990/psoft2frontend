@@ -20,7 +20,7 @@ import { UsersService } from '../../../_services/users/users.service';
 import { PrestamosService } from '../../../_services/prestamos/prestamos.service';
 import { MediaMatcher } from '@angular/cdk/layout';
 import Swal from 'sweetalert2';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CrearClienteComponent } from '../crear-cliente/crear-cliente.component';
 
@@ -339,7 +339,7 @@ describe('CrearPrestamoComponent', () => {
 
     const fieldGroup = component.fields[0].fieldGroup as any[];
     const fechaField = fieldGroup.find((field) => field.key === 'fec_inicial');
-    const control = new FormControl();
+    const control = new UntypedFormControl();
     fechaField.hooks.onInit({ formControl: control, form: component.form });
 
     control.setValue(new Date());
@@ -429,7 +429,7 @@ describe('CrearPrestamoComponent', () => {
 
     const fieldGroup = component.fields[0].fieldGroup as any[];
     const fechaField = fieldGroup.find((field) => field.key === 'fec_inicial');
-    const control = new FormControl();
+    const control = new UntypedFormControl();
     fechaField.hooks.onInit({ formControl: control, form: component.form });
 
     control.setValue(new Date());

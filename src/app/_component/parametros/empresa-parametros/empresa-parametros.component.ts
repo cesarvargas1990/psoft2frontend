@@ -16,7 +16,7 @@ import { AuthService } from '../../../_services/auth.service';
 import Swal from 'sweetalert2';
 import { MatPaginator } from '@angular/material/paginator';
 
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
@@ -27,7 +27,7 @@ import { environment } from '../../../../environments/environment';
   styleUrls: ['./empresa-parametros.component.scss']
 })
 export class EmpresaParametrosComponent implements OnInit {
-  form = new FormGroup({});
+  form = new UntypedFormGroup({});
   model: any = {};
   firmaPreview = '';
   firmaMensaje = '';

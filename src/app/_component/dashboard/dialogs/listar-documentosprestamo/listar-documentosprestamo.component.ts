@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Cliente } from '../../../../_models/cliente';
 import { documento } from '../../../../_models/documento';
 import { Router } from '@angular/router';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 
 import { ClienteService } from '../../../../_services/cliente/cliente.service';
@@ -33,7 +33,7 @@ export class ListarDocumentosprestamoComponent implements OnInit {
   panelOpenState = false;
   config: any = {};
 
-  form = new FormGroup({});
+  form = new UntypedFormGroup({});
   model: any = {};
 
   documentoPlantilla: any = {};

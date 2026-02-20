@@ -11,7 +11,7 @@ import {
   BASE_URL,
   environment
 } from '../../../../../../environments/environment';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { Observable, Subject } from 'rxjs';
 import { ClienteService } from '../../../../../_services/cliente/cliente.service';
@@ -78,7 +78,7 @@ export class EditarClienteComponent implements OnInit {
 
   urlimage: any = {};
 
-  form = new FormGroup({});
+  form = new UntypedFormGroup({});
   model: any = {};
   options: FormlyFormOptions = {};
 

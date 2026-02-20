@@ -22,7 +22,7 @@ import { UsersService } from '../../../_services/users/users.service';
 import Swal from 'sweetalert2';
 import { PrestamosService } from '../../../_services/prestamos/prestamos.service';
 
-import { FormArray, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { Router } from '@angular/router';
 import { SignaturePad } from 'ngx-signaturepad/signature-pad';
@@ -309,7 +309,7 @@ export class CrearClienteComponent implements AfterViewInit {
     }
   ];
 
-  form = new FormArray(this.tabs.map(() => new FormGroup({})));
+  form = new UntypedFormArray(this.tabs.map(() => new UntypedFormGroup({})));
   options = this.tabs.map(() => ({}) as FormlyFormOptions);
 
   tiposdocumento: any = {};

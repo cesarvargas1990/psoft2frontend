@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Cliente } from '../../../../../_models/cliente';
 
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 
 import { ClienteService } from '../../../../../_services/cliente/cliente.service';
@@ -17,7 +17,7 @@ import { DatePipe } from '@angular/common';
   providers: [DatePipe]
 })
 export class ListarPrestamosclienteComponent implements OnInit {
-  form = new FormGroup({});
+  form = new UntypedFormGroup({});
   model: any = {};
   options: FormlyFormOptions = {};
   consultaPrestamoCliente: any[] = [];

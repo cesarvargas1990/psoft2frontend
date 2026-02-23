@@ -1,5 +1,5 @@
 # Etapa 1: Compilar la aplicación Angular
-FROM node:14 as build
+FROM node:20 as build
 
 # Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
@@ -9,13 +9,12 @@ COPY package.json package-lock.json ./
 
 # Instala las dependencias
 RUN npm install
-RUN npm install -g @angular/cli@14
 # Copia el resto del código fuente al contenedor
 COPY . .
 ARG BUILD_CONFIGURATION=docker
 
 # Compila la aplicación Angular
-RUN ng build --configuration $BUILD_CONFIGURATION  --base-href ./ --aot --buildOptimizer
+RUN npx ng build --configuration $BUILD_CONFIGURATION --base-href ./ --aot --optimization
 
 # Etapa 2: Servir la aplicación con Nginx
 FROM nginx:alpine

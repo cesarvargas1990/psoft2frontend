@@ -12,7 +12,7 @@ COPY scripts ./scripts
 RUN npm ci --legacy-peer-deps
 # Copia el resto del código fuente al contenedor
 COPY . .
-ARG BUILD_CONFIGURATION=docker
+ARG BUILD_CONFIGURATION=docker-contabo
 
 # Compila la aplicación Angular
 RUN npx ng build --configuration $BUILD_CONFIGURATION --base-href ./ --aot --optimization
@@ -24,7 +24,8 @@ FROM nginx:alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copia los archivos generados por Angular en la etapa anterior
-COPY --from=build /app/dist /usr/share/nginx/html
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=build /app/dist/browser/ /usr/share/nginx/html/
 
 # Expone el puerto 80
 EXPOSE 80

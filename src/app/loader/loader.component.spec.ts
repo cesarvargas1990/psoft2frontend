@@ -1,7 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoaderComponent } from './loader.component';
 import { LoaderService } from '../loader.service';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
 import { By } from '@angular/platform-browser';
 import { BehaviorSubject } from 'rxjs';
 
@@ -11,7 +11,7 @@ describe('LoaderComponent', () => {
   let loadingSubject: BehaviorSubject<boolean>;
   let loaderServiceStub: Partial<LoaderService>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     loadingSubject = new BehaviorSubject<boolean>(false);
 
     loaderServiceStub = {

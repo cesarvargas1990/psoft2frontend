@@ -1,5 +1,5 @@
 import {
-  async,
+  waitForAsync,
   ComponentFixture,
   TestBed,
   fakeAsync,
@@ -21,7 +21,7 @@ import { PrestamosService } from '../../../_services/prestamos/prestamos.service
 import { MediaMatcher } from '@angular/cdk/layout';
 import Swal from 'sweetalert2';
 import { UntypedFormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { CrearClienteComponent } from '../crear-cliente/crear-cliente.component';
 
 class MockAuthService {
@@ -113,7 +113,7 @@ describe('CrearPrestamoComponent', () => {
   let prestamosService: PrestamosService;
   let dialog: MatDialog;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     localStorage.setItem(
       'menu_usuario',
       JSON.stringify([{ displayName: 'Test', iconName: 'test' }])

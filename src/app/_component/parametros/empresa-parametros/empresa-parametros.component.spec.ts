@@ -1,5 +1,5 @@
 import {
-  async,
+  waitForAsync,
   ComponentFixture,
   TestBed,
   fakeAsync,
@@ -77,7 +77,7 @@ describe('EmpresaParametrosComponent', () => {
   let fixture: ComponentFixture<EmpresaParametrosComponent>;
   let empresaService: EmpresaService;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     localStorage.setItem(
       'menu_usuario',
       JSON.stringify([{ displayName: 'Test', iconName: 'test' }])

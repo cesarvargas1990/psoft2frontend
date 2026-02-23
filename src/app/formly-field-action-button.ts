@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FieldType } from '@ngx-formly/material';
+import { FieldType, FieldTypeConfig } from '@ngx-formly/core';
 
 @Component({
   selector: 'formly-field-action-button',
@@ -7,11 +7,13 @@ import { FieldType } from '@ngx-formly/material';
     <button
       type="button"
       class="btn btn-outline-primary add-client-inline-btn"
-      [attr.title]="to.label || 'Acción'"
-      (click)="to.onClick && to.onClick(field, $event)"
+      [attr.title]="props?.label || to?.label || 'Acción'"
+      (click)="(props?.onClick || to?.onClick)?.(field, $event)"
     >
-      <mat-icon aria-label="Acción">{{ to.icon || 'add' }}</mat-icon>
+      <mat-icon aria-label="Acción">{{
+        props?.icon || to?.icon || 'add'
+      }}</mat-icon>
     </button>
   `
 })
-export class FormlyFieldActionButton extends FieldType {}
+export class FormlyFieldActionButton extends FieldType<FieldTypeConfig> {}

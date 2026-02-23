@@ -6,7 +6,6 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 import { environment } from './../../../environments/environment';
-import { AuthService } from '../../_services/auth.service';
 import { Observable, throwError } from 'rxjs';
 
 const httpOptions = {
@@ -31,10 +30,7 @@ export class TipodocidentiService {
     })
   };
 
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService
-  ) {}
+  constructor(private http: HttpClient) {}
 
   getAllTipodocidenti(): Observable<any> {
     return this.http.get(`${this.services.pstipodocidenti}`, this.httpOpts);

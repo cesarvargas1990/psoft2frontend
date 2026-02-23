@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { CrearClienteComponent } from './crear-cliente.component';
@@ -11,7 +11,7 @@ import { UsersService } from '../../../_services/users/users.service';
 import { PrestamosService } from '../../../_services/prestamos/prestamos.service';
 import { MediaMatcher } from '@angular/cdk/layout';
 import Swal from 'sweetalert2';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 // =======================
 // 🧪 Mock Services
 // =======================
@@ -65,7 +65,7 @@ describe('CrearClienteComponent', () => {
   let fixture: ComponentFixture<CrearClienteComponent>;
   let clienteService: ClienteService;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [CrearClienteComponent],
       providers: [
@@ -154,7 +154,7 @@ describe('CrearClienteComponent', () => {
     expect(component.sign).toBe(true);
   });
 
-  it('debe cargar tipos de documento en ngAfterViewInit', async(() => {
+  it('debe cargar tipos de documento en ngAfterViewInit', waitForAsync(() => {
     spyOn(component, 'tiposDocumentos').and.callThrough();
     component.ngAfterViewInit();
     expect(component.tiposDocumentos).toHaveBeenCalled();

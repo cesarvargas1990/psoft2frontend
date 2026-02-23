@@ -6,7 +6,10 @@ import {
   flush
 } from '@angular/core/testing';
 import { EditarClienteComponent } from './editar-cliente.component';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogRef as MatDialogRef
+} from '@angular/material/legacy-dialog';
 import { ClienteService } from '../../../../../_services/cliente/cliente.service';
 import { TipodocidentiService } from '../../../../../_services/tipodocidenti/tipodocidenti.service';
 import { UsersService } from '../../../../../_services/users/users.service';
@@ -87,7 +90,7 @@ describe('EditarClienteComponent', () => {
     expect(Swal.fire).not.toHaveBeenCalled();
   });
 
-  it('debe actualizar cliente y llamar a editFile si es válido sin cerrar modal', fakeAsync(() => {
+  it('debe actualizar cliente, llamar a editFile y cerrar modal si es válido', fakeAsync(() => {
     const fakeResponse = { id: 1 };
     component.model = {};
     component.form.setErrors(null);
@@ -104,14 +107,13 @@ describe('EditarClienteComponent', () => {
 
     component.submit();
     tick();
+    flush();
 
     expect(clienteService.updateCliente).toHaveBeenCalled();
     expect(clienteService.editFile).toHaveBeenCalled();
     expect(Swal.fire).toHaveBeenCalled();
     expect(component.editFirmar).toBe(false);
-    expect(component.dialogRef.close).not.toHaveBeenCalled();
-
-    flush();
+    expect(component.dialogRef.close).toHaveBeenCalledWith(fakeResponse);
   }));
 
   it('debe cargar archivos en ngOnInit', fakeAsync(() => {

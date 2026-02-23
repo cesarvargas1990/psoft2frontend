@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FieldType } from '@ngx-formly/material';
+import { FieldType, FieldTypeConfig } from '@ngx-formly/core';
 
 @Component({
   selector: 'formly-field-input',
@@ -12,4 +12,4 @@ import { FieldType } from '@ngx-formly/material';
     />
   `
 })
-export class FormlyFieldInput extends FieldType {}
+export class FormlyFieldInput extends FieldType<FieldTypeConfig> {}

@@ -6,20 +6,23 @@ import {
 } from '@angular/core/testing';
 import { ListarClienteComponent } from './listar-cliente.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import {
+  MatLegacyDialogModule as MatDialogModule,
+  MatLegacyDialog as MatDialog
+} from '@angular/material/legacy-dialog';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
+import { MatLegacyPaginatorModule as MatPaginatorModule } from '@angular/material/legacy-paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatButtonModule } from '@angular/material/button';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDividerModule } from '@angular/material/divider';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -31,6 +34,10 @@ import { ClienteService } from '../../../_services/cliente/cliente.service';
 import { AuthService } from '../../../_services/auth.service';
 import { NavService } from '../../../_services/nav.service';
 import Swal from 'sweetalert2';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi
+} from '@angular/common/http';
 
 describe('ListarClienteComponent', () => {
   let component: ListarClienteComponent;
@@ -55,10 +62,10 @@ describe('ListarClienteComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [ListarClienteComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
       imports: [
         BrowserAnimationsModule,
         RouterTestingModule,
-        HttpClientTestingModule,
         MatDialogModule,
         MatTableModule,
         MatPaginatorModule,
@@ -80,9 +87,10 @@ describe('ListarClienteComponent', () => {
         { provide: ClienteService, useValue: clienteSpy },
         { provide: AuthService, useValue: authSpy },
         { provide: NavService, useValue: navSpy },
-        { provide: MatDialog, useValue: dialogSpy }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+        { provide: MatDialog, useValue: dialogSpy },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ListarClienteComponent);

@@ -144,7 +144,7 @@
                 <mat-header-cell *matHeaderCellDef mat-sort-header
                   >Id Prestamo</mat-header-cell
                 >
-                <mat-cell *matCellDef="let element" data-label="Cliente">
+                <mat-cell *matCellDef="let element" data-label="Id Prestamo">
                   {{ element.id_prestamo }}
                 </mat-cell>
               </ng-container>
@@ -206,7 +206,7 @@
                     *ngIf="
                       authService.tienePermiso('dashboard.imprimir_documentos')
                     "
-                    class="float-right btn btn-outline-primary btn-sm"
+                    class="btn btn-outline-primary btn-sm action-btn"
                     mat-icon-button
                     color="primary"
                     (click)="
@@ -220,7 +220,7 @@
                   <button
                     title="Listado Cuotas"
                     *ngIf="authService.tienePermiso('dashboard.listado_cuotas')"
-                    class="float-right btn btn-outline-info btn-sm"
+                    class="btn btn-outline-info btn-sm action-btn"
                     mat-icon-button
                     color="primary"
                     (click)="
@@ -238,7 +238,7 @@
                     *ngIf="
                       authService.tienePermiso('dashboard.eliminar_prestamo')
                     "
-                    class="float-right btn btn-outline-info btn-sm"
+                    class="btn btn-outline-info btn-sm action-btn"
                     mat-icon-button
                     color="accent"
                     (click)="eliminarPrestamo(row)"

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, ElementRef } from '@angular/core';
 import { AppComponent } from './app.component';
 import { NavService } from './_services/nav.service';
@@ -17,7 +17,7 @@ describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
   let navService: MockNavService;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [AppComponent],
       providers: [

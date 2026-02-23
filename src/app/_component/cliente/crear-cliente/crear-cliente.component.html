@@ -78,9 +78,10 @@
                         Escriba su firma sobre el cuadro de abajo.
                       </p>
                       <signature-pad
+                        #signaturePadRef
                         class="signature-canvas"
                         [options]="signaturePadOptions"
-                        (onBeginEvent)="drawStart()"
+                        (drawStartEvent)="drawStart()"
                       ></signature-pad>
                       <ng-container #fieldComponent></ng-container>
 
@@ -344,9 +345,10 @@
                       Escriba su firma sobre el cuadro de abajo.
                     </p>
                     <signature-pad
+                      #signaturePadRef
                       class="signature-canvas"
                       [options]="signaturePadOptions"
-                      (onBeginEvent)="drawStart()"
+                      (drawStartEvent)="drawStart()"
                     ></signature-pad>
                     <ng-container #fieldComponent></ng-container>
 

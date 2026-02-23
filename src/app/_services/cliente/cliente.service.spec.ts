@@ -1,10 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { ClienteService } from './cliente.service';
 import {
-  HttpClientTestingModule,
-  HttpTestingController
+  HttpTestingController,
+  provideHttpClientTesting
 } from '@angular/common/http/testing';
-import { HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpErrorResponse,
+  provideHttpClient,
+  withInterceptorsFromDi
+} from '@angular/common/http';
 import { AuthService } from '../../_services/auth.service';
 import { environment } from './../../../environments/environment';
 import Swal from 'sweetalert2';
@@ -21,8 +25,13 @@ describe('ClienteService', () => {
     const authSpy = jasmine.createSpyObj('AuthService', ['isLoggedIn']);
 
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [ClienteService, { provide: AuthService, useValue: authSpy }]
+      imports: [],
+      providers: [
+        ClienteService,
+        { provide: AuthService, useValue: authSpy },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     });
 
     service = TestBed.get(ClienteService);

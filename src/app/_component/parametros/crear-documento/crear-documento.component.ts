@@ -13,19 +13,19 @@ import { VERSION } from '@angular/material/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { MatSort } from '@angular/material/sort';
 import { AuthService } from '../../../_services/auth.service';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { documento } from '../../../_models/documento';
 import { ClienteService } from '../../../_services/cliente/cliente.service';
 import { PrestamosService } from '../../../_services/prestamos/prestamos.service';
 import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA
-} from '@angular/material/dialog';
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
+} from '@angular/material/legacy-dialog';
 import { TipodocidentiService } from '../../../_services/tipodocidenti/tipodocidenti.service';
 import { UsersService } from '../../../_services/users/users.service';
 import Swal from 'sweetalert2';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 
 import { UntypedFormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';

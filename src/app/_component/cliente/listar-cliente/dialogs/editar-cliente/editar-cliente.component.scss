@@ -1,5 +1,5 @@
 .dialog-title {
-  margin: 0;
+  margin: 0 !important;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -25,8 +25,10 @@
 }
 
 .modern-dialog {
-  padding-top: 12px;
-  max-height: 78vh;
+  padding: 12px 16px !important;
+  margin: 0 !important;
+  max-height: 70vh;
+  overflow: auto;
 }
 
 .edit-form {
@@ -46,7 +48,7 @@
 .data-pane-card {
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 8px;
-  background: rgba(0, 0, 0, 0.015);
+  background: #fff;
   padding: 12px;
 }
 
@@ -61,7 +63,7 @@
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 8px;
   padding: 12px;
-  background: rgba(0, 0, 0, 0.015);
+  background: #fff;
 }
 
 .card-title-row {
@@ -215,8 +217,11 @@
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-  margin-top: 12px;
-  padding: 0;
+  margin: 0 !important;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  min-height: auto;
 }
 
 .submit-button {
@@ -227,6 +232,26 @@
 
 :host ::ng-deep .edit-tabs .mat-tab-header,
 :host ::ng-deep .doc-tabs .mat-tab-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+:host ::ng-deep .modern-dialog.mat-dialog-content,
+:host ::ng-deep .modern-dialog.mat-mdc-dialog-content {
+  margin: 0 !important;
+}
+
+:host ::ng-deep .dialog-actions.mat-dialog-actions,
+:host ::ng-deep .dialog-actions.mat-mdc-dialog-actions {
+  margin: 0 !important;
+}
+
+:host ::ng-deep .edit-tabs .mat-tab-body-wrapper,
+:host ::ng-deep .edit-tabs .mat-mdc-tab-body-wrapper {
+  min-height: 0;
+}
+
+:host ::ng-deep .edit-tabs .mat-mdc-tab-header,
+:host ::ng-deep .doc-tabs .mat-mdc-tab-header {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -252,8 +277,19 @@
   opacity: 1;
 }
 
+:host ::ng-deep .edit-tabs .mat-mdc-tab,
+:host ::ng-deep .doc-tabs .mat-mdc-tab {
+  min-width: 120px;
+}
+
 :host ::ng-deep .edit-tabs .mat-tab-label-active,
 :host ::ng-deep .doc-tabs .mat-tab-label-active {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+:host ::ng-deep .edit-tabs .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label,
+:host ::ng-deep .doc-tabs .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
   color: var(--color-primary);
   font-weight: 600;
 }
@@ -261,6 +297,19 @@
 :host ::ng-deep .edit-tabs .mat-ink-bar,
 :host ::ng-deep .doc-tabs .mat-ink-bar {
   background-color: var(--color-primary);
+}
+
+:host
+  ::ng-deep
+  .edit-tabs
+  .mdc-tab-indicator--active
+  .mdc-tab-indicator__content--underline,
+:host
+  ::ng-deep
+  .doc-tabs
+  .mdc-tab-indicator--active
+  .mdc-tab-indicator__content--underline {
+  border-color: var(--color-primary);
 }
 
 @media (max-width: 768px) {
@@ -314,5 +363,11 @@
     min-width: 90px;
     padding: 0 10px;
     font-size: 12px;
+  }
+
+  :host ::ng-deep .edit-tabs .mat-mdc-tab,
+  :host ::ng-deep .doc-tabs .mat-mdc-tab {
+    min-width: 90px;
+    padding: 0 10px;
   }
 }

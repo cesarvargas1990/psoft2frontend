@@ -11,17 +11,17 @@ import { NavService } from '../../_services/nav.service';
 import { VERSION } from '@angular/material/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { EChartOption } from 'echarts';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { MatSort } from '@angular/material/sort';
 import { ListaPrestamos } from '../../_models/ListaPrestamos';
 import { fechasPago } from '../../_models/fechasPago';
 import { PrestamosService } from '../../_services/prestamos/prestamos.service';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA
-} from '@angular/material/dialog';
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
+} from '@angular/material/legacy-dialog';
 import Swal from 'sweetalert2';
 
 import { Router } from '@angular/router';

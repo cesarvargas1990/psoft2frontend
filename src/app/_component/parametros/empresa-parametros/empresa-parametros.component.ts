@@ -14,7 +14,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { AuthService } from '../../../_services/auth.service';
 
 import Swal from 'sweetalert2';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 
 import { UntypedFormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';

@@ -1,20 +1,19 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 import {
-  HttpClientTestingModule,
-  HttpTestingController
+  HttpTestingController,
+  provideHttpClientTesting
 } from '@angular/common/http/testing';
 import { TipodocidentiService } from './tipodocidenti.service';
-import { AuthService } from '../../_services/auth.service';
 import { environment } from './../../../environments/environment';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi
+} from '@angular/common/http';
 
 describe('TipodocidentiService', () => {
   let injector: TestBed;
   let service: TipodocidentiService;
   let httpMock: HttpTestingController;
-
-  const mockAuthService = {
-    isAuthenticated: () => true
-  };
 
   const dummyResponse = [
     { id: 1, descripcion: 'Cédula de ciudadanía' },
@@ -32,10 +31,11 @@ describe('TipodocidentiService', () => {
     );
 
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [],
       providers: [
         TipodocidentiService,
-        { provide: AuthService, useValue: mockAuthService }
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
       ]
     });
 

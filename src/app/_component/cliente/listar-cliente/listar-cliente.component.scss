@@ -65,6 +65,38 @@
   word-break: break-word !important;
 }
 
+.app-data-table .mat-column-action {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  flex: 0 0 190px;
+  max-width: 190px;
+  padding-right: 10px;
+}
+
+.app-data-table .mat-header-cell.mat-column-action,
+.app-data-table .mat-mdc-header-cell.mat-column-action {
+  flex: 0 0 190px;
+  max-width: 190px;
+}
+
+.app-data-table .action-btn {
+  float: none !important;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-data-table .action-btn .mat-icon {
+  margin: 0;
+}
+
 .card-header {
   background: linear-gradient(135deg, var(--color-primary), #3b82f6);
 }

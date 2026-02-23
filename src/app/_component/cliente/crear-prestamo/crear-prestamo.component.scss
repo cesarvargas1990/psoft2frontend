@@ -309,7 +309,9 @@ td.numbers {
 
 :host ::ng-deep .cliente-plus-field {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 10px;
 }
 
 :host ::ng-deep .add-client-inline-btn {
@@ -321,6 +323,7 @@ td.numbers {
   align-items: center;
   justify-content: center;
   border-radius: 8px;
+  margin-top: 0;
 }
 
 :host ::ng-deep .add-client-inline-btn .mat-icon {
@@ -359,6 +362,8 @@ td.numbers {
 
   :host ::ng-deep .cliente-plus-field {
     align-items: center;
+    justify-content: stretch;
+    padding-top: 0;
   }
 
   :host ::ng-deep .add-client-inline-btn {

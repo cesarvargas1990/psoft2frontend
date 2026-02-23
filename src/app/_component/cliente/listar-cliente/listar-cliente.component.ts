@@ -14,21 +14,20 @@ import { VERSION } from '@angular/material/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { MatSort } from '@angular/material/sort';
 import { AuthService } from '../../../_services/auth.service';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { Cliente } from '../../../_models/cliente';
 import { ClienteService } from '../../../_services/cliente/cliente.service';
 import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA
-} from '@angular/material/dialog';
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
+} from '@angular/material/legacy-dialog';
 import { EditarClienteComponent } from '../.././../_component/cliente/listar-cliente/dialogs/editar-cliente/editar-cliente.component';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { ListarPrestamosclienteComponent } from '../../../_component/cliente/listar-cliente/dialogs/listar-prestamoscliente/listar-prestamoscliente.component';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
-import { SignaturePad } from 'ngx-signaturepad/signature-pad';
 
 import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
@@ -68,7 +67,7 @@ export class ListarClienteComponent implements AfterViewInit {
   @ViewChild('appDrawer') appDrawer: ElementRef;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  @ViewChild(SignaturePad) public signaturePad: SignaturePad;
+  @ViewChild('signaturePadRef') public signaturePad: any;
   imagePath: any = {};
   imgURL: any = {};
 
@@ -184,7 +183,13 @@ export class ListarClienteComponent implements AfterViewInit {
 
   modalEditarCliente(row: any[]) {
     const dialogRef = this.dialog.open(EditarClienteComponent, {
-      data: row
+      data: row,
+      width: '88vw',
+      maxWidth: '1024px',
+      maxHeight: '90vh',
+      panelClass: 'editar-cliente-dialog',
+      backdropClass: 'editar-cliente-backdrop',
+      autoFocus: false
     });
     // Subscribirme al evento de cerrar el cuadro de dialogo
     dialogRef.afterClosed().subscribe((result) => {
@@ -194,7 +199,13 @@ export class ListarClienteComponent implements AfterViewInit {
 
   modalListadoCreditos(row) {
     const dialogRef = this.dialog.open(ListarPrestamosclienteComponent, {
-      data: row
+      data: row,
+      width: '86vw',
+      maxWidth: '1060px',
+      maxHeight: '88vh',
+      panelClass: 'listar-prestamos-dialog',
+      backdropClass: 'listar-prestamos-backdrop',
+      autoFocus: false
     });
     // Subscribirme al evento de cerrar el cuadro de dialogo
     dialogRef.afterClosed().subscribe((result) => {

@@ -1,5 +1,5 @@
 .dialog-title {
-  margin: 0;
+  margin: 0 !important;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -25,7 +25,12 @@
 }
 
 .prestamos-dialog-content {
-  padding-top: 10px;
+  padding: 12px 16px !important;
+  margin: 0 !important;
+  background: #fff;
+  opacity: 1;
+  max-height: 70vh;
+  overflow: auto;
 }
 
 .table-shell {
@@ -33,6 +38,11 @@
   border-radius: 10px;
   overflow: auto;
   background: #fff;
+}
+
+:host ::ng-deep .prestamos-dialog-content.mat-dialog-content,
+:host ::ng-deep .prestamos-dialog-content.mat-mdc-dialog-content {
+  margin: 0 !important;
 }
 
 .modern-table {
@@ -74,7 +84,7 @@
 
 .empty-state {
   min-height: 170px;
-  border: 1px dashed rgba(0, 0, 0, 0.2);
+  border: 1px dashed rgba(15, 23, 42, 0.3);
   border-radius: 10px;
   display: flex;
   flex-direction: column;

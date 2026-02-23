@@ -21,33 +21,42 @@
   align-items: center;
   width: auto;
   font-weight: 500;
+  line-height: 1.2;
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
 
   .routeIcon {
-    margin-right: 14px;
+    flex: 0 0 24px;
     font-size: 24px;
     width: 24px;
     height: 24px;
+    line-height: 24px;
     color: inherit;
+    margin: 0;
+    margin-right: 16px;
   }
 
   .menu-label {
-    flex: 1 1 auto;
+    flex: 1;
+    line-height: 1.25;
   }
 
   .menu-indicator {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
-    margin-left: 8px;
+    margin-left: auto;
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
   }
 
   .indicator-icon {
-    font-size: 26px;
-    width: 26px;
-    height: 26px;
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
   }
 
   &:hover,
@@ -58,4 +67,13 @@
   &.expanded {
     background-color: mat-color($app-primary, 50);
   }
+}
+
+:host ::ng-deep .menu-list-item .mat-list-item-content,
+:host ::ng-deep .menu-list-item .mdc-list-item__content,
+:host ::ng-deep .menu-list-item .mat-mdc-list-item-unscoped-content {
+  display: flex !important;
+  align-items: center !important;
+  width: 100%;
+  gap: 0;
 }

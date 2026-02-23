@@ -5,7 +5,10 @@ import {
   AfterViewInit,
   ViewChild
 } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
+} from '@angular/material/legacy-dialog';
 import { Cliente } from '../../../../../_models/cliente';
 import {
   BASE_URL,
@@ -21,7 +24,6 @@ import { UsersService } from '../../../../../_services/users/users.service';
 import { DatePipe } from '@angular/common';
 import { PrestamosService } from '../../../../../_services/prestamos/prestamos.service';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
-import { SignaturePad } from 'ngx-signaturepad/signature-pad';
 
 @Component({
   selector: 'app-editar-cliente',
@@ -30,7 +32,7 @@ import { SignaturePad } from 'ngx-signaturepad/signature-pad';
   providers: [DatePipe]
 })
 export class EditarClienteComponent implements OnInit {
-  @ViewChild(SignaturePad) public signaturePad: SignaturePad;
+  @ViewChild('signaturePadRef') public signaturePad: any;
 
   public signaturePadOptions: Object = {
     // passed through to szimek/signature_pad constructor
@@ -157,59 +159,36 @@ export class EditarClienteComponent implements OnInit {
         this.listaTipoDoc = { ...this.listaTipoDoc, 3: 3 };
       }
 
-      this.clienteServicio.updateCliente(this.model).subscribe((response) => {
-        if (response) {
-          let ltdoc;
-          let imageBase64;
-
-          this.dataImage.image = this.listaArchivos;
-          this.dataImage.id_tdocadjunto = this.listaTipoDoc;
-          this.dataImage.id_cliente = this.data.id;
-          this.dataImage.path = environment.GET_UPLOADS_PATH;
-
-          this.clienteServicio
-            .editFile(this.dataImage)
-            .subscribe((response) => {});
-
-          /*for (let i = 0; i < Object.keys(this.listaArchivos).length; i++) {
-
-
-
-              if (this.listaArchivos[i] != '') {
-
-                  let imageBase64 = this.listaArchivos[i];
-                  ltdoc = this.listaTipoDoc[i];
-                  this.dataImage.image = imageBase64;
-                  this.dataImage.id_tdocadjunto = this.listaTipoDoc[i];
-                  this.dataImage.id_cliente = response.id;
-                  this.dataImage.path = environment.GET_UPLOADS_PATH;
-                  this.dataImage.fileExt = 'jpeg';
-
-
-                  this.clienteServicio.editFile(this.dataImage).subscribe(
-                    response => {
-
-                    }
-                  )
-
-
-
-              }
-
-            }
-          }*/
-
+      this.clienteServicio.updateCliente(this.model).subscribe(
+        (response) => {
           if (response) {
+            this.dataImage.image = this.listaArchivos;
+            this.dataImage.id_tdocadjunto = this.listaTipoDoc;
+            this.dataImage.id_cliente = this.data.id;
+            this.dataImage.path = environment.GET_UPLOADS_PATH;
+
+            this.clienteServicio.editFile(this.dataImage).subscribe(() => {});
+
             this.model = response;
             this.editFirmar = false;
+
             Swal.fire({
               type: 'info',
               title: 'Informaci&oacute;n',
               text: 'Se actualizo satisfactoriamente el registro.'
+            }).then(() => {
+              this.dialogRef.close(this.model);
             });
           }
+        },
+        (_error) => {
+          Swal.fire({
+            type: 'error',
+            title: 'Error',
+            text: 'No fue posible actualizar el cliente.'
+          });
         }
-      });
+      );
     }
   }
 

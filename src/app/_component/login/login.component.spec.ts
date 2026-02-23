@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { LoginComponent } from './login.component';
 import { AuthService } from '../../_services/auth.service';
 import { FormsModule } from '@angular/forms';
@@ -26,7 +26,7 @@ describe('LoginComponent', () => {
     menu_usuario: []
   };
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     authServiceSpy = jasmine.createSpyObj('AuthService', [
       'loginForm',
       'setUser'

@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ListarDocumentosprestamoComponent } from './listar-documentosprestamo.component';
 import { Component, Input, forwardRef } from '@angular/core';
 import {
@@ -8,7 +8,10 @@ import {
   ControlValueAccessor
 } from '@angular/forms';
 import { FormlyModule } from '@ngx-formly/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
+} from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
@@ -16,7 +19,7 @@ import Swal from 'sweetalert2';
 
 // Angular Material
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ClienteService } from '../../../../_services/cliente/cliente.service';
@@ -73,7 +76,7 @@ describe('ListarDocumentosprestamoComponent', () => {
   );
   const usersServiceMock = jasmine.createSpyObj('UsersService', ['getUsers']);
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ListarDocumentosprestamoComponent, MockTinymceComponent],
       imports: [

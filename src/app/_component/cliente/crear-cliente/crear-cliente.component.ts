@@ -25,10 +25,12 @@ import { PrestamosService } from '../../../_services/prestamos/prestamos.service
 import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { Router } from '@angular/router';
-import { SignaturePad } from 'ngx-signaturepad/signature-pad';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { environment } from '../../../../environments/environment';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
+} from '@angular/material/legacy-dialog';
 
 export interface TabType {
   label: string;
@@ -63,7 +65,7 @@ export class CrearClienteComponent implements AfterViewInit {
     boolean | string
   >();
 
-  @ViewChild(SignaturePad) public signaturePad: SignaturePad;
+  @ViewChild('signaturePadRef') public signaturePad: any;
 
   public signaturePadOptions: Object = {
     // passed through to szimek/signature_pad constructor

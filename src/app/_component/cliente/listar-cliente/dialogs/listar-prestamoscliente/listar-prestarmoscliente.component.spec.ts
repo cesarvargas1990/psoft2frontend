@@ -1,12 +1,12 @@
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ListarPrestamosclienteComponent } from './listar-prestamoscliente.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FormlyModule } from '@ngx-formly/core';
 import {
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-  MatDialogModule
-} from '@angular/material/dialog';
+  MatLegacyDialogRef as MatDialogRef,
+  MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
+  MatLegacyDialogModule as MatDialogModule
+} from '@angular/material/legacy-dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { of } from 'rxjs';
@@ -42,7 +42,7 @@ describe('ListarPrestamosclienteComponent', () => {
   let usersServiceSpy: any;
   let dialogRefSpy: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     clienteServiceSpy = jasmine.createSpyObj('ClienteService', [
       'getPrestamosCliente',
       'updateCliente'

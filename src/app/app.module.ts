@@ -6,6 +6,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatLegacyDialogModule } from '@angular/material/legacy-dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
@@ -37,7 +38,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Modulos
-import { HttpClientModule } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+  HttpClientModule
+} from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -112,9 +117,9 @@ import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 
 import { CrearDocumentoComponent } from './_component/parametros/crear-documento/crear-documento.component';
 
-import { NgxTinymceModule } from 'ngx-tinymce';
+import { provideTinymce, TinymceComponent } from 'ngx-tinymce';
 
-import { SignaturePadModule } from 'ngx-signaturepad';
+import { SignaturePadComponent } from './signature-pad.component';
 
 // import {FirmaWrapperComponent} from './_component/firma/firma-wrapper.component';
 
@@ -152,6 +157,7 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
     MatChipsModule,
     MatDatepickerModule,
     MatDialogModule,
+    MatLegacyDialogModule,
     MatExpansionModule,
     MatGridListModule,
     MatIconModule,
@@ -184,6 +190,31 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
     MatTableModule,
     MatSortModule
   ],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    DashboardComponent,
+    MenuListItemComponent,
+    TopNavComponent,
+    // Se Declaran Componentes que de alguna manera implementan angular van aqui
+    // (dialogos, o componentes de entrada)
+    LoaderComponent,
+    LogoComponent,
+    ListarClienteComponent,
+    EditarClienteComponent,
+    CrearClienteComponent,
+    CrearPrestamoComponent,
+    FormlyFieldInput,
+    FormlyFieldActionButton,
+    CrearDocumentoComponent,
+    // FirmaWrapperComponent,
+    ListarPrestamosclienteComponent,
+    ListarDocumentosprestamoComponent,
+    EmpresaParametrosComponent,
+    LogoutComponent,
+    SignaturePadComponent
+  ],
+  bootstrap: [AppComponent],
   imports: [
     BrowserModule,
     CommonModule,
@@ -192,7 +223,6 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
     BrowserAnimationsModule,
     FlexLayoutModule,
     AppRoutingModule,
-    HttpClientModule,
     MatFormFieldModule,
     MatPaginatorModule,
     MatTableModule,
@@ -215,6 +245,7 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
     MatChipsModule,
     MatDatepickerModule,
     MatDialogModule,
+    MatLegacyDialogModule,
     MatExpansionModule,
     MatGridListModule,
     MatIconModule,
@@ -245,10 +276,6 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
       // ],
       types: [
         {
-          name: 'input',
-          component: FormlyFieldInput
-        },
-        {
           name: 'action-button',
           component: FormlyFieldActionButton
         }
@@ -258,37 +285,9 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
         { name: 'required', message: 'El campo es obligatorio' }
       ]
     }),
-    NgxTinymceModule.forRoot({
-      baseURL: './assets/tinymce/'
-    }),
-    SignaturePadModule,
+    TinymceComponent,
     WebcamModule
   ],
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    DashboardComponent,
-    AppComponent,
-    MenuListItemComponent,
-    TopNavComponent,
-    // Se Declaran Componentes que de alguna manera implementan angular van aqui
-    // (dialogos, o componentes de entrada)
-    LoaderComponent,
-    LogoComponent,
-    ListarClienteComponent,
-    EditarClienteComponent,
-    CrearClienteComponent,
-    CrearPrestamoComponent,
-    FormlyFieldInput,
-    FormlyFieldActionButton,
-    CrearDocumentoComponent,
-    // FirmaWrapperComponent,
-    ListarPrestamosclienteComponent,
-    ListarDocumentosprestamoComponent,
-    EmpresaParametrosComponent,
-    LogoutComponent
-  ],
-  bootstrap: [AppComponent],
   providers: [
     LoaderService,
     NavService,
@@ -308,7 +307,11 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
         languages: getHighlightLanguages()
       }
     },
-    AppService
+    provideTinymce({
+      baseURL: './assets/tinymce/'
+    }),
+    AppService,
+    provideHttpClient(withInterceptorsFromDi())
   ]
 })
 export class AppModule {}

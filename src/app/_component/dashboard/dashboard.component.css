@@ -40,37 +40,92 @@
 
 .mat-column-fecha_pago {
   justify-content: flex-start;
-  margin: 8px;
+  margin: 0;
 }
 
 .mat-column-fecha_realpago {
   justify-content: flex-start;
-  margin: 8px;
+  margin: 0;
 }
 
 .mat-column-valorpres {
-  justify-content: right;
-  margin: 8px;
+  justify-content: flex-end;
+  margin: 0;
 }
 
 .mat-column-valcuota {
-  justify-content: right;
-  margin: 8px;
+  justify-content: flex-end;
+  margin: 0;
 }
 
 .mat-column-nomfpago {
   justify-content: center;
-  margin: 8px;
+  margin: 0;
 }
 
 .mat-column-valtotal {
-  justify-content: right;
-  margin: 8px;
+  justify-content: flex-end;
+  margin: 0;
 }
 
 .mat-column-action {
   justify-content: center;
-  margin: 8px;
+  margin: 0;
+}
+
+.app-data-table .mat-mdc-header-cell,
+.app-data-table .mat-mdc-cell,
+.app-data-table .mat-header-cell,
+.app-data-table .mat-cell {
+  margin: 0 !important;
+}
+
+.app-data-table .mat-mdc-row,
+.app-data-table .mat-mdc-header-row {
+  column-gap: 0;
+}
+
+.app-data-table .mat-column-id_prestamo,
+.app-data-table .mat-column-nomcliente,
+.app-data-table .mat-column-celular,
+.app-data-table .mat-column-direcasa,
+.app-data-table .mat-column-nomfpago,
+.app-data-table .mat-column-valorpres,
+.app-data-table .mat-column-valcuota,
+.app-data-table .mat-column-valtotal {
+  margin: 0 !important;
+}
+
+.app-data-table .mat-column-action {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  flex: 0 0 180px;
+  max-width: 180px;
+  padding-right: 8px;
+}
+
+.app-data-table .mat-header-cell.mat-column-action,
+.app-data-table .mat-mdc-header-cell.mat-column-action {
+  flex: 0 0 180px;
+  max-width: 180px;
+}
+
+.app-data-table .action-btn {
+  float: none !important;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-data-table .action-btn .mat-icon {
+  margin: 0;
 }
 
 .main-table .mat-header-cell,

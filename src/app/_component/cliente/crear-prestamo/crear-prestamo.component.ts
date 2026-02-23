@@ -19,7 +19,7 @@ import { PrestamosService } from '../../../_services/prestamos/prestamos.service
 import { UntypedFormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { CrearClienteComponent } from '../crear-cliente/crear-cliente.component';
 
 @Component({
@@ -144,7 +144,7 @@ export class CrearPrestamoComponent implements AfterViewInit {
           {
             className: 'col-md-1 cliente-plus-field',
             type: 'action-button',
-            templateOptions: {
+            props: {
               label: 'Crear cliente',
               icon: 'add',
               onClick: () => this.modalAdicionarEmpresa()
@@ -425,10 +425,11 @@ export class CrearPrestamoComponent implements AfterViewInit {
     const dialogRef = this.dialog.open(CrearClienteComponent, {
       width: '95vw',
       maxWidth: '1400px',
-      height: '92vh',
+      maxHeight: '92vh',
       autoFocus: false,
       disableClose: true,
-      panelClass: 'crear-cliente-dialog'
+      panelClass: 'crear-cliente-dialog',
+      backdropClass: 'crear-cliente-backdrop'
     });
 
     dialogRef.afterClosed().subscribe(async (clienteCreado) => {

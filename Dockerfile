@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Instala las dependencias
-RUN npm install
+RUN npm ci --legacy-peer-deps
 # Copia el resto del código fuente al contenedor
 COPY . .
 ARG BUILD_CONFIGURATION=docker

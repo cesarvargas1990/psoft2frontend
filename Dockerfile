@@ -1,11 +1,12 @@
 # Etapa 1: Compilar la aplicación Angular
-FROM node:20 as build
+FROM node:20 AS build
 
 # Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
 # Copia los archivos necesarios para instalar las dependencias
 COPY package.json package-lock.json ./
+COPY scripts ./scripts
 
 # Instala las dependencias
 RUN npm ci --legacy-peer-deps

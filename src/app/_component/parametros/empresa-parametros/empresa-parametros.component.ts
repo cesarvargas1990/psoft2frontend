@@ -22,6 +22,7 @@ import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 
 @Component({
+  standalone: false,
   selector: 'app-empresa-parametros',
   templateUrl: './empresa-parametros.component.html',
   styleUrls: ['./empresa-parametros.component.scss']

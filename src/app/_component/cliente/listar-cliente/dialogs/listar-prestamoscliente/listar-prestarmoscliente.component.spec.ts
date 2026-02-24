@@ -83,7 +83,7 @@ describe('ListarPrestamosclienteComponent', () => {
     );
     usersServiceSpy.getUsers.and.returnValue(Promise.resolve([]));
 
-    dialogRefSpy = TestBed.get(MatDialogRef);
+    dialogRefSpy = TestBed.inject(MatDialogRef);
 
     fixture = TestBed.createComponent(ListarPrestamosclienteComponent);
     component = fixture.componentInstance;

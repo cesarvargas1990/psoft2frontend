@@ -14,6 +14,7 @@ import { TipodocidentiService } from './../../../../../_services/tipodocidenti/t
 import { UsersService } from '../../../../../_services/users/users.service';
 import { DatePipe } from '@angular/common';
 @Component({
+  standalone: false,
   selector: 'app-listar-prestamoscliente',
   templateUrl: './listar-prestamoscliente.component.html',
   styleUrls: ['./listar-prestamoscliente.component.scss'],

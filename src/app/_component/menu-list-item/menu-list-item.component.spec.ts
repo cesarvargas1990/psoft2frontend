@@ -50,8 +50,8 @@ describe('MenuListItemComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(MenuListItemComponent);
     component = fixture.componentInstance;
-    router = TestBed.get(Router);
-    navService = TestBed.get(NavService);
+    router = TestBed.inject(Router);
+    navService = TestBed.inject(NavService) as unknown as MockNavService;
     component.item = mockItem;
     component.depth = 0;
     fixture.detectChanges();

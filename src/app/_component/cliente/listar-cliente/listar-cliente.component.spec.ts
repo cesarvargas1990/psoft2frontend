@@ -96,10 +96,10 @@ describe('ListarClienteComponent', () => {
     fixture = TestBed.createComponent(ListarClienteComponent);
     component = fixture.componentInstance;
 
-    clienteServiceSpy = TestBed.get(
+    clienteServiceSpy = TestBed.inject(
       ClienteService
     ) as jasmine.SpyObj<ClienteService>;
-    authServiceSpy = TestBed.get(AuthService) as jasmine.SpyObj<AuthService>;
+    authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
 
     authServiceSpy.isLoggedIn.and.returnValue(true);
     authServiceSpy.tienePermiso.and.returnValue(true);
@@ -163,7 +163,7 @@ describe('ListarClienteComponent', () => {
   });
 
   it('debería navegar al crear cliente', () => {
-    const router = TestBed.get(Router);
+    const router = TestBed.inject(Router);
     const navigateSpy = spyOn(router, 'navigate');
     component.modalAdicionarEmpresa();
     expect(navigateSpy).toHaveBeenCalledWith(['clientes/crear']);
@@ -261,7 +261,7 @@ describe('ListarClienteComponent', () => {
   });
 
   it('debería navegar al crear cliente al ejecutar volver()', () => {
-    const router = TestBed.get(Router);
+    const router = TestBed.inject(Router);
     const navigateSpy = spyOn(router, 'navigate');
     component.volver();
     expect(navigateSpy).toHaveBeenCalledWith(['/clientes/crear']);

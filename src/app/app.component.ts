@@ -11,6 +11,7 @@ import { NavService } from './_services/nav.service';
 import { AuthService } from '../app/_services/auth.service';
 
 @Component({
+  standalone: false,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],

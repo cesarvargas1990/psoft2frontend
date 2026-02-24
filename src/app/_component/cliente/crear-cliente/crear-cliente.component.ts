@@ -38,6 +38,7 @@ export interface TabType {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-crear-cliente',
   templateUrl: './crear-cliente.component.html',
   styleUrls: ['./crear-cliente.component.scss']

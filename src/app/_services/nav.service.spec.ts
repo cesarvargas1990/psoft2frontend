@@ -16,8 +16,8 @@ describe('NavService', () => {
       providers: [NavService, { provide: Router, useClass: MockRouter }]
     });
 
-    service = TestBed.get(NavService);
-    router = TestBed.get(Router);
+    service = TestBed.inject(NavService);
+    router = TestBed.inject(Router) as unknown as MockRouter;
   });
 
   it('debería crearse correctamente', () => {

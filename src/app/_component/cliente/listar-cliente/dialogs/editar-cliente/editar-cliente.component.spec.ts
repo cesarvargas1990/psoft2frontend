@@ -75,8 +75,12 @@ describe('EditarClienteComponent', () => {
     fixture = TestBed.createComponent(EditarClienteComponent);
     component = fixture.componentInstance;
 
-    clienteService = TestBed.get(ClienteService);
-    prestamosService = TestBed.get(PrestamosService);
+    clienteService = TestBed.inject(
+      ClienteService
+    ) as jasmine.SpyObj<ClienteService>;
+    prestamosService = TestBed.inject(
+      PrestamosService
+    ) as jasmine.SpyObj<PrestamosService>;
   });
 
   it('debe crear el componente', () => {

@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'signature-pad',
   template: `
     <canvas

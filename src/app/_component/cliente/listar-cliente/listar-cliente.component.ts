@@ -38,6 +38,7 @@ export interface TabType {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-listar-cliente',
   templateUrl: './listar-cliente.component.html',
   styleUrls: ['./listar-cliente.component.scss']

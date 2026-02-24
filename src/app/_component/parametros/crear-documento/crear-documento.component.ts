@@ -32,6 +32,7 @@ import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { Router } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-crear-documento',
   templateUrl: './crear-documento.component.html',
   styleUrls: ['./crear-documento.component.scss']

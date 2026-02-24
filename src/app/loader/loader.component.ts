@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoaderService } from '../loader.service';
 
 @Component({
+  standalone: false,
   selector: 'app-loading',
   templateUrl: './loader.component.html',
   styleUrls: ['./loader.component.scss']

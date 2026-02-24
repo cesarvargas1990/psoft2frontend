@@ -3,6 +3,7 @@ import { NavService } from '../../_services/nav.service';
 import { AuthService } from '../../_services/auth.service';
 
 @Component({
+  standalone: false,
   selector: 'app-top-nav',
   templateUrl: './top-nav.component.html',
   styleUrls: ['./top-nav.component.scss']

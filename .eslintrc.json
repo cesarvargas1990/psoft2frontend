@@ -24,6 +24,7 @@
         "@angular-eslint/no-empty-lifecycle-method": "off",
         "@angular-eslint/use-lifecycle-interface": "off",
         "@angular-eslint/prefer-inject": "off",
+        "@angular-eslint/prefer-standalone": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-empty-function": "off",
         "@typescript-eslint/no-unused-vars": "off"

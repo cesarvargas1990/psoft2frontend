@@ -16,6 +16,7 @@ import { UsersService } from '../../../../_services/users/users.service';
 import { PrestamosService } from '../../../../_services/prestamos/prestamos.service';
 import { DomSanitizer } from '@angular/platform-browser';
 @Component({
+  standalone: false,
   selector: 'listar-documentosprestamo',
   templateUrl: './listar-documentosprestamo.component.html',
   styleUrls: ['./listar-documentosprestamo.component.scss']

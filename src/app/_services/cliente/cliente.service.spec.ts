@@ -34,9 +34,9 @@ describe('ClienteService', () => {
       ]
     });
 
-    service = TestBed.get(ClienteService);
-    httpMock = TestBed.get(HttpTestingController);
-    authServiceSpy = TestBed.get(AuthService) as jasmine.SpyObj<AuthService>;
+    service = TestBed.inject(ClienteService);
+    httpMock = TestBed.inject(HttpTestingController);
+    authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
 
     spyOn(localStorage, 'getItem').and.callFake((key: string) => {
       if (key === 'id_empresa') {

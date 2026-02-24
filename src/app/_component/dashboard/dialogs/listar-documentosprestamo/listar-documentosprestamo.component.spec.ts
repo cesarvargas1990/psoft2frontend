@@ -29,6 +29,7 @@ import { PrestamosService } from '../../../../_services/prestamos/prestamos.serv
 
 // Mock <tinymce>
 @Component({
+  standalone: false,
   selector: 'tinymce',
   template: '<div></div>',
   providers: [
@@ -182,7 +183,7 @@ describe('ListarDocumentosprestamoComponent', () => {
   });
 
   it('debería navegar al dashboard al llamar volver()', () => {
-    const router = TestBed.get(Router);
+    const router = TestBed.inject(Router);
     const navigateSpy = spyOn(router, 'navigate');
     component.volver();
     expect(navigateSpy).toHaveBeenCalledWith(['/dashboard']);

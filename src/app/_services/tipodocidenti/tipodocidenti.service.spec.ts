@@ -40,8 +40,8 @@ describe('TipodocidentiService', () => {
     });
 
     injector = getTestBed();
-    service = injector.get(TipodocidentiService);
-    httpMock = injector.get(HttpTestingController);
+    service = injector.inject(TipodocidentiService);
+    httpMock = injector.inject(HttpTestingController);
   });
 
   afterEach(() => {

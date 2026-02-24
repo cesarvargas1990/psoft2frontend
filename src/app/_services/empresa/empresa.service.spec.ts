@@ -46,8 +46,8 @@ describe('EmpresaService', () => {
     });
 
     injector = getTestBed();
-    service = injector.get(EmpresaService);
-    httpMock = injector.get(HttpTestingController);
+    service = injector.inject(EmpresaService);
+    httpMock = injector.inject(HttpTestingController);
   });
 
   afterEach(() => {

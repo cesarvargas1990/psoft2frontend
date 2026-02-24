@@ -27,6 +27,7 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']

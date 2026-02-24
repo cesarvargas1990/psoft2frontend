@@ -26,6 +26,7 @@ import { PrestamosService } from '../../../../../_services/prestamos/prestamos.s
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 
 @Component({
+  standalone: false,
   selector: 'app-editar-cliente',
   templateUrl: './editar-cliente.component.html',
   styleUrls: ['./editar-cliente.component.scss'],

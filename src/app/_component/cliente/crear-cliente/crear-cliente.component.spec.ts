@@ -85,7 +85,7 @@ describe('CrearClienteComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CrearClienteComponent);
     component = fixture.componentInstance;
-    clienteService = TestBed.get(ClienteService);
+    clienteService = TestBed.inject(ClienteService);
     fixture.detectChanges();
   });
 
@@ -246,7 +246,7 @@ describe('CrearClienteComponent', () => {
   });
 
   it('debe navegar al dashboard al llamar volver()', () => {
-    const router = TestBed.get(Router);
+    const router = TestBed.inject(Router);
     spyOn(router, 'navigate');
     component.volver();
     expect(router.navigate).toHaveBeenCalledWith(['/dashboard']);
@@ -313,7 +313,7 @@ describe('CrearClienteComponent', () => {
 
   it('volver debe cerrar dialogo en modo dialog', () => {
     const dialogRefSpy = { close: jasmine.createSpy('close') };
-    const router = TestBed.get(Router);
+    const router = TestBed.inject(Router);
     const routerSpy = spyOn(router, 'navigate');
     const mediaMatcher = {
       matchMedia: (_q: string) => ({
@@ -324,15 +324,15 @@ describe('CrearClienteComponent', () => {
     } as any;
 
     const dialogComponent = new CrearClienteComponent(
-      TestBed.get(AuthService),
-      TestBed.get(NavService),
-      TestBed.get(ClienteService),
+      TestBed.inject(AuthService),
+      TestBed.inject(NavService),
+      TestBed.inject(ClienteService),
       { detectChanges: () => {} } as any,
       mediaMatcher,
       router,
-      TestBed.get(TipodocidentiService),
-      TestBed.get(UsersService),
-      TestBed.get(PrestamosService),
+      TestBed.inject(TipodocidentiService),
+      TestBed.inject(UsersService),
+      TestBed.inject(PrestamosService),
       dialogRefSpy as unknown as MatDialogRef<CrearClienteComponent>,
       { fromDialog: true }
     );

@@ -139,9 +139,9 @@ describe('CrearPrestamoComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CrearPrestamoComponent);
     component = fixture.componentInstance;
-    router = TestBed.get(Router);
-    prestamosService = TestBed.get(PrestamosService);
-    dialog = TestBed.get(MatDialog);
+    router = TestBed.inject(Router);
+    prestamosService = TestBed.inject(PrestamosService);
+    dialog = TestBed.inject(MatDialog);
     fixture.detectChanges();
   });
 
@@ -314,16 +314,16 @@ describe('CrearPrestamoComponent', () => {
     } as unknown as ChangeDetectorRef;
 
     const cmp = new CrearPrestamoComponent(
-      TestBed.get(AuthService),
-      TestBed.get(NavService),
-      TestBed.get(ClienteService),
+      TestBed.inject(AuthService),
+      TestBed.inject(NavService),
+      TestBed.inject(ClienteService),
       changeDetectorRef,
       mediaMatcher,
-      TestBed.get(Router),
-      TestBed.get(MatDialog),
-      TestBed.get(TipodocidentiService),
-      TestBed.get(UsersService),
-      TestBed.get(PrestamosService)
+      TestBed.inject(Router),
+      TestBed.inject(MatDialog),
+      TestBed.inject(TipodocidentiService),
+      TestBed.inject(UsersService),
+      TestBed.inject(PrestamosService)
     );
 
     const mediaQuery = (cmp as any).mobileQuery as any;

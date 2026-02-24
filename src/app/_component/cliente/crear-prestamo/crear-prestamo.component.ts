@@ -23,6 +23,7 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { CrearClienteComponent } from '../crear-cliente/crear-cliente.component';
 
 @Component({
+  standalone: false,
   selector: 'app-crear-prestamo',
   templateUrl: './crear-prestamo.component.html',
   styleUrls: ['./crear-prestamo.component.scss']

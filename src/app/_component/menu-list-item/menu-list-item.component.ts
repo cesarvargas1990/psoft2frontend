@@ -11,6 +11,7 @@ import {
 } from '@angular/animations';
 
 @Component({
+  standalone: false,
   selector: 'app-menu-list-item',
   templateUrl: './menu-list-item.component.html',
   styleUrls: ['./menu-list-item.component.scss'],

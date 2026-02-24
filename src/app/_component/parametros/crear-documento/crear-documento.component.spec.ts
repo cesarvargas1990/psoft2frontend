@@ -245,7 +245,9 @@ describe('CrearDocumentoComponent', () => {
   });
 
   it('debería llamar logout si falla la carga de documentos', () => {
-    const authService = TestBed.get(AuthService) as MockAuthService;
+    const authService = TestBed.inject(
+      AuthService
+    ) as unknown as MockAuthService;
     spyOn(
       component.prestamosService,
       'consultaPlantillasDocumentos'
@@ -337,16 +339,16 @@ describe('CrearDocumentoComponent', () => {
     } as unknown as ChangeDetectorRef;
 
     const cmp = new CrearDocumentoComponent(
-      TestBed.get(AuthService),
-      TestBed.get(NavService),
-      TestBed.get(ClienteService),
+      TestBed.inject(AuthService),
+      TestBed.inject(NavService),
+      TestBed.inject(ClienteService),
       changeDetectorRef,
       mediaMatcher,
-      TestBed.get(Router),
-      TestBed.get(TipodocidentiService),
-      TestBed.get(UsersService),
-      TestBed.get(PrestamosService),
-      TestBed.get(MatDialog)
+      TestBed.inject(Router),
+      TestBed.inject(TipodocidentiService),
+      TestBed.inject(UsersService),
+      TestBed.inject(PrestamosService),
+      TestBed.inject(MatDialog)
     );
 
     const mediaQuery = (cmp as any).mobileQuery as any;

@@ -100,7 +100,7 @@ describe('EmpresaParametrosComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(EmpresaParametrosComponent);
     component = fixture.componentInstance;
-    empresaService = TestBed.get(EmpresaService);
+    empresaService = TestBed.inject(EmpresaService);
     fixture.detectChanges();
   });
 
@@ -174,7 +174,7 @@ describe('EmpresaParametrosComponent', () => {
   });
 
   it('debe navegar al dashboard cuando se llama volver()', () => {
-    const router = TestBed.get(Router) as Router;
+    const router = TestBed.inject(Router) as Router;
     const navSpy = spyOn(router, 'navigate');
 
     component.volver();
@@ -226,12 +226,12 @@ describe('EmpresaParametrosComponent', () => {
     } as unknown as ChangeDetectorRef;
 
     const cmp = new EmpresaParametrosComponent(
-      TestBed.get(AuthService),
-      TestBed.get(NavService),
+      TestBed.inject(AuthService),
+      TestBed.inject(NavService),
       changeDetectorRef,
       mediaMatcher,
-      TestBed.get(Router),
-      TestBed.get(EmpresaService)
+      TestBed.inject(Router),
+      TestBed.inject(EmpresaService)
     );
     const mediaQuery = (cmp as any).mobileQuery;
     expect(mediaQuery.addEventListener).toHaveBeenCalled();

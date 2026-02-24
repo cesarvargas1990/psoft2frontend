@@ -45,7 +45,7 @@ describe('AppComponent', () => {
 
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
-    navService = TestBed.get(NavService);
+    navService = TestBed.inject(NavService);
   });
 
   afterEach(() => {

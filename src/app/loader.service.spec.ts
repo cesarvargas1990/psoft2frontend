@@ -6,7 +6,7 @@ describe('LoaderService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.get(LoaderService);
+    service = TestBed.inject(LoaderService);
   });
 
   it('deberia crearse', () => {

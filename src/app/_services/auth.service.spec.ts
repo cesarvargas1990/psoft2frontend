@@ -34,9 +34,9 @@ describe('AuthService', () => {
       ]
     });
 
-    service = TestBed.get(AuthService);
-    httpMock = TestBed.get(HttpTestingController);
-    router = TestBed.get(Router);
+    service = TestBed.inject(AuthService);
+    httpMock = TestBed.inject(HttpTestingController);
+    router = TestBed.inject(Router) as unknown as MockRouter;
   });
 
   afterEach(() => {

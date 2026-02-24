@@ -92,7 +92,10 @@ export class CrearDocumentoComponent implements AfterViewInit {
     if (this.mobileQuery.addEventListener) {
       this.mobileQuery.addEventListener('change', this._mobileQueryListener);
     } else {
-      this.mobileQuery.addListener(this._mobileQueryListener);
+      const legacyAddListener = (this.mobileQuery as any).addListener as
+        | ((listener: () => void) => void)
+        | undefined;
+      legacyAddListener?.(this._mobileQueryListener);
     }
   }
 
@@ -102,7 +105,10 @@ export class CrearDocumentoComponent implements AfterViewInit {
     if (this.mobileQuery.removeEventListener) {
       this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
     } else {
-      this.mobileQuery.removeListener(this._mobileQueryListener);
+      const legacyRemoveListener = (this.mobileQuery as any).removeListener as
+        | ((listener: () => void) => void)
+        | undefined;
+      legacyRemoveListener?.(this._mobileQueryListener);
     }
   }
 

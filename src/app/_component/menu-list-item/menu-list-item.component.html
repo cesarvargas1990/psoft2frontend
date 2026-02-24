@@ -10,20 +10,22 @@
 >
   <mat-icon class="routeIcon">{{ item.iconName }}</mat-icon>
   <span class="menu-label">{{ item.displayName }}</span>
-  <span class="menu-indicator" *ngIf="item.children && item.children.length">
-    <mat-icon
-      class="indicator-icon"
-      [@indicatorRotate]="expanded ? 'expanded' : 'collapsed'"
-    >
-      expand_more
-    </mat-icon>
-  </span>
+  @if (item.children && item.children.length) {
+    <span class="menu-indicator">
+      <mat-icon
+        class="indicator-icon"
+        [@indicatorRotate]="expanded ? 'expanded' : 'collapsed'"
+      >
+        expand_more
+      </mat-icon>
+    </span>
+  }
 </a>
-<div *ngIf="expanded">
-  <app-menu-list-item
-    *ngFor="let child of item.children"
-    [item]="child"
-    [depth]="depth + 1"
-  >
-  </app-menu-list-item>
-</div>
+@if (expanded) {
+  <div>
+    @for (child of item.children; track child) {
+      <app-menu-list-item [item]="child" [depth]="depth + 1">
+      </app-menu-list-item>
+    }
+  </div>
+}

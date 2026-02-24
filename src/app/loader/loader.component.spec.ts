@@ -28,10 +28,10 @@ describe('LoaderComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(LoaderComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create the component', () => {
+    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 

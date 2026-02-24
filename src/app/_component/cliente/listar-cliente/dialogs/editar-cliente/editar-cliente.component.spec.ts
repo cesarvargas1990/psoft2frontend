@@ -24,6 +24,8 @@ describe('EditarClienteComponent', () => {
   let fixture: ComponentFixture<EditarClienteComponent>;
   let clienteService: jasmine.SpyObj<ClienteService>;
   let prestamosService: jasmine.SpyObj<PrestamosService>;
+  let tipodocidentiService: jasmine.SpyObj<TipodocidentiService>;
+  let usersService: jasmine.SpyObj<UsersService>;
 
   const mockCliente = {
     id: 1,
@@ -78,9 +80,18 @@ describe('EditarClienteComponent', () => {
     clienteService = TestBed.inject(
       ClienteService
     ) as jasmine.SpyObj<ClienteService>;
+    tipodocidentiService = TestBed.inject(
+      TipodocidentiService
+    ) as jasmine.SpyObj<TipodocidentiService>;
+    usersService = TestBed.inject(UsersService) as jasmine.SpyObj<UsersService>;
     prestamosService = TestBed.inject(
       PrestamosService
     ) as jasmine.SpyObj<PrestamosService>;
+
+    tipodocidentiService.getTipodocidenti.and.returnValue(of([]));
+    usersService.getUsers.and.returnValue(of([]) as any);
+    prestamosService.listadoArchivosCliente.and.returnValue(of([]));
+    prestamosService.listaTiposDocumento.and.returnValue(of([]));
   });
 
   it('debe crear el componente', () => {

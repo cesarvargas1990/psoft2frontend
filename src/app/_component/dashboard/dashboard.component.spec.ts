@@ -6,15 +6,29 @@ import {
 } from '@angular/core/testing';
 import { DashboardComponent } from './dashboard.component';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  forwardRef,
+  Input,
+  NO_ERRORS_SCHEMA
+} from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import {
+  MatLegacyDialog,
+  MatLegacyDialog as MatDialog,
+  MatLegacyDialogModule
+} from '@angular/material/legacy-dialog';
 import { MatLegacyPaginatorModule as MatPaginatorModule } from '@angular/material/legacy-paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
-import { FormsModule } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormsModule,
+  NG_VALUE_ACCESSOR
+} from '@angular/forms';
 import Swal from 'sweetalert2';
 
 import { PrestamosService } from '../../_services/prestamos/prestamos.service';
@@ -27,6 +41,25 @@ import {
   provideHttpClient,
   withInterceptorsFromDi
 } from '@angular/common/http';
+
+@Component({
+  standalone: false,
+  selector: 'tinymce',
+  template: '<div></div>',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => MockTinymceComponent),
+      multi: true
+    }
+  ]
+})
+class MockTinymceComponent implements ControlValueAccessor {
+  @Input() config: any;
+  writeValue(): void {}
+  registerOnChange(): void {}
+  registerOnTouched(): void {}
+}
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -74,10 +107,11 @@ describe('DashboardComponent', () => {
     prestamosServiceSpy.deletePrestamo.and.returnValue(of({}));
 
     await TestBed.configureTestingModule({
-      declarations: [DashboardComponent],
+      declarations: [DashboardComponent, MockTinymceComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
       imports: [
         RouterTestingModule,
+        MatLegacyDialogModule,
         MatPaginatorModule,
         MatSortModule,
         MatTableModule,
@@ -89,6 +123,7 @@ describe('DashboardComponent', () => {
         { provide: AuthService, useValue: authServiceSpy },
         { provide: NavService, useValue: { appDrawer: null } },
         { provide: Router, useValue: routerSpy },
+        { provide: MatLegacyDialog, useValue: dialogSpy },
         { provide: MatDialog, useValue: dialogSpy },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting()

@@ -11,15 +11,18 @@
       [opened]="true"
     >
       <div class="logo-container" fxFlexAlign="center">
-        <app-logo *ngIf="authService.isLoggedIn()"></app-logo>
+        @if (authService.isLoggedIn()) {
+          <app-logo></app-logo>
+        }
       </div>
       <mat-divider></mat-divider>
-      <mat-nav-list *ngIf="authService.isLoggedIn()">
-        <app-menu-list-item
-          *ngFor="let item of navItems"
-          [item]="item"
-        ></app-menu-list-item>
-      </mat-nav-list>
+      @if (authService.isLoggedIn()) {
+        <mat-nav-list>
+          @for (item of navItems; track item) {
+            <app-menu-list-item [item]="item"></app-menu-list-item>
+          }
+        </mat-nav-list>
+      }
     </mat-sidenav>
 
     <mat-sidenav-content>
@@ -88,9 +91,9 @@
                       </span>
                     </div>
 
-                    <span class="firma-error" *ngIf="firmaMensaje">{{
-                      firmaMensaje
-                    }}</span>
+                    @if (firmaMensaje) {
+                      <span class="firma-error">{{ firmaMensaje }}</span>
+                    }
 
                     <div class="upload-actions">
                       <button
@@ -109,39 +112,32 @@
                   <div class="col-md-6 preview-column">
                     <span class="firma-label">Previsualización firma</span>
 
-                    <div
-                      class="preview-shell"
-                      *ngIf="firmaPreview; else firmaVacia"
-                    >
-                      <img
-                        [src]="firmaPreview"
-                        class="firma-preview"
-                        alt="Firma"
-                      />
-                    </div>
-
-                    <ng-template #firmaVacia>
+                    @if (firmaPreview) {
+                      <div class="preview-shell">
+                        <img
+                          [src]="firmaPreview"
+                          class="firma-preview"
+                          alt="Firma"
+                        />
+                      </div>
+                    } @else {
                       <div class="preview-empty">
                         <mat-icon aria-label="Sin firma">draw</mat-icon>
                         <span>Sube una imagen para visualizar la firma</span>
                       </div>
-                    </ng-template>
+                    }
                   </div>
                 </div>
 
                 <br />
                 <mat-dialog-actions class="empresa-actions">
-                  <button
-                    *ngIf="
-                      authService.tienePermiso(
-                        'empresa.modificar_datos_empresa'
-                      )
-                    "
-                    type="submit"
-                    class="btn btn-primary submit-button"
-                  >
-                    <mat-icon aria-label="Edit">save</mat-icon>
-                  </button>
+                  @if (
+                    authService.tienePermiso('empresa.modificar_datos_empresa')
+                  ) {
+                    <button type="submit" class="btn btn-primary submit-button">
+                      <mat-icon aria-label="Edit">save</mat-icon>
+                    </button>
+                  }
                 </mat-dialog-actions>
               </form>
             </div>

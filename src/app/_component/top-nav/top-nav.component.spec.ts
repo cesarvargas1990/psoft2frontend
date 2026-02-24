@@ -39,6 +39,7 @@ describe('TopNavComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TopNavComponent);
     component = fixture.componentInstance;
+    mockAuthService.isLoggedIn.and.returnValue(true);
     fixture.detectChanges();
   });
 
@@ -54,6 +55,9 @@ describe('TopNavComponent', () => {
   });
 
   it('should not show the menu button if the user is not logged in', () => {
+    fixture.destroy();
+    fixture = TestBed.createComponent(TopNavComponent);
+    component = fixture.componentInstance;
     mockAuthService.isLoggedIn.and.returnValue(false);
     fixture.detectChanges();
     const button = fixture.debugElement.query(By.css('#menu'));

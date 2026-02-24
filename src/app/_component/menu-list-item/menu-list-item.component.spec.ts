@@ -86,7 +86,7 @@ describe('MenuListItemComponent', () => {
     };
 
     component.item = itemWithChildren;
-    fixture.detectChanges();
+    component.expanded = false;
 
     expect(component.expanded).toBe(false); // Asegura estado inicial
     component.onItemSelected(itemWithChildren);

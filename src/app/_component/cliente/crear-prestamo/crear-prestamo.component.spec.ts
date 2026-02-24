@@ -295,8 +295,7 @@ describe('CrearPrestamoComponent', () => {
   it('debe llamar ngAfterViewInit y setear config y fields', async () => {
     component.appDrawer = {} as any;
     const navService = (component as any).navService as NavService;
-    component.ngAfterViewInit();
-    await fixture.whenStable();
+    await (component as any).initializeAfterViewInit();
     expect(component.config.height).toBe(500);
     expect(component.fields.length).toBeGreaterThan(0);
     expect(navService.appDrawer).toBe(component.appDrawer);
@@ -332,7 +331,7 @@ describe('CrearPrestamoComponent', () => {
 
   it('debe ejecutar hook de fecha y recalcular cuotas', fakeAsync(() => {
     component.appDrawer = {} as any;
-    component.ngAfterViewInit();
+    void (component as any).initializeAfterViewInit();
     flushMicrotasks();
     const spyCuotas = spyOn(component, 'obtenerCuotasPrestamo');
     component.form.setErrors(null);
@@ -350,8 +349,7 @@ describe('CrearPrestamoComponent', () => {
 
   it('debe ejecutar el change de sistema de pago y actualizar validez', async () => {
     component.appDrawer = {} as any;
-    component.ngAfterViewInit();
-    await fixture.whenStable();
+    await (component as any).initializeAfterViewInit();
     const spyUpdate = spyOn(component.form, 'updateValueAndValidity');
     const spyCuotas = spyOn(component, 'obtenerCuotasPrestamo');
     component.form.setErrors(null);
@@ -368,8 +366,7 @@ describe('CrearPrestamoComponent', () => {
 
   it('no debe recalcular desde changes/blur si el formulario es inválido', async () => {
     component.appDrawer = {} as any;
-    component.ngAfterViewInit();
-    await fixture.whenStable();
+    await (component as any).initializeAfterViewInit();
     const spyCuotas = spyOn(component, 'obtenerCuotasPrestamo');
     component.form.setErrors({ invalid: true });
 
@@ -404,8 +401,7 @@ describe('CrearPrestamoComponent', () => {
   it('no debe actualizar validez en sistema de pago cuando pstiposistemaprest responde falso', async () => {
     component.appDrawer = {} as any;
     spyOn(prestamosService, 'pstiposistemaprest').and.returnValue(of(false));
-    component.ngAfterViewInit();
-    await fixture.whenStable();
+    await (component as any).initializeAfterViewInit();
     const spyUpdate = spyOn(component.form, 'updateValueAndValidity');
     const spyCuotas = spyOn(component, 'obtenerCuotasPrestamo');
     component.form.setErrors({ invalid: true });
@@ -422,7 +418,7 @@ describe('CrearPrestamoComponent', () => {
 
   it('no debe recalcular desde hook de fecha cuando el formulario es inválido', fakeAsync(() => {
     component.appDrawer = {} as any;
-    component.ngAfterViewInit();
+    void (component as any).initializeAfterViewInit();
     flushMicrotasks();
     const spyCuotas = spyOn(component, 'obtenerCuotasPrestamo');
     component.form.setErrors({ invalid: true });

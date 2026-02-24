@@ -1,46 +1,323 @@
-<div
-  *ngIf="!isDialogMode"
-  class="example-container"
-  [class.example-is-mobile]="mobileQuery.matches"
->
-  <app-top-nav fxHide.xs></app-top-nav>
-  <app-top-nav class="fixed-topnav" fxHide.gt-xs></app-top-nav>
-  <app-loading></app-loading>
-  <mat-sidenav-container class="example-sidenav-container">
-    <mat-sidenav
-      #appDrawer
-      [mode]="mobileQuery.matches ? 'over' : 'side'"
-      [fixedInViewport]="mobileQuery.matches"
-      fixedTopGap="56"
-      [opened]="true"
-    >
-      <div class="logo-container" fxFlexAlign="center">
-        <app-logo *ngIf="authService.isLoggedIn()"></app-logo>
-      </div>
-      <mat-divider></mat-divider>
-      <mat-nav-list *ngIf="authService.isLoggedIn()">
-        <app-menu-list-item
-          *ngFor="let item of navItems"
-          [item]="item"
-        ></app-menu-list-item>
-      </mat-nav-list>
-    </mat-sidenav>
+@if (!isDialogMode) {
+  <div
+    class="example-container"
+    [class.example-is-mobile]="mobileQuery.matches"
+  >
+    <app-top-nav fxHide.xs></app-top-nav>
+    <app-top-nav class="fixed-topnav" fxHide.gt-xs></app-top-nav>
+    <app-loading></app-loading>
+    <mat-sidenav-container class="example-sidenav-container">
+      <mat-sidenav
+        #appDrawer
+        [mode]="mobileQuery.matches ? 'over' : 'side'"
+        [fixedInViewport]="mobileQuery.matches"
+        fixedTopGap="56"
+        [opened]="true"
+      >
+        <div class="logo-container" fxFlexAlign="center">
+          @if (authService.isLoggedIn()) {
+            <app-logo></app-logo>
+          }
+        </div>
+        <mat-divider></mat-divider>
+        @if (authService.isLoggedIn()) {
+          <mat-nav-list>
+            @for (item of navItems; track item) {
+              <app-menu-list-item [item]="item"></app-menu-list-item>
+            }
+          </mat-nav-list>
+        }
+      </mat-sidenav>
+      <mat-sidenav-content>
+        <div class="card form-card">
+          <div class="card-body">
+            <div class="card-text">
+              <form
+                [formGroup]="form"
+                (ngSubmit)="submit()"
+                class="cliente-form"
+              >
+                <div class="form-hero">
+                  <button
+                    title="Volver"
+                    (click)="volver()"
+                    class="btn btn-outline-primary btn-sm back-button"
+                    mat-icon-button
+                    color="primary"
+                    type="button"
+                  >
+                    <mat-icon aria-label="Volver">keyboard_backspace</mat-icon>
+                  </button>
+                  <div class="hero-copy">
+                    <h2 class="hero-title">Nuevo cliente</h2>
+                    <p class="hero-subtitle">
+                      Diligencia la información, captura firma y adjunta
+                      soportes.
+                    </p>
+                  </div>
+                </div>
+                <mat-tab-group
+                  class="cliente-tabs"
+                  [dynamicHeight]="true"
+                  [animationDuration]="'250ms'"
+                  mat-stretch-tabs
+                >
+                  @for (tab of tabs; track tab; let index = $index) {
+                    <mat-tab [label]="tab.label">
+                      <div class="tab-pane">
+                        <formly-form
+                          [form]="form.at(index)"
+                          [model]="model"
+                          [fields]="tab.fields"
+                          [options]="options[index]"
+                        >
+                        </formly-form>
+                      </div>
+                    </mat-tab>
+                  }
+                  <mat-tab label="Firma">
+                    <div class="tab-pane">
+                      <div class="signature-section">
+                        <p class="section-help-text">
+                          Escriba su firma sobre el cuadro de abajo.
+                        </p>
+                        <signature-pad
+                          #signaturePadRef
+                          class="signature-canvas"
+                          [options]="signaturePadOptions"
+                          (drawStartEvent)="drawStart()"
+                        ></signature-pad>
+                        <ng-container #fieldComponent></ng-container>
+                        <div class="signature-actions">
+                          <button
+                            type="button"
+                            title="Limpiar"
+                            (click)="drawClear()"
+                            class="btn btn-primary submit-button"
+                          >
+                            <mat-icon aria-label="Limpiar firma"
+                              >clear</mat-icon
+                            >
+                            Limpiar
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-tab>
+                  <mat-tab label="Archivos">
+                    <div class="tab-pane">
+                      @if (listaTiposDocumento && listaTiposDocumento.length) {
+                        <mat-tab-group class="doc-tabs" [dynamicHeight]="true">
+                          @for (
+                            item of listaTiposDocumento;
+                            track item;
+                            let i = $index
+                          ) {
+                            <mat-tab [label]="item.nombre">
+                              <div class="doc-tab-content">
+                                <div class="row file-panel-content">
+                                  <div class="col-md-6 upload-column">
+                                    @if (message) {
+                                      <span class="upload-error">{{
+                                        message
+                                      }}</span>
+                                    }
+                                    <mat-divider></mat-divider>
+                                    <div class="upload-shell">
+                                      <input
+                                        class="file-input"
+                                        #fileInput
+                                        type="file"
+                                        accept="image/*,application/pdf"
+                                        (change)="
+                                          onFileChange(
+                                            fileInput.files,
+                                            i,
+                                            item.id
+                                          )
+                                        "
+                                      />
+                                      <button
+                                        type="button"
+                                        class="btn btn-outline-primary submit-button file-trigger"
+                                        (click)="fileInput.click()"
+                                      >
+                                        <mat-icon
+                                          aria-label="Seleccionar archivo"
+                                          >upload_file</mat-icon
+                                        >
+                                        Seleccionar archivo
+                                      </button>
+                                      <span
+                                        class="selected-file"
+                                        [class.empty]="!selectedFileNames[i]"
+                                        [title]="getSelectedFileName(i)"
+                                      >
+                                        {{ getSelectedFileName(i) }}
+                                      </span>
+                                    </div>
+                                    <mat-divider
+                                      class="upload-divider"
+                                    ></mat-divider>
+                                    @if (webcamIndex == i) {
+                                      <webcam
+                                        [trigger]="triggerObservable"
+                                        (imageCapture)="handleImage($event)"
+                                      >
+                                      </webcam>
+                                    }
+                                    <div class="upload-actions">
+                                      @if (tomarfoto == 0) {
+                                        <button
+                                          type="button"
+                                          (click)="
+                                            webcamIndex = i;
+                                            listaArchivos[i] = '';
+                                            tomarfoto = 1
+                                          "
+                                          class="btn btn-primary submit-button"
+                                        >
+                                          <mat-icon aria-label="Abrir cámara"
+                                            >videocam</mat-icon
+                                          >
+                                          Cámara
+                                        </button>
+                                      }
+                                      @if (webcamIndex == i) {
+                                        <button
+                                          type="button"
+                                          (click)="
+                                            triggerSnapshot(i);
+                                            listaTipoDoc[i] = item.id;
+                                            webcamIndex = null
+                                          "
+                                          class="btn btn-primary submit-button"
+                                        >
+                                          <mat-icon aria-label="Capturar"
+                                            >control_camera</mat-icon
+                                          >
+                                          Capturar
+                                        </button>
+                                      }
+                                      @if (listaArchivos[i]) {
+                                        <button
+                                          type="button"
+                                          (click)="clearSelectedFile(i)"
+                                          class="btn btn-outline-secondary submit-button"
+                                        >
+                                          <mat-icon
+                                            aria-label="Eliminar archivo"
+                                            >delete</mat-icon
+                                          >
+                                          Limpiar
+                                        </button>
+                                      }
+                                    </div>
+                                  </div>
+                                  <div class="col-md-6 preview-column">
+                                    <mat-divider></mat-divider>
+                                    @if (listaArchivos[i]) {
+                                      <div class="preview-shell">
+                                        <div class="preview-toolbar">
+                                          <a
+                                            class="preview-link"
+                                            [href]="listaArchivos[i]"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                          >
+                                            <mat-icon aria-label="Abrir archivo"
+                                              >open_in_new</mat-icon
+                                            >
+                                            Abrir
+                                          </a>
+                                        </div>
+                                        @if (isPdfFile(i)) {
+                                          <div class="pdf-preview">
+                                            <mat-icon aria-label="Vista PDF"
+                                              >picture_as_pdf</mat-icon
+                                            >
+                                            <span
+                                              >Vista previa disponible en nueva
+                                              pestaña</span
+                                            >
+                                          </div>
+                                        }
+                                        @if (!isPdfFile(i)) {
+                                          <img
+                                            class="preview-image"
+                                            [src]="listaArchivos[i]"
+                                            [attr.file-index]="i"
+                                            [attr.alt]="
+                                              'Vista previa de ' + item.nombre
+                                            "
+                                          />
+                                        }
+                                      </div>
+                                    } @else {
+                                      <div class="preview-empty">
+                                        <mat-icon aria-label="Sin archivo"
+                                          >insert_drive_file</mat-icon
+                                        >
+                                        <span
+                                          >Sube o captura un archivo para verlo
+                                          aquí</span
+                                        >
+                                      </div>
+                                    }
+                                  </div>
+                                </div>
+                              </div>
+                            </mat-tab>
+                          }
+                        </mat-tab-group>
+                      } @else {
+                        <div class="empty-state">
+                          <mat-icon aria-label="Sin documentos"
+                            >description</mat-icon
+                          >
+                          <span>No hay tipos de documento disponibles.</span>
+                        </div>
+                      }
+                    </div>
+                  </mat-tab>
+                </mat-tab-group>
+                <mat-dialog-actions class="form-actions">
+                  <button
+                    type="submit"
+                    [disabled]="!form.valid"
+                    class="btn btn-primary submit-button"
+                  >
+                    <mat-icon aria-label="Edit">save</mat-icon>
+                    Guardar
+                  </button>
+                </mat-dialog-actions>
+              </form>
+            </div>
+          </div>
+        </div>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>
+}
 
-    <mat-sidenav-content>
-      <div class="card form-card">
+@if (isDialogMode) {
+  <div class="dialog-mode-wrapper">
+    <h4 mat-dialog-title class="dialog-mode-title">Nuevo cliente</h4>
+    <mat-dialog-content class="dialog-mode-content">
+      <div class="card form-card dialog-form-card">
         <div class="card-body">
           <div class="card-text">
             <form [formGroup]="form" (ngSubmit)="submit()" class="cliente-form">
               <div class="form-hero">
                 <button
-                  title="Volver"
+                  title="Cerrar"
                   (click)="volver()"
                   class="btn btn-outline-primary btn-sm back-button"
                   mat-icon-button
                   color="primary"
                   type="button"
                 >
-                  <mat-icon aria-label="Volver">keyboard_backspace</mat-icon>
+                  <mat-icon aria-label="Cerrar">close</mat-icon>
                 </button>
                 <div class="hero-copy">
                   <h2 class="hero-title">Nuevo cliente</h2>
@@ -49,28 +326,25 @@
                   </p>
                 </div>
               </div>
-
               <mat-tab-group
                 class="cliente-tabs"
                 [dynamicHeight]="true"
                 [animationDuration]="'250ms'"
                 mat-stretch-tabs
               >
-                <mat-tab
-                  *ngFor="let tab of tabs; let index = index"
-                  [label]="tab.label"
-                >
-                  <div class="tab-pane">
-                    <formly-form
-                      [form]="form.at(index)"
-                      [model]="model"
-                      [fields]="tab.fields"
-                      [options]="options[index]"
-                    >
-                    </formly-form>
-                  </div>
-                </mat-tab>
-
+                @for (tab of tabs; track tab; let index = $index) {
+                  <mat-tab [label]="tab.label">
+                    <div class="tab-pane">
+                      <formly-form
+                        [form]="form.at(index)"
+                        [model]="model"
+                        [fields]="tab.fields"
+                        [options]="options[index]"
+                      >
+                      </formly-form>
+                    </div>
+                  </mat-tab>
+                }
                 <mat-tab label="Firma">
                   <div class="tab-pane">
                     <div class="signature-section">
@@ -84,7 +358,6 @@
                         (drawStartEvent)="drawStart()"
                       ></signature-pad>
                       <ng-container #fieldComponent></ng-container>
-
                       <div class="signature-actions">
                         <button
                           type="button"
@@ -99,181 +372,190 @@
                     </div>
                   </div>
                 </mat-tab>
-
                 <mat-tab label="Archivos">
                   <div class="tab-pane">
-                    <mat-tab-group
-                      class="doc-tabs"
-                      [dynamicHeight]="true"
-                      *ngIf="
-                        listaTiposDocumento && listaTiposDocumento.length;
-                        else emptyDocs
-                      "
-                    >
-                      <mat-tab
-                        *ngFor="let item of listaTiposDocumento; let i = index"
-                        [label]="item.nombre"
-                      >
-                        <div class="doc-tab-content">
-                          <div class="row file-panel-content">
-                            <div class="col-md-6 upload-column">
-                              <span class="upload-error" *ngIf="message">{{
-                                message
-                              }}</span>
-                              <mat-divider></mat-divider>
-                              <div class="upload-shell">
-                                <input
-                                  class="file-input"
-                                  #fileInput
-                                  type="file"
-                                  accept="image/*,application/pdf"
-                                  (change)="
-                                    onFileChange(fileInput.files, i, item.id)
-                                  "
-                                />
-                                <button
-                                  type="button"
-                                  class="btn btn-outline-primary submit-button file-trigger"
-                                  (click)="fileInput.click()"
-                                >
-                                  <mat-icon aria-label="Seleccionar archivo"
-                                    >upload_file</mat-icon
-                                  >
-                                  Seleccionar archivo
-                                </button>
-                                <span
-                                  class="selected-file"
-                                  [class.empty]="!selectedFileNames[i]"
-                                  [title]="getSelectedFileName(i)"
-                                >
-                                  {{ getSelectedFileName(i) }}
-                                </span>
-                              </div>
-                              <mat-divider class="upload-divider"></mat-divider>
-
-                              <webcam
-                                [trigger]="triggerObservable"
-                                (imageCapture)="handleImage($event)"
-                                *ngIf="webcamIndex == i"
-                              >
-                              </webcam>
-
-                              <div class="upload-actions">
-                                <button
-                                  type="button"
-                                  *ngIf="tomarfoto == 0"
-                                  (click)="
-                                    webcamIndex = i;
-                                    listaArchivos[i] = '';
-                                    tomarfoto = 1
-                                  "
-                                  class="btn btn-primary submit-button"
-                                >
-                                  <mat-icon aria-label="Abrir cámara"
-                                    >videocam</mat-icon
-                                  >
-                                  Cámara
-                                </button>
-
-                                <button
-                                  type="button"
-                                  *ngIf="webcamIndex == i"
-                                  (click)="
-                                    triggerSnapshot(i);
-                                    listaTipoDoc[i] = item.id;
-                                    webcamIndex = null
-                                  "
-                                  class="btn btn-primary submit-button"
-                                >
-                                  <mat-icon aria-label="Capturar"
-                                    >control_camera</mat-icon
-                                  >
-                                  Capturar
-                                </button>
-
-                                <button
-                                  type="button"
-                                  *ngIf="listaArchivos[i]"
-                                  (click)="clearSelectedFile(i)"
-                                  class="btn btn-outline-secondary submit-button"
-                                >
-                                  <mat-icon aria-label="Eliminar archivo"
-                                    >delete</mat-icon
-                                  >
-                                  Limpiar
-                                </button>
-                              </div>
-                            </div>
-
-                            <div class="col-md-6 preview-column">
-                              <mat-divider></mat-divider>
-                              <div
-                                class="preview-shell"
-                                *ngIf="listaArchivos[i]; else emptyPreview"
-                              >
-                                <div class="preview-toolbar">
-                                  <a
-                                    class="preview-link"
-                                    [href]="listaArchivos[i]"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    <mat-icon aria-label="Abrir archivo"
-                                      >open_in_new</mat-icon
+                    @if (listaTiposDocumento && listaTiposDocumento.length) {
+                      <mat-tab-group class="doc-tabs" [dynamicHeight]="true">
+                        @for (
+                          item of listaTiposDocumento;
+                          track item;
+                          let i = $index
+                        ) {
+                          <mat-tab [label]="item.nombre">
+                            <div class="doc-tab-content">
+                              <div class="row file-panel-content">
+                                <div class="col-md-6 upload-column">
+                                  @if (message) {
+                                    <span class="upload-error">{{
+                                      message
+                                    }}</span>
+                                  }
+                                  <mat-divider></mat-divider>
+                                  <div class="upload-shell">
+                                    <input
+                                      class="file-input"
+                                      #fileInputDialog
+                                      type="file"
+                                      accept="image/*,application/pdf"
+                                      (change)="
+                                        onFileChange(
+                                          fileInputDialog.files,
+                                          i,
+                                          item.id
+                                        )
+                                      "
+                                    />
+                                    <button
+                                      type="button"
+                                      class="btn btn-outline-primary submit-button file-trigger"
+                                      (click)="fileInputDialog.click()"
                                     >
-                                    Abrir
-                                  </a>
+                                      <mat-icon aria-label="Seleccionar archivo"
+                                        >upload_file</mat-icon
+                                      >
+                                      Seleccionar archivo
+                                    </button>
+                                    <span
+                                      class="selected-file"
+                                      [class.empty]="!selectedFileNames[i]"
+                                      [title]="getSelectedFileName(i)"
+                                    >
+                                      {{ getSelectedFileName(i) }}
+                                    </span>
+                                  </div>
+                                  <mat-divider
+                                    class="upload-divider"
+                                  ></mat-divider>
+                                  @if (webcamIndex == i) {
+                                    <webcam
+                                      [trigger]="triggerObservable"
+                                      (imageCapture)="handleImage($event)"
+                                    >
+                                    </webcam>
+                                  }
+                                  <div class="upload-actions">
+                                    @if (tomarfoto == 0) {
+                                      <button
+                                        type="button"
+                                        (click)="
+                                          webcamIndex = i;
+                                          listaArchivos[i] = '';
+                                          tomarfoto = 1
+                                        "
+                                        class="btn btn-primary submit-button"
+                                      >
+                                        <mat-icon aria-label="Abrir cámara"
+                                          >videocam</mat-icon
+                                        >
+                                        Cámara
+                                      </button>
+                                    }
+                                    @if (webcamIndex == i) {
+                                      <button
+                                        type="button"
+                                        (click)="
+                                          triggerSnapshot(i);
+                                          listaTipoDoc[i] = item.id;
+                                          webcamIndex = null
+                                        "
+                                        class="btn btn-primary submit-button"
+                                      >
+                                        <mat-icon aria-label="Capturar"
+                                          >control_camera</mat-icon
+                                        >
+                                        Capturar
+                                      </button>
+                                    }
+                                    @if (listaArchivos[i]) {
+                                      <button
+                                        type="button"
+                                        (click)="clearSelectedFile(i)"
+                                        class="btn btn-outline-secondary submit-button"
+                                      >
+                                        <mat-icon aria-label="Eliminar archivo"
+                                          >delete</mat-icon
+                                        >
+                                        Limpiar
+                                      </button>
+                                    }
+                                  </div>
                                 </div>
-
-                                <div class="pdf-preview" *ngIf="isPdfFile(i)">
-                                  <mat-icon aria-label="Vista PDF"
-                                    >picture_as_pdf</mat-icon
-                                  >
-                                  <span
-                                    >Vista previa disponible en nueva
-                                    pestaña</span
-                                  >
+                                <div class="col-md-6 preview-column">
+                                  <mat-divider></mat-divider>
+                                  @if (listaArchivos[i]) {
+                                    <div class="preview-shell">
+                                      <div class="preview-toolbar">
+                                        <a
+                                          class="preview-link"
+                                          [href]="listaArchivos[i]"
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                        >
+                                          <mat-icon aria-label="Abrir archivo"
+                                            >open_in_new</mat-icon
+                                          >
+                                          Abrir
+                                        </a>
+                                      </div>
+                                      @if (isPdfFile(i)) {
+                                        <div class="pdf-preview">
+                                          <mat-icon aria-label="Vista PDF"
+                                            >picture_as_pdf</mat-icon
+                                          >
+                                          <span
+                                            >Vista previa disponible en nueva
+                                            pestaña</span
+                                          >
+                                        </div>
+                                      }
+                                      @if (!isPdfFile(i)) {
+                                        <img
+                                          class="preview-image"
+                                          [src]="listaArchivos[i]"
+                                          [attr.file-index]="i"
+                                          [attr.alt]="
+                                            'Vista previa de ' + item.nombre
+                                          "
+                                        />
+                                      }
+                                    </div>
+                                  } @else {
+                                    <div class="preview-empty">
+                                      <mat-icon aria-label="Sin archivo"
+                                        >insert_drive_file</mat-icon
+                                      >
+                                      <span
+                                        >Sube o captura un archivo para verlo
+                                        aquí</span
+                                      >
+                                    </div>
+                                  }
                                 </div>
-
-                                <img
-                                  class="preview-image"
-                                  [src]="listaArchivos[i]"
-                                  *ngIf="!isPdfFile(i)"
-                                  [attr.file-index]="i"
-                                  [attr.alt]="'Vista previa de ' + item.nombre"
-                                />
                               </div>
-
-                              <ng-template #emptyPreview>
-                                <div class="preview-empty">
-                                  <mat-icon aria-label="Sin archivo"
-                                    >insert_drive_file</mat-icon
-                                  >
-                                  <span
-                                    >Sube o captura un archivo para verlo
-                                    aquí</span
-                                  >
-                                </div>
-                              </ng-template>
                             </div>
-                          </div>
-                        </div>
-                      </mat-tab>
-                    </mat-tab-group>
-
-                    <ng-template #emptyDocs>
+                          </mat-tab>
+                        }
+                      </mat-tab-group>
+                    } @else {
                       <div class="empty-state">
                         <mat-icon aria-label="Sin documentos"
                           >description</mat-icon
                         >
                         <span>No hay tipos de documento disponibles.</span>
                       </div>
-                    </ng-template>
+                    }
                   </div>
                 </mat-tab>
               </mat-tab-group>
-
               <mat-dialog-actions class="form-actions">
+                <button
+                  type="button"
+                  mat-stroked-button
+                  class="cancel-button"
+                  (click)="volver()"
+                >
+                  Cancelar
+                </button>
                 <button
                   type="submit"
                   [disabled]="!form.valid"
@@ -287,284 +569,6 @@
           </div>
         </div>
       </div>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-</div>
-
-<div *ngIf="isDialogMode" class="dialog-mode-wrapper">
-  <h4 mat-dialog-title class="dialog-mode-title">Nuevo cliente</h4>
-  <mat-dialog-content class="dialog-mode-content">
-    <div class="card form-card dialog-form-card">
-      <div class="card-body">
-        <div class="card-text">
-          <form [formGroup]="form" (ngSubmit)="submit()" class="cliente-form">
-            <div class="form-hero">
-              <button
-                title="Cerrar"
-                (click)="volver()"
-                class="btn btn-outline-primary btn-sm back-button"
-                mat-icon-button
-                color="primary"
-                type="button"
-              >
-                <mat-icon aria-label="Cerrar">close</mat-icon>
-              </button>
-              <div class="hero-copy">
-                <h2 class="hero-title">Nuevo cliente</h2>
-                <p class="hero-subtitle">
-                  Diligencia la información, captura firma y adjunta soportes.
-                </p>
-              </div>
-            </div>
-
-            <mat-tab-group
-              class="cliente-tabs"
-              [dynamicHeight]="true"
-              [animationDuration]="'250ms'"
-              mat-stretch-tabs
-            >
-              <mat-tab
-                *ngFor="let tab of tabs; let index = index"
-                [label]="tab.label"
-              >
-                <div class="tab-pane">
-                  <formly-form
-                    [form]="form.at(index)"
-                    [model]="model"
-                    [fields]="tab.fields"
-                    [options]="options[index]"
-                  >
-                  </formly-form>
-                </div>
-              </mat-tab>
-
-              <mat-tab label="Firma">
-                <div class="tab-pane">
-                  <div class="signature-section">
-                    <p class="section-help-text">
-                      Escriba su firma sobre el cuadro de abajo.
-                    </p>
-                    <signature-pad
-                      #signaturePadRef
-                      class="signature-canvas"
-                      [options]="signaturePadOptions"
-                      (drawStartEvent)="drawStart()"
-                    ></signature-pad>
-                    <ng-container #fieldComponent></ng-container>
-
-                    <div class="signature-actions">
-                      <button
-                        type="button"
-                        title="Limpiar"
-                        (click)="drawClear()"
-                        class="btn btn-primary submit-button"
-                      >
-                        <mat-icon aria-label="Limpiar firma">clear</mat-icon>
-                        Limpiar
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </mat-tab>
-
-              <mat-tab label="Archivos">
-                <div class="tab-pane">
-                  <mat-tab-group
-                    class="doc-tabs"
-                    [dynamicHeight]="true"
-                    *ngIf="
-                      listaTiposDocumento && listaTiposDocumento.length;
-                      else emptyDocsDialog
-                    "
-                  >
-                    <mat-tab
-                      *ngFor="let item of listaTiposDocumento; let i = index"
-                      [label]="item.nombre"
-                    >
-                      <div class="doc-tab-content">
-                        <div class="row file-panel-content">
-                          <div class="col-md-6 upload-column">
-                            <span class="upload-error" *ngIf="message">{{
-                              message
-                            }}</span>
-                            <mat-divider></mat-divider>
-                            <div class="upload-shell">
-                              <input
-                                class="file-input"
-                                #fileInputDialog
-                                type="file"
-                                accept="image/*,application/pdf"
-                                (change)="
-                                  onFileChange(
-                                    fileInputDialog.files,
-                                    i,
-                                    item.id
-                                  )
-                                "
-                              />
-                              <button
-                                type="button"
-                                class="btn btn-outline-primary submit-button file-trigger"
-                                (click)="fileInputDialog.click()"
-                              >
-                                <mat-icon aria-label="Seleccionar archivo"
-                                  >upload_file</mat-icon
-                                >
-                                Seleccionar archivo
-                              </button>
-                              <span
-                                class="selected-file"
-                                [class.empty]="!selectedFileNames[i]"
-                                [title]="getSelectedFileName(i)"
-                              >
-                                {{ getSelectedFileName(i) }}
-                              </span>
-                            </div>
-                            <mat-divider class="upload-divider"></mat-divider>
-
-                            <webcam
-                              [trigger]="triggerObservable"
-                              (imageCapture)="handleImage($event)"
-                              *ngIf="webcamIndex == i"
-                            >
-                            </webcam>
-
-                            <div class="upload-actions">
-                              <button
-                                type="button"
-                                *ngIf="tomarfoto == 0"
-                                (click)="
-                                  webcamIndex = i;
-                                  listaArchivos[i] = '';
-                                  tomarfoto = 1
-                                "
-                                class="btn btn-primary submit-button"
-                              >
-                                <mat-icon aria-label="Abrir cámara"
-                                  >videocam</mat-icon
-                                >
-                                Cámara
-                              </button>
-
-                              <button
-                                type="button"
-                                *ngIf="webcamIndex == i"
-                                (click)="
-                                  triggerSnapshot(i);
-                                  listaTipoDoc[i] = item.id;
-                                  webcamIndex = null
-                                "
-                                class="btn btn-primary submit-button"
-                              >
-                                <mat-icon aria-label="Capturar"
-                                  >control_camera</mat-icon
-                                >
-                                Capturar
-                              </button>
-
-                              <button
-                                type="button"
-                                *ngIf="listaArchivos[i]"
-                                (click)="clearSelectedFile(i)"
-                                class="btn btn-outline-secondary submit-button"
-                              >
-                                <mat-icon aria-label="Eliminar archivo"
-                                  >delete</mat-icon
-                                >
-                                Limpiar
-                              </button>
-                            </div>
-                          </div>
-
-                          <div class="col-md-6 preview-column">
-                            <mat-divider></mat-divider>
-                            <div
-                              class="preview-shell"
-                              *ngIf="listaArchivos[i]; else emptyPreviewDialog"
-                            >
-                              <div class="preview-toolbar">
-                                <a
-                                  class="preview-link"
-                                  [href]="listaArchivos[i]"
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  <mat-icon aria-label="Abrir archivo"
-                                    >open_in_new</mat-icon
-                                  >
-                                  Abrir
-                                </a>
-                              </div>
-
-                              <div class="pdf-preview" *ngIf="isPdfFile(i)">
-                                <mat-icon aria-label="Vista PDF"
-                                  >picture_as_pdf</mat-icon
-                                >
-                                <span
-                                  >Vista previa disponible en nueva
-                                  pestaña</span
-                                >
-                              </div>
-
-                              <img
-                                class="preview-image"
-                                [src]="listaArchivos[i]"
-                                *ngIf="!isPdfFile(i)"
-                                [attr.file-index]="i"
-                                [attr.alt]="'Vista previa de ' + item.nombre"
-                              />
-                            </div>
-
-                            <ng-template #emptyPreviewDialog>
-                              <div class="preview-empty">
-                                <mat-icon aria-label="Sin archivo"
-                                  >insert_drive_file</mat-icon
-                                >
-                                <span
-                                  >Sube o captura un archivo para verlo
-                                  aquí</span
-                                >
-                              </div>
-                            </ng-template>
-                          </div>
-                        </div>
-                      </div>
-                    </mat-tab>
-                  </mat-tab-group>
-
-                  <ng-template #emptyDocsDialog>
-                    <div class="empty-state">
-                      <mat-icon aria-label="Sin documentos"
-                        >description</mat-icon
-                      >
-                      <span>No hay tipos de documento disponibles.</span>
-                    </div>
-                  </ng-template>
-                </div>
-              </mat-tab>
-            </mat-tab-group>
-
-            <mat-dialog-actions class="form-actions">
-              <button
-                type="button"
-                mat-stroked-button
-                class="cancel-button"
-                (click)="volver()"
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                [disabled]="!form.valid"
-                class="btn btn-primary submit-button"
-              >
-                <mat-icon aria-label="Edit">save</mat-icon>
-                Guardar
-              </button>
-            </mat-dialog-actions>
-          </form>
-        </div>
-      </div>
-    </div>
-  </mat-dialog-content>
-</div>
+    </mat-dialog-content>
+  </div>
+}

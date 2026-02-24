@@ -6,38 +6,43 @@
         : 'No hay préstamos asignados al cliente'
     }}
   </span>
-  <span class="dialog-title-sub" *ngIf="consultaPrestamoCliente.length > 0"
-    >Consulta rápida del historial del cliente.</span
-  >
+  @if (consultaPrestamoCliente.length > 0) {
+    <span class="dialog-title-sub"
+      >Consulta rápida del historial del cliente.</span
+    >
+  }
 </h4>
 
 <mat-dialog-content class="prestamos-dialog-content">
-  <div
-    class="table-shell"
-    *ngIf="consultaPrestamoCliente.length > 0; else emptyState"
-  >
-    <table class="main-table mobile-optimised modern-table">
-      <thead>
-        <tr>
-          <th *ngFor="let header of getHeaders()">{{ header }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of consultaPrestamoCliente">
-          <td *ngFor="let key of getHeaders()" [attr.data-th]="key">
-            {{ item[key] }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <ng-template #emptyState>
+  @if (consultaPrestamoCliente.length > 0) {
+    <div class="table-shell">
+      <table class="main-table mobile-optimised modern-table">
+        <thead>
+          <tr>
+            @for (header of getHeaders(); track header) {
+              <th>{{ header }}</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of consultaPrestamoCliente; track item) {
+            <tr>
+              @for (key of getHeaders(); track key) {
+                <td [attr.data-th]="key">
+                  {{ item[key] }}
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
     <div class="empty-state">
       <mat-icon aria-label="Sin préstamos">receipt_long</mat-icon>
       <span>No se encontraron préstamos para este cliente.</span>
     </div>
-  </ng-template>
+  }
 
   <form [formGroup]="form" (ngSubmit)="submit()"></form>
 </mat-dialog-content>

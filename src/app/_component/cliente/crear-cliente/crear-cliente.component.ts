@@ -87,7 +87,7 @@ export class CrearClienteComponent implements AfterViewInit {
   listaTipoDoc: any = [];
   selectedFileNames: any = [];
   lista: string[] = ['hola', 'que', 'tal', 'estas'];
-  listaTiposDocumento: [] = [];
+  listaTiposDocumento: any[] = [];
   webcam = 0;
   tomarfoto = 0;
   currentIndexImage = 0;

@@ -71,7 +71,7 @@ export class EditarClienteComponent implements OnInit {
     boolean | string
   >();
 
-  listaTiposDocumento: [] = [];
+  listaTiposDocumento: any[] = [];
   webcam = 0;
   tomarfoto = 0;
   currentIndexImage = 0;

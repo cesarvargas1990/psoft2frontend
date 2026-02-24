@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "NODE_OPTIONS=--openssl-legacy-provider ng serve",
+    "start": "NODE_OPTIONS=--openssl-legacy-provider npx -y node@20 ./node_modules/@angular/cli/bin/ng serve",
     "build": "NODE_OPTIONS=--openssl-legacy-provider ng build",
     "test": "NODE_OPTIONS=--openssl-legacy-provider npx -y node@20 ./node_modules/@angular/cli/bin/ng test --watch=false",
     "test:coverage": "NODE_OPTIONS=--openssl-legacy-provider npx -y node@20 ./node_modules/@angular/cli/bin/ng test --watch=false --code-coverage=true",

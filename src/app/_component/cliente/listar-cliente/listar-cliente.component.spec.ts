@@ -249,15 +249,15 @@ describe('ListarClienteComponent', () => {
     expect(getSpy).toHaveBeenCalled();
   });
 
-  it('debería usar removeListener en ngOnInit cuando removeEventListener no existe', () => {
+  it('debería usar removeListener en ngOnDestroy cuando removeEventListener no existe', () => {
     component.mobileQuery = {
       removeListener: jasmine.createSpy('removeListener'),
       addListener: jasmine.createSpy('addListener')
     } as any;
     spyOn(component, 'getDatosCliente');
-    component.ngOnInit();
+    component.ngOnDestroy();
     expect(component.mobileQuery.removeListener).toHaveBeenCalled();
-    expect(component.getDatosCliente).toHaveBeenCalled();
+    expect(component.getDatosCliente).not.toHaveBeenCalled();
   });
 
   it('debería navegar al crear cliente al ejecutar volver()', () => {

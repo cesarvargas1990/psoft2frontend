@@ -200,6 +200,38 @@ describe('CrearPrestamoComponent', () => {
     discardPeriodicTasks();
   }));
 
+  it('debe cargar documentos cuando guardarPrestamo responde objeto con id_prestamo', fakeAsync(() => {
+    spyOn(prestamosService, 'guardarPrestamo').and.returnValue(
+      of({ id_prestamo: 456 } as any)
+    );
+    spyOn(prestamosService, 'renderTemplates').and.returnValue(
+      of({
+        data: [{ plantilla_html: '<html><body>Doc OK</body></html>' }]
+      } as any)
+    );
+    spyOn(Swal, 'fire').and.returnValue(Promise.resolve({ value: true }));
+
+    component.model = {
+      id_cliente: 1,
+      valorpres: 100000,
+      numcuotas: 12,
+      porcint: 1.5,
+      fec_inicial: new Date(),
+      id_periodo_pago: 1,
+      id_sistema_pago: 1,
+      id_cobrador: 1
+    };
+    component.form.patchValue(component.model);
+    component.form.setErrors(null);
+
+    component.guardarPrestamo();
+    tick();
+
+    expect(component.listarDocumentosPrestamo).toBe(true);
+    expect(component.model.id_prestamo).toBe(456);
+    expect(component.contenidoCombinado).toContain('Doc OK');
+  }));
+
   it('debe combinar contenido HTML correctamente', () => {
     const htmlItems = [
       { plantilla_html: '<html><body>Texto A</body></html>' },
@@ -216,6 +248,22 @@ describe('CrearPrestamoComponent', () => {
     component.combinarContenido({} as any);
     expect(errorSpy).toHaveBeenCalled();
     expect(component.contenidoCombinado).toBe('');
+  });
+
+  it('debe combinar contenido cuando render viene envuelto en data', () => {
+    component.combinarContenido({
+      data: [{ plantilla_html: '<html><body>Envuelto</body></html>' }]
+    } as any);
+
+    expect(component.contenidoCombinado).toContain('Envuelto');
+  });
+
+  it('debe combinar contenido cuando renderTemplates responde con rendered string', () => {
+    component.combinarContenido({
+      rendered: '<html><body>Renderizado</body></html>'
+    } as any);
+
+    expect(component.contenidoCombinado).toContain('Renderizado');
   });
 
   it('debe limpiar HTML removiendo body y head', () => {
@@ -273,23 +321,23 @@ describe('CrearPrestamoComponent', () => {
     expect(routerSpy).toHaveBeenCalledWith(['/prestamos/listar']);
   });
 
-  it('debe llamar ngOnInit y remover event listener', () => {
+  it('debe remover event listener en ngOnDestroy', () => {
     component.mobileQuery = {
       removeEventListener: jasmine.createSpy('removeEventListener'),
       addEventListener: jasmine.createSpy('addEventListener'),
       removeListener: jasmine.createSpy('removeListener'),
       addListener: jasmine.createSpy('addListener')
     } as any;
-    component.ngOnInit();
+    component.ngOnDestroy();
     expect(component.mobileQuery.removeEventListener).toHaveBeenCalled();
   });
 
-  it('debe usar removeListener si removeEventListener no existe', () => {
+  it('debe usar removeListener en ngOnDestroy si removeEventListener no existe', () => {
     component.mobileQuery = {
       removeListener: jasmine.createSpy('removeListener'),
       addListener: jasmine.createSpy('addListener')
     } as any;
-    component.ngOnInit();
+    component.ngOnDestroy();
     expect(component.mobileQuery.removeListener).toHaveBeenCalled();
   });
 
@@ -650,6 +698,33 @@ describe('CrearPrestamoComponent', () => {
     expect(component.listarDocumentosPrestamo).toBe(true);
     expect(component.model.id_prestamo).toBe(123);
     expect(component.contenidoCombinado).toContain('Contenido');
+  }));
+
+  it('debe extraer idPrestamo y rendered al guardar prestamo', fakeAsync(() => {
+    component.form.setErrors(null);
+    component.model = { id_cliente: 1 };
+    spyOn(prestamosService, 'guardarPrestamo').and.returnValue(
+      of({ data: { idPrestamo: 999 } } as any)
+    );
+    spyOn(prestamosService, 'renderTemplates').and.returnValue(
+      of({ rendered: '<html><body>Doc render</body></html>' } as any)
+    );
+
+    let callCount = 0;
+    spyOn(Swal, 'fire').and.callFake(() => {
+      callCount += 1;
+      if (callCount === 1) {
+        return Promise.resolve({ value: true }) as any;
+      }
+      return Promise.resolve({ value: true }) as any;
+    });
+
+    component.guardarPrestamo();
+    tick();
+
+    expect(component.listarDocumentosPrestamo).toBe(true);
+    expect(component.model.id_prestamo).toBe(999);
+    expect(component.contenidoCombinado).toContain('Doc render');
   }));
 
   it('debe llamar obtenerCuotasPrestamo desde Formly field change', () => {

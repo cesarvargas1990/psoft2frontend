@@ -3,6 +3,7 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
+  OnDestroy,
   ChangeDetectorRef
 } from '@angular/core';
 import { AuthService } from '../../_services/auth.service';
@@ -33,7 +34,7 @@ import { SessionStateService } from '../../core/session/session-state.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements AfterViewInit {
+export class DashboardComponent implements AfterViewInit, OnDestroy {
   constructor(
     public dialog: MatDialog,
     public authService: AuthService,
@@ -206,16 +207,6 @@ export class DashboardComponent implements AfterViewInit {
       this.total_interes = response.total_interes;
       this.total_prestado = response.total_prestado;
     });
-
-    if (this.mobileQuery.removeEventListener) {
-      this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
-    } else {
-      const legacyRemoveListener = (this.mobileQuery as any).removeListener as
-        | ((listener: () => void) => void)
-        | undefined;
-      legacyRemoveListener?.(this._mobileQueryListener);
-    }
-    // this.getSomePrivateStuff();
     this.getDatosPrestamo();
   }
   ngOnInit() {
@@ -407,6 +398,17 @@ export class DashboardComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.navService.appDrawer = this.appDrawer;
+  }
+
+  ngOnDestroy(): void {
+    if (this.mobileQuery.removeEventListener) {
+      this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
+    } else {
+      const legacyRemoveListener = (this.mobileQuery as any).removeListener as
+        | ((listener: () => void) => void)
+        | undefined;
+      legacyRemoveListener?.(this._mobileQueryListener);
+    }
   }
 
   logout() {

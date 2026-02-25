@@ -3,6 +3,7 @@ import {
   ViewChild,
   ElementRef,
   OnInit,
+  OnDestroy,
   ChangeDetectorRef,
   AfterViewInit,
   ViewContainerRef,
@@ -44,7 +45,7 @@ export interface TabType {
   templateUrl: './crear-cliente.component.html',
   styleUrls: ['./crear-cliente.component.scss']
 })
-export class CrearClienteComponent implements AfterViewInit {
+export class CrearClienteComponent implements AfterViewInit, OnDestroy {
   public isDialogMode = false;
   public showWebcam = true;
   public allowCameraSwitch = true;
@@ -371,7 +372,9 @@ export class CrearClienteComponent implements AfterViewInit {
         this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
       }
     );
+  }
 
+  ngOnDestroy(): void {
     if (this.mobileQuery.removeEventListener) {
       this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
     } else {

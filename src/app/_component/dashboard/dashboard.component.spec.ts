@@ -288,7 +288,7 @@ describe('DashboardComponent', () => {
     expect(component.dataSource).toBe(original);
   });
 
-  it('should call refresh and remove event listener', () => {
+  it('should call refresh and load totals/prestamos', () => {
     component.mobileQuery = {
       removeEventListener: jasmine.createSpy('removeEventListener'),
       addEventListener: jasmine.createSpy('addEventListener'),
@@ -308,19 +308,31 @@ describe('DashboardComponent', () => {
     component.refresh();
     expect(prestamosServiceSpy.totales_dashboard).toHaveBeenCalled();
     expect(component.total_capital_prestado).toBe('1000');
-    expect(component.mobileQuery.removeEventListener).toHaveBeenCalled();
     expect(component.getDatosPrestamo).toHaveBeenCalled();
   });
 
-  it('should call refresh and use removeListener fallback', () => {
+  it('should remove media listener on destroy with removeEventListener', () => {
+    component.mobileQuery = {
+      removeEventListener: jasmine.createSpy('removeEventListener'),
+      addEventListener: jasmine.createSpy('addEventListener'),
+      removeListener: jasmine.createSpy('removeListener'),
+      addListener: jasmine.createSpy('addListener')
+    } as any;
+
+    component.ngOnDestroy();
+
+    expect(component.mobileQuery.removeEventListener).toHaveBeenCalled();
+  });
+
+  it('should remove media listener on destroy with removeListener fallback', () => {
     component.mobileQuery = {
       removeListener: jasmine.createSpy('removeListener'),
       addListener: jasmine.createSpy('addListener')
     } as any;
-    spyOn(component, 'getDatosPrestamo');
-    component.refresh();
+
+    component.ngOnDestroy();
+
     expect(component.mobileQuery.removeListener).toHaveBeenCalled();
-    expect(component.getDatosPrestamo).toHaveBeenCalled();
   });
 
   it('should not delete prestamo when confirm is cancelled', fakeAsync(() => {

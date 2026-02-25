@@ -3,6 +3,7 @@ import {
   ViewChild,
   ElementRef,
   OnInit,
+  OnDestroy,
   ChangeDetectorRef,
   AfterViewInit
 } from '@angular/core';
@@ -44,7 +45,7 @@ export interface TabType {
   templateUrl: './listar-cliente.component.html',
   styleUrls: ['./listar-cliente.component.scss']
 })
-export class ListarClienteComponent implements AfterViewInit {
+export class ListarClienteComponent implements AfterViewInit, OnDestroy {
   constructor(
     public authService: AuthService,
     private navService: NavService,
@@ -163,6 +164,14 @@ export class ListarClienteComponent implements AfterViewInit {
   }
 
   ngOnInit() {
+    this.getDatosCliente();
+  }
+
+  ngAfterViewInit() {
+    this.navService.appDrawer = this.appDrawer;
+  }
+
+  ngOnDestroy(): void {
     if (this.mobileQuery.removeEventListener) {
       this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
     } else {
@@ -171,11 +180,6 @@ export class ListarClienteComponent implements AfterViewInit {
         | undefined;
       legacyRemoveListener?.(this._mobileQueryListener);
     }
-    this.getDatosCliente();
-  }
-
-  ngAfterViewInit() {
-    this.navService.appDrawer = this.appDrawer;
   }
 
   getDatosCliente() {

@@ -2,7 +2,7 @@ import {
   Component,
   ViewChild,
   ElementRef,
-  OnInit,
+  OnDestroy,
   ChangeDetectorRef,
   AfterViewInit
 } from '@angular/core';
@@ -38,7 +38,7 @@ import { SessionStateService } from '../../../core/session/session-state.service
   templateUrl: './crear-documento.component.html',
   styleUrls: ['./crear-documento.component.scss']
 })
-export class CrearDocumentoComponent implements AfterViewInit {
+export class CrearDocumentoComponent implements AfterViewInit, OnDestroy {
   html = ``;
   config: any = {};
   templates: any = {};
@@ -107,7 +107,7 @@ export class CrearDocumentoComponent implements AfterViewInit {
 
   private _mobileQueryListener: () => void;
 
-  ngOnInit() {
+  ngOnDestroy(): void {
     if (this.mobileQuery.removeEventListener) {
       this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
     } else {

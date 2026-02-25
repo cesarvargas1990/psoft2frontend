@@ -183,7 +183,7 @@ describe('EmpresaParametrosComponent', () => {
     expect(navSpy).toHaveBeenCalledWith(['dashboard']);
   });
 
-  it('debe remover event listener con removeEventListener si existe', () => {
+  it('debe remover event listener con removeEventListener en ngOnDestroy', () => {
     component.mobileQuery = {
       removeEventListener: jasmine.createSpy('removeEventListener'),
       addEventListener: jasmine.createSpy('addEventListener'),
@@ -191,18 +191,18 @@ describe('EmpresaParametrosComponent', () => {
       addListener: jasmine.createSpy('addListener')
     } as any;
 
-    component.ngOnInit();
+    component.ngOnDestroy();
 
     expect(component.mobileQuery.removeEventListener).toHaveBeenCalled();
   });
 
-  it('debe remover event listener con removeListener si no existe removeEventListener', () => {
+  it('debe remover event listener con removeListener en ngOnDestroy si no existe removeEventListener', () => {
     component.mobileQuery = {
       removeListener: jasmine.createSpy('removeListener'),
       addListener: jasmine.createSpy('addListener')
     } as any;
 
-    component.ngOnInit();
+    component.ngOnDestroy();
 
     expect(component.mobileQuery.removeListener).toHaveBeenCalled();
   });

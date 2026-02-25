@@ -282,12 +282,12 @@ describe('CrearDocumentoComponent', () => {
     expect(component.model.id).toBe(2);
   });
 
-  it('debería usar removeListener en ngOnInit cuando removeEventListener no existe', () => {
+  it('debería usar removeListener en ngOnDestroy cuando removeEventListener no existe', () => {
     component.mobileQuery = {
       removeListener: jasmine.createSpy('removeListener'),
       addListener: jasmine.createSpy('addListener')
     } as any;
-    component.ngOnInit();
+    component.ngOnDestroy();
     expect(component.mobileQuery.removeListener).toHaveBeenCalled();
   });
 

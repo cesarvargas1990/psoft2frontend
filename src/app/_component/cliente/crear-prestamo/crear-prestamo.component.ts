@@ -3,6 +3,7 @@ import {
   ViewChild,
   ElementRef,
   OnInit,
+  OnDestroy,
   ChangeDetectorRef,
   AfterViewInit
 } from '@angular/core';
@@ -29,7 +30,7 @@ import { SessionStateService } from '../../../core/session/session-state.service
   templateUrl: './crear-prestamo.component.html',
   styleUrls: ['./crear-prestamo.component.scss']
 })
-export class CrearPrestamoComponent implements AfterViewInit {
+export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
   panelOpenState = false;
   plantillas_html: any = {};
   config: any = {};
@@ -91,7 +92,9 @@ export class CrearPrestamoComponent implements AfterViewInit {
     }
   }
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  ngOnDestroy(): void {
     if (this.mobileQuery.removeEventListener) {
       this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
     } else {
@@ -379,24 +382,34 @@ export class CrearPrestamoComponent implements AfterViewInit {
       }).then((result) => {
         if (result.value === true) {
           this.prestamosService
-            .guardarPrestamo(this.model)
+            .guardarPrestamo(this.form.value)
             .subscribe((response) => {
               console.log(response);
-              if (response) {
+              const idPrestamo = this.extractPrestamoId(response);
+              if (idPrestamo !== null) {
                 Swal.fire({
                   type: 'info',
                   title: 'Información',
-                  text: 'Se crea satisfactoriamente el prestamo # ' + response
+                  text: 'Se crea satisfactoriamente el prestamo # ' + idPrestamo
                 }).then((r) => {
                   if (r.value === true) {
                     this.listarDocumentosPrestamo = true;
-                    this.model.id_prestamo = response;
+                    this.model.id_prestamo = idPrestamo;
+                    this.contenidoCombinado = '';
                     this.prestamosService
                       .renderTemplates(this.model)
                       .subscribe((resp) => {
                         console.log(resp);
-                        this.plantillas_html = resp;
-                        this.combinarContenido(resp);
+                        this.plantillas_html =
+                          this.extractRenderedTemplates(resp);
+                        if (this.plantillas_html.length === 0) {
+                          Swal.fire({
+                            type: 'warning',
+                            title: 'Sin documentos',
+                            text: 'El préstamo fue creado, pero no se generaron documentos. Verifique las plantillas configuradas.'
+                          });
+                        }
+                        this.combinarContenido(this.plantillas_html);
                       });
                   }
                 });
@@ -414,11 +427,12 @@ export class CrearPrestamoComponent implements AfterViewInit {
   }
 
   combinarContenido(response: any): void {
-    if (!Array.isArray(response)) {
+    const templates = this.extractRenderedTemplates(response);
+    if (!Array.isArray(response) && templates.length === 0) {
       console.error('Response no es un arreglo:', response);
       return;
     }
-    this.contenidoCombinado = response
+    this.contenidoCombinado = templates
       .map((item) => {
         const contenidoLimpio = this.limpiarHTML(item.plantilla_html);
         return `
@@ -486,5 +500,103 @@ export class CrearPrestamoComponent implements AfterViewInit {
       .replace(/<head[^>]*>.*?<\/head>/gi, '')
       .replace(/<body[^>]*>/gi, '')
       .replace(/<\/body>/gi, '');
+  }
+
+  private extractPrestamoId(response: unknown): number | string | null {
+    if (typeof response === 'number' || typeof response === 'string') {
+      return response;
+    }
+
+    if (response && typeof response === 'object') {
+      const record = response as Record<string, unknown>;
+      const candidates = [
+        record.id_prestamo,
+        record.id,
+        record.idPrestamo,
+        record.idprestamo,
+        (record.data as Record<string, unknown> | undefined)?.id_prestamo,
+        (record.data as Record<string, unknown> | undefined)?.id,
+        (record.data as Record<string, unknown> | undefined)?.idPrestamo,
+        (record.data as Record<string, unknown> | undefined)?.idprestamo
+      ];
+
+      for (const candidate of candidates) {
+        if (typeof candidate === 'number' || typeof candidate === 'string') {
+          return candidate;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  private extractRenderedTemplates(
+    response: unknown
+  ): Array<{ plantilla_html: string }> {
+    if (Array.isArray(response)) {
+      return response
+        .map((item) => this.mapToTemplate(item))
+        .filter((item): item is { plantilla_html: string } => item !== null);
+    }
+
+    if (typeof response === 'string') {
+      try {
+        return this.extractRenderedTemplates(JSON.parse(response));
+      } catch (_error) {
+        return [];
+      }
+    }
+
+    if (response && typeof response === 'object') {
+      const record = response as Record<string, unknown>;
+
+      const mapped = this.mapToTemplate(record);
+      if (mapped) {
+        return [mapped];
+      }
+
+      const nestedCandidates = [
+        record.data,
+        record.documentos,
+        record.templates,
+        record.plantillas_html,
+        record.result,
+        record.rendered
+      ];
+      for (const candidate of nestedCandidates) {
+        if (candidate !== undefined) {
+          const extracted = this.extractRenderedTemplates(candidate);
+          if (extracted.length > 0) {
+            return extracted;
+          }
+        }
+      }
+    }
+
+    return [];
+  }
+
+  private mapToTemplate(value: unknown): { plantilla_html: string } | null {
+    if (typeof value === 'string') {
+      return { plantilla_html: value };
+    }
+
+    if (!value || typeof value !== 'object') {
+      return null;
+    }
+
+    const record = value as Record<string, unknown>;
+    const rawTemplate = [
+      record.plantilla_html,
+      record.rendered,
+      record.html,
+      record.contenido
+    ].find((candidate) => typeof candidate === 'string');
+
+    if (typeof rawTemplate === 'string') {
+      return { plantilla_html: rawTemplate };
+    }
+
+    return null;
   }
 }

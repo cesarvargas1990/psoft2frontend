@@ -4,6 +4,7 @@ import {
   ViewChild,
   ElementRef,
   OnInit,
+  OnDestroy,
   ChangeDetectorRef
 } from '@angular/core';
 
@@ -28,7 +29,7 @@ import { SessionStateService } from '../../../core/session/session-state.service
   templateUrl: './empresa-parametros.component.html',
   styleUrls: ['./empresa-parametros.component.scss']
 })
-export class EmpresaParametrosComponent implements OnInit {
+export class EmpresaParametrosComponent implements OnInit, OnDestroy {
   form = new UntypedFormGroup({});
   model: any = {};
   firmaPreview = '';
@@ -222,7 +223,9 @@ export class EmpresaParametrosComponent implements OnInit {
 
     console.log('los datos empresa');
     console.log(this.datosEmpresa);
+  }
 
+  ngOnDestroy(): void {
     if (this.mobileQuery.removeEventListener) {
       this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
     } else {

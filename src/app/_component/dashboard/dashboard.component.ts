@@ -25,6 +25,7 @@ import {
 import Swal from 'sweetalert2';
 
 import { Router } from '@angular/router';
+import { SessionStateService } from '../../core/session/session-state.service';
 
 @Component({
   standalone: false,
@@ -37,6 +38,7 @@ export class DashboardComponent implements AfterViewInit {
     public dialog: MatDialog,
     public authService: AuthService,
     private navService: NavService,
+    private readonly sessionState: SessionStateService,
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
     public prestamosService: PrestamosService,
@@ -132,11 +134,11 @@ export class DashboardComponent implements AfterViewInit {
 
   version = VERSION;
 
-  menuUsuario = JSON.parse(localStorage.getItem('menu_usuario'));
+  menuUsuario: unknown = [];
 
-  permisos = JSON.parse(localStorage.getItem('permisos'));
+  permisos: string[] = [];
 
-  navItems: NavItem[] = this.menuUsuario;
+  navItems: NavItem[] = [];
 
   dataFromServer: any = [];
 
@@ -218,6 +220,10 @@ export class DashboardComponent implements AfterViewInit {
     this.getDatosPrestamo();
   }
   ngOnInit() {
+    this.menuUsuario = this.sessionState.parseStoredJson('menu_usuario', []);
+    this.permisos = this.sessionState.getPermissions();
+    this.navItems = this.sessionState.getMenuItems();
+
     this.config = {
       height: 500,
       theme: 'modern',

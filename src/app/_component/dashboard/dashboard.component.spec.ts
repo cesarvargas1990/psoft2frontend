@@ -34,6 +34,7 @@ import Swal from 'sweetalert2';
 import { PrestamosService } from '../../_services/prestamos/prestamos.service';
 import { AuthService } from '../../_services/auth.service';
 import { NavService } from '../../_services/nav.service';
+import { SessionStateService } from '../../core/session/session-state.service';
 import { Router } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
@@ -380,6 +381,7 @@ describe('DashboardComponent', () => {
       dialogSpy,
       authServiceSpy,
       { appDrawer: null } as any,
+      TestBed.inject(SessionStateService),
       changeDetectorRef,
       mediaMatcher,
       prestamosServiceSpy,

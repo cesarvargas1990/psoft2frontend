@@ -9,6 +9,7 @@ import { NavService } from '../../../_services/nav.service';
 import { TipodocidentiService } from '../../../_services/tipodocidenti/tipodocidenti.service';
 import { UsersService } from '../../../_services/users/users.service';
 import { PrestamosService } from '../../../_services/prestamos/prestamos.service';
+import { SessionStateService } from '../../../core/session/session-state.service';
 import { MediaMatcher } from '@angular/cdk/layout';
 import Swal from 'sweetalert2';
 import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
@@ -330,6 +331,7 @@ describe('CrearClienteComponent', () => {
       { detectChanges: () => {} } as any,
       mediaMatcher,
       router,
+      TestBed.inject(SessionStateService),
       TestBed.inject(TipodocidentiService),
       TestBed.inject(UsersService),
       TestBed.inject(PrestamosService),

@@ -10,6 +10,10 @@ import { retry, catchError } from 'rxjs/operators';
 import { LoginResponse } from '../_models/user';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import {
+  extractNavItemsFromUnknown,
+  extractStringArrayFromUnknown
+} from '../core/session/nav-menu.mapper';
 
 @Injectable({
   providedIn: 'root'
@@ -70,10 +74,39 @@ export class AuthService {
 
   // After login save token and other values(if any) in localStorage
   setUser(resp: LoginResponse) {
+    const menuUsuarioCandidates = [
+      resp?.menu_usuario,
+      (resp as any)?.menu,
+      (resp as any)?.data?.menu_usuario,
+      (resp as any)?.data?.menu,
+      (resp as any)?.usuario?.menu_usuario,
+      (resp as any)?.user?.menu_usuario,
+      resp?.data
+    ];
+    const permisosCandidates = [
+      resp?.permisos,
+      (resp as any)?.permissions,
+      (resp as any)?.data?.permisos,
+      (resp as any)?.data?.permissions,
+      (resp as any)?.usuario?.permisos,
+      (resp as any)?.user?.permisos,
+      resp?.data
+    ];
+
+    const menuUsuario =
+      menuUsuarioCandidates
+        .map((candidate) => extractNavItemsFromUnknown(candidate))
+        .find((items) => items.length > 0) ?? [];
+
+    const permisos =
+      permisosCandidates
+        .map((candidate) => extractStringArrayFromUnknown(candidate))
+        .find((items) => items.length > 0) ?? [];
+
     localStorage.setItem('name', resp.name);
     localStorage.setItem('access_token', resp.access_token);
-    localStorage.setItem('menu_usuario', JSON.stringify(resp.menu_usuario));
-    localStorage.setItem('permisos', JSON.stringify(resp.permisos));
+    localStorage.setItem('menu_usuario', JSON.stringify(menuUsuario));
+    localStorage.setItem('permisos', JSON.stringify(permisos));
     localStorage.setItem('id', JSON.stringify(resp.id));
     localStorage.setItem('id_usuario', JSON.stringify(resp.id));
     localStorage.setItem('id_empresa', resp.id_empresa);
@@ -141,10 +174,8 @@ export class AuthService {
   }
 
   tienePermiso(name) {
-    if (localStorage.getItem('permisos') == null) {
-      return false;
-    }
-    const permisos = JSON.parse(localStorage.getItem('permisos'));
-    return permisos.includes(name);
+    return extractStringArrayFromUnknown(
+      localStorage.getItem('permisos')
+    ).includes(name);
   }
 }

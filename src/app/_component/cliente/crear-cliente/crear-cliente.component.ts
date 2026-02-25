@@ -27,6 +27,7 @@ import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { Router } from '@angular/router';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { environment } from '../../../../environments/environment';
+import { SessionStateService } from '../../../core/session/session-state.service';
 import {
   MatLegacyDialogRef as MatDialogRef,
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
@@ -326,9 +327,9 @@ export class CrearClienteComponent implements AfterViewInit {
 
   version = VERSION;
 
-  menuUsuario = JSON.parse(localStorage.getItem('menu_usuario'));
+  menuUsuario: unknown = [];
 
-  navItems: NavItem[] = this.menuUsuario;
+  navItems: NavItem[] = [];
 
   datosCliente: any = [];
 
@@ -339,12 +340,16 @@ export class CrearClienteComponent implements AfterViewInit {
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
     public router: Router,
+    private readonly sessionState: SessionStateService,
     public tipodocidentiService: TipodocidentiService,
     public usersService: UsersService,
     public prestamosService: PrestamosService,
     @Optional() public dialogRef?: MatDialogRef<CrearClienteComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData?: any
   ) {
+    this.menuUsuario = this.sessionState.parseStoredJson('menu_usuario', []);
+    this.navItems = this.sessionState.getMenuItems();
+
     this.isDialogMode = !!this.dialogRef;
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();

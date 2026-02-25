@@ -30,6 +30,7 @@ import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-pag
 import { UntypedFormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { Router } from '@angular/router';
+import { SessionStateService } from '../../../core/session/session-state.service';
 
 @Component({
   standalone: false,
@@ -64,9 +65,9 @@ export class CrearDocumentoComponent implements AfterViewInit {
 
   version = VERSION;
 
-  menuUsuario = JSON.parse(localStorage.getItem('menu_usuario'));
-  permisos = JSON.parse(localStorage.getItem('permisos'));
-  navItems: NavItem[] = this.menuUsuario;
+  menuUsuario: unknown = [];
+  permisos: string[] = [];
+  navItems: NavItem[] = [];
 
   datosFormasPago: any = [];
 
@@ -82,11 +83,16 @@ export class CrearDocumentoComponent implements AfterViewInit {
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
     public router: Router,
+    private readonly sessionState: SessionStateService,
     public tipodocidentiService: TipodocidentiService,
     public usersService: UsersService,
     public prestamosService: PrestamosService,
     public dialog: MatDialog
   ) {
+    this.menuUsuario = this.sessionState.parseStoredJson('menu_usuario', []);
+    this.permisos = this.sessionState.getPermissions();
+    this.navItems = this.sessionState.getMenuItems();
+
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     if (this.mobileQuery.addEventListener) {

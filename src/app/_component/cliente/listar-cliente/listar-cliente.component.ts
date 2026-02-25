@@ -28,6 +28,7 @@ import { Router } from '@angular/router';
 import { ListarPrestamosclienteComponent } from '../../../_component/cliente/listar-cliente/dialogs/listar-prestamoscliente/listar-prestamoscliente.component';
 import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
+import { SessionStateService } from '../../../core/session/session-state.service';
 
 import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
@@ -47,12 +48,17 @@ export class ListarClienteComponent implements AfterViewInit {
   constructor(
     public authService: AuthService,
     private navService: NavService,
+    private readonly sessionState: SessionStateService,
     public clienteService: ClienteService,
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
     public dialog: MatDialog,
     public router: Router
   ) {
+    this.menuUsuario = this.sessionState.parseStoredJson('menu_usuario', []);
+    this.permisos = this.sessionState.getPermissions();
+    this.navItems = this.sessionState.getMenuItems();
+
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     if (this.mobileQuery.addEventListener) {
@@ -95,10 +101,10 @@ export class ListarClienteComponent implements AfterViewInit {
   // webcam snapshot trigger
   private trigger: Subject<void> = new Subject<void>();
 
-  menuUsuario = JSON.parse(localStorage.getItem('menu_usuario'));
-  permisos = JSON.parse(localStorage.getItem('permisos'));
+  menuUsuario: unknown = [];
+  permisos: string[] = [];
   urlimage: any = {};
-  navItems: NavItem[] = this.menuUsuario;
+  navItems: NavItem[] = [];
   currentIndexImage = 0;
   model: any = {};
   data: any = {};

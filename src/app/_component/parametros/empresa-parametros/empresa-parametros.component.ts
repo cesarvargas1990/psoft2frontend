@@ -20,6 +20,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
+import { SessionStateService } from '../../../core/session/session-state.service';
 
 @Component({
   standalone: false,
@@ -47,10 +48,10 @@ export class EmpresaParametrosComponent implements OnInit {
 
   version = VERSION;
 
-  menuUsuario = JSON.parse(localStorage.getItem('menu_usuario'));
+  menuUsuario: unknown = [];
 
-  permisos = JSON.parse(localStorage.getItem('permisos'));
-  navItems: NavItem[] = this.menuUsuario;
+  permisos: string[] = [];
+  navItems: NavItem[] = [];
 
   datosFormasPago: any = [];
 
@@ -62,8 +63,13 @@ export class EmpresaParametrosComponent implements OnInit {
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
     public router: Router,
-    public empresaService: EmpresaService
+    public empresaService: EmpresaService,
+    private readonly sessionState: SessionStateService
   ) {
+    this.menuUsuario = this.sessionState.parseStoredJson('menu_usuario', []);
+    this.permisos = this.sessionState.getPermissions();
+    this.navItems = this.sessionState.getMenuItems();
+
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     if (this.mobileQuery.addEventListener) {

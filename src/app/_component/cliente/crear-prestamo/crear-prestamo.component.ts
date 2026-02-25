@@ -21,6 +21,7 @@ import { FormlyFormOptions, FormlyFieldConfig } from '@ngx-formly/core';
 import { Router } from '@angular/router';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { CrearClienteComponent } from '../crear-cliente/crear-cliente.component';
+import { SessionStateService } from '../../../core/session/session-state.service';
 
 @Component({
   standalone: false,
@@ -55,8 +56,8 @@ export class CrearPrestamoComponent implements AfterViewInit {
   private _mobileQueryListener: () => void;
 
   version = VERSION;
-  menuUsuario = JSON.parse(localStorage.getItem('menu_usuario'));
-  navItems: NavItem[] = this.menuUsuario;
+  menuUsuario: unknown = [];
+  navItems: NavItem[] = [];
   contenidoCombinado = '';
 
   datosCliente: any = [];
@@ -70,10 +71,14 @@ export class CrearPrestamoComponent implements AfterViewInit {
     media: MediaMatcher,
     public router: Router,
     public dialog: MatDialog,
+    private readonly sessionState: SessionStateService,
     public tipodocidentiService: TipodocidentiService,
     public usersService: UsersService,
     public prestamosService: PrestamosService
   ) {
+    this.menuUsuario = this.sessionState.parseStoredJson('menu_usuario', []);
+    this.navItems = this.sessionState.getMenuItems();
+
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     if (this.mobileQuery.addEventListener) {

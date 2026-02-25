@@ -14,6 +14,7 @@ import { EmpresaParametrosComponent } from './empresa-parametros.component';
 import { AuthService } from '../../../_services/auth.service';
 import { NavService } from '../../../_services/nav.service';
 import { EmpresaService } from '../../../_services/empresa/empresa.service';
+import { SessionStateService } from '../../../core/session/session-state.service';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { of } from 'rxjs';
 import Swal from 'sweetalert2';
@@ -231,7 +232,8 @@ describe('EmpresaParametrosComponent', () => {
       changeDetectorRef,
       mediaMatcher,
       TestBed.inject(Router),
-      TestBed.inject(EmpresaService)
+      TestBed.inject(EmpresaService),
+      TestBed.inject(SessionStateService)
     );
     const mediaQuery = (cmp as any).mobileQuery;
     expect(mediaQuery.addEventListener).toHaveBeenCalled();

@@ -179,7 +179,6 @@ export class DashboardComponent implements AfterViewInit {
   }
 
   eliminarPrestamo(row) {
-    console.log(row);
     Swal.fire({
       title: 'Esta seguro?',
       text: 'Desea eliminar el prestamo?',

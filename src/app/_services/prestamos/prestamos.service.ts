@@ -55,6 +55,29 @@ export class PrestamosService {
     private authService: AuthService
   ) {}
 
+  private getStorageValue(key: string): string {
+    const rawValue = localStorage.getItem(key);
+    if (rawValue === null) {
+      return '';
+    }
+
+    let parsedValue: unknown = rawValue;
+    while (typeof parsedValue === 'string') {
+      const trimmedValue = parsedValue.trim();
+      if (!trimmedValue) {
+        return '';
+      }
+
+      try {
+        parsedValue = JSON.parse(trimmedValue);
+      } catch (_error) {
+        return trimmedValue;
+      }
+    }
+
+    return String(parsedValue ?? '');
+  }
+
   handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
@@ -82,7 +105,7 @@ export class PrestamosService {
   }
 
   calcularCuotas(data): Observable<any> {
-    data.id_empresa = localStorage.getItem('id_empresa');
+    data.id_empresa = this.getStorageValue('id_empresa');
     return this.http
       .post<any>(`${this.services.calcularCuotas}`, data, this.httpOpts)
       .pipe(retry(2), catchError(this.handleError));
@@ -91,7 +114,7 @@ export class PrestamosService {
   getFormasPago(): Observable<any> {
     console.log('la data');
 
-    const id_empresa = localStorage.getItem('id_empresa');
+    const id_empresa = this.getStorageValue('id_empresa');
     return this.http
       .get<any>(
         `${this.services.listaformaspago}` + '/' + id_empresa,
@@ -134,8 +157,8 @@ export class PrestamosService {
   }
 
   guardarFormaPago(data): Observable<any> {
-    const id_empresa = localStorage.getItem('id_empresa');
-    const id_usureg = localStorage.getItem('id_usuario');
+    const id_empresa = this.getStorageValue('id_empresa');
+    const id_usureg = this.getStorageValue('id_usuario');
     data.id_empresa = id_empresa;
     data.id_usureg = id_usureg;
     return this.http
@@ -144,8 +167,8 @@ export class PrestamosService {
   }
 
   guardarDocumento(data): Observable<any> {
-    const id_empresa = localStorage.getItem('id_empresa');
-    const id_usureg = localStorage.getItem('id_usuario');
+    const id_empresa = this.getStorageValue('id_empresa');
+    const id_usureg = this.getStorageValue('id_usuario');
     data.id_empresa = id_empresa;
     data.id_usureg = id_usureg;
     return this.http
@@ -155,14 +178,14 @@ export class PrestamosService {
 
   listaTiposDocumento(): Observable<any> {
     const data: any = {};
-    const id_empresa = localStorage.getItem('id_empresa');
+    const id_empresa = this.getStorageValue('id_empresa');
     return this.http
       .get<any>(`${this.services.pstdocadjuntos}`, this.httpOpts)
       .pipe(retry(2), catchError(this.handleError));
   }
 
   listaVariablesPlantillas(): Observable<any> {
-    const id_empresa = localStorage.getItem('id_empresa');
+    const id_empresa = this.getStorageValue('id_empresa');
     return this.http
       .get<any>(
         `${this.services.generarVariablesPlantillas}` + '/' + id_empresa,
@@ -172,7 +195,7 @@ export class PrestamosService {
   }
 
   listaFechasPago(id_prestamo): Observable<any> {
-    const id_empresa = localStorage.getItem('id_empresa');
+    const id_empresa = this.getStorageValue('id_empresa');
     return this.http
       .get<any>(
         `${this.services.psfechaspago}` + '/' + id_prestamo,
@@ -183,7 +206,7 @@ export class PrestamosService {
 
   prueba(): Observable<any> {
     const data: any = {};
-    const id_empresa = localStorage.getItem('id_empresa');
+    const id_empresa = this.getStorageValue('id_empresa');
 
     return this.http
       .get<any>(`${this.services.generarVariablesPlantillas}`, this.httpOpts)
@@ -192,7 +215,7 @@ export class PrestamosService {
 
   consultaPlantillasDocumentos(): Observable<any> {
     const data: any = {};
-    const id_empresa = localStorage.getItem('id_empresa');
+    const id_empresa = this.getStorageValue('id_empresa');
     data.id_empresa = id_empresa;
 
     return this.http
@@ -206,7 +229,7 @@ export class PrestamosService {
 
   pstiposistemaprest(): Observable<any> {
     const data: any = {};
-    const id_empresa = localStorage.getItem('id_empresa');
+    const id_empresa = this.getStorageValue('id_empresa');
     data.id_empresa = id_empresa;
 
     return this.http
@@ -215,8 +238,8 @@ export class PrestamosService {
   }
 
   guardarPrestamo(data): Observable<any> {
-    const id_empresa = localStorage.getItem('id_empresa');
-    const id_usureg = localStorage.getItem('id_usuario');
+    const id_empresa = this.getStorageValue('id_empresa');
+    const id_usureg = this.getStorageValue('id_usuario');
     const fecha = this.obtenerFechaHoraCliente();
     data.id_empresa = id_empresa;
     data.id_usureg = id_usureg;
@@ -227,8 +250,8 @@ export class PrestamosService {
   }
 
   renderTemplates(data): Observable<any> {
-    const id_empresa = localStorage.getItem('id_empresa');
-    const id_usureg = localStorage.getItem('id_usuario');
+    const id_empresa = this.getStorageValue('id_empresa');
+    const id_usureg = this.getStorageValue('id_usuario');
     data.id_empresa = id_empresa;
     data.id_usureg = id_usureg;
     return this.http
@@ -237,8 +260,8 @@ export class PrestamosService {
   }
 
   listadoPrestamos(data): Observable<any> {
-    data.id_empresa = localStorage.getItem('id_empresa');
-    data.id_user = localStorage.getItem('id');
+    data.id_empresa = this.getStorageValue('id_empresa');
+    data.id_user = this.getStorageValue('id');
     return this.http.post(
       `${this.services.listadoPrestamos}`,
       data,
@@ -248,8 +271,8 @@ export class PrestamosService {
 
   listadoArchivosCliente(id): Observable<any> {
     const data: any = {};
-    data.id_empresa = localStorage.getItem('id_empresa');
-    data.id_user = localStorage.getItem('id');
+    data.id_empresa = this.getStorageValue('id_empresa');
+    data.id_user = this.getStorageValue('id');
     return this.http.get(
       `${this.services.psdocadjuntos}` + '/' + id,
       this.httpOpts
@@ -257,13 +280,13 @@ export class PrestamosService {
   }
 
   saveFormaPago(data): Observable<any> {
-    data.id_empresa = localStorage.getItem('id_empresa');
-    data.id_user = localStorage.getItem('id');
+    data.id_empresa = this.getStorageValue('id_empresa');
+    data.id_user = this.getStorageValue('id');
     return this.http.post(`${this.services.psformapago}`, data, this.httpOpts);
   }
 
   updateFormaPago(data): Observable<any> {
-    data.id_empresa = localStorage.getItem('id_empresa');
+    data.id_empresa = this.getStorageValue('id_empresa');
 
     return this.http.put(
       `${this.services.psformapago}` + '/' + data.id,
@@ -273,7 +296,7 @@ export class PrestamosService {
   }
 
   updatePlantillaDocumento(data): Observable<any> {
-    data.id_empresa = localStorage.getItem('id_empresa');
+    data.id_empresa = this.getStorageValue('id_empresa');
 
     return this.http.put(
       `${this.services.pstdocplant}` + '/' + data.id,
@@ -283,8 +306,8 @@ export class PrestamosService {
   }
 
   registrarPagoCuota(data): Observable<any> {
-    data.id_empresa = localStorage.getItem('id_empresa');
-    data.id_user = localStorage.getItem('id');
+    data.id_empresa = this.getStorageValue('id_empresa');
+    data.id_user = this.getStorageValue('id');
     data.fecha = this.obtenerFechaHoraCliente();
     return this.http.post(`${this.services.pspagos}`, data, this.httpOpts);
   }
@@ -292,7 +315,7 @@ export class PrestamosService {
   totales_dashboard(): Observable<any> {
     const data: any = {};
     data.fecha = this.fechaActual();
-    data.id_empresa = localStorage.getItem('id_empresa');
+    data.id_empresa = this.getStorageValue('id_empresa');
     return this.http.post(
       `${this.services.totales_dashboard}`,
       data,

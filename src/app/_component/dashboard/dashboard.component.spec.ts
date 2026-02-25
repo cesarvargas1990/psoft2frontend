@@ -172,6 +172,14 @@ describe('DashboardComponent', () => {
     expect(component.contenidoCombinado).toContain('Doc1');
   });
 
+  it('should combine HTML content when response is wrapped in data', () => {
+    const response = {
+      data: [{ plantilla_html: '<html><body>DocData</body></html>' }]
+    };
+    component.combinarContenido(response as any);
+    expect(component.contenidoCombinado).toContain('DocData');
+  });
+
   it('should apply filter to table', () => {
     component.applyFilter('cliente');
     expect(component.dataSource.filter).toBe('cliente');

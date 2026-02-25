@@ -253,8 +253,8 @@ export class DashboardComponent implements AfterViewInit {
     this.model.id_prestamo = row.id_prestamo;
     this.prestamosService.renderTemplates(this.model).subscribe((response) => {
       console.log(response);
-      this.plantillas_html = response;
-      this.combinarContenido(response);
+      this.plantillas_html = this.extractRenderedTemplates(response);
+      this.combinarContenido(this.plantillas_html);
     });
   }
 
@@ -338,12 +338,13 @@ export class DashboardComponent implements AfterViewInit {
   combinarContenido(response: any): void {
     console.log('Response recibido:', response);
 
-    if (!Array.isArray(response)) {
+    const templates = this.extractRenderedTemplates(response);
+    if (!Array.isArray(response) && templates.length === 0) {
       console.error('Response no es un arreglo:', response);
       return;
     }
 
-    this.contenidoCombinado = response
+    this.contenidoCombinado = templates
       .map((item) => {
         // Limpia etiquetas <html>, <head>, <body>
         const contenidoLimpio = this.limpiarHTML(item.plantilla_html);
@@ -358,6 +359,40 @@ export class DashboardComponent implements AfterViewInit {
       .join('');
 
     console.log('Contenido combinado:', this.contenidoCombinado);
+  }
+
+  private extractRenderedTemplates(
+    response: unknown
+  ): Array<{ plantilla_html: string }> {
+    if (Array.isArray(response)) {
+      return response as Array<{ plantilla_html: string }>;
+    }
+
+    if (typeof response === 'string') {
+      try {
+        return this.extractRenderedTemplates(JSON.parse(response));
+      } catch (_error) {
+        return [];
+      }
+    }
+
+    if (response && typeof response === 'object') {
+      const record = response as Record<string, unknown>;
+      const nestedCandidates = [
+        record.data,
+        record.documentos,
+        record.templates,
+        record.plantillas_html,
+        record.result
+      ];
+      for (const candidate of nestedCandidates) {
+        if (Array.isArray(candidate)) {
+          return candidate as Array<{ plantilla_html: string }>;
+        }
+      }
+    }
+
+    return [];
   }
 
   limpiarHTML(html: string): string {

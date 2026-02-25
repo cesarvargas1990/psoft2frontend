@@ -121,6 +121,17 @@ describe('CrearDocumentoComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
+  it('debería leer plantillas cuando backend responde en data', () => {
+    spyOn(
+      component.prestamosService,
+      'consultaPlantillasDocumentos'
+    ).and.returnValue(of({ data: [{ nombre: 'Plantilla A' }] } as any));
+
+    component.getDatosDocumentos();
+
+    expect(component.dataSource.data.length).toBe(1);
+  });
+
   it('debería mostrar error si el formulario es inválido', () => {
     const spy = spyOn(Swal, 'fire');
     component.form.setErrors({ invalid: true });

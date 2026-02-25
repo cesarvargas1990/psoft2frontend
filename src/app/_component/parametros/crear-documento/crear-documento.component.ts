@@ -255,7 +255,7 @@ export class CrearDocumentoComponent implements AfterViewInit {
   getDatosDocumentos() {
     this.prestamosService.consultaPlantillasDocumentos().subscribe(
       (response) => {
-        this.datosFormasPago = response;
+        this.datosFormasPago = this.extractDocumentTemplates(response);
         const DATOS: documento[] = this.datosFormasPago;
         console.log(DATOS);
         this.dataSource = new MatTableDataSource(DATOS);
@@ -266,6 +266,37 @@ export class CrearDocumentoComponent implements AfterViewInit {
         this.authService.logout();
       }
     );
+  }
+
+  private extractDocumentTemplates(response: unknown): documento[] {
+    if (Array.isArray(response)) {
+      return response as documento[];
+    }
+
+    if (typeof response === 'string') {
+      try {
+        return this.extractDocumentTemplates(JSON.parse(response));
+      } catch (_error) {
+        return [];
+      }
+    }
+
+    if (response && typeof response === 'object') {
+      const record = response as Record<string, unknown>;
+      const nestedCandidates = [
+        record.data,
+        record.documentos,
+        record.plantillas,
+        record.result
+      ];
+      for (const candidate of nestedCandidates) {
+        if (Array.isArray(candidate)) {
+          return candidate as documento[];
+        }
+      }
+    }
+
+    return [];
   }
 
   modalEditarFormaPago(row: any[]): void {

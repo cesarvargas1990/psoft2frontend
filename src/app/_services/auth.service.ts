@@ -107,14 +107,13 @@ export class AuthService {
     localStorage.setItem('access_token', resp.access_token);
     localStorage.setItem('menu_usuario', JSON.stringify(menuUsuario));
     localStorage.setItem('permisos', JSON.stringify(permisos));
-    localStorage.setItem('id', JSON.stringify(resp.id));
-    localStorage.setItem('id_usuario', JSON.stringify(resp.id));
-    localStorage.setItem('id_empresa', resp.id_empresa);
-    localStorage.setItem('id_empresa', JSON.stringify(resp.id_empresa));
-    localStorage.setItem('ind_activo', JSON.stringify(resp.ind_activo));
-    localStorage.setItem('is_admin', JSON.stringify(resp.is_admin));
+    localStorage.setItem('id', String(resp.id ?? ''));
+    localStorage.setItem('id_usuario', String(resp.id ?? ''));
+    localStorage.setItem('id_empresa', String(resp.id_empresa ?? ''));
+    localStorage.setItem('ind_activo', String(resp.ind_activo ?? ''));
+    localStorage.setItem('is_admin', String(resp.is_admin ?? ''));
 
-    localStorage.setItem('id_user', JSON.stringify(resp.id_user)); // Corresponde al cobrador al cual pertenece este usuario
+    localStorage.setItem('id_user', String(resp.id_user ?? '')); // Corresponde al cobrador al cual pertenece este usuario
     this.router.navigate(['/dashboard']);
   }
 

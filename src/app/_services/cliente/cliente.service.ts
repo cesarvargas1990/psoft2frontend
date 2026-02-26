@@ -158,11 +158,17 @@ export class ClienteService {
   }
 
   dataURLtoFile(dataurl: string, filename: string): File {
-    let arr = dataurl.split(','),
-      mime = arr[0].match(/:(.*?);/)?.[1] ?? 'application/octet-stream',
-      bstr = atob(arr[1]),
-      n = bstr.length,
-      u8arr = new Uint8Array(n);
+    const arr = dataurl.split(',');
+    const header = arr[0] ?? '';
+    const typeStart = header.indexOf(':');
+    const typeEnd = header.indexOf(';');
+    const mime =
+      typeStart >= 0 && typeEnd > typeStart
+        ? header.slice(typeStart + 1, typeEnd)
+        : 'application/octet-stream';
+    const bstr = atob(arr[1] ?? '');
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
 
     while (n--) {
       u8arr[n] = bstr.charCodeAt(n);

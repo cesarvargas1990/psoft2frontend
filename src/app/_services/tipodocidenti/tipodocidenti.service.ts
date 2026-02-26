@@ -7,6 +7,7 @@ import {
 } from '@angular/common/http';
 import { environment } from './../../../environments/environment';
 import { Observable, throwError } from 'rxjs';
+import { SelectOption } from '../../_models/api.types';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -22,7 +23,7 @@ export class TipodocidentiService {
     pstipodocidenti: this.server + '/pstipodocidenti'
   };
 
-  httpOpts: any = {
+  httpOpts = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -32,11 +33,21 @@ export class TipodocidentiService {
 
   constructor(private http: HttpClient) {}
 
-  getAllTipodocidenti(): Observable<any> {
-    return this.http.get(`${this.services.pstipodocidenti}`, this.httpOpts);
+  getAllTipodocidenti(): Observable<
+    Array<SelectOption | Record<string, unknown>>
+  > {
+    return this.http.get<Array<SelectOption | Record<string, unknown>>>(
+      `${this.services.pstipodocidenti}`,
+      this.httpOpts
+    );
   }
 
-  getTipodocidenti(): Observable<any> {
-    return this.http.get(`${this.services.pstipodocidenti}`, this.httpOpts);
+  getTipodocidenti(): Observable<
+    Array<SelectOption | Record<string, unknown>>
+  > {
+    return this.http.get<Array<SelectOption | Record<string, unknown>>>(
+      `${this.services.pstipodocidenti}`,
+      this.httpOpts
+    );
   }
 }

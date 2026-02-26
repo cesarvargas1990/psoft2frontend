@@ -7,6 +7,8 @@ import {
 } from '@angular/common/http';
 import { environment } from './../../../environments/environment';
 import { AuthService } from '../../_services/auth.service';
+import { Observable } from 'rxjs';
+import { SelectOption } from '../../_models/api.types';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -22,7 +24,7 @@ export class UsersService {
     cobradores: this.server + '/cobradores'
   };
 
-  httpOpts: any = {
+  httpOpts = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -35,9 +37,9 @@ export class UsersService {
     private authService: AuthService
   ) {}
 
-  getUsers() {
+  getUsers(): Observable<SelectOption[]> {
     const id_user = localStorage.getItem('id');
-    return this.http.get(
+    return this.http.get<SelectOption[]>(
       `${this.services.cobradores}` + '/' + id_user,
       this.httpOpts
     );

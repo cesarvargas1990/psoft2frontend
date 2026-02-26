@@ -1,7 +1,9 @@
 export interface ListaPrestamos {
-  nomcliente: string;
-  nomfpago: string;
-  valorpres: number;
-  celular: string;
-  direcasa: string;
+  id_prestamo?: number;
+  nomcliente?: string;
+  nomfpago?: string;
+  valcuota?: number | string;
+  valorpres?: number;
+  celular?: string;
+  direcasa?: string;
 }

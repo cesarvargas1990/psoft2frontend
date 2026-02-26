@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
-import { LoginResponse } from '../_models/user';
+import { LoginRequest, LoginResponse } from '../_models/api.types';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import {
@@ -61,7 +61,7 @@ export class AuthService {
   }
 
   // Verify user credentials on server to get token
-  loginForm(data): Observable<LoginResponse> {
+  loginForm(data: LoginRequest): Observable<LoginResponse> {
     localStorage.clear();
     return this.http
       .post<LoginResponse>(
@@ -148,7 +148,10 @@ export class AuthService {
   }
 
   // Get data from server
-  getData(data): Observable<LoginResponse> {
+  getData<T = LoginResponse>(data: {
+    action: string;
+    [key: string]: unknown;
+  }): Observable<T> {
     const httpOptionsAuth = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -156,11 +159,14 @@ export class AuthService {
       })
     };
     return this.http
-      .post<LoginResponse>(this.basePath + data.action, data, httpOptionsAuth)
+      .post<T>(this.basePath + data.action, data, httpOptionsAuth)
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  getDataAny(data): Observable<any> {
+  getDataAny<T = any>(data: {
+    action: string;
+    [key: string]: unknown;
+  }): Observable<T> {
     const httpOptionsAuth = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -168,11 +174,11 @@ export class AuthService {
       })
     };
     return this.http
-      .post<any>(this.basePath + data.action, data, httpOptionsAuth)
+      .post<T>(this.basePath + data.action, data, httpOptionsAuth)
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  tienePermiso(name) {
+  tienePermiso(name: string): boolean {
     return extractStringArrayFromUnknown(
       localStorage.getItem('permisos')
     ).includes(name);

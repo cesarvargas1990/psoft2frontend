@@ -463,7 +463,7 @@ export class CrearClienteComponent implements AfterViewInit, OnDestroy {
 
   async tiposDocumentos() {
     this.prestamosService.listaTiposDocumento().subscribe((response) => {
-      this.listaTiposDocumento = response;
+      this.listaTiposDocumento = Array.isArray(response) ? response : [];
     });
   }
 

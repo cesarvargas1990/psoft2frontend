@@ -10,6 +10,18 @@ import { AuthService } from '../../_services/auth.service';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import Swal from 'sweetalert2';
+import { ListaPrestamos } from '../../_models/ListaPrestamos';
+import { fechasPago } from '../../_models/fechasPago';
+import {
+  BackendMessageResponse,
+  CuotaCalculada,
+  DashboardTotalsResponse,
+  DocumentoPlantilla,
+  DocumentoTipoAdjunto,
+  SelectOption,
+  SistemaPrestamo,
+  VariablePlantilla
+} from '../../_models/api.types';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -42,7 +54,7 @@ export class PrestamosService {
     totales_dashboard: this.server + '/totales_dashboard'
   };
 
-  httpOpts: any = {
+  httpOpts = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -104,140 +116,174 @@ export class PrestamosService {
     );
   }
 
-  calcularCuotas(data): Observable<any> {
+  calcularCuotas(
+    data: Record<string, unknown>
+  ): Observable<CuotaCalculada[] | Record<string, unknown>> {
     data.id_empresa = this.getStorageValue('id_empresa');
     return this.http
-      .post<any>(`${this.services.calcularCuotas}`, data, this.httpOpts)
+      .post<
+        CuotaCalculada[] | Record<string, unknown>
+      >(`${this.services.calcularCuotas}`, data, this.httpOpts)
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  getFormasPago(): Observable<any> {
+  getFormasPago(): Observable<
+    Array<SelectOption | string | Record<string, unknown>>
+  > {
     console.log('la data');
 
     const id_empresa = this.getStorageValue('id_empresa');
     return this.http
-      .get<any>(
-        `${this.services.listaformaspago}` + '/' + id_empresa,
-        this.httpOpts
-      )
+      .get<
+        Array<SelectOption | string | Record<string, unknown>>
+      >(`${this.services.listaformaspago}` + '/' + id_empresa, this.httpOpts)
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  getPeriodosPago(): Observable<any> {
+  getPeriodosPago(): Observable<
+    Array<SelectOption | string | Record<string, unknown>>
+  > {
     return this.http
-      .get<any>(`${this.services.listaperiodospago}`, this.httpOpts)
+      .get<
+        Array<SelectOption | string | Record<string, unknown>>
+      >(`${this.services.listaperiodospago}`, this.httpOpts)
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  getSistemaPrestamo(): Observable<any> {
+  getSistemaPrestamo(): Observable<
+    Array<SelectOption | string | Record<string, unknown>>
+  > {
     return this.http
-      .get<any>(`${this.services.listatiposistemaprest}`, this.httpOpts)
+      .get<
+        Array<SelectOption | string | Record<string, unknown>>
+      >(`${this.services.listatiposistemaprest}`, this.httpOpts)
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  deleteFormaPago(data): Observable<any> {
-    return this.http.delete(
+  deleteFormaPago(data: {
+    id: number | string;
+  }): Observable<BackendMessageResponse> {
+    return this.http.delete<BackendMessageResponse>(
       `${this.services.psformapago}` + '/' + data.id,
       this.httpOpts
     );
   }
 
-  deletePrestamo(data): Observable<any> {
-    return this.http.delete(
+  deletePrestamo(data: {
+    id_prestamo: number | string;
+  }): Observable<BackendMessageResponse> {
+    return this.http.delete<BackendMessageResponse>(
       `${this.services.eliminarPrestamo}` + '/' + data.id_prestamo,
       this.httpOpts
     );
   }
 
-  deleteDocumentoPlantilla(data): Observable<any> {
-    return this.http.delete(
+  deleteDocumentoPlantilla(data: {
+    id: number | string;
+  }): Observable<BackendMessageResponse> {
+    return this.http.delete<BackendMessageResponse>(
       `${this.services.pstdocplant}` + '/' + data.id,
       this.httpOpts
     );
   }
 
-  guardarFormaPago(data): Observable<any> {
+  guardarFormaPago(
+    data: Record<string, unknown>
+  ): Observable<BackendMessageResponse> {
     const id_empresa = this.getStorageValue('id_empresa');
     const id_usureg = this.getStorageValue('id_usuario');
     data.id_empresa = id_empresa;
     data.id_usureg = id_usureg;
     return this.http
-      .post<any>(`${this.services.psformapago}`, data, this.httpOpts)
-      .pipe(retry(2), catchError(this.handleError));
-  }
-
-  guardarDocumento(data): Observable<any> {
-    const id_empresa = this.getStorageValue('id_empresa');
-    const id_usureg = this.getStorageValue('id_usuario');
-    data.id_empresa = id_empresa;
-    data.id_usureg = id_usureg;
-    return this.http
-      .post<any>(`${this.services.pstdocplant}`, data, this.httpOpts)
-      .pipe(retry(2), catchError(this.handleError));
-  }
-
-  listaTiposDocumento(): Observable<any> {
-    const data: any = {};
-    const id_empresa = this.getStorageValue('id_empresa');
-    return this.http
-      .get<any>(`${this.services.pstdocadjuntos}`, this.httpOpts)
-      .pipe(retry(2), catchError(this.handleError));
-  }
-
-  listaVariablesPlantillas(): Observable<any> {
-    const id_empresa = this.getStorageValue('id_empresa');
-    return this.http
-      .get<any>(
-        `${this.services.generarVariablesPlantillas}` + '/' + id_empresa,
-        this.httpOpts
-      )
-      .pipe(retry(2), catchError(this.handleError));
-  }
-
-  listaFechasPago(id_prestamo): Observable<any> {
-    const id_empresa = this.getStorageValue('id_empresa');
-    return this.http
-      .get<any>(
-        `${this.services.psfechaspago}` + '/' + id_prestamo,
-        this.httpOpts
-      )
-      .pipe(retry(2), catchError(this.handleError));
-  }
-
-  prueba(): Observable<any> {
-    const data: any = {};
-    const id_empresa = this.getStorageValue('id_empresa');
-
-    return this.http
-      .get<any>(`${this.services.generarVariablesPlantillas}`, this.httpOpts)
-      .pipe(retry(2), catchError(this.handleError));
-  }
-
-  consultaPlantillasDocumentos(): Observable<any> {
-    const data: any = {};
-    const id_empresa = this.getStorageValue('id_empresa');
-    data.id_empresa = id_empresa;
-
-    return this.http
-      .post<any>(
-        `${this.services.consultaTipoDocPlantilla}`,
+      .post<BackendMessageResponse>(
+        `${this.services.psformapago}`,
         data,
         this.httpOpts
       )
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  pstiposistemaprest(): Observable<any> {
+  guardarDocumento(
+    data: Partial<DocumentoPlantilla> & Record<string, unknown>
+  ): Observable<DocumentoPlantilla | Record<string, unknown>> {
+    const id_empresa = this.getStorageValue('id_empresa');
+    const id_usureg = this.getStorageValue('id_usuario');
+    data.id_empresa = id_empresa;
+    data.id_usureg = id_usureg;
+    return this.http
+      .post<
+        DocumentoPlantilla | Record<string, unknown>
+      >(`${this.services.pstdocplant}`, data, this.httpOpts)
+      .pipe(retry(2), catchError(this.handleError));
+  }
+
+  listaTiposDocumento(): Observable<
+    DocumentoTipoAdjunto[] | Record<string, unknown>
+  > {
+    return this.http
+      .get<
+        DocumentoTipoAdjunto[] | Record<string, unknown>
+      >(`${this.services.pstdocadjuntos}`, this.httpOpts)
+      .pipe(retry(2), catchError(this.handleError));
+  }
+
+  listaVariablesPlantillas(): Observable<
+    VariablePlantilla[] | Record<string, unknown>
+  > {
+    const id_empresa = this.getStorageValue('id_empresa');
+    return this.http
+      .get<
+        VariablePlantilla[] | Record<string, unknown>
+      >(`${this.services.generarVariablesPlantillas}` + '/' + id_empresa, this.httpOpts)
+      .pipe(retry(2), catchError(this.handleError));
+  }
+
+  listaFechasPago(id_prestamo: number | string): Observable<fechasPago[]> {
+    return this.http
+      .get<
+        fechasPago[]
+      >(`${this.services.psfechaspago}` + '/' + id_prestamo, this.httpOpts)
+      .pipe(retry(2), catchError(this.handleError));
+  }
+
+  prueba(): Observable<unknown> {
+    return this.http
+      .get<unknown>(
+        `${this.services.generarVariablesPlantillas}`,
+        this.httpOpts
+      )
+      .pipe(retry(2), catchError(this.handleError));
+  }
+
+  consultaPlantillasDocumentos(): Observable<
+    DocumentoPlantilla[] | Record<string, unknown>
+  > {
     const data: any = {};
     const id_empresa = this.getStorageValue('id_empresa');
     data.id_empresa = id_empresa;
 
     return this.http
-      .get<any>(`${this.services.pstiposistemaprest}`, this.httpOpts)
+      .post<
+        DocumentoPlantilla[] | Record<string, unknown>
+      >(`${this.services.consultaTipoDocPlantilla}`, data, this.httpOpts)
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  guardarPrestamo(data): Observable<any> {
+  pstiposistemaprest(): Observable<SistemaPrestamo[] | boolean> {
+    const data: any = {};
+    const id_empresa = this.getStorageValue('id_empresa');
+    data.id_empresa = id_empresa;
+
+    return this.http
+      .get<
+        SistemaPrestamo[] | boolean
+      >(`${this.services.pstiposistemaprest}`, this.httpOpts)
+      .pipe(retry(2), catchError(this.handleError));
+  }
+
+  guardarPrestamo(
+    data: Record<string, unknown>
+  ): Observable<BackendMessageResponse> {
     const id_empresa = this.getStorageValue('id_empresa');
     const id_usureg = this.getStorageValue('id_usuario');
     const fecha = this.obtenerFechaHoraCliente();
@@ -245,11 +291,18 @@ export class PrestamosService {
     data.id_usureg = id_usureg;
     data.fecha = fecha;
     return this.http
-      .post<any>(`${this.services.guardarPrestamo}`, data, this.httpOpts)
+      .post<BackendMessageResponse>(
+        `${this.services.guardarPrestamo}`,
+        data,
+        this.httpOpts
+      )
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  renderTemplates(data): Observable<any> {
+  renderTemplates(data: {
+    id_prestamo?: number | string;
+    [key: string]: unknown;
+  }): Observable<any> {
     const id_empresa = this.getStorageValue('id_empresa');
     const id_usureg = this.getStorageValue('id_usuario');
     data.id_empresa = id_empresa;
@@ -259,64 +312,89 @@ export class PrestamosService {
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  listadoPrestamos(data): Observable<any> {
+  listadoPrestamos(
+    data: Record<string, unknown>
+  ): Observable<ListaPrestamos[]> {
     data.id_empresa = this.getStorageValue('id_empresa');
     data.id_user = this.getStorageValue('id');
-    return this.http.post(
+    return this.http.post<ListaPrestamos[]>(
       `${this.services.listadoPrestamos}`,
       data,
       this.httpOpts
     );
   }
 
-  listadoArchivosCliente(id): Observable<any> {
+  listadoArchivosCliente(
+    id: number | string
+  ): Observable<Record<string, unknown>[]> {
     const data: any = {};
     data.id_empresa = this.getStorageValue('id_empresa');
     data.id_user = this.getStorageValue('id');
-    return this.http.get(
+    return this.http.get<Record<string, unknown>[]>(
       `${this.services.psdocadjuntos}` + '/' + id,
       this.httpOpts
     );
   }
 
-  saveFormaPago(data): Observable<any> {
+  saveFormaPago(
+    data: Record<string, unknown>
+  ): Observable<BackendMessageResponse> {
     data.id_empresa = this.getStorageValue('id_empresa');
     data.id_user = this.getStorageValue('id');
-    return this.http.post(`${this.services.psformapago}`, data, this.httpOpts);
+    return this.http.post<BackendMessageResponse>(
+      `${this.services.psformapago}`,
+      data,
+      this.httpOpts
+    );
   }
 
-  updateFormaPago(data): Observable<any> {
+  updateFormaPago(data: {
+    id: number | string;
+    [key: string]: unknown;
+  }): Observable<BackendMessageResponse> {
     data.id_empresa = this.getStorageValue('id_empresa');
 
-    return this.http.put(
+    return this.http.put<BackendMessageResponse>(
       `${this.services.psformapago}` + '/' + data.id,
       data,
       this.httpOpts
     );
   }
 
-  updatePlantillaDocumento(data): Observable<any> {
+  updatePlantillaDocumento(data: {
+    id: number | string;
+    [key: string]: unknown;
+  }): Observable<BackendMessageResponse> {
     data.id_empresa = this.getStorageValue('id_empresa');
 
-    return this.http.put(
+    return this.http.put<BackendMessageResponse>(
       `${this.services.pstdocplant}` + '/' + data.id,
       data,
       this.httpOpts
     );
   }
 
-  registrarPagoCuota(data): Observable<any> {
+  registrarPagoCuota(data: {
+    id?: number | string;
+    id_cliente?: number | string;
+    id_prestamo?: number | string;
+    [key: string]: unknown;
+  }): Observable<BackendMessageResponse> {
     data.id_empresa = this.getStorageValue('id_empresa');
     data.id_user = this.getStorageValue('id');
     data.fecha = this.obtenerFechaHoraCliente();
-    return this.http.post(`${this.services.pspagos}`, data, this.httpOpts);
+    return this.http.post<BackendMessageResponse>(
+      `${this.services.pspagos}`,
+      data,
+      this.httpOpts
+    );
   }
 
-  totales_dashboard(): Observable<any> {
+  totales_dashboard(): Observable<DashboardTotalsResponse> {
     const data: any = {};
     data.fecha = this.fechaActual();
     data.id_empresa = this.getStorageValue('id_empresa');
-    return this.http.post(
+    return this.http.post<DashboardTotalsResponse>(
       `${this.services.totales_dashboard}`,
       data,
       this.httpOpts

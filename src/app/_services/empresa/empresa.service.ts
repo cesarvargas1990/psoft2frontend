@@ -9,6 +9,12 @@ import { AuthService } from '../../_services/auth.service';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import Swal from 'sweetalert2';
+import {
+  ArchivoAdjuntoPayload,
+  ArchivoAdjuntoUploadResponse,
+  EmpresaResponse,
+  EmpresaUpdatePayload
+} from '../../_models/api.types';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -25,7 +31,7 @@ export class EmpresaService {
     guardarArchivos: this.server + '/guardarArchivoAdjunto'
   };
 
-  httpOpts: any = {
+  httpOpts = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -64,17 +70,22 @@ export class EmpresaService {
     );
   }
 
-  getEmpresa(): Observable<any> {
+  getEmpresa(): Observable<EmpresaResponse> {
     const id_empresa = localStorage.getItem('id_empresa');
     return this.http
-      .get<any>(`${this.services.psempresa}` + '/' + id_empresa, this.httpOpts)
+      .get<EmpresaResponse>(
+        `${this.services.psempresa}` + '/' + id_empresa,
+        this.httpOpts
+      )
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  actualizarDatosEmpresa(data: any): Observable<any> {
+  actualizarDatosEmpresa(
+    data: EmpresaUpdatePayload
+  ): Observable<EmpresaResponse> {
     const id_empresa = localStorage.getItem('id_empresa');
     return this.http
-      .put<any>(
+      .put<EmpresaResponse>(
         `${this.services.psempresa}` + '/' + id_empresa,
         data,
         this.httpOpts
@@ -82,11 +93,17 @@ export class EmpresaService {
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  subirArchivoFirma(data: any): Observable<any> {
+  subirArchivoFirma(
+    data: ArchivoAdjuntoPayload
+  ): Observable<ArchivoAdjuntoUploadResponse> {
     data.id_empresa = localStorage.getItem('id_empresa');
     data.id_usuario = localStorage.getItem('id');
     return this.http
-      .post<any>(`${this.services.guardarArchivos}`, data, this.httpOpts)
+      .post<ArchivoAdjuntoUploadResponse>(
+        `${this.services.guardarArchivos}`,
+        data,
+        this.httpOpts
+      )
       .pipe(retry(2), catchError(this.handleError));
   }
 }

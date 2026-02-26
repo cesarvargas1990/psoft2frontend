@@ -429,12 +429,14 @@ export class EditarClienteComponent implements OnInit {
 
     this.prestamosService.listaTiposDocumento().subscribe((response) => {
       if (response) {
-        this.listaTiposDocumento = response;
-        Object.entries(response as any).forEach(([, value]: [string, any]) => {
-          this.listaTipoDoc[value.id] = value.id;
-          console.log('tipodoc');
-          console.log(this.listaTipoDoc);
-        });
+        this.listaTiposDocumento = Array.isArray(response) ? response : [];
+        Object.entries(this.listaTiposDocumento as any).forEach(
+          ([, value]: [string, any]) => {
+            this.listaTipoDoc[value.id] = value.id;
+            console.log('tipodoc');
+            console.log(this.listaTipoDoc);
+          }
+        );
       }
     });
   }

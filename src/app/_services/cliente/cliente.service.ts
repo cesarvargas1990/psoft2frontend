@@ -10,6 +10,15 @@ import { AuthService } from '../../_services/auth.service';
 import { Observable, throwError } from 'rxjs';
 import Swal from 'sweetalert2';
 import { map } from 'rxjs/operators';
+import { Cliente } from '../../_models/cliente';
+import {
+  ArchivoAdjuntoPayload,
+  ArchivoAdjuntoUploadResponse,
+  BackendMessageResponse,
+  ClientePayload,
+  PrestamoClienteResumen,
+  SelectOption
+} from '../../_models/api.types';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
@@ -33,7 +42,7 @@ export class ClienteService {
     prestamosCliente: this.server + '/prestamosCliente'
   };
 
-  httpOpts: any = {
+  httpOpts = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
       Accept: 'application/json',
@@ -66,77 +75,91 @@ export class ClienteService {
     );
   }
 
-  getAllClientes(data): Observable<any> {
+  getAllClientes(
+    data: Record<string, unknown>
+  ): Observable<Partial<Cliente>[]> {
     const id_empresa = localStorage.getItem('id_empresa');
-    return this.http.post(
+    return this.http.post<Partial<Cliente>[]>(
       `${this.services.psclientes}` + '/' + id_empresa,
       data,
       this.httpOpts
     );
   }
 
-  getClientes(): Observable<any> {
+  getClientes(): Observable<Array<SelectOption | Record<string, unknown>>> {
     const id_empresa = localStorage.getItem('id_empresa');
-    return this.http.get(
+    return this.http.get<Array<SelectOption | Record<string, unknown>>>(
       `${this.services.listadoclientes}` + '/' + id_empresa,
       this.httpOpts
     );
   }
 
-  updateCliente(data): Observable<any> {
-    return this.http.put(
+  updateCliente(
+    data: ClientePayload
+  ): Observable<ClientePayload | BackendMessageResponse> {
+    return this.http.put<ClientePayload | BackendMessageResponse>(
       `${this.services.psclientes}` + '/' + data.id,
       data,
       this.httpOpts
     );
   }
 
-  deleteCliente(data): Observable<any> {
-    return this.http.delete(
+  deleteCliente(data: {
+    id: number | string;
+  }): Observable<BackendMessageResponse> {
+    return this.http.delete<BackendMessageResponse>(
       `${this.services.psclientes}` + '/' + data.id,
       this.httpOpts
     );
   }
 
-  saveCliente(data): Observable<any> {
+  saveCliente(data: ClientePayload): Observable<ClientePayload> {
     data.id_empresa = localStorage.getItem('id_empresa');
     data.id_user = localStorage.getItem('id');
-    return this.http.post(`${this.services.psclientes}`, data, this.httpOpts);
+    return this.http.post<ClientePayload>(
+      `${this.services.psclientes}`,
+      data,
+      this.httpOpts
+    );
   }
 
-  uploadFile(data): Observable<any> {
+  uploadFile(
+    data: ArchivoAdjuntoPayload
+  ): Observable<ArchivoAdjuntoUploadResponse> {
     data.id_empresa = localStorage.getItem('id_empresa');
     data.id_usuario = localStorage.getItem('id');
-    return this.http.post(
+    return this.http.post<ArchivoAdjuntoUploadResponse>(
       `${this.services.guardarArchivos}`,
       data,
       this.httpOpts
     );
   }
 
-  editFile(data): Observable<any> {
+  editFile(data: ArchivoAdjuntoPayload): Observable<unknown> {
     data.id_empresa = localStorage.getItem('id_empresa');
     data.id_usuario = localStorage.getItem('id');
-    return this.http.put(
+    return this.http.put<unknown>(
       `${this.services.editarArchivos}`,
       data,
       this.httpOpts
     );
   }
 
-  getPrestamosCliente(data): Observable<any> {
+  getPrestamosCliente(
+    data: Record<string, unknown>
+  ): Observable<PrestamoClienteResumen[]> {
     data.id_empresa = localStorage.getItem('id_empresa');
     data.id_user = localStorage.getItem('id');
-    return this.http.post(
+    return this.http.post<PrestamoClienteResumen[]>(
       `${this.services.prestamosCliente}`,
       data,
       this.httpOpts
     );
   }
 
-  dataURLtoFile(dataurl, filename) {
+  dataURLtoFile(dataurl: string, filename: string): File {
     let arr = dataurl.split(','),
-      mime = arr[0].match(/:(.*?);/)[1],
+      mime = arr[0].match(/:(.*?);/)?.[1] ?? 'application/octet-stream',
       bstr = atob(arr[1]),
       n = bstr.length,
       u8arr = new Uint8Array(n);

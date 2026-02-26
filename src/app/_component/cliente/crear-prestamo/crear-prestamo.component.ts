@@ -343,7 +343,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
       this.prestamosService
         .calcularCuotas(this.form.value)
         .subscribe((response) => {
-          this.tableCuotasPrestamo = response;
+          this.tableCuotasPrestamo = Array.isArray(response) ? response : [];
         });
     } else {
       Swal.fire({

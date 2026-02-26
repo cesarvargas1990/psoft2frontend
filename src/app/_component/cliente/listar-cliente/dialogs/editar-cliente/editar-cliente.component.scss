@@ -36,9 +36,9 @@
 }
 
 .edit-tabs {
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  background: #fff;
+  background: var(--color-surface);
 }
 
 .tab-pane {
@@ -46,9 +46,9 @@
 }
 
 .data-pane-card {
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  background: #fff;
+  background: var(--color-surface);
   padding: 12px;
 }
 
@@ -60,10 +60,10 @@
 
 .signature-card,
 .documents-card {
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 12px;
-  background: #fff;
+  background: var(--color-surface);
 }
 
 .card-title-row {
@@ -87,18 +87,18 @@
 }
 
 .signature-surface {
-  border: 1px dashed rgba(0, 0, 0, 0.2);
+  border: 1px dashed var(--color-border);
   border-radius: 6px;
-  background: #fff;
+  background: var(--color-surface);
   padding: 6px;
 }
 
 .signature-image {
   max-width: 100%;
   max-height: 220px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
-  background: #fff;
+  background: var(--color-surface);
   padding: 4px;
 }
 
@@ -132,9 +132,9 @@
   align-items: center;
   gap: 10px;
   padding: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  background: #fff;
+  background: rgba(148, 163, 184, 0.08);
 }
 
 .file-input {
@@ -170,9 +170,9 @@
 }
 
 .preview-shell {
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  background: #fff;
+  background: rgba(148, 163, 184, 0.08);
   padding: 10px;
 }
 
@@ -193,7 +193,7 @@
   max-width: 100%;
   max-height: 220px;
   object-fit: contain;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   padding: 4px;
 }
@@ -201,7 +201,7 @@
 .pdf-preview,
 .preview-empty {
   min-height: 190px;
-  border: 1px dashed rgba(0, 0, 0, 0.18);
+  border: 1px dashed var(--color-border);
   border-radius: 6px;
   display: flex;
   flex-direction: column;
@@ -210,7 +210,7 @@
   gap: 8px;
   text-align: center;
   padding: 10px;
-  color: rgba(0, 0, 0, 0.72);
+  color: var(--color-muted);
 }
 
 .dialog-actions {
@@ -219,8 +219,8 @@
   gap: 8px;
   margin: 0 !important;
   padding: 12px 16px;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-  background: #fff;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
   min-height: auto;
 }
 
@@ -232,7 +232,7 @@
 
 :host ::ng-deep .edit-tabs .mat-tab-header,
 :host ::ng-deep .doc-tabs .mat-tab-header {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--color-border);
 }
 
 :host ::ng-deep .modern-dialog.mat-dialog-content,
@@ -252,7 +252,7 @@
 
 :host ::ng-deep .edit-tabs .mat-mdc-tab-header,
 :host ::ng-deep .doc-tabs .mat-mdc-tab-header {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--color-border);
 }
 
 :host ::ng-deep .data-pane-card .row {

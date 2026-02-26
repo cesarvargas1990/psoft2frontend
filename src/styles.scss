@@ -3,18 +3,18 @@
 @import 'highlight.js/styles/github.css';
 
 :root {
-  --color-primary: #2563eb;
-  --color-primary-dark: #1d4ed8;
-  --color-accent: #06b6d4;
-  --color-bg: #f3f6fb;
-  --color-surface: #ffffff;
-  --color-text: #0f172a;
-  --color-muted: #64748b;
-  --color-border: #dbe3ef;
+  --color-primary: #60a5fa;
+  --color-primary-dark: #3b82f6;
+  --color-accent: #22d3ee;
+  --color-bg: #0b1220;
+  --color-surface: #131c2e;
+  --color-text: #e2e8f0;
+  --color-muted: #94a3b8;
+  --color-border: #243049;
   --color-success: #16a34a;
   --radius-md: 10px;
   --radius-lg: 14px;
-  --shadow-card: 0 10px 28px rgba(15, 23, 42, 0.08);
+  --shadow-card: 0 14px 30px rgba(2, 6, 23, 0.5);
 }
 
 html,
@@ -114,7 +114,7 @@ h1.example-app-name {
 }
 
 .mat-sidenav {
-  background-color: #f8fbff;
+  background-color: #0f172a;
   border-right: 1px solid var(--color-border);
   padding: 14px 12px;
 }
@@ -229,12 +229,12 @@ h1.example-app-name {
 
 .mat-header-row {
   min-height: 52px;
-  background-color: rgba(37, 99, 235, 0.06);
+  background-color: rgba(96, 165, 250, 0.15);
 }
 
 .mat-mdc-header-row {
   min-height: 52px;
-  background-color: rgba(37, 99, 235, 0.06);
+  background-color: rgba(96, 165, 250, 0.15);
 }
 
 .mat-row {
@@ -248,19 +248,19 @@ h1.example-app-name {
 }
 
 .mat-row:nth-child(even) {
-  background-color: rgba(148, 163, 184, 0.06);
+  background-color: rgba(148, 163, 184, 0.08);
 }
 
 .mat-mdc-row:nth-child(even) {
-  background-color: rgba(148, 163, 184, 0.06);
+  background-color: rgba(148, 163, 184, 0.08);
 }
 
 .mat-row:hover {
-  background-color: rgba(37, 99, 235, 0.08);
+  background-color: rgba(96, 165, 250, 0.18);
 }
 
 .mat-mdc-row:hover {
-  background-color: rgba(37, 99, 235, 0.08);
+  background-color: rgba(96, 165, 250, 0.18);
 }
 
 .mat-header-cell,
@@ -310,7 +310,7 @@ h1.example-app-name {
 
 .mat-paginator {
   border-top: 1px solid var(--color-border);
-  background-color: rgba(248, 250, 252, 0.75);
+  background-color: rgba(15, 23, 42, 0.9);
 }
 
 @media only screen and (max-width: 600px) {
@@ -331,14 +331,14 @@ h1.example-app-name {
 .editar-cliente-dialog .mat-dialog-container {
   padding: 0 !important;
   overflow: hidden;
-  background-color: #fff !important;
+  background-color: var(--color-surface) !important;
   opacity: 1 !important;
 }
 
 .editar-cliente-dialog .mat-mdc-dialog-container .mdc-dialog__surface {
   padding: 0 !important;
   overflow: hidden;
-  background-color: #fff !important;
+  background-color: var(--color-surface) !important;
   opacity: 1 !important;
 }
 
@@ -351,7 +351,7 @@ h1.example-app-name {
 .listar-prestamos-dialog .mat-dialog-container {
   padding: 0 !important;
   overflow: hidden;
-  background-color: #fff !important;
+  background-color: var(--color-surface) !important;
   opacity: 1 !important;
   border: 1px solid var(--color-border) !important;
 }
@@ -359,7 +359,7 @@ h1.example-app-name {
 .listar-prestamos-dialog .mat-mdc-dialog-container .mdc-dialog__surface {
   padding: 0 !important;
   overflow: hidden;
-  background-color: #fff !important;
+  background-color: var(--color-surface) !important;
   opacity: 1 !important;
   border: 1px solid var(--color-border) !important;
 }
@@ -373,7 +373,7 @@ h1.example-app-name {
 .crear-cliente-dialog .mat-dialog-container {
   padding: 0 !important;
   overflow: hidden;
-  background-color: #fff !important;
+  background-color: var(--color-surface) !important;
   opacity: 1 !important;
   border: 1px solid var(--color-border) !important;
 }
@@ -381,7 +381,7 @@ h1.example-app-name {
 .crear-cliente-dialog .mat-mdc-dialog-container .mdc-dialog__surface {
   padding: 0 !important;
   overflow: hidden;
-  background-color: #fff !important;
+  background-color: var(--color-surface) !important;
   opacity: 1 !important;
   border: 1px solid var(--color-border) !important;
 }
@@ -394,4 +394,65 @@ h1.example-app-name {
 
 .listadoDocumentos {
   padding: 15px;
+}
+
+.mat-dialog-container,
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text) !important;
+}
+
+.mat-card,
+.mat-menu-panel,
+.dropdown-menu {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-border) !important;
+}
+
+.form-control,
+.mat-input-element,
+.mat-mdc-input-element {
+  background-color: #0f172a !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-border) !important;
+}
+
+.form-control::placeholder,
+.mat-input-element::placeholder,
+.mat-mdc-input-element::placeholder {
+  color: var(--color-muted) !important;
+}
+
+.card,
+.card-body,
+.card-text,
+.card-footer {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-border) !important;
+}
+
+.mat-cell,
+.mat-mdc-cell,
+.mat-header-cell,
+.mat-mdc-header-cell,
+.mat-sort-header-content,
+.mat-sort-header-arrow {
+  color: var(--color-text) !important;
+}
+
+.mat-form-field,
+.mat-mdc-form-field,
+.mat-form-field-label,
+.mat-mdc-floating-label,
+.mat-mdc-select-value-text {
+  color: var(--color-text) !important;
+}
+
+.mat-select-panel,
+.mat-mdc-select-panel,
+.mat-autocomplete-panel {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text) !important;
 }

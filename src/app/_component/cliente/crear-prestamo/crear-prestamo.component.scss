@@ -12,7 +12,7 @@
 }
 
 th.mat-sort-header-sorted {
-  color: black;
+  color: var(--color-text);
 }
 
 .mobile-label {
@@ -30,7 +30,7 @@ th.mat-sort-header-sorted {
     display: none;
   }
   .mat-table .mat-row {
-    border-bottom: 10px solid #ddd;
+    border-bottom: 10px solid var(--color-border);
     display: block;
     align-items: start;
     flex-direction: column;

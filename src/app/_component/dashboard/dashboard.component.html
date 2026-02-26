@@ -419,6 +419,7 @@
                 <ng-container matColumnDef="action">
                   <mat-header-cell *matHeaderCellDef> </mat-header-cell>
                   <mat-cell
+                    class="estado-accion"
                     [ngClass]="
                       row.id_fecha_pago ? 'estado-pagado' : 'estado-pendiente'
                     "
@@ -428,9 +429,10 @@
                       <span class="estado-texto-pagado">Pagado</span>
                     }
                     @if (!row.id_fecha_pago) {
+                      <span class="estado-texto-pendiente">Pendiente</span>
                       <button
                         title="PagarCuota"
-                        class="float-right btn btn-light btn-sm"
+                        class="action-btn cuota-pay-button"
                         mat-icon-button
                         color="primary"
                         (click)="pagarCuotaPrestamo(row)"

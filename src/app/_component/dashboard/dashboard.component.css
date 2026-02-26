@@ -135,8 +135,9 @@
   box-sizing: border-box;
 }
 
-p {
+.card p {
   margin: 20px;
+  color: var(--color-text);
 }
 
 .card-header {
@@ -199,28 +200,86 @@ p {
 }
 
 .estado-pagado {
-  background-color: #dcfce7;
-  color: #14532d;
-  border: 1px solid #86efac;
+  background:
+    linear-gradient(0deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.12)),
+    rgba(15, 23, 42, 0.92);
+  color: #86efac;
+  border: 1px solid rgba(16, 185, 129, 0.55);
   border-radius: 8px;
   padding: 10px 16px !important;
   min-height: 54px;
   align-items: center;
+  box-shadow: inset 3px 0 0 rgba(74, 222, 128, 0.9);
 }
 
 .estado-pendiente {
-  background-color: #fee2e2;
-  color: #7f1d1d;
-  border: 1px solid #fca5a5;
+  background:
+    linear-gradient(0deg, rgba(244, 63, 94, 0.12), rgba(244, 63, 94, 0.12)),
+    rgba(15, 23, 42, 0.92);
+  color: #fecdd3;
+  border: 1px solid rgba(251, 113, 133, 0.6);
   border-radius: 8px;
   padding: 10px 16px !important;
   min-height: 54px;
   align-items: center;
+  box-shadow: inset 3px 0 0 rgba(251, 113, 133, 0.95);
 }
 
 .estado-texto-pagado {
   font-weight: 600;
-  color: #166534;
+  color: #86efac;
+  letter-spacing: 0.2px;
+}
+
+.estado-texto-pendiente {
+  font-weight: 600;
+  color: #fda4af;
+  letter-spacing: 0.2px;
+}
+
+.cuota-pay-button {
+  float: none !important;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(96, 165, 250, 0.55);
+  border-radius: 8px;
+  background-color: rgba(96, 165, 250, 0.14) !important;
+  color: #bfdbfe !important;
+  box-shadow: none !important;
+}
+
+.cuota-pay-button:hover,
+.cuota-pay-button:focus {
+  background-color: rgba(96, 165, 250, 0.24) !important;
+  border-color: rgba(147, 197, 253, 0.8);
+  color: #dbeafe !important;
+}
+
+.cuota-pay-button .mat-icon {
+  color: inherit;
+  margin: 0;
+}
+
+.estado-accion {
+  gap: 10px;
+  justify-content: center;
+}
+
+.estado-pendiente .cuota-pay-button {
+  border-color: rgba(251, 113, 133, 0.7);
+  background-color: rgba(244, 63, 94, 0.2) !important;
+  color: #fecdd3 !important;
+}
+
+.estado-pendiente .cuota-pay-button:hover,
+.estado-pendiente .cuota-pay-button:focus {
+  background-color: rgba(244, 63, 94, 0.32) !important;
+  border-color: rgba(251, 113, 133, 0.95);
 }
 
 @media (max-width: 768px) {

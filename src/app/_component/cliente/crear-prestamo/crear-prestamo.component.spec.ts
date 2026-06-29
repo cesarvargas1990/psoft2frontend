@@ -339,6 +339,28 @@ describe('CrearPrestamoComponent', () => {
     expect(component.formatearMoneda(1234.5)).toBe('$1,234.50');
   });
 
+  it('debe calcular equivalencia anual simple para interés mensual', () => {
+    component.formaspago = [{ id: 1, nomfpago: 'Mensual' }];
+    component.form.addControl('id_periodo_pago', new UntypedFormControl());
+    component.form.addControl('porcint', new UntypedFormControl());
+    component.form.patchValue({ id_periodo_pago: 1, porcint: 10 });
+
+    component.actualizarEquivalenciaInteres();
+
+    expect(component.model.interes_equivalente_anual).toBe('120.00');
+  });
+
+  it('debe calcular equivalencia anual simple para interés quincenal', () => {
+    component.formaspago = [{ value: 'q', label: 'Quincenal' }];
+    component.form.addControl('id_periodo_pago', new UntypedFormControl());
+    component.form.addControl('porcint', new UntypedFormControl());
+    component.form.patchValue({ id_periodo_pago: 'q', porcint: '2.5' });
+
+    component.actualizarEquivalenciaInteres();
+
+    expect(component.model.interes_equivalente_anual).toBe('60.00');
+  });
+
   it('getHeaders debe retornar los headers de la tabla', () => {
     component.tableCuotasPrestamo = [
       { cuota: 1, valor: 100000 },

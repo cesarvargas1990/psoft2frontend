@@ -45,7 +45,9 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
   listarDocumentosPrestamo = false;
 
   form = new UntypedFormGroup({});
-  model: any = {};
+  model: any = {
+    interes_equivalente_anual: '0.00'
+  };
 
   options: FormlyFormOptions = {};
 
@@ -183,6 +185,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
               options: this.formaspago,
               required: true,
               change: (field, $event) => {
+                this.actualizarEquivalenciaInteres();
                 if (this.form.valid) {
                   this.obtenerCuotasPrestamo();
                 }
@@ -213,7 +216,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
           },
           {
             key: 'valorpres',
-            className: 'col-md-4',
+            className: 'col-md-3',
             type: 'input',
             modelOptions: {
               updateOn: 'blur'
@@ -239,7 +242,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
           },
           {
             key: 'numcuotas',
-            className: 'col-md-4',
+            className: 'col-md-3',
             type: 'input',
             modelOptions: {
               updateOn: 'blur'
@@ -265,16 +268,17 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
           },
           {
             key: 'porcint',
-            className: 'col-md-4',
+            className: 'col-md-3',
             type: 'input',
             modelOptions: {
               updateOn: 'blur'
             },
             templateOptions: {
-              label: 'Porcentaje interés',
+              label: 'Interés del período (%)',
               required: true,
               pattern: /^[0-9]*\.?[0-9]*$/,
               blur: (field, $event) => {
+                this.actualizarEquivalenciaInteres();
                 if (this.form.valid) {
                   this.obtenerCuotasPrestamo();
                 }
@@ -285,6 +289,16 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
                 pattern: (error, field: FormlyFieldConfig) =>
                   `"${field.formControl.value}" no es un número válido`
               }
+            }
+          },
+          {
+            key: 'interes_equivalente_anual',
+            className: 'col-md-3',
+            type: 'input',
+            templateOptions: {
+              label: 'Equivalencia anual simple (%)',
+              readonly: true,
+              disabled: true
             }
           },
           {
@@ -348,6 +362,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
   async obtenerCuotasPrestamo() {
     if (this.form.valid) {
+      this.actualizarEquivalenciaInteres();
       this.mostrarTablaResumen = true;
       this.prestamosService
         .calcularCuotas(this.form.value)
@@ -376,6 +391,87 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
       });
     }
     return headers;
+  }
+
+  actualizarEquivalenciaInteres(): void {
+    const interesPeriodo = this.convertirANumero(this.form.value?.porcint);
+    const multiplicadorAnual = this.obtenerMultiplicadorAnualPago();
+    const equivalenciaAnual = interesPeriodo * multiplicadorAnual;
+    const valorFormateado = equivalenciaAnual.toFixed(2);
+
+    this.model.interes_equivalente_anual = valorFormateado;
+    this.form
+      .get('interes_equivalente_anual')
+      ?.setValue(valorFormateado, { emitEvent: false, onlySelf: true });
+  }
+
+  private obtenerMultiplicadorAnualPago(): number {
+    const formaPago = this.obtenerFormaPagoSeleccionada();
+    const nombrePeriodo = this.normalizarTexto(
+      [
+        formaPago?.nomfpago,
+        formaPago?.nomperiodopago,
+        formaPago?.label,
+        formaPago?.nombre,
+        formaPago?.descripcion,
+        typeof formaPago === 'string' ? formaPago : ''
+      ]
+        .filter(Boolean)
+        .join(' ')
+    );
+
+    if (nombrePeriodo.includes('diari')) {
+      return 360;
+    }
+    if (nombrePeriodo.includes('seman')) {
+      return 52;
+    }
+    if (nombrePeriodo.includes('quincen')) {
+      return 24;
+    }
+    if (nombrePeriodo.includes('mens')) {
+      return 12;
+    }
+    if (nombrePeriodo.includes('bimestr')) {
+      return 6;
+    }
+    if (nombrePeriodo.includes('cuatrimestr')) {
+      return 3;
+    }
+    if (nombrePeriodo.includes('trimestr')) {
+      return 4;
+    }
+    if (nombrePeriodo.includes('semestr')) {
+      return 2;
+    }
+    if (nombrePeriodo.includes('anual')) {
+      return 1;
+    }
+
+    return 12;
+  }
+
+  private obtenerFormaPagoSeleccionada(): any {
+    const idPeriodoPago = this.form.value?.id_periodo_pago;
+    const opciones = Array.isArray(this.formaspago) ? this.formaspago : [];
+
+    return opciones.find((opcion) => {
+      if (typeof opcion === 'string') {
+        return opcion === idPeriodoPago;
+      }
+
+      if (!opcion || typeof opcion !== 'object') {
+        return false;
+      }
+
+      const record = opcion as Record<string, unknown>;
+      return [
+        record.value,
+        record.id,
+        record.id_periodo_pago,
+        record.codperiodopago
+      ].some((valor) => String(valor) === String(idPeriodoPago));
+    });
   }
 
   formatearMoneda(valor: number): string {

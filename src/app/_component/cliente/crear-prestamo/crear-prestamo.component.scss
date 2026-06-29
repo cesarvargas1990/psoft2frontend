@@ -276,6 +276,45 @@ td.numbers {
   color: var(--color-text);
 }
 
+.loan-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 6px 0 14px;
+}
+
+.loan-summary-item {
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: rgba(148, 163, 184, 0.08);
+}
+
+.loan-summary-item-total {
+  border-color: rgba(37, 99, 235, 0.5);
+  background: rgba(37, 99, 235, 0.12);
+}
+
+.loan-summary-label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--color-muted);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.loan-summary-value {
+  display: block;
+  color: var(--color-text);
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
 .loan-actions {
   margin-top: 8px;
   display: flex;
@@ -350,6 +389,10 @@ td.numbers {
     font-size: 0.82rem;
   }
 
+  .loan-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .loan-actions {
     justify-content: stretch;
     flex-direction: column;
@@ -369,5 +412,11 @@ td.numbers {
   :host ::ng-deep .add-client-inline-btn {
     width: 100%;
     min-width: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .loan-summary-grid {
+    grid-template-columns: 1fr;
   }
 }

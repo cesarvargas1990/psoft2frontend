@@ -69,7 +69,22 @@ class MockPrestamosService {
   }
 
   calcularCuotas(data: any) {
-    return of([{ cuota: 1, valor: 100000 }]);
+    return of([
+      {
+        'N° Cuota': 1,
+        Interes: '$ 50,000.00',
+        Capital: '$ 100,000.00',
+        Saldo: '$ 100,000.00',
+        'Total a pagar cuota': '$ 150,000.00'
+      },
+      {
+        'N° Cuota': 2,
+        Interes: '$ 50,000.00',
+        Capital: '$ 100,000.00',
+        Saldo: '$ 0.00',
+        'Total a pagar cuota': '$ 150,000.00'
+      }
+    ]);
   }
 
   guardarPrestamo(model: any) {
@@ -289,6 +304,39 @@ describe('CrearPrestamoComponent', () => {
     component.obtenerCuotasPrestamo();
     expect(component.mostrarTablaResumen).toBe(true);
     expect(component.tableCuotasPrestamo.length).toBeGreaterThan(0);
+    expect(component.resumenCuotas.capital).toBe(200000);
+    expect(component.resumenCuotas.intereses).toBe(100000);
+    expect(component.resumenCuotas.granTotal).toBe(300000);
+    expect(component.resumenCuotas.saldoRestante).toBe(0);
+  });
+
+  it('debe calcular el resumen de cuotas desde valores formateados', () => {
+    component.tableCuotasPrestamo = [
+      {
+        Interes: '$ 1,500.50',
+        Capital: '$ 10,000.00',
+        Saldo: '$ 10,000.00',
+        'Total a pagar cuota': '$ 11,500.50'
+      },
+      {
+        Interes: '$ 500.00',
+        Capital: '$ 10,000.00',
+        Saldo: '$ 0.00',
+        'Total a pagar cuota': '$ 10,500.00'
+      }
+    ];
+
+    (component as any).actualizarResumenCuotas();
+
+    expect(component.resumenCuotas.capital).toBe(20000);
+    expect(component.resumenCuotas.intereses).toBe(2000.5);
+    expect(component.resumenCuotas.granTotal).toBe(22000.5);
+    expect(component.resumenCuotas.saldoRestante).toBe(0);
+    expect(component.resumenCuotas.cuotas).toBe(2);
+  });
+
+  it('formatearMoneda debe retornar moneda con dos decimales', () => {
+    expect(component.formatearMoneda(1234.5)).toBe('$1,234.50');
   });
 
   it('getHeaders debe retornar los headers de la tabla', () => {

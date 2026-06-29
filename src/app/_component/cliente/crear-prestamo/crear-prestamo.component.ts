@@ -24,6 +24,14 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { CrearClienteComponent } from '../crear-cliente/crear-cliente.component';
 import { SessionStateService } from '../../../core/session/session-state.service';
 
+interface ResumenCuotasPrestamo {
+  capital: number;
+  intereses: number;
+  granTotal: number;
+  saldoRestante: number;
+  cuotas: number;
+}
+
 @Component({
   standalone: false,
   selector: 'app-crear-prestamo',
@@ -48,6 +56,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
   mostrarTablaResumen = false;
   tableCuotasPrestamo: any[] = [];
+  resumenCuotas: ResumenCuotasPrestamo = this.crearResumenVacio();
 
   fields: FormlyFieldConfig[] = [];
 
@@ -344,6 +353,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
         .calcularCuotas(this.form.value)
         .subscribe((response) => {
           this.tableCuotasPrestamo = Array.isArray(response) ? response : [];
+          this.actualizarResumenCuotas();
         });
     } else {
       Swal.fire({
@@ -366,6 +376,122 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
       });
     }
     return headers;
+  }
+
+  formatearMoneda(valor: number): string {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(Number.isFinite(valor) ? valor : 0);
+  }
+
+  private actualizarResumenCuotas(): void {
+    const cuotas = Array.isArray(this.tableCuotasPrestamo)
+      ? this.tableCuotasPrestamo
+      : [];
+
+    const resumen = cuotas.reduce((acumulado, cuota) => {
+      acumulado.capital += this.obtenerNumeroDeCampo(cuota, ['Capital']);
+      acumulado.intereses += this.obtenerNumeroDeCampo(cuota, [
+        'Interes',
+        'Interés'
+      ]);
+      acumulado.granTotal += this.obtenerNumeroDeCampo(cuota, [
+        'Total a pagar cuota'
+      ]);
+      return acumulado;
+    }, this.crearResumenVacio());
+
+    const ultimaCuota = cuotas.length ? cuotas[cuotas.length - 1] : null;
+    resumen.saldoRestante = ultimaCuota
+      ? this.obtenerNumeroDeCampo(ultimaCuota, ['Saldo'])
+      : 0;
+    resumen.cuotas = cuotas.length;
+
+    if (resumen.granTotal === 0) {
+      resumen.granTotal = resumen.capital + resumen.intereses;
+    }
+
+    this.resumenCuotas = resumen;
+  }
+
+  private crearResumenVacio(): ResumenCuotasPrestamo {
+    return {
+      capital: 0,
+      intereses: 0,
+      granTotal: 0,
+      saldoRestante: 0,
+      cuotas: 0
+    };
+  }
+
+  private obtenerNumeroDeCampo(
+    fila: Record<string, unknown>,
+    nombresCampo: string[]
+  ): number {
+    const nombresNormalizados = nombresCampo.map((campo) =>
+      this.normalizarTexto(campo)
+    );
+    const nombreEncontrado = Object.keys(fila).find((campo) =>
+      nombresNormalizados.includes(this.normalizarTexto(campo))
+    );
+
+    if (!nombreEncontrado) {
+      return 0;
+    }
+
+    return this.convertirANumero(fila[nombreEncontrado]);
+  }
+
+  private normalizarTexto(texto: string): string {
+    return texto
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
+  }
+
+  private convertirANumero(valor: unknown): number {
+    if (typeof valor === 'number') {
+      return Number.isFinite(valor) ? valor : 0;
+    }
+
+    if (typeof valor !== 'string') {
+      return 0;
+    }
+
+    let valorLimpio = valor.replace(/[^\d,.-]/g, '');
+    if (!valorLimpio) {
+      return 0;
+    }
+
+    const ultimoPunto = valorLimpio.lastIndexOf('.');
+    const ultimaComa = valorLimpio.lastIndexOf(',');
+
+    if (ultimoPunto >= 0 && ultimaComa >= 0) {
+      if (ultimaComa > ultimoPunto) {
+        valorLimpio = valorLimpio.replace(/\./g, '').replace(',', '.');
+      } else {
+        valorLimpio = valorLimpio.replace(/,/g, '');
+      }
+    } else if (ultimaComa >= 0) {
+      const decimales = valorLimpio.length - ultimaComa - 1;
+      valorLimpio =
+        decimales > 0 && decimales <= 2
+          ? valorLimpio.replace(',', '.')
+          : valorLimpio.replace(/,/g, '');
+    } else if (ultimoPunto >= 0) {
+      const decimales = valorLimpio.length - ultimoPunto - 1;
+      valorLimpio =
+        decimales > 0 && decimales <= 2
+          ? valorLimpio
+          : valorLimpio.replace(/\./g, '');
+    }
+
+    const numero = Number(valorLimpio);
+    return Number.isFinite(numero) ? numero : 0;
   }
 
   async guardarPrestamo() {

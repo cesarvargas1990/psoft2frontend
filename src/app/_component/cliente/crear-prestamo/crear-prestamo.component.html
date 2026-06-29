@@ -59,6 +59,35 @@
               >
               </formly-form>
 
+              @if (mostrarTablaResumen && tableCuotasPrestamo?.length) {
+                <div class="loan-summary-grid">
+                  <div class="loan-summary-item">
+                    <span class="loan-summary-label">Capital</span>
+                    <strong class="loan-summary-value">
+                      {{ formatearMoneda(resumenCuotas.capital) }}
+                    </strong>
+                  </div>
+                  <div class="loan-summary-item">
+                    <span class="loan-summary-label">Intereses</span>
+                    <strong class="loan-summary-value">
+                      {{ formatearMoneda(resumenCuotas.intereses) }}
+                    </strong>
+                  </div>
+                  <div class="loan-summary-item loan-summary-item-total">
+                    <span class="loan-summary-label">Gran total</span>
+                    <strong class="loan-summary-value">
+                      {{ formatearMoneda(resumenCuotas.granTotal) }}
+                    </strong>
+                  </div>
+                  <div class="loan-summary-item">
+                    <span class="loan-summary-label">Saldo restante</span>
+                    <strong class="loan-summary-value">
+                      {{ formatearMoneda(resumenCuotas.saldoRestante) }}
+                    </strong>
+                  </div>
+                </div>
+              }
+
               <mat-dialog-actions class="loan-actions">
                 <button
                   type="button"

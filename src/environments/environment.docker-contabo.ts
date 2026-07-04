@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://147.93.1.252:8002';
+export const BASE_URL = 'http://cesarvargas.tech/apsoft';
 
 export const environment = {
   local: true,

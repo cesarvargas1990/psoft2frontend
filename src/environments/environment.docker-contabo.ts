@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://cesarvargas.tech/apsoft';
+export const BASE_URL = 'https://cesarvargas.tech/apsoft';
 
 export const environment = {
   local: true,

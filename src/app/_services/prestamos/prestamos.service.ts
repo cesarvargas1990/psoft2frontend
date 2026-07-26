@@ -49,6 +49,7 @@ export class PrestamosService {
     psdocadjuntos: this.server + '/psdocadjuntos',
     psfechaspago: this.server + '/psfechaspago',
     pspagos: this.server + '/pspagos',
+    cuotasPendientesHoy: this.server + '/cuotas_pendientes_hoy',
     eliminarPrestamo: this.server + '/eliminarPrestamo',
     listatiposistemaprest: this.server + '/listatiposistemaprest',
     totales_dashboard: this.server + '/totales_dashboard'
@@ -385,6 +386,18 @@ export class PrestamosService {
     data.fecha = this.obtenerFechaHoraCliente();
     return this.http.post<BackendMessageResponse>(
       `${this.services.pspagos}`,
+      data,
+      this.httpOpts
+    );
+  }
+
+  cuotasPendientesHoy(): Observable<fechasPago[]> {
+    const data = {
+      fecha: this.fechaActual(),
+      id_empresa: this.getStorageValue('id_empresa')
+    };
+    return this.http.post<fechasPago[]>(
+      `${this.services.cuotasPendientesHoy}`,
       data,
       this.httpOpts
     );

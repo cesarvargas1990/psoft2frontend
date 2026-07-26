@@ -78,6 +78,7 @@ describe('DashboardComponent', () => {
       'listaFechasPago',
       'renderTemplates',
       'registrarPagoCuota',
+      'cuotasPendientesHoy',
       'deletePrestamo'
     ]);
 
@@ -105,6 +106,7 @@ describe('DashboardComponent', () => {
     prestamosServiceSpy.registrarPagoCuota.and.returnValue(
       of({ success: true })
     );
+    prestamosServiceSpy.cuotasPendientesHoy.and.returnValue(of([]));
     prestamosServiceSpy.deletePrestamo.and.returnValue(of({}));
 
     await TestBed.configureTestingModule({

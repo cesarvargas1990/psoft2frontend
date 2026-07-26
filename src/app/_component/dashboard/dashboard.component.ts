@@ -70,6 +70,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
   datosEmpresa: any = [];
   datosPrestamos: any = [];
   datosFechasPago: any = [];
+  cuotasPendientesHoy: fechasPago[] = [];
   fechasPago: any = [];
 
   panelOpenState = false;
@@ -208,7 +209,19 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
       this.total_interes = response.total_interes;
       this.total_prestado = response.total_prestado;
     });
+    this.cargarCuotasPendientesHoy();
     this.getDatosPrestamo();
+  }
+
+  cargarCuotasPendientesHoy(): void {
+    this.prestamosService.cuotasPendientesHoy().subscribe({
+      next: (response) => {
+        this.cuotasPendientesHoy = response || [];
+      },
+      error: () => {
+        this.cuotasPendientesHoy = [];
+      }
+    });
   }
   ngOnInit() {
     this.menuUsuario = this.sessionState.parseStoredJson('menu_usuario', []);

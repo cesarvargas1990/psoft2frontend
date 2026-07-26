@@ -94,6 +94,53 @@
 
       <br />
       @if (!visualizarDocumentos && listadoPrestamos) {
+        <div class="card cuotas-hoy-card">
+          <div class="card-header cuotas-hoy-header">
+            <div>
+              <div class="card-title">Cuotas para cobrar hoy</div>
+              <small>Acceso directo para registrar los pagos programados del día.</small>
+            </div>
+            <span class="cuotas-hoy-count">{{ cuotasPendientesHoy.length }}</span>
+          </div>
+          <div class="card-body">
+            @if (cuotasPendientesHoy.length === 0) {
+              <div class="cuotas-hoy-empty">
+                No hay cuotas pendientes con fecha de pago hoy.
+              </div>
+            }
+            @if (cuotasPendientesHoy.length > 0) {
+              <div class="cuotas-hoy-list">
+                @for (cuota of cuotasPendientesHoy; track cuota.id) {
+                  <div class="cuota-hoy-item">
+                    <div class="cuota-hoy-cliente">
+                      <strong>{{ cuota.nomcliente }}</strong>
+                      <span>Préstamo #{{ cuota.id_prestamo }}</span>
+                      @if (cuota.celular) {
+                        <span>{{ cuota.celular }}</span>
+                      }
+                    </div>
+                    <div class="cuota-hoy-valor">
+                      <span>{{ cuota.fecha_pago_texto || cuota.fecha_pago }}</span>
+                      <strong>$ {{ cuota.valtotal }}</strong>
+                    </div>
+                    <button
+                      type="button"
+                      class="btn btn-primary cuota-hoy-pagar"
+                      [disabled]="cuotaEnProceso !== null"
+                      (click)="pagarCuotaPrestamo(cuota)"
+                    >
+                      <mat-icon aria-hidden="true">payments</mat-icon>
+                      Registrar pago
+                    </button>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+        <br />
+      }
+      @if (!visualizarDocumentos && listadoPrestamos) {
         <div class="card prestamos-page-card">
           <div class="card">
             <div class="card-header">

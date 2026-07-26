@@ -26,6 +26,100 @@
 
 /* ---------- Tabla principal de préstamos ---------- */
 
+.cuotas-hoy-card {
+  overflow: hidden;
+  border-left: 4px solid #1976d2;
+}
+
+.cuotas-hoy-header,
+.cuota-hoy-item {
+  display: flex;
+  align-items: center;
+}
+
+.cuotas-hoy-header {
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.cuotas-hoy-header .card-title {
+  margin-bottom: 2px;
+}
+
+.cuotas-hoy-count {
+  display: inline-flex;
+  min-width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 17px;
+  background: #1976d2;
+  color: #fff;
+  font-weight: 700;
+}
+
+.cuotas-hoy-list {
+  display: grid;
+  gap: 10px;
+}
+
+.cuota-hoy-item {
+  gap: 20px;
+  padding: 12px 14px;
+  border: 1px solid #e3e8ee;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.cuota-hoy-cliente,
+.cuota-hoy-valor {
+  display: flex;
+  flex-direction: column;
+}
+
+.cuota-hoy-cliente {
+  flex: 1 1 auto;
+}
+
+.cuota-hoy-valor {
+  min-width: 180px;
+  text-align: right;
+}
+
+.cuota-hoy-pagar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.cuota-hoy-pagar .mat-icon {
+  font-size: 20px;
+}
+
+.cuotas-hoy-empty {
+  padding: 14px;
+  color: #5f6b76;
+  text-align: center;
+}
+
+@media (max-width: 767px) {
+  .cuota-hoy-item {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cuota-hoy-valor {
+    min-width: 0;
+    text-align: left;
+  }
+
+  .cuota-hoy-pagar {
+    justify-content: center;
+  }
+}
+
 .app-data-table {
   width: 100%;
 }

@@ -1,40 +1,160 @@
+.action-label {
+  display: none;
+}
+
 @media screen and (max-width: 960px) {
-  .mat-table {
-    border: 0;
-    vertical-align: middle;
+  .clientes-card-body {
+    padding: 12px;
   }
-  .mat-table .mat-header-cell {
-    border: 10px solid;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    position: absolute;
-    width: 1px;
+
+  .clientes-toolbar {
+    align-items: stretch;
+    margin-bottom: 12px;
   }
-  .mat-table .mat-row {
-    border-bottom: 5px solid #ddd;
+
+  .app-data-table {
     display: block;
+    width: 100%;
+    min-width: 0;
+    overflow: visible;
+    background: transparent;
+    box-shadow: none !important;
   }
-  .mat-table .mat-cell {
-    border-bottom: 1px solid #ddd;
+
+  .app-data-table .mat-header-row,
+  .app-data-table .mat-mdc-header-row {
+    display: none !important;
+  }
+
+  .app-data-table .mat-row,
+  .app-data-table .mat-mdc-row {
     display: block;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    min-height: 0;
+    margin-bottom: 14px;
+    padding: 8px 14px;
+    box-sizing: border-box;
+    overflow: hidden;
+    background: linear-gradient(
+      155deg,
+      rgba(51, 65, 85, 0.96),
+      rgba(24, 36, 56, 0.98)
+    );
+    border: 1px solid rgba(96, 165, 250, 0.4);
+    border-radius: 14px;
+    box-shadow:
+      inset 4px 0 0 #3b82f6,
+      0 10px 24px rgba(2, 6, 23, 0.24);
+  }
+
+  .app-data-table .mat-cell,
+  .app-data-table .mat-mdc-cell {
+    display: grid !important;
+    grid-template-columns: minmax(110px, 38%) minmax(0, 62%);
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    min-height: 44px;
+    height: auto;
+    flex: none !important;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    padding: 10px 0 !important;
+    box-sizing: border-box;
+    color: var(--color-text);
+    font-size: 0.92rem;
+    line-height: 1.35;
     text-align: right;
-    padding: inherit;
-    height: 30px;
-    margin-bottom: 4%;
-    padding-right: 24px;
-    margin-top: 5%;
+    white-space: normal !important;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    word-break: normal !important;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.16);
   }
-  .mat-table .mat-cell:before {
+
+  .app-data-table .mat-cell::before,
+  .app-data-table .mat-mdc-cell::before {
     content: attr(data-label);
-    float: left;
-    font-weight: bold;
-    padding-left: 24px;
-    font-size: 0.85em;
+    min-width: 0;
+    color: #bfdbfe;
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.35px;
   }
-  .mat-table .mat-cell:last-child {
+
+  .app-data-table .mat-column-nomcliente {
+    color: #f8fafc;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .app-data-table .mat-column-action {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    padding-top: 14px !important;
     border-bottom: 0;
+  }
+
+  .app-data-table .mat-column-action::before {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .cliente-row-actions {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .app-data-table .action-btn {
+    display: inline-flex !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 0 8px !important;
+    border-radius: 10px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .action-label {
+    display: inline;
+    font-size: 0.7rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .app-data-table .action-edit {
+    color: #93c5fd;
+    border-color: rgba(96, 165, 250, 0.8);
+    background: rgba(59, 130, 246, 0.1);
+  }
+
+  .app-data-table .action-delete {
+    color: #fda4af;
+    border-color: rgba(251, 113, 133, 0.8);
+    background: rgba(244, 63, 94, 0.1);
+  }
+
+  .app-data-table .action-credits {
+    color: #67e8f9;
+    border-color: rgba(34, 211, 238, 0.8);
+    background: rgba(6, 182, 212, 0.1);
   }
 }
 
@@ -95,6 +215,26 @@
 
 .app-data-table .action-btn .mat-icon {
   margin: 0;
+}
+
+.clientes-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.clientes-search {
+  flex: 1 1 auto;
+}
+
+.cliente-create-button {
+  flex: 0 0 auto;
+  margin-bottom: 18px;
+  white-space: nowrap;
+}
+
+.cliente-create-button .mat-icon {
+  margin-right: 6px;
 }
 
 .card-header {
@@ -170,5 +310,61 @@
 
   .clientes-hero-subtitle {
     font-size: 0.8rem;
+  }
+
+  .clientes-toolbar {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .clientes-search,
+  .cliente-create-button {
+    width: 100%;
+  }
+
+  .cliente-create-button {
+    min-height: 48px;
+    margin: 0 0 12px;
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .clientes-page {
+    padding: 8px;
+  }
+
+  .clientes-card-body {
+    padding: 8px;
+  }
+
+  .app-data-table .mat-row,
+  .app-data-table .mat-mdc-row {
+    padding: 6px 12px;
+    border-radius: 12px;
+  }
+
+  .app-data-table .mat-cell,
+  .app-data-table .mat-mdc-cell {
+    grid-template-columns: minmax(96px, 38%) minmax(0, 62%);
+    min-height: 42px;
+    gap: 8px;
+    padding: 9px 0 !important;
+    font-size: 0.86rem;
+  }
+
+  .cliente-row-actions {
+    gap: 6px;
+  }
+
+  .app-data-table .action-btn {
+    height: 46px;
+    flex-direction: column;
+    gap: 2px;
+    padding: 4px 2px !important;
+  }
+
+  .action-label {
+    font-size: 0.64rem;
   }
 }

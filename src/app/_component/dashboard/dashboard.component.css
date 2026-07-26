@@ -1,76 +1,66 @@
-@media screen and (max-width: 960px) {
-  .mat-table {
-    border: 0;
-    vertical-align: middle;
-  }
-  .mat-table .mat-header-cell {
-    border: 10px solid;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    position: absolute;
-    width: 1px;
-  }
-  .mat-table .mat-row {
-    border-bottom: 5px solid #ddd;
-    display: block;
-  }
-  .mat-table .mat-cell {
-    border-bottom: 1px solid #ddd;
-    display: block;
-    text-align: right;
-    padding: inherit;
-    height: 30px;
-    margin-bottom: 4%;
-    padding-right: 24px;
-    margin-top: 5%;
-  }
-  .mat-table .mat-cell:before {
-    content: attr(data-label);
-    float: left;
-    font-weight: bold;
-    padding-left: 24px;
-    font-size: 0.85em;
-  }
-  .mat-table .mat-cell:last-child {
-    border-bottom: 0;
-  }
-}
+/* =========================================================
+   PRESTASOFT - DASHBOARD
+   Estilos completos de tablas, estados y vista móvil
+   ========================================================= */
 
-.mat-column-fecha_pago {
-  justify-content: flex-start;
-  margin: 0;
-}
+/* ---------- Columnas de escritorio ---------- */
 
+.mat-column-fecha_pago,
 .mat-column-fecha_realpago {
   justify-content: flex-start;
   margin: 0;
 }
 
-.mat-column-valorpres {
-  justify-content: flex-end;
-  margin: 0;
-}
-
-.mat-column-valcuota {
-  justify-content: flex-end;
-  margin: 0;
-}
-
-.mat-column-nomfpago {
-  justify-content: center;
-  margin: 0;
-}
-
+.mat-column-valorpres,
+.mat-column-valcuota,
 .mat-column-valtotal {
   justify-content: flex-end;
   margin: 0;
 }
 
+.mat-column-nomfpago,
 .mat-column-action {
   justify-content: center;
   margin: 0;
+}
+
+/* ---------- Tabla principal de préstamos ---------- */
+
+.app-data-table {
+  width: 100%;
+}
+
+.prestamos-page-card,
+.prestamos-card-body,
+.prestamos-content {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.prestamos-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.prestamos-search {
+  flex: 1 1 auto;
+}
+
+.prestamo-create-button {
+  flex: 0 0 auto;
+  margin-bottom: 18px;
+  white-space: nowrap;
+}
+
+.prestamo-create-button .mat-icon {
+  margin-right: 6px;
+}
+
+.action-label {
+  display: none;
 }
 
 .app-data-table .mat-mdc-header-cell,
@@ -78,10 +68,13 @@
 .app-data-table .mat-header-cell,
 .app-data-table .mat-cell {
   margin: 0 !important;
+  box-sizing: border-box;
 }
 
 .app-data-table .mat-mdc-row,
-.app-data-table .mat-mdc-header-row {
+.app-data-table .mat-mdc-header-row,
+.app-data-table .mat-row,
+.app-data-table .mat-header-row {
   column-gap: 0;
 }
 
@@ -98,13 +91,13 @@
 
 .app-data-table .mat-column-action {
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 8px;
-  white-space: nowrap;
   flex: 0 0 180px;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
   max-width: 180px;
   padding-right: 8px;
+  white-space: nowrap;
 }
 
 .app-data-table .mat-header-cell.mat-column-action,
@@ -113,27 +106,76 @@
   max-width: 180px;
 }
 
+.app-data-table .row-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 .app-data-table .action-btn {
-  float: none !important;
+  display: inline-flex;
   width: 40px;
   min-width: 40px;
   height: 40px;
-  padding: 0;
-  display: inline-flex;
   align-items: center;
   justify-content: center;
+  float: none !important;
+  padding: 0;
 }
 
 .app-data-table .action-btn .mat-icon {
   margin: 0;
 }
 
+/* ---------- Tabla de cuotas en escritorio ---------- */
+
+.main-table {
+  width: 100%;
+}
+
 .main-table .mat-header-cell,
-.main-table .mat-cell {
-  padding-left: 12px;
+.main-table .mat-cell,
+.main-table .mat-mdc-header-cell,
+.main-table .mat-mdc-cell {
+  box-sizing: border-box;
   padding-right: 12px;
+  padding-left: 12px;
+}
+
+.cuotas-page-card {
+  width: 100%;
+  max-width: 100%;
+}
+
+.cuotas-card-body,
+.cuotas-content,
+.cuotas-scroll-container {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   box-sizing: border-box;
 }
+
+.cuotas-search,
+.example-full-width {
+  width: 100%;
+}
+
+.cuotas-table {
+  width: 100%;
+}
+
+.cuota-status-actions {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* ---------- Tarjetas y encabezados ---------- */
 
 .card p {
   margin: 20px;
@@ -141,8 +183,8 @@
 }
 
 .card-header {
-  background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
   color: white;
+  background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
 }
 
 .dashboard-hero-header {
@@ -162,14 +204,15 @@
 }
 
 .dashboard-back-button {
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.32);
-  background: transparent;
   flex-shrink: 0;
+  color: #fff;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.32);
 }
 
 .dashboard-hero-copy {
   display: flex;
+  min-width: 0;
   flex-direction: column;
   gap: 2px;
 }
@@ -179,101 +222,103 @@
   color: #fff;
   font-size: 1.15rem;
   font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
 .dashboard-hero-subtitle {
   margin: 0;
   color: rgba(255, 255, 255, 0.92);
   font-size: 0.87rem;
+  overflow-wrap: anywhere;
 }
 
 .mat-expansion-panel-header {
   background-color: var(--color-primary) !important;
 }
 
-.mat-expansion-panel-header-description {
-  color: white;
-}
-
+.mat-expansion-panel-header-description,
 .mat-expansion-panel-header-title {
   color: white;
 }
 
+/* ---------- Estados de cuotas en escritorio ---------- */
+
 .estado-pagado {
+  min-height: 54px;
+  align-items: center;
+  padding: 10px 16px !important;
+  color: #86efac;
   background:
     linear-gradient(0deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.12)),
     rgba(15, 23, 42, 0.92);
-  color: #86efac;
   border: 1px solid rgba(16, 185, 129, 0.55);
   border-radius: 8px;
-  padding: 10px 16px !important;
-  min-height: 54px;
-  align-items: center;
   box-shadow: inset 3px 0 0 rgba(74, 222, 128, 0.9);
 }
 
 .estado-pendiente {
+  min-height: 54px;
+  align-items: center;
+  padding: 10px 16px !important;
+  color: #fecdd3;
   background:
     linear-gradient(0deg, rgba(244, 63, 94, 0.12), rgba(244, 63, 94, 0.12)),
     rgba(15, 23, 42, 0.92);
-  color: #fecdd3;
   border: 1px solid rgba(251, 113, 133, 0.6);
   border-radius: 8px;
-  padding: 10px 16px !important;
-  min-height: 54px;
-  align-items: center;
   box-shadow: inset 3px 0 0 rgba(251, 113, 133, 0.95);
 }
 
 .estado-texto-pagado {
-  font-weight: 600;
   color: #86efac;
+  font-weight: 600;
   letter-spacing: 0.2px;
 }
 
-.estado-texto-pendiente {
-  font-weight: 600;
+.estado-texto-pendiente,
+.fecha-pendiente {
   color: #fda4af;
+  font-weight: 600;
   letter-spacing: 0.2px;
+}
+
+.estado-accion {
+  justify-content: center;
+  gap: 10px;
 }
 
 .cuota-pay-button {
-  float: none !important;
+  display: inline-flex;
   width: 40px;
   min-width: 40px;
   height: 40px;
-  padding: 0;
-  display: inline-flex;
   align-items: center;
   justify-content: center;
+  float: none !important;
+  padding: 0;
+  color: #bfdbfe !important;
+  background-color: rgba(96, 165, 250, 0.14) !important;
   border: 1px solid rgba(96, 165, 250, 0.55);
   border-radius: 8px;
-  background-color: rgba(96, 165, 250, 0.14) !important;
-  color: #bfdbfe !important;
   box-shadow: none !important;
 }
 
 .cuota-pay-button:hover,
 .cuota-pay-button:focus {
+  color: #dbeafe !important;
   background-color: rgba(96, 165, 250, 0.24) !important;
   border-color: rgba(147, 197, 253, 0.8);
-  color: #dbeafe !important;
 }
 
 .cuota-pay-button .mat-icon {
-  color: inherit;
   margin: 0;
-}
-
-.estado-accion {
-  gap: 10px;
-  justify-content: center;
+  color: inherit;
 }
 
 .estado-pendiente .cuota-pay-button {
-  border-color: rgba(251, 113, 133, 0.7);
-  background-color: rgba(244, 63, 94, 0.2) !important;
   color: #fecdd3 !important;
+  background-color: rgba(244, 63, 94, 0.2) !important;
+  border-color: rgba(251, 113, 133, 0.7);
 }
 
 .estado-pendiente .cuota-pay-button:hover,
@@ -282,7 +327,356 @@
   border-color: rgba(251, 113, 133, 0.95);
 }
 
-@media (max-width: 768px) {
+/* ---------- Estado vacío ---------- */
+
+.cuotas-empty-state {
+  padding: 24px 16px;
+  color: var(--color-text);
+  text-align: center;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+}
+
+/* ---------- Scroll principal ---------- */
+
+mat-sidenav-content,
+.mat-sidenav-content {
+  min-width: 0;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* =========================================================
+   MOBILE: PRÉSTAMOS Y CUOTAS COMO TARJETAS
+   ========================================================= */
+
+@media screen and (max-width: 960px) {
+  .card-body,
+  .cuotas-card-body,
+  .prestamos-card-body {
+    padding: 12px;
+  }
+
+  .card-text,
+  .cuotas-content,
+  .prestamos-content {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .prestamos-toolbar {
+    align-items: stretch;
+    margin-bottom: 12px;
+  }
+
+  .prestamos-search {
+    min-width: 0;
+  }
+
+  .prestamo-create-button {
+    min-height: 48px;
+    margin: 0 0 18px;
+    padding: 0 18px;
+    border-radius: 10px;
+  }
+
+  /*
+   * Se usa el desplazamiento natural de mat-sidenav-content.
+   * No se crea un segundo scroll interno, para evitar lentitud.
+   */
+  .cuotas-scroll-container {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: visible;
+    padding-bottom: 8px;
+  }
+
+  /* ---------- Encabezados ocultos ---------- */
+
+  .app-data-table .mat-header-row,
+  .app-data-table .mat-mdc-header-row,
+  .cuotas-table .mat-header-row,
+  .cuotas-table .mat-mdc-header-row {
+    display: none !important;
+  }
+
+  /* ---------- Tablas sin ancho de escritorio ---------- */
+
+  .app-data-table,
+  .cuotas-table {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: visible !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  /* ---------- Cada fila se convierte en tarjeta ---------- */
+
+  .app-data-table .mat-row,
+  .app-data-table .mat-mdc-row,
+  .cuotas-table .mat-row,
+  .cuotas-table .mat-mdc-row {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 0 14px !important;
+    padding: 8px 14px !important;
+    box-sizing: border-box;
+    overflow: hidden;
+    border-radius: 14px;
+  }
+
+  .app-data-table .mat-row,
+  .app-data-table .mat-mdc-row {
+    background: linear-gradient(
+      155deg,
+      rgba(51, 65, 85, 0.96),
+      rgba(24, 36, 56, 0.98)
+    );
+    border: 1px solid rgba(96, 165, 250, 0.4);
+    box-shadow:
+      inset 4px 0 0 #3b82f6,
+      0 10px 24px rgba(2, 6, 23, 0.24);
+  }
+
+  .cuotas-table .cuota-card-pagada {
+    background: linear-gradient(
+      145deg,
+      rgba(16, 185, 129, 0.15),
+      rgba(15, 23, 42, 0.97)
+    ) !important;
+    border: 1px solid rgba(52, 211, 153, 0.55);
+    box-shadow: inset 4px 0 0 #34d399;
+  }
+
+  .cuotas-table .cuota-card-pendiente {
+    background: linear-gradient(
+      145deg,
+      rgba(244, 63, 94, 0.14),
+      rgba(30, 20, 40, 0.97)
+    ) !important;
+    border: 1px solid rgba(251, 113, 133, 0.55);
+    box-shadow: inset 4px 0 0 #fb7185;
+  }
+
+  /* ---------- Celdas etiqueta / valor ---------- */
+
+  .app-data-table .mat-cell,
+  .app-data-table .mat-mdc-cell,
+  .cuotas-table .mat-cell,
+  .cuotas-table .mat-mdc-cell {
+    display: grid !important;
+    grid-template-columns: minmax(105px, 40%) minmax(0, 60%);
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    min-height: 44px !important;
+    height: auto !important;
+    flex: none !important;
+    align-items: center;
+    column-gap: 12px;
+    margin: 0 !important;
+    padding: 10px 0 !important;
+    box-sizing: border-box;
+    color: var(--color-text);
+    font-size: 0.92rem;
+    line-height: 1.35;
+    text-align: right;
+    white-space: normal;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    background: transparent !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.16) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .app-data-table .mat-cell:last-child,
+  .app-data-table .mat-mdc-cell:last-child,
+  .cuotas-table .mat-cell:last-child,
+  .cuotas-table .mat-mdc-cell:last-child {
+    border-bottom: 0 !important;
+  }
+
+  .app-data-table .mat-cell::before,
+  .app-data-table .mat-mdc-cell::before,
+  .cuotas-table .mat-cell::before,
+  .cuotas-table .mat-mdc-cell::before {
+    content: attr(data-label);
+    display: block;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    color: rgba(191, 219, 254, 0.92);
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1.25;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.35px;
+  }
+
+  .cuotas-table .cuota-card-pagada .mat-cell::before,
+  .cuotas-table .cuota-card-pagada .mat-mdc-cell::before {
+    color: #6ee7b7;
+  }
+
+  .cuotas-table .cuota-card-pendiente .mat-cell::before,
+  .cuotas-table .cuota-card-pendiente .mat-mdc-cell::before {
+    color: #fda4af;
+  }
+
+  /* ---------- Reinicio de anchos de columnas ---------- */
+
+  .app-data-table .mat-column-id_prestamo,
+  .app-data-table .mat-column-nomcliente,
+  .app-data-table .mat-column-celular,
+  .app-data-table .mat-column-direcasa,
+  .app-data-table .mat-column-nomfpago,
+  .app-data-table .mat-column-valorpres,
+  .app-data-table .mat-column-valcuota,
+  .app-data-table .mat-column-valtotal,
+  .app-data-table .mat-column-action,
+  .cuotas-table .mat-column-fecha_pago,
+  .cuotas-table .mat-column-fecha_realpago,
+  .cuotas-table .mat-column-valcuota,
+  .cuotas-table .mat-column-valtotal,
+  .cuotas-table .mat-column-action {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    flex: none !important;
+    margin: 0 !important;
+    justify-content: initial !important;
+  }
+
+  .app-data-table .mat-column-nomcliente {
+    color: #f8fafc;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .app-data-table .mat-column-valorpres,
+  .app-data-table .mat-column-valcuota,
+  .app-data-table .mat-column-valtotal,
+  .cuotas-table .mat-column-valcuota,
+  .cuotas-table .mat-column-valtotal {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Acciones ---------- */
+
+  .app-data-table .mat-column-action,
+  .cuotas-table .mat-column-action {
+    grid-template-columns: minmax(105px, 40%) minmax(0, 60%);
+    padding-top: 12px !important;
+    padding-bottom: 8px !important;
+  }
+
+  .app-data-table .mat-column-action {
+    display: block !important;
+    padding-top: 14px !important;
+  }
+
+  .app-data-table .mat-column-action::before {
+    margin-bottom: 10px;
+  }
+
+  .app-data-table .row-actions,
+  .cuotas-table .cuota-status-actions {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .app-data-table .action-btn,
+  .cuotas-table .cuota-pay-button {
+    display: inline-flex;
+    flex: 0 0 42px;
+    width: 42px;
+    min-width: 42px;
+    height: 42px;
+    align-items: center;
+    justify-content: center;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .app-data-table .row-actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .app-data-table .action-btn {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    height: 48px;
+    gap: 6px;
+    border-radius: 10px;
+  }
+
+  .app-data-table .action-label {
+    display: inline;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .app-data-table .action-btn[title='Eliminar Prestamo'] {
+    color: #fda4af;
+    border-color: rgba(251, 113, 133, 0.7);
+  }
+
+  .cuotas-table .estado-texto-pagado,
+  .cuotas-table .estado-texto-pendiente {
+    white-space: nowrap;
+  }
+
+  /* ---------- Paginadores ---------- */
+
+  .mat-paginator,
+  .mat-mdc-paginator,
+  .cuotas-paginator {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-top: 8px;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+
+  .mat-paginator-container,
+  .mat-mdc-paginator-container {
+    min-height: 64px !important;
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    row-gap: 8px;
+    padding: 8px !important;
+  }
+
+  .mat-paginator-page-size,
+  .mat-mdc-paginator-page-size {
+    margin: 0 8px 0 0 !important;
+  }
+
+  /* ---------- Hero móvil ---------- */
+
   .dashboard-hero-header {
     padding: 10px;
   }
@@ -297,5 +691,92 @@
 
   .dashboard-hero-subtitle {
     font-size: 0.8rem;
+  }
+}
+
+/* =========================================================
+   TELÉFONOS ANGOSTOS
+   ========================================================= */
+
+@media screen and (max-width: 480px) {
+  .card-body,
+  .cuotas-card-body,
+  .prestamos-card-body {
+    padding: 8px;
+  }
+
+  .prestamos-toolbar {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .prestamo-create-button {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+
+  .app-data-table .mat-row,
+  .app-data-table .mat-mdc-row,
+  .cuotas-table .mat-row,
+  .cuotas-table .mat-mdc-row {
+    margin-bottom: 12px !important;
+    padding: 6px 12px !important;
+    border-radius: 12px;
+  }
+
+  .app-data-table .mat-cell,
+  .app-data-table .mat-mdc-cell,
+  .cuotas-table .mat-cell,
+  .cuotas-table .mat-mdc-cell {
+    grid-template-columns: minmax(96px, 38%) minmax(0, 62%);
+    min-height: 42px !important;
+    column-gap: 8px;
+    padding: 9px 0 !important;
+    font-size: 0.86rem;
+  }
+
+  .app-data-table .mat-cell::before,
+  .app-data-table .mat-mdc-cell::before,
+  .cuotas-table .mat-cell::before,
+  .cuotas-table .mat-mdc-cell::before {
+    font-size: 0.66rem;
+    letter-spacing: 0.2px;
+  }
+
+  .app-data-table .mat-column-action,
+  .cuotas-table .mat-column-action {
+    grid-template-columns: minmax(96px, 38%) minmax(0, 62%);
+  }
+
+  .app-data-table .action-btn,
+  .cuotas-table .cuota-pay-button {
+    flex-basis: 40px;
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+  }
+
+  .app-data-table .action-btn {
+    width: 100%;
+    min-width: 0;
+    flex-basis: auto;
+    height: 46px;
+  }
+
+  .app-data-table .action-label {
+    font-size: 0.68rem;
+  }
+
+  .dashboard-hero-title {
+    font-size: 0.96rem;
+    line-height: 1.25;
+  }
+
+  .dashboard-hero-subtitle {
+    font-size: 0.76rem;
+  }
+
+  .cuotas-paginator {
+    font-size: 0.75rem;
   }
 }

@@ -94,36 +94,35 @@
 
       <br />
       @if (!visualizarDocumentos && listadoPrestamos) {
-        <div class="card" style="width: 100%">
+        <div class="card prestamos-page-card">
           <div class="card">
             <div class="card-header">
               <div class="card-title">Listado de prestamos</div>
             </div>
           </div>
-          <div class="card-body">
-            <div class="card-text">
-              <mat-form-field class="example-full-width">
-                <input
-                  matInput
-                  (keyup)="applyFilter($event.target.value)"
-                  placeholder="Buscar"
-                />
-              </mat-form-field>
-              <br />
-              @if (authService.tienePermiso('dashboard.crear_prestamo')) {
-                <button
-                  title="Crear Prestamo"
-                  class="btn btn-outline-primary btn-sm"
-                  mat-icon-button
-                  color="primary"
-                  (click)="irPantallaCrearPrestamo()"
-                >
-                  <mat-icon aria-label="Example icon-button with a heart icon"
-                    >add</mat-icon
+          <div class="card-body prestamos-card-body">
+            <div class="card-text prestamos-content">
+              <div class="prestamos-toolbar">
+                <mat-form-field class="example-full-width prestamos-search">
+                  <input
+                    matInput
+                    (keyup)="applyFilter($event.target.value)"
+                    placeholder="Buscar"
+                  />
+                </mat-form-field>
+                @if (authService.tienePermiso('dashboard.crear_prestamo')) {
+                  <button
+                    title="Crear préstamo"
+                    class="prestamo-create-button"
+                    mat-raised-button
+                    color="primary"
+                    (click)="irPantallaCrearPrestamo()"
                   >
-                </button>
-              }
-              <br />
+                    <mat-icon aria-hidden="true">add</mat-icon>
+                    <span>Nuevo préstamo</span>
+                  </button>
+                }
+              </div>
               <mat-table
                 class="table-responsive mat-elevation-z8 app-data-table"
                 [dataSource]="dataSource"
@@ -187,56 +186,68 @@
                 </ng-container>
                 <ng-container matColumnDef="action">
                   <mat-header-cell *matHeaderCellDef> </mat-header-cell>
-                  <mat-cell *matCellDef="let row; let i = index">
-                    @if (
-                      authService.tienePermiso('dashboard.imprimir_documentos')
-                    ) {
-                      <button
-                        title="Documentos"
-                        class="btn btn-outline-primary btn-sm action-btn"
-                        mat-icon-button
-                        color="primary"
-                        (click)="
-                          modalListadoDocumentos(row);
-                          visualizarListaCuotas = false;
-                          totales = false
-                        "
-                      >
-                        <mat-icon aria-label="print">print</mat-icon>
-                      </button>
-                    }
-                    @if (authService.tienePermiso('dashboard.listado_cuotas')) {
-                      <button
-                        title="Listado Cuotas"
-                        class="btn btn-outline-info btn-sm action-btn"
-                        mat-icon-button
-                        color="primary"
-                        (click)="
-                          visualizarListaCuotas = true;
-                          visualizarDocumentos = false;
-                          listadoPrestamos = false;
-                          listadoCuotas(row);
-                          totales = false
-                        "
-                      >
-                        <mat-icon aria-label="find_in_page"
-                          >find_in_page</mat-icon
+                  <mat-cell
+                    *matCellDef="let row; let i = index"
+                    data-label="Acciones"
+                  >
+                    <div class="row-actions">
+                      @if (
+                        authService.tienePermiso(
+                          'dashboard.imprimir_documentos'
+                        )
+                      ) {
+                        <button
+                          title="Documentos"
+                          class="btn btn-outline-primary btn-sm action-btn"
+                          mat-icon-button
+                          color="primary"
+                          (click)="
+                            modalListadoDocumentos(row);
+                            visualizarListaCuotas = false;
+                            totales = false
+                          "
                         >
-                      </button>
-                    }
-                    @if (
-                      authService.tienePermiso('dashboard.eliminar_prestamo')
-                    ) {
-                      <button
-                        title="Eliminar Prestamo"
-                        class="btn btn-outline-info btn-sm action-btn"
-                        mat-icon-button
-                        color="accent"
-                        (click)="eliminarPrestamo(row)"
-                      >
-                        <mat-icon aria-label="delete">delete</mat-icon>
-                      </button>
-                    }
+                          <mat-icon aria-label="print">print</mat-icon>
+                          <span class="action-label">Documentos</span>
+                        </button>
+                      }
+                      @if (
+                        authService.tienePermiso('dashboard.listado_cuotas')
+                      ) {
+                        <button
+                          title="Listado Cuotas"
+                          class="btn btn-outline-info btn-sm action-btn"
+                          mat-icon-button
+                          color="primary"
+                          (click)="
+                            visualizarListaCuotas = true;
+                            visualizarDocumentos = false;
+                            listadoPrestamos = false;
+                            listadoCuotas(row);
+                            totales = false
+                          "
+                        >
+                          <mat-icon aria-label="find_in_page"
+                            >find_in_page</mat-icon
+                          >
+                          <span class="action-label">Cuotas</span>
+                        </button>
+                      }
+                      @if (
+                        authService.tienePermiso('dashboard.eliminar_prestamo')
+                      ) {
+                        <button
+                          title="Eliminar Prestamo"
+                          class="btn btn-outline-info btn-sm action-btn"
+                          mat-icon-button
+                          color="accent"
+                          (click)="eliminarPrestamo(row)"
+                        >
+                          <mat-icon aria-label="delete">delete</mat-icon>
+                          <span class="action-label">Eliminar</span>
+                        </button>
+                      }
+                    </div>
                   </mat-cell>
                 </ng-container>
                 <mat-header-row
@@ -312,8 +323,8 @@
         </div>
       }
       @if (visualizarListaCuotas) {
-        <div class="card" style="width: 100%">
-          <div class="card-body">
+        <div class="card cuotas-page-card">
+          <div class="card-body cuotas-card-body">
             <div class="card-header dashboard-hero-header">
               <div class="dashboard-hero-title-wrap">
                 <button
@@ -339,117 +350,127 @@
                 </div>
               </div>
             </div>
-            <div class="card-text">
-              <mat-form-field class="example-full-width">
+            <div class="card-text cuotas-content">
+              <mat-form-field class="example-full-width cuotas-search">
                 <input
                   matInput
                   (keyup)="applyFilter($event.target.value)"
                   placeholder="Buscar"
                 />
               </mat-form-field>
-              <mat-table
-                class="main-table mobile-optimised table-responvive"
-                [dataSource]="dataSourceFecPago"
-                matSort
-                class="mat-elevation-z8"
-              >
-                <ng-container matColumnDef="fecha_pago">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Fecha de Pago
-                  </mat-header-cell>
-                  <mat-cell
+              <div class="cuotas-scroll-container">
+                <mat-table
+                  class="main-table cuotas-table mat-elevation-z8"
+                  [dataSource]="dataSourceFecPago"
+                  matSort
+                >
+                  <ng-container matColumnDef="fecha_pago">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                      Fecha de Pago
+                    </mat-header-cell>
+                    <mat-cell
+                      [ngClass]="
+                        element.id_fecha_pago
+                          ? 'estado-pagado'
+                          : 'estado-pendiente'
+                      "
+                      *matCellDef="let element"
+                      data-label="Fecha de pago"
+                    >
+                      {{ element.fecha_pago }}
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="fecha_realpago">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                      Fecha Realiza Pago
+                    </mat-header-cell>
+                    <mat-cell
+                      [ngClass]="
+                        element.id_fecha_pago
+                          ? 'estado-pagado'
+                          : 'estado-pendiente'
+                      "
+                      *matCellDef="let element"
+                      data-label="Pago realizado"
+                    >
+                      {{ element.fecha_realpago }}
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="valcuota">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                      Valor Intereses
+                    </mat-header-cell>
+                    <mat-cell
+                      [ngClass]="
+                        element.id_fecha_pago
+                          ? 'estado-pagado'
+                          : 'estado-pendiente'
+                      "
+                      *matCellDef="let element"
+                      data-label="Valor intereses"
+                    >
+                      {{ element.valcuota }}
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="valtotal">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+                      Valor Pagar
+                    </mat-header-cell>
+                    <mat-cell
+                      [ngClass]="
+                        element.id_fecha_pago
+                          ? 'estado-pagado'
+                          : 'estado-pendiente'
+                      "
+                      *matCellDef="let element"
+                      data-label="Valor a pagar"
+                    >
+                      {{ element.valtotal }}
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="action">
+                    <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+                    <mat-cell
+                      class="estado-accion cuota-status-actions"
+                      [ngClass]="
+                        row.id_fecha_pago ? 'estado-pagado' : 'estado-pendiente'
+                      "
+                      *matCellDef="let row; let i = index"
+                      data-label="Estado"
+                    >
+                      @if (row.id_fecha_pago) {
+                        <span class="estado-texto-pagado">Pagado</span>
+                      }
+                      @if (!row.id_fecha_pago) {
+                        <span class="estado-texto-pendiente">Pendiente</span>
+                        <button
+                          title="PagarCuota"
+                          class="action-btn cuota-pay-button"
+                          mat-icon-button
+                          color="primary"
+                          [disabled]="cuotaEnProceso !== null"
+                          (click)="pagarCuotaPrestamo(row)"
+                        >
+                          <mat-icon aria-label="money">money</mat-icon>
+                        </button>
+                      }
+                    </mat-cell>
+                  </ng-container>
+                  <mat-header-row
+                    *matHeaderRowDef="displayedColumnsFecPago"
+                  ></mat-header-row>
+                  <mat-row
+                    *matRowDef="let row; columns: displayedColumnsFecPago"
                     [ngClass]="
-                      element.id_fecha_pago
-                        ? 'estado-pagado'
-                        : 'estado-pendiente'
+                      row.id_fecha_pago
+                        ? 'cuota-card-pagada'
+                        : 'cuota-card-pendiente'
                     "
-                    *matCellDef="let element"
-                    data-label="Fecha Pago"
-                  >
-                    {{ element.fecha_pago }}
-                  </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="fecha_realpago">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Fecha Realiza Pago
-                  </mat-header-cell>
-                  <mat-cell
-                    [ngClass]="
-                      element.id_fecha_pago
-                        ? 'estado-pagado'
-                        : 'estado-pendiente'
-                    "
-                    *matCellDef="let element"
-                    data-label="Fecha Pago"
-                  >
-                    {{ element.fecha_realpago }}
-                  </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="valcuota">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Valor Intereses
-                  </mat-header-cell>
-                  <mat-cell
-                    [ngClass]="
-                      element.id_fecha_pago
-                        ? 'estado-pagado'
-                        : 'estado-pendiente'
-                    "
-                    *matCellDef="let element"
-                    data-label="Val Cuota Interes"
-                  >
-                    {{ element.valcuota }}
-                  </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="valtotal" data-label="Val Total">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>
-                    Valor Pagar
-                  </mat-header-cell>
-                  <mat-cell
-                    [ngClass]="
-                      element.id_fecha_pago
-                        ? 'estado-pagado'
-                        : 'estado-pendiente'
-                    "
-                    *matCellDef="let element"
-                  >
-                    {{ element.valtotal }}
-                  </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="action">
-                  <mat-header-cell *matHeaderCellDef> </mat-header-cell>
-                  <mat-cell
-                    class="estado-accion"
-                    [ngClass]="
-                      row.id_fecha_pago ? 'estado-pagado' : 'estado-pendiente'
-                    "
-                    *matCellDef="let row; let i = index"
-                  >
-                    @if (row.id_fecha_pago) {
-                      <span class="estado-texto-pagado">Pagado</span>
-                    }
-                    @if (!row.id_fecha_pago) {
-                      <span class="estado-texto-pendiente">Pendiente</span>
-                      <button
-                        title="PagarCuota"
-                        class="action-btn cuota-pay-button"
-                        mat-icon-button
-                        color="primary"
-                        (click)="pagarCuotaPrestamo(row)"
-                      >
-                        <mat-icon aria-label="money">money</mat-icon>
-                      </button>
-                    }
-                  </mat-cell>
-                </ng-container>
-                <mat-header-row
-                  *matHeaderRowDef="displayedColumnsFecPago"
-                ></mat-header-row>
-                <mat-row
-                  *matRowDef="let row; columns: displayedColumnsFecPago"
-                ></mat-row>
-              </mat-table>
+                  ></mat-row>
+                </mat-table>
+              </div>
               <mat-paginator
+                class="cuotas-paginator"
                 [pageSize]="25"
                 [length]="dataSourceFecPago.data.length"
                 [pageSizeOptions]="[

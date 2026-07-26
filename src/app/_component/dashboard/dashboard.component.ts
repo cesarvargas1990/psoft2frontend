@@ -106,6 +106,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
   total_prestado: string;
   total_interes: string;
   contenidoCombinado = '';
+  cuotaEnProceso: number | string | null = null;
 
   @ViewChild('appDrawer') appDrawer: ElementRef;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -249,79 +250,60 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  pagarCuotaPrestamo(row) {
+  pagarCuotaPrestamo(row: Partial<fechasPago> & { fecha_pago: string }): void {
+    if (this.cuotaEnProceso !== null || row.id_fecha_pago) {
+      return;
+    }
+
     Swal.fire({
-      title: 'Esta seguro?',
-      text: 'Se va a realizar pago de la cuota?',
+      title: '¿Confirmar pago?',
+      text: 'Esta acción registrará la cuota como pagada.',
       type: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Si!',
-      cancelButtonText: 'No!'
+      confirmButtonText: 'Sí, pagar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true,
+      focusCancel: true
     }).then((result) => {
-      if (result.value == true) {
-        // var currency = row.valtotal;
-        // var number = Number(currency.replace(/[^0-9.-]+/g,""));
+      const confirmado =
+        result.value === true ||
+        (result as { isConfirmed?: boolean }).isConfirmed;
 
-        this.model.fecha_pago = row.fecha_pago;
-        this.model.id_prestamo = row.id_prestamo;
-        this.model.id_cliente = row.id_cliente;
-        this.model.id = row.id;
-        this.prestamosService
-          .registrarPagoCuota(this.model)
-          .subscribe((response) => {
+      if (confirmado) {
+        this.cuotaEnProceso = row.id ?? row.id_prestamo ?? 'cuota';
+        const pago = {
+          fecha_pago: row.fecha_pago,
+          id_prestamo: row.id_prestamo,
+          id_cliente: row.id_cliente,
+          id: row.id
+        };
+
+        this.prestamosService.registrarPagoCuota(pago).subscribe({
+          next: (response) => {
             if (response) {
-              Swal.fire('Listo!', 'El pago ha sido registrado.', 'success');
+              Swal.fire('¡Listo!', 'El pago ha sido registrado.', 'success');
               this.listadoCuotas(row);
               this.refresh();
+            } else {
+              Swal.fire(
+                'No se pudo registrar',
+                'El servidor no confirmó el pago. Intenta nuevamente.',
+                'error'
+              );
             }
-          });
-
-        //   Swal.fire({
-        //     input: 'text',
-        //     title: 'Valor a pagar',
-        //     text: "Por favor ingrese el valor a cancelar:",
-        //     showCancelButton: true,
-        // confirmButtonColor: '#3085d6',
-        // inputValue: row.valtotal,
-        // cancelButtonColor: '#d33',
-        // confirmButtonText: 'Aceptar!',
-        // cancelButtonText: 'Cancelar!',
-        //     inputAttributes: {
-        //     autocapitalize: 'off',
-
-        //       },
-        //       preConfirm: (response) => {
-
-        //         var currency = row.valtotal;
-        //         var number = Number(currency.replace(/[^0-9.-]+/g,""));
-
-        //        // alert (row.valtotal);
-        //         if (isNaN(response)){
-        //           Swal.fire ({
-        //             title: 'Error!',
-        //             text: 'El valor ingresado no es númerico!',
-        //             cancelButtonColor: '#d33',
-        //             type: 'error',
-        //           })
-        //           return false;
-        //         }
-
-        //         if (response <  number) {
-        //           Swal.fire ({
-        //             title: 'Error!',
-        //             text: 'El valor ingresado debe ser mayor o igual al valor de la cuota!',
-        //             cancelButtonColor: '#d33',
-        //             type: 'error',
-        //           })
-        //           return false;
-        //         }
-
-        //         console.log (row);
-
-        //       }
-        //   })
+            this.cuotaEnProceso = null;
+          },
+          error: () => {
+            this.cuotaEnProceso = null;
+            Swal.fire(
+              'Error',
+              'No fue posible registrar el pago. Verifica la conexión e intenta nuevamente.',
+              'error'
+            );
+          }
+        });
       }
     });
   }

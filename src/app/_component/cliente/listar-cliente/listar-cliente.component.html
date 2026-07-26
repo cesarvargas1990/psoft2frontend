@@ -48,30 +48,30 @@
             </div>
           </section>
           <section class="card clientes-content-card">
-            <div class="card-body">
-              <div class="card-text">
-                <mat-form-field class="example-full-width">
-                  <input
-                    matInput
-                    (keyup)="applyFilter($event.target.value)"
-                    placeholder="Buscar"
-                  />
-                </mat-form-field>
-                <br />
-                @if (authService.tienePermiso('cliente.crear')) {
-                  <button
-                    title="Agregar Cliente"
-                    class="btn btn-outline-primary btn-sm"
-                    mat-icon-button
-                    color="primary"
-                    (click)="modalAdicionarEmpresa()"
-                  >
-                    <mat-icon aria-label="Example icon-button with a heart icon"
-                      >add</mat-icon
+            <div class="card-body clientes-card-body">
+              <div class="card-text clientes-content">
+                <div class="clientes-toolbar">
+                  <mat-form-field class="clientes-search">
+                    <mat-icon matPrefix aria-hidden="true">search</mat-icon>
+                    <input
+                      matInput
+                      (keyup)="applyFilter($event.target.value)"
+                      placeholder="Buscar por nombre, documento o celular"
+                    />
+                  </mat-form-field>
+                  @if (authService.tienePermiso('cliente.crear')) {
+                    <button
+                      title="Agregar cliente"
+                      class="cliente-create-button"
+                      mat-raised-button
+                      color="primary"
+                      (click)="modalAdicionarEmpresa()"
                     >
-                  </button>
-                }
-                <br />
+                      <mat-icon aria-hidden="true">person_add</mat-icon>
+                      <span>Nuevo cliente</span>
+                    </button>
+                  }
+                </div>
                 <mat-table
                   class="table-responsive mat-elevation-z8 app-data-table"
                   [dataSource]="dataSource"
@@ -127,44 +127,52 @@
                   </ng-container>
                   <ng-container matColumnDef="action">
                     <mat-header-cell *matHeaderCellDef> </mat-header-cell>
-                    <mat-cell *matCellDef="let row; let i = index">
-                      @if (authService.tienePermiso('cliente.editar')) {
-                        <button
-                          title="Editar Cliente"
-                          class="btn btn-outline-primary btn-sm action-btn"
-                          mat-icon-button
-                          color="primary"
-                          (click)="modalEditarCliente(row)"
-                        >
-                          <mat-icon aria-label="Edit">edit</mat-icon>
-                        </button>
-                      }
-                      @if (authService.tienePermiso('cliente.eliminar')) {
-                        <button
-                          title="Eliminar Cliente"
-                          class="btn btn-outline-danger btn-sm action-btn"
-                          mat-icon-button
-                          color="accent"
-                          (click)="modalEliminarCliente(row)"
-                        >
-                          <mat-icon aria-label="Delete">delete</mat-icon>
-                        </button>
-                      }
-                      @if (
-                        authService.tienePermiso('cliente.listado_creditos')
-                      ) {
-                        <button
-                          title="Listado Creditos"
-                          class="btn btn-outline-info btn-sm action-btn"
-                          mat-icon-button
-                          color="accent"
-                          (click)="modalListadoCreditos(row)"
-                        >
-                          <mat-icon aria-label="find_in_page"
-                            >find_in_page</mat-icon
+                    <mat-cell
+                      *matCellDef="let row; let i = index"
+                      data-label="Acciones"
+                    >
+                      <div class="cliente-row-actions">
+                        @if (authService.tienePermiso('cliente.editar')) {
+                          <button
+                            title="Editar Cliente"
+                            class="action-btn action-edit"
+                            mat-stroked-button
+                            color="primary"
+                            (click)="modalEditarCliente(row)"
                           >
-                        </button>
-                      }
+                            <mat-icon aria-label="Edit">edit</mat-icon>
+                            <span class="action-label">Editar</span>
+                          </button>
+                        }
+                        @if (authService.tienePermiso('cliente.eliminar')) {
+                          <button
+                            title="Eliminar Cliente"
+                            class="action-btn action-delete"
+                            mat-stroked-button
+                            color="warn"
+                            (click)="modalEliminarCliente(row)"
+                          >
+                            <mat-icon aria-label="Delete">delete</mat-icon>
+                            <span class="action-label">Eliminar</span>
+                          </button>
+                        }
+                        @if (
+                          authService.tienePermiso('cliente.listado_creditos')
+                        ) {
+                          <button
+                            title="Listado Creditos"
+                            class="action-btn action-credits"
+                            mat-stroked-button
+                            color="primary"
+                            (click)="modalListadoCreditos(row)"
+                          >
+                            <mat-icon aria-label="find_in_page"
+                              >find_in_page</mat-icon
+                            >
+                            <span class="action-label">Créditos</span>
+                          </button>
+                        }
+                      </div>
                     </mat-cell>
                   </ng-container>
                   <mat-header-row

@@ -361,6 +361,20 @@ describe('CrearPrestamoComponent', () => {
     expect(component.model.interes_equivalente_anual).toBe('60.00');
   });
 
+  it('debe ignorar identificadores de periodo que sean objetos', () => {
+    component.formaspago = [
+      { value: { id: 1 }, label: 'Diario' },
+      { id: 2, label: 'Mensual' }
+    ];
+    component.form.addControl('id_periodo_pago', new UntypedFormControl());
+    component.form.addControl('porcint', new UntypedFormControl());
+    component.form.patchValue({ id_periodo_pago: 2, porcint: 10 });
+
+    component.actualizarEquivalenciaInteres();
+
+    expect(component.model.interes_equivalente_anual).toBe('120.00');
+  });
+
   it('getHeaders debe retornar los headers de la tabla', () => {
     component.tableCuotasPrestamo = [
       { cuota: 1, valor: 100000 },

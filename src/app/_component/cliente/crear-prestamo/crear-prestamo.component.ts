@@ -453,11 +453,17 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
   private obtenerFormaPagoSeleccionada(): any {
     const idPeriodoPago = this.form.value?.id_periodo_pago;
+    const idPeriodoNormalizado =
+      this.normalizarIdentificador(idPeriodoPago);
     const opciones = Array.isArray(this.formaspago) ? this.formaspago : [];
+
+    if (idPeriodoNormalizado === null) {
+      return undefined;
+    }
 
     return opciones.find((opcion) => {
       if (typeof opcion === 'string') {
-        return opcion === idPeriodoPago;
+        return opcion === idPeriodoNormalizado;
       }
 
       if (!opcion || typeof opcion !== 'object') {
@@ -470,8 +476,17 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
         record.id,
         record.id_periodo_pago,
         record.codperiodopago
-      ].some((valor) => String(valor) === String(idPeriodoPago));
+      ].some(
+        (valor) =>
+          this.normalizarIdentificador(valor) === idPeriodoNormalizado
+      );
     });
+  }
+
+  private normalizarIdentificador(valor: unknown): string | null {
+    return typeof valor === 'string' || typeof valor === 'number'
+      ? String(valor)
+      : null;
   }
 
   formatearMoneda(valor: number): string {

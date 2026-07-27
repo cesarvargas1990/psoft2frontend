@@ -265,6 +265,30 @@ describe('PrestamosService', () => {
     req.flush({ ok: true });
   });
 
+  it('debería consultar las cuotas pendientes de hoy', () => {
+    const cuotas = [
+      {
+        id: 10,
+        id_prestamo: 20,
+        fecha_pago: '2026-07-26',
+        fecha_realpago: 'Pendiente de pago',
+        valcuota: '100.00'
+      }
+    ];
+
+    service.cuotasPendientesHoy().subscribe((resp) => {
+      expect(resp).toEqual(cuotas);
+    });
+
+    const req = httpMock.expectOne(
+      `${environment.API_URL}/cuotas_pendientes_hoy`
+    );
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body.id_empresa).toBe(mockEmpresaId);
+    expect(req.request.body.fecha).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    req.flush(cuotas);
+  });
+
   it('debería listar documentos adjuntos de cliente', () => {
     service.listadoArchivosCliente('cliente123').subscribe((resp) => {
       expect(resp).toBeDefined();

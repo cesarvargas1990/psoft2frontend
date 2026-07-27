@@ -25,7 +25,7 @@
       }
     </mat-sidenav>
     <mat-sidenav-content>
-      @if (authService.tienePermiso('dashboard.totales')) {
+      @if (!esVistaPrestamos && authService.tienePermiso('dashboard.totales')) {
         <div class="row">
           <div class="col-md-3">
             <div class="card">
@@ -71,7 +71,9 @@
         </div>
       }
 
-      @if (authService.tienePermiso('dashboard.totales_user')) {
+      @if (
+        !esVistaPrestamos && authService.tienePermiso('dashboard.totales_user')
+      ) {
         <div class="row">
           <div class="col-md-3">
             <div class="card">
@@ -93,7 +95,7 @@
       }
 
       <br />
-      @if (!visualizarDocumentos && listadoPrestamos) {
+      @if (!esVistaPrestamos && !visualizarDocumentos && listadoPrestamos) {
         <div class="card cuotas-hoy-card">
           <div class="card-header cuotas-hoy-header">
             <div>
@@ -170,7 +172,7 @@
         </div>
         <br />
       }
-      @if (!visualizarDocumentos && listadoPrestamos) {
+      @if (esVistaPrestamos && !visualizarDocumentos && listadoPrestamos) {
         <div class="card prestamos-page-card">
           <div class="card">
             <div class="card-header">

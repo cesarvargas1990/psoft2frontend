@@ -94,7 +94,7 @@ export class MapaUbicacionDialogComponent {
     }
 
     const coincidencia = decodeURIComponent(ubicacion).match(
-      /(?:[?&]q=|@)(-?\d{1,2}(?:\.\d+)?),(-?\d{1,3}(?:\.\d+)?)/
+      /(?:(?:[?&]q=|@)\s*)?(-?\d{1,2}(?:\.\d+)?)\s*,\s*(-?\d{1,3}(?:\.\d+)?)/
     );
     return coincidencia ? `${coincidencia[1]},${coincidencia[2]}` : '';
   }

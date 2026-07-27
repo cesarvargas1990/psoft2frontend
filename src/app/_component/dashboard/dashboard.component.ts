@@ -46,6 +46,9 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
     public prestamosService: PrestamosService,
     private router: Router
   ) {
+    this.esVistaPrestamos = (this.router.url || '').includes(
+      '/prestamos/listar'
+    );
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     if (this.mobileQuery.addEventListener) {
@@ -73,6 +76,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
   datosFechasPago: any = [];
   cuotasPendientesHoy: fechasPago[] = [];
   fechasPago: any = [];
+  esVistaPrestamos = false;
 
   panelOpenState = false;
   plantillas_html: any = {};
@@ -203,6 +207,11 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
   }
 
   refresh() {
+    if (this.esVistaPrestamos) {
+      this.getDatosPrestamo();
+      return;
+    }
+
     this.prestamosService.totales_dashboard().subscribe((response) => {
       this.total_capital_prestado = response.total_capital_prestado;
       this.total_prestado_hoy = response.total_prestado_hoy;
@@ -211,7 +220,6 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
       this.total_prestado = response.total_prestado;
     });
     this.cargarCuotasPendientesHoy();
-    this.getDatosPrestamo();
   }
 
   cargarCuotasPendientesHoy(): void {

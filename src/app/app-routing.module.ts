@@ -45,6 +45,16 @@ const routes: Routes = [
       }
     ]
   },
+  {
+    path: 'prestamos',
+    children: [
+      {
+        path: 'listar',
+        component: DashboardComponent,
+        canActivate: [AuthGuard]
+      }
+    ]
+  },
 
   {
     path: 'parametros',

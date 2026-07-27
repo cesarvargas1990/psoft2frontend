@@ -28,6 +28,16 @@
                     [ngModelOptions]="{ standalone: true }"
                     placeholder="Escribe la dirección"
                   />
+                </div>
+                <label for="editar-coordenadas-casa">Coordenadas</label>
+                <div class="address-input-row">
+                  <input
+                    id="editar-coordenadas-casa"
+                    type="text"
+                    [(ngModel)]="model.ubicasa"
+                    [ngModelOptions]="{ standalone: true }"
+                    placeholder="Latitud, longitud"
+                  />
                   <button
                     type="button"
                     class="location-icon-button"
@@ -47,7 +57,7 @@
                     class="location-icon-button"
                     title="Ver ubicación en el mapa"
                     aria-label="Ver ubicación de la casa"
-                    [disabled]="!model.ubicasa && !model.direcasa"
+                    [disabled]="!model.ubicasa"
                     (click)="
                       verUbicacion(
                         model.ubicasa,
@@ -70,6 +80,16 @@
                     [ngModelOptions]="{ standalone: true }"
                     placeholder="Escribe la dirección"
                   />
+                </div>
+                <label for="editar-coordenadas-trabajo">Coordenadas</label>
+                <div class="address-input-row">
+                  <input
+                    id="editar-coordenadas-trabajo"
+                    type="text"
+                    [(ngModel)]="model.ubictrabajo"
+                    [ngModelOptions]="{ standalone: true }"
+                    placeholder="Latitud, longitud"
+                  />
                   <button
                     type="button"
                     class="location-icon-button"
@@ -89,7 +109,7 @@
                     class="location-icon-button"
                     title="Ver ubicación en el mapa"
                     aria-label="Ver ubicación del trabajo"
-                    [disabled]="!model.ubictrabajo && !model.diretrabajo"
+                    [disabled]="!model.ubictrabajo"
                     (click)="
                       verUbicacion(
                         model.ubictrabajo,

@@ -144,10 +144,21 @@ describe('DashboardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call refresh and load dashboard totals and prestamos', () => {
+  it('should load dashboard totals without loading the loans listing', () => {
+    prestamosServiceSpy.totales_dashboard.calls.reset();
+    prestamosServiceSpy.listadoPrestamos.calls.reset();
     component.refresh();
     expect(prestamosServiceSpy.totales_dashboard).toHaveBeenCalled();
+    expect(prestamosServiceSpy.listadoPrestamos).not.toHaveBeenCalled();
+  });
+
+  it('should load loans only in the loans listing view', () => {
+    prestamosServiceSpy.totales_dashboard.calls.reset();
+    prestamosServiceSpy.listadoPrestamos.calls.reset();
+    component.esVistaPrestamos = true;
+    component.refresh();
     expect(prestamosServiceSpy.listadoPrestamos).toHaveBeenCalled();
+    expect(prestamosServiceSpy.totales_dashboard).not.toHaveBeenCalled();
   });
 
   it('should navigate to crear prestamo', () => {
@@ -310,7 +321,7 @@ describe('DashboardComponent', () => {
     component.refresh();
     expect(prestamosServiceSpy.totales_dashboard).toHaveBeenCalled();
     expect(component.total_capital_prestado).toBe('1000');
-    expect(component.getDatosPrestamo).toHaveBeenCalled();
+    expect(component.getDatosPrestamo).not.toHaveBeenCalled();
   });
 
   it('should remove media listener on destroy with removeEventListener', () => {

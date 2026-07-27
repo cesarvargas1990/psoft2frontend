@@ -207,8 +207,19 @@ export class EditarClienteComponent implements OnInit {
     public prestamosService: PrestamosService,
     @Optional() private readonly dialog?: MatDialog
   ) {
-    this.model.ubicasa = this.data.ubicasa || '';
-    this.model.ubictrabajo = this.data.ubictrabajo || '';
+    this.model.ubicasa = this.normalizarCoordenadas(this.data.ubicasa);
+    this.model.ubictrabajo = this.normalizarCoordenadas(this.data.ubictrabajo);
+  }
+
+  private normalizarCoordenadas(ubicacion?: string): string {
+    if (!ubicacion) {
+      return '';
+    }
+
+    const coincidencia = decodeURIComponent(ubicacion).match(
+      /(?:(?:[?&]q=|@)\s*)?(-?\d{1,2}(?:\.\d+)?)\s*,\s*(-?\d{1,3}(?:\.\d+)?)/
+    );
+    return coincidencia ? `${coincidencia[1]}, ${coincidencia[2]}` : ubicacion;
   }
 
   ngAfterViewInit(): void {
@@ -477,10 +488,7 @@ export class EditarClienteComponent implements OnInit {
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
         const coordenadas = `${coords.latitude}, ${coords.longitude}`;
-        this.model[campo] =
-          `https://www.google.com/maps?q=${coords.latitude},${coords.longitude}`;
-        this.model[campo === 'ubicasa' ? 'direcasa' : 'diretrabajo'] =
-          coordenadas;
+        this.model[campo] = coordenadas;
         this.ubicacionEnProceso = null;
       },
       (error) => {

@@ -388,6 +388,17 @@
                   <mat-expansion-panel-header>
                     <mat-panel-title> Documentos del prestamo </mat-panel-title>
                   </mat-expansion-panel-header>
+                  <div class="document-print-actions">
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      [disabled]="!contenidoCombinado"
+                      (click)="imprimirDocumentos()"
+                    >
+                      <mat-icon aria-hidden="true">print</mat-icon>
+                      Imprimir / guardar PDF
+                    </button>
+                  </div>
                   <br />
                   <tinymce
                     [(ngModel)]="contenidoCombinado"

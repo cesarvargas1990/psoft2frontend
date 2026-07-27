@@ -523,9 +523,27 @@ h1.example-app-name {
   font-size: 19px;
 }
 
+.document-print-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 10px;
+}
+
+.document-print-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
 @media (max-width: 767px) {
   .address-location-grid {
     grid-template-columns: 1fr;
+  }
+
+  .document-print-actions .btn {
+    width: 100%;
+    min-height: 48px;
+    justify-content: center;
   }
 }
 

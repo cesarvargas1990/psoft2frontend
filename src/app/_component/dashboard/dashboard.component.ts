@@ -404,6 +404,79 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
       .replace(/<\/body>/gi, '');
   }
 
+  imprimirDocumentos(): void {
+    if (!this.contenidoCombinado) {
+      return;
+    }
+
+    const ventanaImpresion = window.open('', '_blank');
+    if (!ventanaImpresion) {
+      Swal.fire(
+        'No fue posible abrir la impresión',
+        'Permite las ventanas emergentes del sitio e intenta nuevamente.',
+        'warning'
+      );
+      return;
+    }
+
+    ventanaImpresion.document.open();
+    ventanaImpresion.document.write(`<!doctype html>
+      <html lang="es">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>Documentos del préstamo</title>
+          <style>
+            * { box-sizing: border-box; }
+            body {
+              margin: 0 auto;
+              max-width: 210mm;
+              padding: 18px;
+              background: #fff;
+              color: #111;
+              font-family: Arial, sans-serif;
+            }
+            img, table { max-width: 100%; }
+            .print-toolbar {
+              position: sticky;
+              top: 0;
+              z-index: 2;
+              display: flex;
+              justify-content: center;
+              padding: 10px;
+              background: #eef4ff;
+              border-bottom: 1px solid #cbd5e1;
+            }
+            .print-toolbar button {
+              min-height: 46px;
+              padding: 10px 18px;
+              border: 0;
+              border-radius: 7px;
+              background: #2563eb;
+              color: #fff;
+              font-size: 16px;
+              font-weight: 700;
+            }
+            @page { size: auto; margin: 12mm; }
+            @media print {
+              body { max-width: none; padding: 0; }
+              .print-toolbar { display: none; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="print-toolbar">
+            <button type="button" onclick="window.print()">
+              Imprimir / guardar PDF
+            </button>
+          </div>
+          ${this.contenidoCombinado}
+        </body>
+      </html>`);
+    ventanaImpresion.document.close();
+    ventanaImpresion.focus();
+  }
+
   ngAfterViewInit() {
     this.navService.appDrawer = this.appDrawer;
   }

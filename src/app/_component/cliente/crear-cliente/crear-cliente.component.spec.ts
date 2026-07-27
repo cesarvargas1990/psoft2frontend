@@ -98,6 +98,17 @@ describe('CrearClienteComponent', () => {
     expect(component.tabs.length).toBeGreaterThan(0);
   });
 
+  it('debe permitir email y fecha de nacimiento vacíos', () => {
+    const fields = component.tabs[0].fields[0].fieldGroup as any[];
+    const email = fields.find((field) => field.key === 'email');
+    const fechaNacimiento = fields.find(
+      (field) => field.key === 'fch_nacimiento'
+    );
+
+    expect(email.templateOptions.required).not.toBe(true);
+    expect(fechaNacimiento.templateOptions.required).not.toBe(true);
+  });
+
   it('debe tener showWebcam activado por defecto', () => {
     expect(component.showWebcam).toBe(true);
   });

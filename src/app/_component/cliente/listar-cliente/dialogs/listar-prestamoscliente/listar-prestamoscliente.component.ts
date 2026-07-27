@@ -174,8 +174,7 @@ export class ListarPrestamosclienteComponent implements OnInit {
         },
         templateOptions: {
           label: 'Fecha Nacimiento',
-          placeholder: 'Fecha Nacimiento',
-          required: true
+          placeholder: 'Fecha Nacimiento'
         }
       },
 
@@ -227,8 +226,7 @@ export class ListarPrestamosclienteComponent implements OnInit {
           updateOn: 'submit'
         },
         templateOptions: {
-          label: 'Email',
-          required: true
+          label: 'Email'
         }
       },
 

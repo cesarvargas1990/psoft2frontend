@@ -98,6 +98,22 @@ describe('EditarClienteComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('debe permitir email y fecha de nacimiento vacíos', async () => {
+    await (component as any).initializeAfterViewInit();
+    const findField = (fields: any[], key: string): any =>
+      fields.reduce(
+        (found, field) =>
+          found ||
+          (field.key === key ? field : findField(field.fieldGroup || [], key)),
+        undefined
+      );
+    const email = findField(component.fields, 'email');
+    const fechaNacimiento = findField(component.fields, 'fch_nacimiento');
+
+    expect(email.templateOptions.required).not.toBe(true);
+    expect(fechaNacimiento.templateOptions.required).not.toBe(true);
+  });
+
   it('debe mostrar error si el formulario no es válido al hacer submit', () => {
     spyOn(Swal, 'fire');
     component.form.setErrors({ required: true });

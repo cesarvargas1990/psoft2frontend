@@ -188,8 +188,7 @@ export class CrearClienteComponent implements AfterViewInit, OnDestroy {
               },
               templateOptions: {
                 label: 'Fecha Nacimiento',
-                placeholder: 'Fecha Nacimiento',
-                required: true
+                placeholder: 'Fecha Nacimiento'
               }
             },
 
@@ -201,8 +200,7 @@ export class CrearClienteComponent implements AfterViewInit, OnDestroy {
                 updateOn: 'blur'
               },
               templateOptions: {
-                label: 'Email',
-                required: true
+                label: 'Email'
               }
             }
           ]

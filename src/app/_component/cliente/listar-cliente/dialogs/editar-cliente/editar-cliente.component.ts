@@ -285,8 +285,7 @@ export class EditarClienteComponent implements OnInit {
               updateOn: 'submit'
             },
             templateOptions: {
-              label: 'Email',
-              required: true
+              label: 'Email'
             }
           }
         ]
@@ -318,8 +317,7 @@ export class EditarClienteComponent implements OnInit {
             },
             templateOptions: {
               label: 'Fecha Nacimiento',
-              placeholder: 'Fecha Nacimiento',
-              required: true
+              placeholder: 'Fecha Nacimiento'
             }
           }
         ]

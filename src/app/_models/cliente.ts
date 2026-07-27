@@ -6,10 +6,10 @@ export interface Cliente {
   numdocumento: string;
   ciudad: string;
   fch_expdocumento: string;
-  fch_nacimiento: string;
+  fch_nacimiento?: string | null;
   telefijo: string;
   celular: string;
-  email: string;
+  email?: string | null;
   direcasa: string;
   diretrabajo: string;
   ubicasa: string;

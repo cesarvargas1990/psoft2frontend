@@ -16,3 +16,13 @@ mat-toolbar > span:not(.example-spacer) {
   font-weight: 600;
   letter-spacing: 0.2px;
 }
+
+@media (min-width: 768px) {
+  mat-toolbar {
+    min-height: 56px;
+  }
+
+  mat-toolbar > span:not(.example-spacer) {
+    font-size: 1.55rem;
+  }
+}

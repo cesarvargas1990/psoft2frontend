@@ -12,5 +12,7 @@ export interface fechasPago {
   celular?: string;
   direcasa?: string;
   ubicasa?: string;
+  diretrabajo?: string;
+  ubictrabajo?: string;
   fecha_pago_texto?: string;
 }

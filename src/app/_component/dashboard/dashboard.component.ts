@@ -228,8 +228,8 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
   verUbicacionCuota(cuota: fechasPago): void {
     this.dialog.open(MapaUbicacionDialogComponent, {
       data: {
-        ubicacion: cuota.ubicasa,
-        direccion: cuota.direcasa,
+        ubicacion: cuota.ubicasa || cuota.ubictrabajo,
+        direccion: cuota.direcasa || cuota.diretrabajo,
         titulo: `Ubicación de ${cuota.nomcliente || 'cliente'}`
       },
       maxWidth: '94vw'

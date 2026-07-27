@@ -375,6 +375,34 @@ describe('CrearPrestamoComponent', () => {
     expect(component.model.interes_equivalente_anual).toBe('120.00');
   });
 
+  it('debe usar el periodo por defecto si el identificador no es escalar', () => {
+    component.formaspago = [{ id: 1, label: 'Diario' }];
+    component.form.addControl('id_periodo_pago', new UntypedFormControl());
+    component.form.addControl('porcint', new UntypedFormControl());
+    component.form.patchValue({
+      id_periodo_pago: { id: 1 },
+      porcint: 10
+    });
+
+    component.actualizarEquivalenciaInteres();
+
+    expect(component.model.interes_equivalente_anual).toBe('120.00');
+  });
+
+  it('debe seleccionar una forma de pago representada por texto', () => {
+    component.formaspago = ['Mensual'];
+    component.form.addControl('id_periodo_pago', new UntypedFormControl());
+    component.form.addControl('porcint', new UntypedFormControl());
+    component.form.patchValue({
+      id_periodo_pago: 'Mensual',
+      porcint: 10
+    });
+
+    component.actualizarEquivalenciaInteres();
+
+    expect(component.model.interes_equivalente_anual).toBe('120.00');
+  });
+
   it('getHeaders debe retornar los headers de la tabla', () => {
     component.tableCuotasPrestamo = [
       { cuota: 1, valor: 100000 },

@@ -17,6 +17,92 @@
               [options]="options"
               [form]="form"
             ></formly-form>
+            <div class="location-section">
+              <div class="location-heading">
+                <mat-icon aria-hidden="true">location_on</mat-icon>
+                <div>
+                  <strong>Ubicación en Google Maps</strong>
+                  <span>
+                    Puedes pegar un enlace manualmente o usar el GPS del
+                    dispositivo.
+                  </span>
+                </div>
+              </div>
+              <div class="location-grid">
+                <div class="location-control">
+                  <label for="editar-ubicacion-casa">Casa</label>
+                  <input
+                    id="editar-ubicacion-casa"
+                    type="url"
+                    [(ngModel)]="model.ubicasa"
+                    [ngModelOptions]="{ standalone: true }"
+                    placeholder="Enlace de Google Maps"
+                  />
+                  <div class="location-actions">
+                    <button
+                      type="button"
+                      class="btn btn-outline-primary"
+                      [disabled]="ubicacionEnProceso !== null"
+                      (click)="capturarUbicacion('ubicasa')"
+                    >
+                      <mat-icon aria-hidden="true">my_location</mat-icon>
+                      {{
+                        ubicacionEnProceso === 'ubicasa'
+                          ? 'Capturando...'
+                          : 'Usar mi ubicación'
+                      }}
+                    </button>
+                    @if (model.ubicasa) {
+                      <a
+                        class="btn btn-outline-secondary"
+                        [href]="model.ubicasa"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <mat-icon aria-hidden="true">map</mat-icon>
+                        Abrir
+                      </a>
+                    }
+                  </div>
+                </div>
+                <div class="location-control">
+                  <label for="editar-ubicacion-trabajo">Trabajo</label>
+                  <input
+                    id="editar-ubicacion-trabajo"
+                    type="url"
+                    [(ngModel)]="model.ubictrabajo"
+                    [ngModelOptions]="{ standalone: true }"
+                    placeholder="Enlace de Google Maps"
+                  />
+                  <div class="location-actions">
+                    <button
+                      type="button"
+                      class="btn btn-outline-primary"
+                      [disabled]="ubicacionEnProceso !== null"
+                      (click)="capturarUbicacion('ubictrabajo')"
+                    >
+                      <mat-icon aria-hidden="true">my_location</mat-icon>
+                      {{
+                        ubicacionEnProceso === 'ubictrabajo'
+                          ? 'Capturando...'
+                          : 'Usar mi ubicación'
+                      }}
+                    </button>
+                    @if (model.ubictrabajo) {
+                      <a
+                        class="btn btn-outline-secondary"
+                        [href]="model.ubictrabajo"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <mat-icon aria-hidden="true">map</mat-icon>
+                        Abrir
+                      </a>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </mat-tab>

@@ -399,6 +399,94 @@ h1.example-app-name {
   opacity: 1 !important;
 }
 
+/* Captura manual o GPS de ubicaciones de clientes */
+.location-section {
+  margin-top: 12px;
+  padding: 16px;
+  border: 1px solid #2c4263;
+  border-radius: 10px;
+  background: #152238;
+}
+
+.location-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 14px;
+  color: #f4f7fb;
+}
+
+.location-heading div,
+.location-control {
+  display: flex;
+  flex-direction: column;
+}
+
+.location-heading span {
+  color: #b8c5d9;
+  font-size: 0.85rem;
+}
+
+.location-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.location-control {
+  gap: 7px;
+}
+
+.location-control label {
+  color: #dbe7f6;
+  font-weight: 600;
+}
+
+.location-control input {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 11px;
+  border: 1px solid #40577a;
+  border-radius: 6px;
+  outline: none;
+  background: #0f1930;
+  color: #fff;
+}
+
+.location-control input:focus {
+  border-color: #5da8ff;
+  box-shadow: 0 0 0 3px rgb(93 168 255 / 18%);
+}
+
+.location-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.location-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.location-actions .mat-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+}
+
+@media (max-width: 767px) {
+  .location-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .location-actions .btn {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}
+
 .crear-cliente-dialog .mat-dialog-container {
   padding: 0 !important;
   overflow: hidden;

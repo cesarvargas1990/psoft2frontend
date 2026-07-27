@@ -90,6 +90,7 @@ export class EditarClienteComponent implements OnInit {
   fields: FormlyFieldConfig[] = [];
   listaArchivos: any = {};
   selectedFileNames: any = {};
+  ubicacionEnProceso: 'ubicasa' | 'ubictrabajo' | null = null;
 
   dataImage: any = {};
 
@@ -201,7 +202,10 @@ export class EditarClienteComponent implements OnInit {
     public usersService: UsersService,
     private datePipe: DatePipe,
     public prestamosService: PrestamosService
-  ) {}
+  ) {
+    this.model.ubicasa = this.data.ubicasa || '';
+    this.model.ubictrabajo = this.data.ubictrabajo || '';
+  }
 
   ngAfterViewInit(): void {
     void this.initializeAfterViewInit();
@@ -482,6 +486,35 @@ export class EditarClienteComponent implements OnInit {
 
   public showNextWebcam(directionOrDeviceId: boolean | string): void {
     this.nextWebcam.next(directionOrDeviceId);
+  }
+
+  capturarUbicacion(campo: 'ubicasa' | 'ubictrabajo'): void {
+    if (!navigator.geolocation) {
+      Swal.fire(
+        'Ubicación no disponible',
+        'Este navegador no permite capturar la ubicación.',
+        'warning'
+      );
+      return;
+    }
+
+    this.ubicacionEnProceso = campo;
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        this.model[campo] =
+          `https://www.google.com/maps?q=${coords.latitude},${coords.longitude}`;
+        this.ubicacionEnProceso = null;
+      },
+      (error) => {
+        this.ubicacionEnProceso = null;
+        const mensaje =
+          error.code === error.PERMISSION_DENIED
+            ? 'Debes permitir el acceso a la ubicación para capturarla.'
+            : 'No fue posible obtener la ubicación. Intenta nuevamente.';
+        Swal.fire('Ubicación no capturada', mensaje, 'warning');
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+    );
   }
 
   public handleImage(webcamImage: WebcamImage): void {

@@ -420,16 +420,16 @@ h1.example-app-name {
 }
 
 .address-input-row {
+  position: relative;
   display: flex;
   align-items: stretch;
-  gap: 7px;
 }
 
 .address-input-row input {
   min-width: 0;
   width: 100%;
   min-height: 42px;
-  padding: 9px 11px;
+  padding: 9px 94px 9px 11px;
   border: 1px solid #40577a;
   border-radius: 6px;
   outline: none;
@@ -443,9 +443,11 @@ h1.example-app-name {
 }
 
 .location-icon-button {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
   display: inline-flex;
-  width: 42px;
-  min-width: 42px;
+  width: 38px;
   align-items: center;
   justify-content: center;
   border: 1px solid #4f9cf9;
@@ -453,6 +455,14 @@ h1.example-app-name {
   background: #17345e;
   color: #72b5ff;
   cursor: pointer;
+}
+
+.address-input-row .location-icon-button:first-of-type {
+  right: 46px;
+}
+
+.address-input-row .location-icon-button:last-of-type {
+  right: 4px;
 }
 
 .location-icon-button:hover:not(:disabled) {

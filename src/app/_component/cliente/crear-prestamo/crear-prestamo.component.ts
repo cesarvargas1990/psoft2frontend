@@ -453,8 +453,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
   private obtenerFormaPagoSeleccionada(): any {
     const idPeriodoPago = this.form.value?.id_periodo_pago;
-    const idPeriodoNormalizado =
-      this.normalizarIdentificador(idPeriodoPago);
+    const idPeriodoNormalizado = this.normalizarIdentificador(idPeriodoPago);
     const opciones = Array.isArray(this.formaspago) ? this.formaspago : [];
 
     if (idPeriodoNormalizado === null) {
@@ -477,8 +476,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
         record.id_periodo_pago,
         record.codperiodopago
       ].some(
-        (valor) =>
-          this.normalizarIdentificador(valor) === idPeriodoNormalizado
+        (valor) => this.normalizarIdentificador(valor) === idPeriodoNormalizado
       );
     });
   }

@@ -1,5 +1,4 @@
 import { Component, Inject } from '@angular/core';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import {
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
   MatLegacyDialogRef as MatDialogRef
@@ -25,7 +24,7 @@ export interface MapaUbicacionDialogData {
       }
       <iframe
         class="map-preview-frame"
-        [src]="mapaUrl"
+        [attr.src]="mapaUrl"
         title="Vista previa de la ubicación"
         loading="lazy"
         referrerpolicy="no-referrer-when-downgrade"
@@ -71,21 +70,18 @@ export interface MapaUbicacionDialogData {
   ]
 })
 export class MapaUbicacionDialogComponent {
-  mapaUrl: SafeResourceUrl;
-  googleMapsUrl: string;
+  readonly mapaUrl: string;
+  readonly googleMapsUrl: string;
 
   constructor(
     public dialogRef: MatDialogRef<MapaUbicacionDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: MapaUbicacionDialogData,
-    sanitizer: DomSanitizer
+    @Inject(MAT_DIALOG_DATA) public data: MapaUbicacionDialogData
   ) {
     const consulta =
       this.extraerConsulta(data.ubicacion) || data.direccion || '';
     const consultaCodificada = encodeURIComponent(consulta);
     this.googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${consultaCodificada}`;
-    this.mapaUrl = sanitizer.bypassSecurityTrustResourceUrl(
-      `https://maps.google.com/maps?q=${consultaCodificada}&z=16&output=embed`
-    );
+    this.mapaUrl = `https://maps.google.com/maps?q=${consultaCodificada}&z=16&output=embed`;
   }
 
   private extraerConsulta(ubicacion?: string): string {
@@ -93,9 +89,9 @@ export class MapaUbicacionDialogComponent {
       return '';
     }
 
-    const coincidencia = decodeURIComponent(ubicacion).match(
-      /(?:(?:[?&]q=|@)\s*)?(-?\d{1,2}(?:\.\d+)?)\s*,\s*(-?\d{1,3}(?:\.\d+)?)/
-    );
+    const patronCoordenadas =
+      /(?:(?:[?&]q=|@)\s*)?(-?\d{1,2}(?:\.\d+)?)\s*,\s*(-?\d{1,3}(?:\.\d+)?)/;
+    const coincidencia = patronCoordenadas.exec(decodeURIComponent(ubicacion));
     return coincidencia ? `${coincidencia[1]},${coincidencia[2]}` : '';
   }
 }

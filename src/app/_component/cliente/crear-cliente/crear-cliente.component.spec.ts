@@ -366,4 +366,38 @@ describe('CrearClienteComponent', () => {
       text: 'Por favor valide los campos obligatorios, para guardar el cliente.'
     });
   });
+
+  it('debe guardar las coordenadas capturadas', () => {
+    spyOn(navigator.geolocation, 'getCurrentPosition').and.callFake(
+      (success: PositionCallback) =>
+        success({
+          coords: { latitude: 4.60971, longitude: -74.08175 }
+        } as GeolocationPosition)
+    );
+
+    component.capturarUbicacion('ubicasa');
+
+    expect(component.model.ubicasa).toBe('4.60971, -74.08175');
+    expect(component.ubicacionEnProceso).toBeNull();
+  });
+
+  it('debe informar cuando se niega el permiso de ubicación', () => {
+    spyOn(Swal, 'fire');
+    spyOn(navigator.geolocation, 'getCurrentPosition').and.callFake(
+      (_success: PositionCallback, error: PositionErrorCallback) =>
+        error({
+          code: 1,
+          PERMISSION_DENIED: 1
+        } as GeolocationPositionError)
+    );
+
+    component.capturarUbicacion('ubictrabajo');
+
+    expect(component.ubicacionEnProceso).toBeNull();
+    expect(Swal.fire).toHaveBeenCalledWith(
+      'Ubicación no capturada',
+      'Debes permitir el acceso a la ubicación para capturarla.',
+      'warning'
+    );
+  });
 });

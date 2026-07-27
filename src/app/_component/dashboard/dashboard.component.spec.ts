@@ -265,9 +265,8 @@ describe('DashboardComponent', () => {
   it('should call ngAfterViewInit and set navService.appDrawer', () => {
     const appDrawerMock = {};
     component.appDrawer = appDrawerMock as any;
-    // No acceso directo a private navService, solo ejecutamos el método
     component.ngAfterViewInit();
-    // No assertion directa sobre navService.appDrawer por ser private
+    expect(TestBed.inject(NavService).appDrawer).toBe(appDrawerMock as any);
   });
 
   it('should call getDatosPrestamo and update dataSource', () => {

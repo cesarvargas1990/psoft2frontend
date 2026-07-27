@@ -309,4 +309,38 @@ describe('EditarClienteComponent', () => {
       'Solo se Aceptan, Imagenes o Documentos PDF.'
     );
   });
+
+  it('debe guardar las coordenadas capturadas en la edición', () => {
+    spyOn(navigator.geolocation, 'getCurrentPosition').and.callFake(
+      (success: PositionCallback) =>
+        success({
+          coords: { latitude: 6.2442, longitude: -75.5812 }
+        } as GeolocationPosition)
+    );
+
+    component.capturarUbicacion('ubictrabajo');
+
+    expect(component.model.ubictrabajo).toBe('6.2442, -75.5812');
+    expect(component.ubicacionEnProceso).toBeNull();
+  });
+
+  it('debe informar los errores al capturar la ubicación', () => {
+    spyOn(Swal, 'fire');
+    spyOn(navigator.geolocation, 'getCurrentPosition').and.callFake(
+      (_success: PositionCallback, error: PositionErrorCallback) =>
+        error({
+          code: 2,
+          PERMISSION_DENIED: 1
+        } as GeolocationPositionError)
+    );
+
+    component.capturarUbicacion('ubicasa');
+
+    expect(component.ubicacionEnProceso).toBeNull();
+    expect(Swal.fire).toHaveBeenCalledWith(
+      'Ubicación no capturada',
+      'No fue posible obtener la ubicación. Intenta nuevamente.',
+      'warning'
+    );
+  });
 });

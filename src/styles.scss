@@ -399,50 +399,34 @@ h1.example-app-name {
   opacity: 1 !important;
 }
 
-/* Captura manual o GPS de ubicaciones de clientes */
-.location-section {
-  margin-top: 12px;
-  padding: 16px;
-  border: 1px solid #2c4263;
-  border-radius: 10px;
-  background: #152238;
-}
-
-.location-heading {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 14px;
-  color: #f4f7fb;
-}
-
-.location-heading div,
-.location-control {
-  display: flex;
-  flex-direction: column;
-}
-
-.location-heading span {
-  color: #b8c5d9;
-  font-size: 0.85rem;
-}
-
-.location-grid {
+/* Dirección manual, captura GPS y vista previa */
+.address-location-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
+  margin-top: 12px;
 }
 
-.location-control {
+.address-location-control {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
   gap: 7px;
 }
 
-.location-control label {
+.address-location-control label {
   color: #dbe7f6;
   font-weight: 600;
 }
 
-.location-control input {
+.address-input-row {
+  display: flex;
+  align-items: stretch;
+  gap: 7px;
+}
+
+.address-input-row input {
+  min-width: 0;
   width: 100%;
   min-height: 42px;
   padding: 9px 11px;
@@ -453,37 +437,80 @@ h1.example-app-name {
   color: #fff;
 }
 
-.location-control input:focus {
+.address-input-row input:focus {
   border-color: #5da8ff;
   box-shadow: 0 0 0 3px rgb(93 168 255 / 18%);
 }
 
-.location-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.location-actions .btn {
+.location-icon-button {
   display: inline-flex;
+  width: 42px;
+  min-width: 42px;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  border: 1px solid #4f9cf9;
+  border-radius: 7px;
+  background: #17345e;
+  color: #72b5ff;
+  cursor: pointer;
 }
 
-.location-actions .mat-icon {
+.location-icon-button:hover:not(:disabled) {
+  background: #2457d6;
+  color: #fff;
+}
+
+.location-icon-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.location-icon-button .mat-icon {
   width: 20px;
   height: 20px;
   font-size: 20px;
 }
 
-@media (max-width: 767px) {
-  .location-grid {
-    grid-template-columns: 1fr;
-  }
+.cuota-hoy-direccion {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+}
 
-  .location-actions .btn {
-    flex: 1 1 auto;
-    justify-content: center;
+.cuota-hoy-direccion > .mat-icon {
+  width: 18px;
+  height: 18px;
+  color: #6eb6ff;
+  font-size: 18px;
+}
+
+.cuota-hoy-map {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #4f9cf9;
+  border-radius: 6px;
+  background: transparent;
+  color: #6eb6ff;
+  cursor: pointer;
+}
+
+.cuota-hoy-map:hover {
+  background: rgb(79 156 249 / 16%);
+}
+
+.cuota-hoy-map .mat-icon {
+  width: 19px;
+  height: 19px;
+  font-size: 19px;
+}
+
+@media (max-width: 767px) {
+  .address-location-grid {
+    grid-template-columns: 1fr;
   }
 }
 

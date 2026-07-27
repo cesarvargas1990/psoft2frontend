@@ -3,9 +3,11 @@ import {
   OnInit,
   Inject,
   AfterViewInit,
-  ViewChild
+  ViewChild,
+  Optional
 } from '@angular/core';
 import {
+  MatLegacyDialog as MatDialog,
   MatLegacyDialogRef as MatDialogRef,
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
 } from '@angular/material/legacy-dialog';
@@ -24,6 +26,7 @@ import { UsersService } from '../../../../../_services/users/users.service';
 import { DatePipe } from '@angular/common';
 import { PrestamosService } from '../../../../../_services/prestamos/prestamos.service';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
+import { MapaUbicacionDialogComponent } from '../../../../shared/mapa-ubicacion-dialog/mapa-ubicacion-dialog.component';
 
 @Component({
   standalone: false,
@@ -201,7 +204,8 @@ export class EditarClienteComponent implements OnInit {
     public tipodocidentiService: TipodocidentiService,
     public usersService: UsersService,
     private datePipe: DatePipe,
-    public prestamosService: PrestamosService
+    public prestamosService: PrestamosService,
+    @Optional() private readonly dialog?: MatDialog
   ) {
     this.model.ubicasa = this.data.ubicasa || '';
     this.model.ubictrabajo = this.data.ubictrabajo || '';
@@ -373,35 +377,6 @@ export class EditarClienteComponent implements OnInit {
         fieldGroupClassName: 'row',
         fieldGroup: [
           {
-            key: 'direcasa',
-            className: 'col-md-6',
-            type: 'input',
-            defaultValue: this.data.direcasa,
-            modelOptions: {
-              updateOn: 'submit'
-            },
-            templateOptions: {
-              label: 'Dir Casa'
-            }
-          },
-          {
-            key: 'diretrabajo',
-            className: 'col-md-6',
-            type: 'input',
-            defaultValue: this.data.diretrabajo,
-            modelOptions: {
-              updateOn: 'submit'
-            },
-            templateOptions: {
-              label: 'Dir Trabajo'
-            }
-          }
-        ]
-      },
-      {
-        fieldGroupClassName: 'row',
-        fieldGroup: [
-          {
             key: 'ref1',
             className: 'col-md-6',
             type: 'input',
@@ -515,6 +490,17 @@ export class EditarClienteComponent implements OnInit {
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
     );
+  }
+
+  verUbicacion(
+    ubicacion: string | undefined,
+    direccion: string | undefined,
+    titulo: string
+  ): void {
+    this.dialog?.open(MapaUbicacionDialogComponent, {
+      data: { ubicacion, direccion, titulo },
+      maxWidth: '94vw'
+    });
   }
 
   public handleImage(webcamImage: WebcamImage): void {

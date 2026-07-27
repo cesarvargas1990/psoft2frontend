@@ -27,6 +27,7 @@ import Swal from 'sweetalert2';
 
 import { Router } from '@angular/router';
 import { SessionStateService } from '../../core/session/session-state.service';
+import { MapaUbicacionDialogComponent } from '../shared/mapa-ubicacion-dialog/mapa-ubicacion-dialog.component';
 
 @Component({
   standalone: false,
@@ -223,6 +224,18 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
       }
     });
   }
+
+  verUbicacionCuota(cuota: fechasPago): void {
+    this.dialog.open(MapaUbicacionDialogComponent, {
+      data: {
+        ubicacion: cuota.ubicasa,
+        direccion: cuota.direcasa,
+        titulo: `Ubicación de ${cuota.nomcliente || 'cliente'}`
+      },
+      maxWidth: '94vw'
+    });
+  }
+
   ngOnInit() {
     this.menuUsuario = this.sessionState.parseStoredJson('menu_usuario', []);
     this.permisos = this.sessionState.getPermissions();

@@ -123,6 +123,21 @@
                       @if (cuota.celular) {
                         <span>{{ cuota.celular }}</span>
                       }
+                      @if (cuota.direcasa || cuota.ubicasa) {
+                        <span class="cuota-hoy-direccion">
+                          <mat-icon aria-hidden="true">home</mat-icon>
+                          {{ cuota.direcasa || 'Dirección no registrada' }}
+                          <button
+                            type="button"
+                            class="cuota-hoy-map"
+                            title="Ver ubicación en el mapa"
+                            aria-label="Ver ubicación del cliente"
+                            (click)="verUbicacionCuota(cuota)"
+                          >
+                            <mat-icon aria-hidden="true">map</mat-icon>
+                          </button>
+                        </span>
+                      }
                     </div>
                     <div class="cuota-hoy-valor">
                       <span>{{

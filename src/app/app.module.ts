@@ -120,6 +120,7 @@ import { CrearDocumentoComponent } from './_component/parametros/crear-documento
 import { provideTinymce, TinymceComponent } from 'ngx-tinymce';
 
 import { SignaturePadComponent } from './signature-pad.component';
+import { MapaUbicacionDialogComponent } from './_component/shared/mapa-ubicacion-dialog/mapa-ubicacion-dialog.component';
 
 // import {FirmaWrapperComponent} from './_component/firma/firma-wrapper.component';
 
@@ -212,7 +213,8 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
     ListarDocumentosprestamoComponent,
     EmpresaParametrosComponent,
     LogoutComponent,
-    SignaturePadComponent
+    SignaturePadComponent,
+    MapaUbicacionDialogComponent
   ],
   bootstrap: [AppComponent],
   imports: [

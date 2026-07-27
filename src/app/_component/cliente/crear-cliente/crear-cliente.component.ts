@@ -30,9 +30,11 @@ import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { environment } from '../../../../environments/environment';
 import { SessionStateService } from '../../../core/session/session-state.service';
 import {
+  MatLegacyDialog as MatDialog,
   MatLegacyDialogRef as MatDialogRef,
   MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA
 } from '@angular/material/legacy-dialog';
+import { MapaUbicacionDialogComponent } from '../../shared/mapa-ubicacion-dialog/mapa-ubicacion-dialog.component';
 
 export interface TabType {
   label: string;
@@ -248,31 +250,6 @@ export class CrearClienteComponent implements AfterViewInit, OnDestroy {
                 label: 'Celular',
                 required: true
               }
-            },
-
-            {
-              key: 'direcasa',
-              className: 'col-md-4',
-              type: 'input',
-              modelOptions: {
-                updateOn: 'blur'
-              },
-              templateOptions: {
-                label: 'Dir Casa',
-                required_: true
-              }
-            },
-
-            {
-              key: 'diretrabajo',
-              className: 'col-md-4',
-              type: 'input',
-              modelOptions: {
-                updateOn: 'blur'
-              },
-              templateOptions: {
-                label: 'Dir Trabajo'
-              }
             }
           ]
         }
@@ -345,7 +322,8 @@ export class CrearClienteComponent implements AfterViewInit, OnDestroy {
     public usersService: UsersService,
     public prestamosService: PrestamosService,
     @Optional() public dialogRef?: MatDialogRef<CrearClienteComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public dialogData?: any
+    @Optional() @Inject(MAT_DIALOG_DATA) public dialogData?: any,
+    @Optional() private readonly dialog?: MatDialog
   ) {
     this.menuUsuario = this.sessionState.parseStoredJson('menu_usuario', []);
     this.navItems = this.sessionState.getMenuItems();
@@ -428,6 +406,17 @@ export class CrearClienteComponent implements AfterViewInit, OnDestroy {
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
     );
+  }
+
+  verUbicacion(
+    ubicacion: string | undefined,
+    direccion: string | undefined,
+    titulo: string
+  ): void {
+    this.dialog?.open(MapaUbicacionDialogComponent, {
+      data: { ubicacion, direccion, titulo },
+      maxWidth: '94vw'
+    });
   }
 
   public handleImage(webcamImage: WebcamImage): void {

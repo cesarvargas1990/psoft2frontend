@@ -10,5 +10,7 @@ export interface fechasPago {
   ind_cuotapaga?: number;
   nomcliente?: string;
   celular?: string;
+  direcasa?: string;
+  ubicasa?: string;
   fecha_pago_texto?: string;
 }

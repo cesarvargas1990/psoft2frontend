@@ -73,101 +73,93 @@
                         >
                         </formly-form>
                         @if (tab.label === 'Datos Contacto') {
-                          <div class="location-section">
-                            <div class="location-heading">
-                              <mat-icon aria-hidden="true"
-                                >location_on</mat-icon
-                              >
-                              <div>
-                                <strong>Ubicación en Google Maps</strong>
-                                <span>
-                                  Puedes pegar un enlace manualmente o usar el
-                                  GPS del dispositivo.
-                                </span>
+                          <div class="address-location-grid">
+                            <div class="address-location-control">
+                              <label for="direccion-casa">Dir Casa</label>
+                              <div class="address-input-row">
+                                <input
+                                  id="direccion-casa"
+                                  name="direccion-casa"
+                                  type="text"
+                                  [(ngModel)]="model.direcasa"
+                                  [ngModelOptions]="{ standalone: true }"
+                                  placeholder="Escribe la dirección"
+                                />
+                                <button
+                                  type="button"
+                                  class="location-icon-button"
+                                  title="Capturar ubicación actual"
+                                  aria-label="Capturar ubicación de la casa"
+                                  [disabled]="ubicacionEnProceso !== null"
+                                  (click)="capturarUbicacion('ubicasa')"
+                                >
+                                  <mat-icon aria-hidden="true">{{
+                                    ubicacionEnProceso === 'ubicasa'
+                                      ? 'hourglass_top'
+                                      : 'my_location'
+                                  }}</mat-icon>
+                                </button>
+                                <button
+                                  type="button"
+                                  class="location-icon-button"
+                                  title="Ver ubicación en el mapa"
+                                  aria-label="Ver ubicación de la casa"
+                                  [disabled]="!model.ubicasa && !model.direcasa"
+                                  (click)="
+                                    verUbicacion(
+                                      model.ubicasa,
+                                      model.direcasa,
+                                      'Ubicación de la casa'
+                                    )
+                                  "
+                                >
+                                  <mat-icon aria-hidden="true">map</mat-icon>
+                                </button>
                               </div>
                             </div>
-                            <div class="location-grid">
-                              <div class="location-control">
-                                <label for="ubicacion-casa">Casa</label>
+                            <div class="address-location-control">
+                              <label for="direccion-trabajo">Dir Trabajo</label>
+                              <div class="address-input-row">
                                 <input
-                                  id="ubicacion-casa"
-                                  name="ubicacion-casa"
-                                  type="url"
-                                  [(ngModel)]="model.ubicasa"
+                                  id="direccion-trabajo"
+                                  name="direccion-trabajo"
+                                  type="text"
+                                  [(ngModel)]="model.diretrabajo"
                                   [ngModelOptions]="{ standalone: true }"
-                                  placeholder="Enlace de Google Maps"
+                                  placeholder="Escribe la dirección"
                                 />
-                                <div class="location-actions">
-                                  <button
-                                    type="button"
-                                    class="btn btn-outline-primary"
-                                    [disabled]="ubicacionEnProceso !== null"
-                                    (click)="capturarUbicacion('ubicasa')"
-                                  >
-                                    <mat-icon aria-hidden="true"
-                                      >my_location</mat-icon
-                                    >
-                                    {{
-                                      ubicacionEnProceso === 'ubicasa'
-                                        ? 'Capturando...'
-                                        : 'Usar mi ubicación'
-                                    }}
-                                  </button>
-                                  @if (model.ubicasa) {
-                                    <a
-                                      class="btn btn-outline-secondary"
-                                      [href]="model.ubicasa"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      <mat-icon aria-hidden="true"
-                                        >map</mat-icon
-                                      >
-                                      Abrir
-                                    </a>
-                                  }
-                                </div>
-                              </div>
-                              <div class="location-control">
-                                <label for="ubicacion-trabajo">Trabajo</label>
-                                <input
-                                  id="ubicacion-trabajo"
-                                  name="ubicacion-trabajo"
-                                  type="url"
-                                  [(ngModel)]="model.ubictrabajo"
-                                  [ngModelOptions]="{ standalone: true }"
-                                  placeholder="Enlace de Google Maps"
-                                />
-                                <div class="location-actions">
-                                  <button
-                                    type="button"
-                                    class="btn btn-outline-primary"
-                                    [disabled]="ubicacionEnProceso !== null"
-                                    (click)="capturarUbicacion('ubictrabajo')"
-                                  >
-                                    <mat-icon aria-hidden="true"
-                                      >my_location</mat-icon
-                                    >
-                                    {{
-                                      ubicacionEnProceso === 'ubictrabajo'
-                                        ? 'Capturando...'
-                                        : 'Usar mi ubicación'
-                                    }}
-                                  </button>
-                                  @if (model.ubictrabajo) {
-                                    <a
-                                      class="btn btn-outline-secondary"
-                                      [href]="model.ubictrabajo"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      <mat-icon aria-hidden="true"
-                                        >map</mat-icon
-                                      >
-                                      Abrir
-                                    </a>
-                                  }
-                                </div>
+                                <button
+                                  type="button"
+                                  class="location-icon-button"
+                                  title="Capturar ubicación actual"
+                                  aria-label="Capturar ubicación del trabajo"
+                                  [disabled]="ubicacionEnProceso !== null"
+                                  (click)="capturarUbicacion('ubictrabajo')"
+                                >
+                                  <mat-icon aria-hidden="true">{{
+                                    ubicacionEnProceso === 'ubictrabajo'
+                                      ? 'hourglass_top'
+                                      : 'my_location'
+                                  }}</mat-icon>
+                                </button>
+                                <button
+                                  type="button"
+                                  class="location-icon-button"
+                                  title="Ver ubicación en el mapa"
+                                  aria-label="Ver ubicación del trabajo"
+                                  [disabled]="
+                                    !model.ubictrabajo && !model.diretrabajo
+                                  "
+                                  (click)="
+                                    verUbicacion(
+                                      model.ubictrabajo,
+                                      model.diretrabajo,
+                                      'Ubicación del trabajo'
+                                    )
+                                  "
+                                >
+                                  <mat-icon aria-hidden="true">map</mat-icon>
+                                </button>
                               </div>
                             </div>
                           </div>

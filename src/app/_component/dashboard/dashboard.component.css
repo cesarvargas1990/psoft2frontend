@@ -28,7 +28,13 @@
 
 .cuotas-hoy-card {
   overflow: hidden;
-  border-left: 4px solid #1976d2;
+  border: 1px solid #29466f;
+  border-left: 4px solid #4f9cf9;
+  background: #101a2d;
+}
+
+.cuotas-hoy-card .card-body {
+  background: #101a2d;
 }
 
 .cuotas-hoy-header,
@@ -40,6 +46,8 @@
 .cuotas-hoy-header {
   justify-content: space-between;
   gap: 16px;
+  background: linear-gradient(135deg, #2457d6 0%, #1d3f91 100%);
+  color: #fff;
 }
 
 .cuotas-hoy-header .card-title {
@@ -53,9 +61,10 @@
   align-items: center;
   justify-content: center;
   border-radius: 17px;
-  background: #1976d2;
+  background: #42a5f5;
   color: #fff;
   font-weight: 700;
+  box-shadow: 0 0 0 4px rgb(66 165 245 / 18%);
 }
 
 .cuotas-hoy-list {
@@ -66,9 +75,11 @@
 .cuota-hoy-item {
   gap: 20px;
   padding: 12px 14px;
-  border: 1px solid #e3e8ee;
+  border: 1px solid #31435f;
   border-radius: 8px;
-  background: #fff;
+  background: #19263b;
+  color: #f4f7fb;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 18%);
 }
 
 .cuota-hoy-cliente,
@@ -81,16 +92,38 @@
   flex: 1 1 auto;
 }
 
+.cuota-hoy-cliente strong {
+  color: #fff;
+}
+
+.cuota-hoy-cliente span,
+.cuota-hoy-valor span {
+  color: #b8c5d9;
+}
+
 .cuota-hoy-valor {
   min-width: 180px;
   text-align: right;
+}
+
+.cuota-hoy-valor strong {
+  color: #6eb6ff;
+  font-size: 1.15rem;
 }
 
 .cuota-hoy-pagar {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  border-color: #4f9cf9;
+  background: #357fdb;
+  color: #fff;
   white-space: nowrap;
+}
+
+.cuota-hoy-pagar:hover:not(:disabled) {
+  border-color: #72b5ff;
+  background: #4f9cf9;
 }
 
 .cuota-hoy-pagar .mat-icon {
@@ -99,7 +132,7 @@
 
 .cuotas-hoy-empty {
   padding: 14px;
-  color: #5f6b76;
+  color: #b8c5d9;
   text-align: center;
 }
 

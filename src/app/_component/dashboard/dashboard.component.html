@@ -25,85 +25,103 @@
       }
     </mat-sidenav>
     <mat-sidenav-content>
-      @if (!esVistaPrestamos && authService.tienePermiso('dashboard.totales')) {
-        <div class="row">
-          <div class="col-md-3">
-            <div class="card">
-              <div class="card-header">
-                <div class="card-title">$ Balance</div>
-              </div>
-              <p style="text-align: end">${{ total_capital_prestado }}</p>
+      @if (!esVistaPrestamos) {
+        <section class="dashboard-overview">
+          <header class="dashboard-welcome">
+            <h1>¡Hola, bienvenido!</h1>
+            <p>Aquí tienes el resumen general de tu negocio.</p>
+          </header>
+
+          @if (authService.tienePermiso('dashboard.totales')) {
+            <div class="dashboard-metrics">
+              <article class="metric-balance">
+                <div class="metric-heading">
+                  <span class="metric-icon metric-icon-wallet">
+                    <mat-icon aria-hidden="true"
+                      >account_balance_wallet</mat-icon
+                    >
+                  </span>
+                  <span>Balance</span>
+                </div>
+                <strong>$ {{ total_capital_prestado }}</strong>
+                <svg
+                  class="balance-wave"
+                  viewBox="0 0 600 100"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M0,82 C60,72 75,28 135,38 S205,80 260,56 S325,28 375,58 S440,88 485,54 S550,42 600,72"
+                  ></path>
+                </svg>
+              </article>
+
+              <article class="metric-card">
+                <span class="metric-icon metric-icon-money">
+                  <mat-icon aria-hidden="true">monetization_on</mat-icon>
+                </span>
+                <span>Total prestado</span>
+                <strong>$ {{ total_prestado }}</strong>
+              </article>
+              <article class="metric-card">
+                <span class="metric-icon metric-icon-growth">
+                  <mat-icon aria-hidden="true">trending_up</mat-icon>
+                </span>
+                <span>Total intereses</span>
+                <strong>$ {{ total_interes }}</strong>
+              </article>
+              <article class="metric-card">
+                <span class="metric-icon metric-icon-calendar">
+                  <mat-icon aria-hidden="true">calendar_month</mat-icon>
+                </span>
+                <span>Prestado hoy</span>
+                <strong>$ {{ total_prestado_hoy }}</strong>
+              </article>
+              <article class="metric-card">
+                <span class="metric-icon metric-icon-piggy">
+                  <mat-icon aria-hidden="true">savings</mat-icon>
+                </span>
+                <span>Ing. intereses hoy</span>
+                <strong>$ {{ total_interes_hoy }}</strong>
+              </article>
             </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card">
-              <div class="card-header">
-                <div class="card-title">$ Total prestado</div>
-              </div>
-              <p style="text-align: end">${{ total_prestado }}</p>
+          }
+
+          @if (authService.tienePermiso('dashboard.totales_user')) {
+            <div class="dashboard-metrics dashboard-metrics-user">
+              <article class="metric-card">
+                <span class="metric-icon metric-icon-growth">
+                  <mat-icon aria-hidden="true">trending_up</mat-icon>
+                </span>
+                <span>Total intereses</span>
+                <strong>$ {{ total_interes }}</strong>
+              </article>
+              <article class="metric-card">
+                <span class="metric-icon metric-icon-piggy">
+                  <mat-icon aria-hidden="true">savings</mat-icon>
+                </span>
+                <span>Ing. intereses hoy</span>
+                <strong>$ {{ total_interes_hoy }}</strong>
+              </article>
             </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card">
-              <div class="card-header">
-                <div class="card-title">$ Total intereses</div>
-              </div>
-              <p style="text-align: end">${{ total_interes }}</p>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card">
-              <div class="card-header">
-                <div class="card-title">$ Prestado hoy</div>
-              </div>
-              <p style="text-align: end">${{ total_prestado_hoy }}</p>
-            </div>
-          </div>
-          <br />
-          <div style="margin-top: 30px" class="col-md-3">
-            <div class="card">
-              <div class="card-header">
-                <div class="card-title">$ Ing Interes hoy</div>
-              </div>
-              <p style="text-align: end">${{ total_interes_hoy }}</p>
-            </div>
-          </div>
-        </div>
+          }
+        </section>
       }
 
-      @if (
-        !esVistaPrestamos && authService.tienePermiso('dashboard.totales_user')
-      ) {
-        <div class="row">
-          <div class="col-md-3">
-            <div class="card">
-              <div class="card-header">
-                <div class="card-title">$ Total intereses</div>
-              </div>
-              <p style="text-align: end">${{ total_interes }}</p>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="card">
-              <div class="card-header">
-                <div class="card-title">$ Ing Interes hoy</div>
-              </div>
-              <p style="text-align: end">${{ total_interes_hoy }}</p>
-            </div>
-          </div>
-        </div>
-      }
-
-      <br />
       @if (!esVistaPrestamos && !visualizarDocumentos && listadoPrestamos) {
         <div class="card cuotas-hoy-card">
           <div class="card-header cuotas-hoy-header">
-            <div>
-              <div class="card-title">Cuotas para cobrar hoy</div>
-              <small
-                >Acceso directo para registrar los pagos programados del
-                día.</small
-              >
+            <div class="cuotas-hoy-title-wrap">
+              <span class="cuotas-hoy-icon">
+                <mat-icon aria-hidden="true">calendar_month</mat-icon>
+              </span>
+              <div>
+                <div class="card-title">Cuotas para cobrar hoy</div>
+                <small
+                  >Acceso directo para registrar los pagos programados del
+                  día.</small
+                >
+              </div>
             </div>
             <span class="cuotas-hoy-count">{{
               cuotasPendientesHoy.length
@@ -112,7 +130,10 @@
           <div class="card-body">
             @if (cuotasPendientesHoy.length === 0) {
               <div class="cuotas-hoy-empty">
-                No hay cuotas pendientes con fecha de pago hoy.
+                <span class="cuotas-empty-icon">
+                  <mat-icon aria-hidden="true">task_alt</mat-icon>
+                </span>
+                <span>No hay cuotas pendientes con fecha de pago hoy.</span>
               </div>
             }
             @if (cuotasPendientesHoy.length > 0) {

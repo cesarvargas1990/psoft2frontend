@@ -535,6 +535,223 @@ h1.example-app-name {
   gap: 7px;
 }
 
+/* Dashboard principal */
+.dashboard-overview {
+  margin-bottom: 22px;
+}
+
+.dashboard-welcome {
+  margin-bottom: 20px;
+  color: #f8fbff;
+}
+
+.dashboard-welcome h1 {
+  margin: 0 0 4px;
+  font-size: clamp(1.45rem, 2vw, 2rem);
+  font-weight: 700;
+}
+
+.dashboard-welcome p {
+  margin: 0;
+  color: #afbdd1;
+  font-size: 1rem;
+}
+
+.dashboard-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.metric-balance,
+.metric-card {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  border: 1px solid #314760;
+  border-radius: 18px;
+  color: #fff;
+  box-shadow: 0 12px 30px rgb(0 0 0 / 18%);
+}
+
+.metric-balance {
+  min-height: 190px;
+  grid-column: 1 / -1;
+  padding: 25px 28px;
+  background:
+    radial-gradient(circle at 82% 10%, rgb(66 153 255 / 28%), transparent 34%),
+    linear-gradient(135deg, #1267ed 0%, #0645b5 55%, #082e73 100%);
+}
+
+.metric-heading {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 1.18rem;
+  font-weight: 600;
+}
+
+.metric-balance > strong {
+  position: relative;
+  z-index: 1;
+  display: block;
+  margin-top: 18px;
+  font-size: clamp(1.85rem, 4vw, 2.7rem);
+  line-height: 1.1;
+  text-align: right;
+}
+
+.balance-wave {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 48%;
+  opacity: 0.75;
+}
+
+.balance-wave path {
+  fill: rgb(38 151 255 / 18%);
+  stroke: #5bb9ff;
+  stroke-width: 3;
+}
+
+.metric-card {
+  display: flex;
+  min-height: 155px;
+  padding: 20px;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 8px;
+  background:
+    radial-gradient(circle at 85% 5%, rgb(39 115 190 / 16%), transparent 45%),
+    linear-gradient(145deg, #142941, #0b192b);
+}
+
+.metric-card > span:not(.metric-icon) {
+  color: #dce7f5;
+  font-size: 1rem;
+}
+
+.metric-card > strong {
+  overflow-wrap: anywhere;
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  line-height: 1.2;
+}
+
+.metric-icon {
+  display: inline-flex;
+  width: 54px;
+  height: 54px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid currentcolor;
+  border-radius: 14px;
+  box-shadow: 0 8px 22px currentcolor;
+}
+
+.metric-icon .mat-icon {
+  width: 27px;
+  height: 27px;
+  font-size: 27px;
+}
+
+.metric-card .metric-icon {
+  margin-bottom: auto;
+}
+
+.metric-icon-wallet {
+  color: #a8caff;
+  background: rgb(17 81 211 / 72%);
+}
+
+.metric-icon-money {
+  color: #9bea76;
+  background: rgb(30 111 40 / 58%);
+}
+
+.metric-icon-growth {
+  color: #d797ff;
+  background: rgb(100 39 143 / 60%);
+}
+
+.metric-icon-calendar {
+  color: #ffd17a;
+  background: rgb(146 75 4 / 64%);
+}
+
+.metric-icon-piggy {
+  color: #71eccb;
+  background: rgb(4 105 87 / 62%);
+}
+
+.dashboard-metrics-user {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.cuotas-hoy-title-wrap,
+.cuotas-hoy-icon,
+.cuotas-empty-icon {
+  display: flex;
+  align-items: center;
+}
+
+.cuotas-hoy-title-wrap {
+  gap: 13px;
+}
+
+.cuotas-hoy-icon {
+  width: 43px;
+  height: 43px;
+  justify-content: center;
+  border: 1px solid rgb(105 174 255 / 55%);
+  border-radius: 11px;
+  background: rgb(16 91 212 / 58%);
+  color: #72b9ff;
+}
+
+.cuotas-hoy-card {
+  border-radius: 18px !important;
+}
+
+.cuotas-hoy-header {
+  padding: 20px !important;
+}
+
+.cuotas-hoy-card .card-body {
+  padding: 18px !important;
+}
+
+.cuotas-hoy-empty {
+  display: flex;
+  min-height: 180px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 18px;
+  font-size: 1.05rem;
+}
+
+.cuotas-empty-icon {
+  width: 82px;
+  height: 82px;
+  justify-content: center;
+  border: 12px solid rgb(24 211 160 / 14%);
+  border-radius: 50%;
+  background: #37e3b1;
+  color: #063f37;
+  box-shadow: 0 0 0 10px rgb(23 148 122 / 18%);
+}
+
+.cuotas-empty-icon .mat-icon {
+  width: 42px;
+  height: 42px;
+  font-size: 42px;
+}
+
 @media (max-width: 767px) {
   .address-location-grid {
     grid-template-columns: 1fr;
@@ -544,6 +761,58 @@ h1.example-app-name {
     width: 100%;
     min-height: 48px;
     justify-content: center;
+  }
+
+  .dashboard-overview {
+    margin-bottom: 18px;
+  }
+
+  .dashboard-welcome {
+    padding: 4px 8px 0;
+  }
+
+  .dashboard-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .metric-balance {
+    min-height: 180px;
+    padding: 22px;
+  }
+
+  .metric-card {
+    min-height: 185px;
+    padding: 16px;
+  }
+
+  .metric-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .cuotas-hoy-title-wrap {
+    align-items: flex-start;
+  }
+
+  .cuotas-hoy-header {
+    padding: 17px !important;
+  }
+
+  .cuotas-hoy-header small {
+    display: block;
+    margin-top: 5px;
+    line-height: 1.5;
+  }
+
+  .cuotas-hoy-card .card-body {
+    padding: 12px !important;
+  }
+}
+
+@media (min-width: 1100px) {
+  .metric-balance {
+    min-height: 175px;
   }
 }
 

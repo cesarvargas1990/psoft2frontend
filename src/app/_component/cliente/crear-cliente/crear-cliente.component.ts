@@ -392,8 +392,11 @@ export class CrearClienteComponent implements AfterViewInit, OnDestroy {
     this.ubicacionEnProceso = campo;
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
+        const coordenadas = `${coords.latitude}, ${coords.longitude}`;
         this.model[campo] =
           `https://www.google.com/maps?q=${coords.latitude},${coords.longitude}`;
+        this.model[campo === 'ubicasa' ? 'direcasa' : 'diretrabajo'] =
+          coordenadas;
         this.ubicacionEnProceso = null;
       },
       (error) => {

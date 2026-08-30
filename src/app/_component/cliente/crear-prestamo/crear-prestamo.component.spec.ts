@@ -19,6 +19,7 @@ import { TipodocidentiService } from '../../../_services/tipodocidenti/tipodocid
 import { UsersService } from '../../../_services/users/users.service';
 import { PrestamosService } from '../../../_services/prestamos/prestamos.service';
 import { SessionStateService } from '../../../core/session/session-state.service';
+import { EmpresaService } from '../../../_services/empresa/empresa.service';
 import { MediaMatcher } from '@angular/cdk/layout';
 import Swal from 'sweetalert2';
 import { UntypedFormControl } from '@angular/forms';
@@ -98,6 +99,16 @@ class MockPrestamosService {
   pstiposistemaprest() {
     return of(true);
   }
+
+  tarifaBloqueCapital() {
+    return of({ valor_cuota: 50000 });
+  }
+}
+
+class MockEmpresaService {
+  getEmpresa() {
+    return of({});
+  }
 }
 
 class MockRouter {
@@ -144,6 +155,7 @@ describe('CrearPrestamoComponent', () => {
         { provide: TipodocidentiService, useClass: MockTipodocidentiService },
         { provide: UsersService, useClass: MockUsersService },
         { provide: PrestamosService, useClass: MockPrestamosService },
+        { provide: EmpresaService, useClass: MockEmpresaService },
         { provide: Router, useClass: MockRouter },
         { provide: MediaMatcher, useClass: MockMediaMatcher },
         { provide: MatDialog, useClass: MockMatDialog }
@@ -484,7 +496,8 @@ describe('CrearPrestamoComponent', () => {
       TestBed.inject(SessionStateService),
       TestBed.inject(TipodocidentiService),
       TestBed.inject(UsersService),
-      TestBed.inject(PrestamosService)
+      TestBed.inject(PrestamosService),
+      TestBed.inject(EmpresaService)
     );
 
     const mediaQuery = (cmp as any).mobileQuery as any;

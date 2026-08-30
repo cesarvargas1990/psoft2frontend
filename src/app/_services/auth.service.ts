@@ -72,6 +72,26 @@ export class AuthService {
       .pipe(retry(2), catchError(this.handleError));
   }
 
+  changePassword(data: {
+    password: string;
+    password_confirmation: string;
+  }): Observable<{ message: string }> {
+    const httpOptionsAuth = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      })
+    };
+
+    return this.http
+      .post<{ message: string }>(
+        this.basePath + '/auth/change-password',
+        data,
+        httpOptionsAuth
+      )
+      .pipe(retry(2), catchError(this.handleError));
+  }
+
   // After login save token and other values(if any) in localStorage
   setUser(resp: LoginResponse) {
     const menuUsuarioCandidates = [

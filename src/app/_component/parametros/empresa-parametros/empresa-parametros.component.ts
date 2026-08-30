@@ -13,6 +13,7 @@ import { NavService } from '../../../_services/nav.service';
 import { VERSION } from '@angular/material/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { AuthService } from '../../../_services/auth.service';
+import { PrestamosService } from '../../../_services/prestamos/prestamos.service';
 
 import Swal from 'sweetalert2';
 import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
@@ -55,6 +56,7 @@ export class EmpresaParametrosComponent implements OnInit, OnDestroy {
   navItems: NavItem[] = [];
 
   datosFormasPago: any = [];
+  sistemasPago: any = [];
 
   fields: FormlyFieldConfig[] = [];
 
@@ -65,6 +67,7 @@ export class EmpresaParametrosComponent implements OnInit, OnDestroy {
     media: MediaMatcher,
     public router: Router,
     public empresaService: EmpresaService,
+    public prestamosService: PrestamosService,
     private readonly sessionState: SessionStateService
   ) {
     this.menuUsuario = this.sessionState.parseStoredJson('menu_usuario', []);
@@ -93,6 +96,7 @@ export class EmpresaParametrosComponent implements OnInit, OnDestroy {
     this.router.navigate(['dashboard']);
   }
   ngOnInit(): void {
+    this.sistemasPago = this.prestamosService.getSistemaPrestamo();
     this.empresaService.getEmpresa().subscribe((response) => {
       this.datosEmpresa = response;
       this.firmaPreview = this.construirPreviewFirma(
@@ -144,6 +148,19 @@ export class EmpresaParametrosComponent implements OnInit, OnDestroy {
                 label: 'Capital Inicial',
                 placeholder: 'Valor de capital inicial',
                 required: true
+              }
+            },
+
+            {
+              key: 'id_sistema_pago_default',
+              defaultValue: this.datosEmpresa.id_sistema_pago_default,
+              className: 'col-md-6',
+              type: 'select',
+              templateOptions: {
+                label: 'Sistema de pago por defecto',
+                placeholder: 'Sin valor por defecto',
+                options: this.sistemasPago,
+                required: false
               }
             },
 

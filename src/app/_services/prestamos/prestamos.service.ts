@@ -36,6 +36,7 @@ export class PrestamosService {
   private services = {
     psformapago: this.server + '/psformapago',
     calcularCuotas: this.server + '/calcularCuotas',
+    tarifaBloqueCapital: this.server + '/tarifaBloqueCapital',
     listaformaspago: this.server + '/listaformaspago',
     listaperiodospago: this.server + '/listaperiodopago',
     guardarPrestamo: this.server + '/guardarPrestamo',
@@ -125,6 +126,19 @@ export class PrestamosService {
       .post<
         CuotaCalculada[] | Record<string, unknown>
       >(`${this.services.calcularCuotas}`, data, this.httpOpts)
+      .pipe(retry(2), catchError(this.handleError));
+  }
+
+  tarifaBloqueCapital(
+    data: Record<string, unknown>
+  ): Observable<Record<string, unknown>> {
+    data.id_empresa = this.getStorageValue('id_empresa');
+    return this.http
+      .post<Record<string, unknown>>(
+        `${this.services.tarifaBloqueCapital}`,
+        data,
+        this.httpOpts
+      )
       .pipe(retry(2), catchError(this.handleError));
   }
 

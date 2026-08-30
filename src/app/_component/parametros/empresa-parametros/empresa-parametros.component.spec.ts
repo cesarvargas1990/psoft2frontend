@@ -14,6 +14,7 @@ import { EmpresaParametrosComponent } from './empresa-parametros.component';
 import { AuthService } from '../../../_services/auth.service';
 import { NavService } from '../../../_services/nav.service';
 import { EmpresaService } from '../../../_services/empresa/empresa.service';
+import { PrestamosService } from '../../../_services/prestamos/prestamos.service';
 import { SessionStateService } from '../../../core/session/session-state.service';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { of } from 'rxjs';
@@ -57,6 +58,12 @@ class MockEmpresaService {
   }
 }
 
+class MockPrestamosService {
+  getSistemaPrestamo() {
+    return Promise.resolve([{ value: 5, label: 'Cuota fija por bloque de capital' }]);
+  }
+}
+
 class MockRouter {
   navigate(_path: string[]) {
     return;
@@ -91,6 +98,7 @@ describe('EmpresaParametrosComponent', () => {
         { provide: AuthService, useClass: MockAuthService },
         { provide: NavService, useClass: MockNavService },
         { provide: EmpresaService, useClass: MockEmpresaService },
+        { provide: PrestamosService, useClass: MockPrestamosService },
         { provide: Router, useClass: MockRouter },
         { provide: MediaMatcher, useClass: MockMediaMatcher }
       ],
@@ -233,6 +241,7 @@ describe('EmpresaParametrosComponent', () => {
       mediaMatcher,
       TestBed.inject(Router),
       TestBed.inject(EmpresaService),
+      TestBed.inject(PrestamosService),
       TestBed.inject(SessionStateService)
     );
     const mediaQuery = (cmp as any).mobileQuery;

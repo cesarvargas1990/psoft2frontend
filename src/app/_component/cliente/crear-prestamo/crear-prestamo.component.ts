@@ -23,6 +23,7 @@ import { Router } from '@angular/router';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { CrearClienteComponent } from '../crear-cliente/crear-cliente.component';
 import { SessionStateService } from '../../../core/session/session-state.service';
+import { EmpresaService } from '../../../_services/empresa/empresa.service';
 
 interface ResumenCuotasPrestamo {
   capital: number;
@@ -46,7 +47,8 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
   form = new UntypedFormGroup({});
   model: any = {
-    interes_equivalente_anual: '0.00'
+    interes_equivalente_anual: '0.00',
+    valor_cuota_diaria: ''
   };
 
   options: FormlyFormOptions = {};
@@ -74,6 +76,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
   datosCliente: any = [];
   listaClientes: any = [];
+  datosEmpresa: any = {};
 
   constructor(
     public authService: AuthService,
@@ -86,7 +89,8 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
     private readonly sessionState: SessionStateService,
     public tipodocidentiService: TipodocidentiService,
     public usersService: UsersService,
-    public prestamosService: PrestamosService
+    public prestamosService: PrestamosService,
+    public empresaService: EmpresaService
   ) {
     this.menuUsuario = this.sessionState.parseStoredJson('menu_usuario', []);
     this.navItems = this.sessionState.getMenuItems();
@@ -143,6 +147,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
     this.listaClientes = await this.clienteService.getClientes();
     this.formaspago = await this.prestamosService.getFormasPago();
     this.sistemaspago = await this.prestamosService.getSistemaPrestamo();
+    this.datosEmpresa = await this.empresaService.getEmpresa().toPromise();
     console.log('los clientes');
     console.log(this.listaClientes);
 
@@ -201,6 +206,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
               options: this.sistemaspago,
               required: true,
               change: (field, $event) => {
+                this.actualizarCamposCuotaFijaPorBloque();
                 this.prestamosService
                   .pstiposistemaprest()
                   .subscribe((response) => {
@@ -212,6 +218,17 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
                   this.obtenerCuotasPrestamo();
                 }
               }
+            }
+          },
+          {
+            key: 'valor_cuota_diaria',
+            className: 'col-md-3',
+            type: 'input',
+            hideExpression: () => !this.esCuotaFijaPorBloque(),
+            templateOptions: {
+              label: 'Valor de cuota diaria',
+              readonly: true,
+              disabled: true
             }
           },
           {
@@ -228,6 +245,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
               minLength: 5,
               maxLength: 11,
               blur: (field, $event) => {
+                this.actualizarCamposCuotaFijaPorBloque();
                 if (this.form.valid) {
                   this.obtenerCuotasPrestamo();
                 }
@@ -254,6 +272,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
               minLength: 1,
               maxLength: 3,
               blur: (field, $event) => {
+                this.actualizarCamposCuotaFijaPorBloque();
                 if (this.form.valid) {
                   this.obtenerCuotasPrestamo();
                 }
@@ -284,6 +303,10 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
                 }
               }
             },
+            hideExpression: () => this.esCuotaFijaPorBloque(),
+            expressionProperties: {
+              'templateOptions.required': () => !this.esCuotaFijaPorBloque()
+            },
             validation: {
               messages: {
                 pattern: (error, field: FormlyFieldConfig) =>
@@ -295,6 +318,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
             key: 'interes_equivalente_anual',
             className: 'col-md-3',
             type: 'input',
+            hideExpression: () => this.esCuotaFijaPorBloque(),
             templateOptions: {
               label: 'Equivalencia anual simple (%)',
               readonly: true,
@@ -339,6 +363,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
         ]
       }
     ];
+    this.aplicarDefaultsEmpresa();
   }
 
   volver() {
@@ -362,10 +387,14 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
   async obtenerCuotasPrestamo() {
     if (this.form.valid) {
-      this.actualizarEquivalenciaInteres();
+      if (this.esCuotaFijaPorBloque()) {
+        this.actualizarCamposCuotaFijaPorBloque();
+      } else {
+        this.actualizarEquivalenciaInteres();
+      }
       this.mostrarTablaResumen = true;
       this.prestamosService
-        .calcularCuotas(this.form.value)
+        .calcularCuotas(this.construirPayloadPrestamo())
         .subscribe((response) => {
           this.tableCuotasPrestamo = Array.isArray(response) ? response : [];
           this.actualizarResumenCuotas();
@@ -377,6 +406,106 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
         text: 'Por favor valide los campos obligatorios, para generar la tabla.'
       });
     }
+  }
+
+  private esCuotaFijaPorBloque(): boolean {
+    const idSistemaPago = this.normalizarIdentificador(
+      this.form.value?.id_sistema_pago ?? this.model?.id_sistema_pago
+    );
+
+    if (idSistemaPago === '5') {
+      return true;
+    }
+
+    const sistemaSeleccionado = this.obtenerSistemaPagoSeleccionado();
+    const nombreSistema = this.normalizarTexto(
+      [
+        sistemaSeleccionado?.label,
+        sistemaSeleccionado?.nomtipsistemap,
+        sistemaSeleccionado?.nombre,
+        sistemaSeleccionado?.descripcion,
+        typeof sistemaSeleccionado === 'string' ? sistemaSeleccionado : ''
+      ]
+        .filter(Boolean)
+        .join(' ')
+    );
+
+    return (
+      nombreSistema.includes('cuota fija') &&
+      nombreSistema.includes('bloque') &&
+      nombreSistema.includes('capital')
+    );
+  }
+
+  private actualizarCamposCuotaFijaPorBloque(): void {
+    if (!this.esCuotaFijaPorBloque()) {
+      this.form.get('porcint')?.enable({
+        emitEvent: false,
+        onlySelf: true
+      });
+      this.form.get('valor_cuota_diaria')?.setValue('', {
+        emitEvent: false,
+        onlySelf: true
+      });
+      this.model.valor_cuota_diaria = '';
+      return;
+    }
+
+    this.form.get('porcint')?.setValue(null, {
+      emitEvent: false,
+      onlySelf: true
+    });
+    this.form.get('porcint')?.disable({
+      emitEvent: false,
+      onlySelf: true
+    });
+    this.form.get('interes_equivalente_anual')?.setValue('0.00', {
+      emitEvent: false,
+      onlySelf: true
+    });
+    this.model.porcint = null;
+    this.model.interes_equivalente_anual = '0.00';
+
+    this.form.updateValueAndValidity({ emitEvent: false });
+    this.actualizarValorCuotaBloque();
+  }
+
+  private aplicarDefaultsEmpresa(): void {
+    const sistemaDefault = this.datosEmpresa?.id_sistema_pago_default;
+    if (!sistemaDefault) {
+      return;
+    }
+
+    this.model.id_sistema_pago = sistemaDefault;
+    this.form.patchValue({ id_sistema_pago: sistemaDefault }, { emitEvent: false });
+
+    if (this.esCuotaFijaPorBloque()) {
+      this.model.numcuotas = 25;
+      this.form.patchValue({ numcuotas: 25 }, { emitEvent: false });
+      this.actualizarCamposCuotaFijaPorBloque();
+    }
+  }
+
+  private actualizarValorCuotaBloque(): void {
+    const numcuotas = this.convertirANumero(this.form.value?.numcuotas);
+    const valorpres = this.convertirANumero(this.form.value?.valorpres);
+
+    if (!numcuotas || !valorpres) {
+      this.model.valor_cuota_diaria = '';
+      return;
+    }
+
+    this.prestamosService
+      .tarifaBloqueCapital({ numcuotas, valorpres })
+      .subscribe((tarifa) => {
+        const valorCuota = this.convertirANumero(tarifa?.valor_cuota);
+        const valorFormateado = valorCuota > 0 ? String(valorCuota) : '';
+        this.model.valor_cuota_diaria = valorFormateado;
+        this.form.get('valor_cuota_diaria')?.setValue(valorFormateado, {
+          emitEvent: false,
+          onlySelf: true
+        });
+      });
   }
 
   getHeaders() {
@@ -481,6 +610,36 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
     });
   }
 
+  private obtenerSistemaPagoSeleccionado(): any {
+    const idSistemaPago = this.form.value?.id_sistema_pago;
+    const idSistemaNormalizado = this.normalizarIdentificador(idSistemaPago);
+    const opciones = Array.isArray(this.sistemaspago) ? this.sistemaspago : [];
+
+    if (idSistemaNormalizado === null) {
+      return undefined;
+    }
+
+    return opciones.find((opcion) => {
+      if (typeof opcion === 'string') {
+        return opcion === idSistemaNormalizado;
+      }
+
+      if (!opcion || typeof opcion !== 'object') {
+        return false;
+      }
+
+      const record = opcion as Record<string, unknown>;
+      return [
+        record.value,
+        record.id,
+        record.id_sistema_pago,
+        record.codtipsistemap
+      ].some(
+        (valor) => this.normalizarIdentificador(valor) === idSistemaNormalizado
+      );
+    });
+  }
+
   private normalizarIdentificador(valor: unknown): string | null {
     return typeof valor === 'string' || typeof valor === 'number'
       ? String(valor)
@@ -502,7 +661,11 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
       : [];
 
     const resumen = cuotas.reduce((acumulado, cuota) => {
-      acumulado.capital += this.obtenerNumeroDeCampo(cuota, ['Capital']);
+      acumulado.capital += this.obtenerNumeroDeCampo(cuota, [
+        'Capital',
+        'Amortizacion',
+        'Amortización'
+      ]);
       acumulado.intereses += this.obtenerNumeroDeCampo(cuota, [
         'Interes',
         'Interés'
@@ -617,7 +780,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
       }).then((result) => {
         if (result.value === true) {
           this.prestamosService
-            .guardarPrestamo(this.form.value)
+            .guardarPrestamo(this.construirPayloadPrestamo())
             .subscribe((response) => {
               console.log(response);
               const idPrestamo = this.extractPrestamoId(response);
@@ -659,6 +822,46 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
         text: 'Por favor valide los campos obligatorios, para generar la tabla.'
       });
     }
+  }
+
+  private construirPayloadPrestamo(): Record<string, unknown> {
+    const payload = { ...this.form.getRawValue() };
+    payload.fec_inicial = this.obtenerProximaFechaPago(payload.fec_inicial);
+    delete payload.interes_equivalente_anual;
+    delete payload.valor_cuota_diaria;
+    return payload;
+  }
+
+  private obtenerProximaFechaPago(fechaBase: unknown): string {
+    const fecha = fechaBase instanceof Date
+      ? new Date(fechaBase.getTime())
+      : new Date(String(fechaBase));
+
+    if (Number.isNaN(fecha.getTime())) {
+      return String(fechaBase || '');
+    }
+
+    const idPeriodoPago = this.normalizarIdentificador(this.form.value?.id_periodo_pago);
+    if (idPeriodoPago === '1') {
+      fecha.setDate(fecha.getDate() + 1);
+    } else if (idPeriodoPago === '2') {
+      fecha.setDate(fecha.getDate() + 7);
+    } else if (idPeriodoPago === '3') {
+      fecha.setDate(fecha.getDate() + 15);
+    } else if (idPeriodoPago === '4') {
+      fecha.setMonth(fecha.getMonth() + 1);
+    } else if (idPeriodoPago === '5') {
+      fecha.setFullYear(fecha.getFullYear() + 1);
+    }
+
+    return this.formatearFechaLocal(fecha);
+  }
+
+  private formatearFechaLocal(fecha: Date): string {
+    const ano = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+    const dia = String(fecha.getDate()).padStart(2, '0');
+    return `${ano}-${mes}-${dia}`;
   }
 
   combinarContenido(response: any): void {

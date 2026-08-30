@@ -10,6 +10,7 @@ import { CrearClienteComponent } from './_component/cliente/crear-cliente/crear-
 import { CrearPrestamoComponent } from './_component/cliente/crear-prestamo/crear-prestamo.component';
 import { CrearDocumentoComponent } from './_component/parametros/crear-documento/crear-documento.component';
 import { LogoutComponent } from './_component/logout/logout.component';
+import { CambiarPasswordComponent } from './_component/parametros/cambiar-password/cambiar-password.component';
 
 const routes: Routes = [
   {
@@ -68,6 +69,11 @@ const routes: Routes = [
       {
         path: 'empresa',
         component: EmpresaParametrosComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'cambiar-password',
+        component: CambiarPasswordComponent,
         canActivate: [AuthGuard]
       }
     ]

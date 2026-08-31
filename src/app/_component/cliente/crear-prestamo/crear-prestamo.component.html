@@ -1,7 +1,9 @@
 <div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
   <app-top-nav fxHide.xs></app-top-nav>
   <app-top-nav class="fixed-topnav" fxHide.gt-xs></app-top-nav>
+
   <app-loading></app-loading>
+
   <mat-sidenav-container class="example-sidenav-container">
     <mat-sidenav
       #appDrawer
@@ -15,7 +17,9 @@
           <app-logo></app-logo>
         }
       </div>
+
       <mat-divider></mat-divider>
+
       @if (authService.isLoggedIn()) {
         <mat-nav-list>
           @for (item of navItems; track item) {
@@ -27,30 +31,44 @@
 
     <mat-sidenav-content>
       <div class="loan-page">
+
+        <!-- ENCABEZADO -->
         <section class="loan-hero card">
           <div class="card-header loan-hero-header">
             <button
+              type="button"
               title="Volver"
               (click)="volver()"
               class="left btn btn-outline-primary btn-sm"
               mat-icon-button
               color="primary"
             >
-              <mat-icon aria-label="Volver">keyboard_backspace</mat-icon>
+              <mat-icon aria-label="Volver">
+                keyboard_backspace
+              </mat-icon>
             </button>
+
             <div class="loan-hero-title-wrap">
-              <h2 class="loan-hero-title">Creación de préstamo</h2>
+              <h2 class="loan-hero-title">
+                Creación de préstamo
+              </h2>
+
               <p class="loan-hero-subtitle">
-                Complete los datos, simule cuotas y luego confirme el registro.
+                Complete los datos, simule las cuotas y luego confirme el registro.
               </p>
             </div>
           </div>
         </section>
 
+        <!-- FORMULARIO -->
         <section class="card loan-form-card">
           <div class="card-body">
-            <h5 class="section-title">Datos del préstamo</h5>
+            <h5 class="section-title">
+              Datos del préstamo
+            </h5>
+
             <form [formGroup]="form" (ngSubmit)="submit()">
+
               <formly-form
                 [model]="model"
                 [fields]="fields"
@@ -59,123 +77,206 @@
               >
               </formly-form>
 
-              @if (mostrarTablaResumen && tableCuotasPrestamo?.length) {
+              <!-- RESUMEN -->
+              @if (
+                mostrarTablaResumen &&
+                tableCuotasPrestamo?.length
+              ) {
                 <div class="loan-summary-grid">
+
                   <div class="loan-summary-item">
-                    <span class="loan-summary-label">Capital</span>
+                    <span class="loan-summary-label">
+                      Capital
+                    </span>
+
                     <strong class="loan-summary-value">
                       {{ formatearMoneda(resumenCuotas.capital) }}
                     </strong>
                   </div>
+
                   <div class="loan-summary-item">
-                    <span class="loan-summary-label">Intereses</span>
+                    <span class="loan-summary-label">
+                      {{
+                        esCuotaFijaPorBloque()
+                          ? 'Ganancia'
+                          : 'Intereses'
+                      }}
+                    </span>
+
                     <strong class="loan-summary-value">
                       {{ formatearMoneda(resumenCuotas.intereses) }}
                     </strong>
                   </div>
+
                   <div class="loan-summary-item loan-summary-item-total">
-                    <span class="loan-summary-label">Gran total</span>
+                    <span class="loan-summary-label">
+                      Gran total
+                    </span>
+
                     <strong class="loan-summary-value">
                       {{ formatearMoneda(resumenCuotas.granTotal) }}
                     </strong>
                   </div>
+
                   <div class="loan-summary-item">
-                    <span class="loan-summary-label">Saldo restante</span>
+                    <span class="loan-summary-label">
+                      Saldo restante
+                    </span>
+
                     <strong class="loan-summary-value">
                       {{ formatearMoneda(resumenCuotas.saldoRestante) }}
                     </strong>
                   </div>
+
                 </div>
               }
 
+              <!-- ACCIONES -->
               <mat-dialog-actions class="loan-actions">
+
                 <button
                   type="button"
-                  (click)="obtenerCuotasPrestamo()"
-                  title="Obtener cuotas del prestamo"
                   class="btn btn-primary submit-button"
+                  title="Simular cuotas del préstamo"
+                  (click)="obtenerCuotasPrestamo()"
                 >
-                  <mat-icon aria-label="Calcular">table_chart</mat-icon>
+                  <mat-icon aria-label="Calcular">
+                    table_chart
+                  </mat-icon>
+
                   Simular cuotas
                 </button>
 
-                @if (mostrarTablaResumen && !listarDocumentosPrestamo) {
+                @if (
+                  mostrarTablaResumen &&
+                  !listarDocumentosPrestamo
+                ) {
                   <button
                     type="button"
                     class="btn btn-primary submit-button"
+                    title="Guardar préstamo"
                     (click)="guardarPrestamo()"
-                    title="Guardar Prestamo"
                   >
-                    <mat-icon aria-label="Guardar">save</mat-icon>
+                    <mat-icon aria-label="Guardar">
+                      save
+                    </mat-icon>
+
                     Guardar préstamo
                   </button>
                 }
+
               </mat-dialog-actions>
+
             </form>
           </div>
         </section>
 
+        <!-- RESULTADO -->
         @if (mostrarTablaResumen) {
           <section class="card loan-result-card">
             <div class="card-body">
-              <h5 class="section-title">Resultado</h5>
-              <mat-tab-group animationDuration="0ms" class="loan-tabs">
+
+              <h5 class="section-title">
+                Resultado
+              </h5>
+
+              <mat-tab-group
+                animationDuration="0ms"
+                class="loan-tabs"
+              >
+
+                <!-- CUOTAS -->
                 <mat-tab label="Resumen de cuotas">
+
                   @if (!listarDocumentosPrestamo) {
-                    <div class="table-responsive">
-                      <table
-                        class="main-table mobile-optimised table-responvive"
-                      >
-                        <thead>
-                          <tr>
-                            @for (header of getHeaders(); track header) {
-                              <th>
-                                {{ header }}
-                              </th>
-                            }
-                          </tr>
-                        </thead>
-                        <tbody>
-                          @for (item of tableCuotasPrestamo; track item) {
+
+                    @if (tableCuotasPrestamo?.length) {
+
+                      <div class="table-responsive">
+                        <table
+                          class="main-table mobile-optimised table-responvive"
+                        >
+
+                          <thead>
                             <tr>
-                              @for (key of getHeaders(); track key) {
-                                <td [attr.data-th]="key">
-                                  {{ item[key] }}
-                                </td>
+                              @for (header of getHeaders(); track header) {
+                                <th>
+                                  {{ header }}
+                                </th>
                               }
                             </tr>
-                          }
-                        </tbody>
-                      </table>
-                    </div>
-                  }
-                  @if (listarDocumentosPrestamo) {
+                          </thead>
+
+                          <tbody>
+                            @for (
+                              item of tableCuotasPrestamo;
+                              track item
+                            ) {
+                              <tr>
+                                @for (
+                                  key of getHeaders();
+                                  track key
+                                ) {
+                                  <td [attr.data-th]="key">
+                                    {{ item[key] }}
+                                  </td>
+                                }
+                              </tr>
+                            }
+                          </tbody>
+
+                        </table>
+                      </div>
+
+                    } @else {
+
+                      <div class="empty-result-state">
+                        No hay cuotas para mostrar.
+                      </div>
+
+                    }
+
+                  } @else {
+
                     <div class="empty-result-state">
                       El préstamo fue registrado. Revise los documentos en la
                       pestaña "Documentos".
                     </div>
+
                   }
+
                 </mat-tab>
+
+                <!-- DOCUMENTOS -->
                 <mat-tab label="Documentos">
+
                   @if (listarDocumentosPrestamo) {
+
                     <div class="documents-pane">
                       <tinymce
                         [(ngModel)]="contenidoCombinado"
                         [config]="config"
-                      ></tinymce>
+                      >
+                      </tinymce>
                     </div>
-                  }
-                  @if (!listarDocumentosPrestamo) {
+
+                  } @else {
+
                     <div class="empty-result-state">
                       Los documentos estarán disponibles después de guardar el
                       préstamo.
                     </div>
+
                   }
+
                 </mat-tab>
+
               </mat-tab-group>
+
             </div>
           </section>
         }
+
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>

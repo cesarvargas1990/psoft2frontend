@@ -1805,7 +1805,12 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
               text: 'Se crea satisfactoriamente el prestamo # ' + idPrestamo
 
+            }).then((result) => {
+              if (result.value) {
+                window.location.reload();
+              }
             });
+            
 
           },
 

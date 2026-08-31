@@ -809,6 +809,11 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
     }
 
+    // Cada simulación debe volver a modo simulador.
+    // Esto evita que quede visible el estado de préstamo registrado/documentos
+    // y garantiza que la tabla vuelva a mostrarse después de guardar un préstamo.
+    this.listarDocumentosPrestamo = false;
+
     if (this.esCuotaFijaPorBloque()) {
 
       // Al simular NO recalcular tarifa: usar el valor visible en el campo.
@@ -863,6 +868,10 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
             this.tableCuotasPrestamo = [];
 
           }
+
+          // Forzar nuevamente el estado de simulación una vez llega la respuesta.
+          this.listarDocumentosPrestamo = false;
+          this.mostrarTablaResumen = true;
 
           this.actualizarResumenCuotas();
 

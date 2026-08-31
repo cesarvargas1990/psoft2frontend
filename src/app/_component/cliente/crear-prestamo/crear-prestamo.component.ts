@@ -899,7 +899,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
   }
 
-  private esCuotaFijaPorBloque(): boolean {
+ esCuotaFijaPorBloque(): boolean {
 
     const idSistemaPago = this.normalizarIdentificador(
 

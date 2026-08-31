@@ -118,6 +118,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
   datosEmpresa: any = {};
 
+  // La tarifa solo precarga este campo. Si el usuario lo cambia, ese valor manda.
   cuotaDiariaModificadaManual = false;
 
   constructor(
@@ -219,6 +220,10 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
     this.sistemaspago = await this.prestamosService.getSistemaPrestamo();
 
     this.datosEmpresa = await this.empresaService.getEmpresa().toPromise();
+
+    console.log('los clientes');
+
+    console.log(this.listaClientes);
 
     this.navService.appDrawer = this.appDrawer;
 
@@ -323,22 +328,35 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
           {
             key: 'valorpres',
+
             className: 'col-md-3',
+
             type: 'input',
+
+            modelOptions: {
+              updateOn: 'blur'
+            },
+
             templateOptions: {
               label: 'Valor del prestamo',
+
               required: true,
+
               pattern: /^[0-9]*\.?[0-9]*$/,
+
               minLength: 5,
+
               maxLength: 11,
 
-              blur: (field, event) => {
+              blur: (field, $event) => {
                 const numeroCuotas = this.convertirANumero(
-                  this.form.get('numcuotas')?.value
+                  this.form.getRawValue()?.numcuotas ?? this.model?.numcuotas
                 );
 
                 if (this.esCuotaFijaPorBloque() && numeroCuotas > 0) {
-                  this.calcularCuotaDiariaPorTarifa(numeroCuotas);
+                  this.cuotaDiariaModificadaManual = false;
+
+                  this.calcularCuotaDiariaPorTarifa(numeroCuotas, true);
 
                   return;
                 }
@@ -361,7 +379,9 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
           {
             key: 'numcuotas',
+
             className: 'col-md-3',
+
             type: 'input',
 
             modelOptions: {
@@ -370,76 +390,38 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
             templateOptions: {
               label: 'Número de cuotas',
+
               required: true,
-              type: 'number',
-              min: 1
+
+              pattern: /^[0-9]*\.?[0-9]*$/,
+
+              minLength: 1,
+
+              maxLength: 3,
+
+              blur: (field, $event) => {
+                const numeroCuotas = this.convertirANumero(
+                  this.form.getRawValue()?.numcuotas ?? this.model?.numcuotas
+                );
+
+                if (this.esCuotaFijaPorBloque() && numeroCuotas > 0) {
+                  this.cuotaDiariaModificadaManual = false;
+
+                  this.calcularCuotaDiariaPorTarifa(numeroCuotas, true);
+
+                  return;
+                }
+
+                if (this.form.valid) {
+                  this.obtenerCuotasPrestamo();
+                }
+              }
             },
 
-            hooks: {
-              onInit: (field) => {
-                field.formControl?.valueChanges.subscribe((valor) => {
-                  const numeroCuotas = this.convertirANumero(valor);
-
-                  console.log('NUMCUOTAS CAMBIÓ EN BLUR:', numeroCuotas);
-
-                  if (numeroCuotas <= 0) {
-                    return;
-                  }
-
-                  console.log('LLAMANDO SERVICIO tarifaBloqueCapital');
-
-                  this.prestamosService
-                    .tarifaBloqueCapital({
-                      numcuotas: numeroCuotas
-                    })
-                    .subscribe({
-                      next: (response: any) => {
-                        console.log('RESPUESTA TARIFA:', response);
-
-                        const valorPrestamo = this.convertirANumero(
-                          this.form.get('valorpres')?.value
-                        );
-
-                        const baseCalculo = this.convertirANumero(
-                          response?.base_calculo
-                        );
-
-                        const valorPorBloque = this.convertirANumero(
-                          response?.valor_por_bloque
-                        );
-
-                        let valorCuota =
-                          this.convertirANumero(response?.valor_default) ||
-                          40000;
-
-                        if (
-                          valorPrestamo > 0 &&
-                          baseCalculo > 0 &&
-                          valorPorBloque > 0
-                        ) {
-                          valorCuota =
-                            (valorPrestamo / baseCalculo) * valorPorBloque;
-                        }
-
-                        valorCuota =
-                          Math.round((valorCuota + Number.EPSILON) * 100) / 100;
-
-                        this.model.valor_cuota_diaria = valorCuota;
-
-                        this.form
-                          .get('valor_cuota_diaria')
-                          ?.setValue(valorCuota, {
-                            emitEvent: false
-                          });
-
-                        this.obtenerCuotasPrestamo(true);
-                      },
-
-                      error: (error) => {
-                        console.error('ERROR CONSULTANDO TARIFA:', error);
-                      }
-                    });
-                });
+            validation: {
+              messages: {
+                pattern: (error, field: FormlyFieldConfig) =>
+                  `"${field.formControl.value}" no es un número válido`
               }
             }
           },
@@ -451,18 +433,45 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
             hideExpression: () => !this.esCuotaFijaPorBloque(),
 
+            modelOptions: {
+              updateOn: 'blur'
+            },
+
             templateOptions: {
               label: 'Valor de cuota diaria',
               required: false,
               type: 'number',
               min: 1,
 
+              // Evita que el label quede montado sobre el valor
+              floatLabel: 'always',
+
               blur: (field, $event) => {
-                const valor = this.convertirANumero(
+                const valorCuota = this.convertirANumero(
                   this.form.getRawValue()?.valor_cuota_diaria
                 );
 
-                if (valor > 0 && this.form.valid) {
+                if (valorCuota <= 0) {
+                  return;
+                }
+
+                /*
+      |--------------------------------------------------------------------------
+      | El usuario modificó manualmente la cuota
+      |--------------------------------------------------------------------------
+      */
+
+                this.cuotaDiariaModificadaManual = true;
+
+                this.model.valor_cuota_diaria = valorCuota;
+
+                /*
+      |--------------------------------------------------------------------------
+      | Simular respetando el valor manual
+      |--------------------------------------------------------------------------
+      */
+
+                if (this.form.valid) {
                   this.obtenerCuotasPrestamo();
                 }
               }
@@ -604,74 +613,54 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  async obtenerCuotasPrestamo(flag: boolean = false) {
+  async obtenerCuotasPrestamo() {
     if (!this.form.valid) {
-      if (!flag) {
-        Swal.fire({
-          type: 'error',
-          title: 'Error',
-          text: 'Por favor valide los campos obligatorios, para generar la tabla.'
-        });
-      }
+      Swal.fire({
+        type: 'error',
+
+        title: 'Error',
+
+        text: 'Por favor valide los campos obligatorios, para generar la tabla.'
+      });
+
       return;
     }
 
     if (this.esCuotaFijaPorBloque()) {
-      this.actualizarCamposCuotaFijaPorBloque();
+      // Al simular NO recalcular tarifa: usar el valor visible en el campo.
+      this.form.get('porcint')?.setValue(null, {
+        emitEvent: false,
+
+        onlySelf: true
+      });
+
+      this.form.get('porcint')?.disable({
+        emitEvent: false,
+
+        onlySelf: true
+      });
     } else {
       this.actualizarEquivalenciaInteres();
     }
 
     this.mostrarTablaResumen = true;
 
+    const payload = this.construirPayloadPrestamo();
+
     this.prestamosService
-      .calcularCuotas(this.construirPayloadPrestamo())
+
+      .calcularCuotas(payload)
+
       .subscribe({
         next: (response: any) => {
-          // Compatible con el endpoint actual que devuelve directamente []
-          // y también con una respuesta futura { tabla: [] }
           if (Array.isArray(response)) {
             this.tableCuotasPrestamo = response;
-          } else if (Array.isArray(response?.tabla)) {
-            this.tableCuotasPrestamo = response.tabla;
           } else if (Array.isArray(response?.tabla_formato)) {
             this.tableCuotasPrestamo = response.tabla_formato;
+          } else if (Array.isArray(response?.tabla)) {
+            this.tableCuotasPrestamo = response.tabla;
           } else {
             this.tableCuotasPrestamo = [];
-          }
-
-          if (
-            this.esCuotaFijaPorBloque() &&
-            this.tableCuotasPrestamo.length > 0
-          ) {
-            let valorCuota = 0;
-
-            // Si posteriormente backend devuelve datosprestamo,
-            // aprovechamos ese dato.
-            if (response?.datosprestamo?.valor_cuota != null) {
-              valorCuota = this.convertirANumero(
-                response.datosprestamo.valor_cuota
-              );
-            } else {
-              // Con la respuesta actual tomamos el total de la primera cuota.
-              valorCuota = this.convertirANumero(
-                this.tableCuotasPrestamo[0]?.['Total a pagar cuota']
-              );
-            }
-
-            // Solo colocar el valor calculado si todavía no hay uno manual.
-            const valorActual = this.convertirANumero(
-              this.form.getRawValue()?.valor_cuota_diaria
-            );
-
-            if (!valorActual && valorCuota > 0) {
-              this.model.valor_cuota_diaria = valorCuota;
-
-              this.form.get('valor_cuota_diaria')?.setValue(valorCuota, {
-                emitEvent: false,
-                onlySelf: true
-              });
-            }
           }
 
           this.actualizarResumenCuotas();
@@ -679,11 +668,14 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
         error: (error) => {
           this.tableCuotasPrestamo = [];
+
           this.mostrarTablaResumen = false;
 
           Swal.fire({
             type: 'error',
+
             title: 'Error',
+
             text: error?.error?.message || 'No fue posible calcular las cuotas.'
           });
         }
@@ -726,8 +718,14 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
     );
   }
 
+  get esSistemaCuotaBloque(): boolean {
+    return this.esCuotaFijaPorBloque();
+  }
+
   private actualizarCamposCuotaFijaPorBloque(): void {
     if (!this.esCuotaFijaPorBloque()) {
+      this.cuotaDiariaModificadaManual = false;
+
       this.form.get('porcint')?.enable({
         emitEvent: false,
 
@@ -769,7 +767,9 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
     this.form.updateValueAndValidity({ emitEvent: false });
 
-    this.actualizarValorCuotaBloque();
+    if (!this.cuotaDiariaModificadaManual) {
+      this.actualizarValorCuotaBloque();
+    }
   }
 
   private aplicarDefaultsEmpresa(): void {
@@ -800,19 +800,112 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    const valorPrestamo = this.convertirANumero(
-      this.form.get('valorpres')?.value
+    if (this.cuotaDiariaModificadaManual) {
+      return;
+    }
+
+    const numcuotas = this.convertirANumero(
+      this.form.getRawValue()?.numcuotas ?? this.model?.numcuotas
     );
 
-    const numeroCuotas = this.convertirANumero(
-      this.form.get('numcuotas')?.value
+    const valorpres = this.convertirANumero(
+      this.form.getRawValue()?.valorpres ?? this.model?.valorpres
+    );
+
+    if (!numcuotas || !valorpres) {
+      return;
+    }
+
+    this.calcularCuotaDiariaPorTarifa(numcuotas, false);
+  }
+
+  private calcularCuotaDiariaPorTarifa(
+    numeroCuotas: number,
+    simularDespues: boolean = false
+  ): void {
+    if (!this.esCuotaFijaPorBloque()) {
+      return;
+    }
+
+    const valorPrestamo = this.convertirANumero(
+      this.form.getRawValue()?.valorpres ?? this.model?.valorpres
     );
 
     if (valorPrestamo <= 0 || numeroCuotas <= 0) {
       return;
     }
 
-    this.calcularCuotaDiariaPorTarifa(numeroCuotas);
+    this.prestamosService
+
+      .tarifaBloqueCapital({
+        numcuotas: numeroCuotas,
+
+        valorpres: valorPrestamo
+      })
+
+      .subscribe({
+        next: (response: any) => {
+          // Si el usuario alcanzó a editar mientras respondía el API, respetar su valor.
+          if (this.cuotaDiariaModificadaManual) {
+            return;
+          }
+
+          let valorCuota = this.convertirANumero(response?.valor_cuota);
+
+          if (valorCuota <= 0) {
+            const baseCalculo = this.convertirANumero(response?.base_calculo);
+
+            const valorPorBloque = this.convertirANumero(
+              response?.valor_por_bloque
+            );
+
+            if (baseCalculo > 0 && valorPorBloque > 0) {
+              valorCuota = (valorPrestamo / baseCalculo) * valorPorBloque;
+            }
+          }
+
+          if (valorCuota <= 0) {
+            valorCuota =
+              this.convertirANumero(response?.valor_default) || 40000;
+          }
+
+          valorCuota = Math.round((valorCuota + Number.EPSILON) * 100) / 100;
+
+          this.model.valor_cuota_diaria = valorCuota;
+
+          this.form.get('valor_cuota_diaria')?.setValue(valorCuota, {
+            emitEvent: false,
+
+            onlySelf: true
+          });
+
+          if (simularDespues && this.form.valid) {
+            this.obtenerCuotasPrestamo();
+          }
+        },
+
+        error: (error) => {
+          console.error('ERROR CONSULTANDO TARIFA:', error);
+
+          if (this.cuotaDiariaModificadaManual) {
+            return;
+          }
+
+          const valorFallback = 40000;
+
+          this.model.valor_cuota_diaria = valorFallback;
+
+          this.form.get('valor_cuota_diaria')?.setValue(valorFallback, {
+            emitEvent: false,
+
+            onlySelf: true
+          });
+
+          if (simularDespues && this.form.valid) {
+            this.obtenerCuotasPrestamo();
+          }
+        }
+      });
   }
 
   getHeaders() {
@@ -1179,7 +1272,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
       /*
     |--------------------------------------------------------------------------
-    | Guardar una copia antes de limpiar el formulario
+    | Guardamos el payload ANTES de limpiar
     |--------------------------------------------------------------------------
     */
 
@@ -1203,11 +1296,15 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
           /*
           |--------------------------------------------------------------------------
-          | Guardar datos necesarios antes de reiniciar
+          | COPIA del préstamo guardado
+          |--------------------------------------------------------------------------
+          |
+          | Esto es importante porque vamos a limpiar this.model.
+          | Los documentos usarán esta copia.
           |--------------------------------------------------------------------------
           */
 
-          const datosPrestamoGuardado = {
+          const datosPrestamoGuardado: any = {
             ...this.model,
             ...payloadPrestamo,
             id_prestamo: idPrestamo
@@ -1215,7 +1312,123 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
 
           /*
           |--------------------------------------------------------------------------
-          | Mostrar confirmación
+          | Generar documentos
+          |--------------------------------------------------------------------------
+          */
+
+          this.listarDocumentosPrestamo = true;
+
+          this.contenidoCombinado = '';
+
+          this.prestamosService
+            .renderTemplates(datosPrestamoGuardado)
+            .subscribe({
+              next: (resp) => {
+                console.log('DOCUMENTOS:', resp);
+
+                this.plantillas_html = this.extractRenderedTemplates(resp);
+
+                if (this.plantillas_html.length === 0) {
+                  Swal.fire({
+                    type: 'warning',
+                    title: 'Sin documentos',
+                    text: 'El préstamo fue creado, pero no se generaron documentos. Verifique las plantillas configuradas.'
+                  });
+                }
+
+                this.combinarContenido(this.plantillas_html);
+              },
+
+              error: (error) => {
+                console.error('ERROR GENERANDO DOCUMENTOS:', error);
+              }
+            });
+
+          /*
+          |--------------------------------------------------------------------------
+          | LIMPIAR FORMULARIO
+          |--------------------------------------------------------------------------
+          |
+          | El préstamo ya fue guardado.
+          | Desde aquí dejamos el formulario listo para crear otro.
+          |--------------------------------------------------------------------------
+          */
+
+          this.cuotaDiariaModificadaManual = false;
+
+          /*
+          |--------------------------------------------------------------------------
+          | Limpiar simulador
+          |--------------------------------------------------------------------------
+          */
+
+          this.tableCuotasPrestamo = [];
+
+          this.mostrarTablaResumen = false;
+
+          this.resumenCuotas = this.crearResumenVacio();
+
+          /*
+          |--------------------------------------------------------------------------
+          | Modelo inicial
+          |--------------------------------------------------------------------------
+          */
+
+          this.model = {
+            interes_equivalente_anual: '0.00',
+
+            valor_cuota_diaria: ''
+          };
+
+          /*
+          |--------------------------------------------------------------------------
+          | Resetear Formly
+          |--------------------------------------------------------------------------
+          */
+
+          if (this.options?.resetModel) {
+            this.options.resetModel(this.model);
+          } else {
+            this.form.reset();
+          }
+
+          /*
+          |--------------------------------------------------------------------------
+          | Reponer defaults de empresa
+          |--------------------------------------------------------------------------
+          */
+
+          setTimeout(() => {
+            this.cuotaDiariaModificadaManual = false;
+
+            this.aplicarDefaultsEmpresa();
+
+            /*
+            |--------------------------------------------------------------------------
+            | Dejar nuevamente limpio el simulador
+            |--------------------------------------------------------------------------
+            */
+
+            this.tableCuotasPrestamo = [];
+
+            this.mostrarTablaResumen = false;
+
+            this.resumenCuotas = this.crearResumenVacio();
+
+            /*
+            |--------------------------------------------------------------------------
+            | Actualizar validación
+            |--------------------------------------------------------------------------
+            */
+
+            this.form.updateValueAndValidity({
+              emitEvent: false
+            });
+          }, 0);
+
+          /*
+          |--------------------------------------------------------------------------
+          | Mensaje final
           |--------------------------------------------------------------------------
           */
 
@@ -1223,54 +1436,7 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
             type: 'success',
             title: 'Préstamo creado',
             text: 'Se crea satisfactoriamente el prestamo # ' + idPrestamo
-          }).then(() => {
-            /*
-            |--------------------------------------------------------------------------
-            | REINICIAR COMPLETAMENTE
-            |--------------------------------------------------------------------------
-            |
-            | Después de esto el formulario queda listo para otro préstamo.
-            |--------------------------------------------------------------------------
-            */
-
-            this.reiniciarFormularioPrestamo();
           });
-
-          /*
-          |--------------------------------------------------------------------------
-          | Generar documentos usando COPIA del préstamo
-          |--------------------------------------------------------------------------
-          |
-          | Ya no dependemos del this.model porque este puede ser limpiado.
-          |--------------------------------------------------------------------------
-          */
-
-          this.prestamosService
-            .renderTemplates(datosPrestamoGuardado)
-            .subscribe({
-              next: (resp) => {
-                console.log('DOCUMENTOS GENERADOS:', resp);
-
-                const plantillas = this.extractRenderedTemplates(resp);
-
-                /*
-                |--------------------------------------------------------------------------
-                | Si necesitas conservar documentos después del guardado,
-                | puedes manejarlos aquí independientemente del formulario.
-                |--------------------------------------------------------------------------
-                */
-
-                if (plantillas.length === 0) {
-                  console.warn(
-                    'El préstamo fue creado, pero no se generaron documentos.'
-                  );
-                }
-              },
-
-              error: (error) => {
-                console.error('ERROR GENERANDO DOCUMENTOS:', error);
-              }
-            });
         },
 
         error: (error) => {
@@ -1287,11 +1453,23 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
   }
 
   private construirPayloadPrestamo(): Record<string, unknown> {
-    const payload = { ...this.form.getRawValue() };
+    const payload: Record<string, any> = {
+      ...this.form.getRawValue()
+    };
 
     payload.fec_inicial = this.obtenerProximaFechaPago(payload.fec_inicial);
 
     delete payload.interes_equivalente_anual;
+
+    if (this.esCuotaFijaPorBloque()) {
+      // La tarifa es solo el valor inicial sugerido.
+      // El valor actual del campo es el que se simula y el que se guarda.
+      payload.valor_cuota_diaria = this.convertirANumero(
+        this.form.getRawValue()?.valor_cuota_diaria
+      );
+    } else {
+      delete payload.valor_cuota_diaria;
+    }
 
     return payload;
   }
@@ -1556,182 +1734,5 @@ export class CrearPrestamoComponent implements AfterViewInit, OnDestroy {
     }
 
     return null;
-  }
-
-  private limpiarCuotaDiaria(): void {
-    if (!this.esCuotaFijaPorBloque()) {
-      return;
-    }
-
-    this.model.valor_cuota_diaria = '';
-
-    this.form.get('valor_cuota_diaria')?.setValue('', {
-      emitEvent: false,
-      onlySelf: true
-    });
-  }
-
-  private calcularCuotaDiariaPorTarifa(numeroCuotas: number): void {
-    //alert('ENTRO METODO - cuotas: ' + numeroCuotas);
-
-    const valorPrestamo = this.convertirANumero(
-      this.form.get('valorpres')?.value
-    );
-
-    //alert('VALOR PRESTAMO: ' + valorPrestamo + ' / CUOTAS: ' + numeroCuotas);
-
-    if (valorPrestamo <= 0 || numeroCuotas <= 0) {
-      //alert('SE DETUVO ANTES DEL HTTP');
-      return;
-    }
-
-    //alert('VOY A HACER PETICION HTTP');
-
-    this.prestamosService
-      .tarifaBloqueCapital({
-        numcuotas: numeroCuotas
-      })
-      .subscribe({
-        next: (response: any) => {
-          //alert('RESPUESTA HTTP: ' + JSON.stringify(response));
-
-          console.log('RESPUESTA COMPLETA TARIFA:', response);
-
-          const baseCalculo = this.convertirANumero(response?.base_calculo);
-
-          const valorPorBloque = this.convertirANumero(
-            response?.valor_por_bloque
-          );
-
-          console.log({
-            baseCalculo,
-            valorPorBloque
-          });
-
-          /*
-           * IMPORTANTE:
-           * POR AHORA NO PONEMOS 40000.
-           * Si backend no respondió con tarifa,
-           * dejamos vacío para saber qué pasó.
-           */
-          if (baseCalculo <= 0 || valorPorBloque <= 0) {
-            //alert('LA RESPUESTA NO TRAJO base_calculo / valor_por_bloque');
-
-            return;
-          }
-
-          const cantidadBloques = valorPrestamo / baseCalculo;
-
-          const valorCuota = cantidadBloques * valorPorBloque;
-
-          //alert('CUOTA CALCULADA: ' + valorCuota);
-
-          this.model.valor_cuota_diaria = valorCuota;
-
-          this.form.get('valor_cuota_diaria')?.setValue(valorCuota, {
-            emitEvent: false
-          });
-        },
-
-        error: (error) => {
-          console.error('ERROR HTTP TARIFA:', error);
-
-          //alert('ERROR HTTP: ' + JSON.stringify(error));
-
-          /*
-           * NO PONER 40000 AHORA.
-           * Necesitamos ver el error real.
-           */
-        }
-      });
-  }
-
-  private reiniciarFormularioPrestamo(): void {
-    /*
-  |--------------------------------------------------------------------------
-  | Limpiar simulación
-  |--------------------------------------------------------------------------
-  */
-
-    this.tableCuotasPrestamo = [];
-    this.mostrarTablaResumen = false;
-    this.resumenCuotas = this.crearResumenVacio();
-
-    /*
-  |--------------------------------------------------------------------------
-  | Limpiar documentos / préstamo anterior
-  |--------------------------------------------------------------------------
-  */
-
-    this.listarDocumentosPrestamo = false;
-    this.plantillas_html = {};
-    this.contenidoCombinado = '';
-
-    /*
-  |--------------------------------------------------------------------------
-  | Crear modelo nuevo
-  |--------------------------------------------------------------------------
-  */
-
-    this.model = {
-      interes_equivalente_anual: '0.00',
-      valor_cuota_diaria: ''
-    };
-
-    /*
-  |--------------------------------------------------------------------------
-  | Reiniciar Formly / Reactive Form
-  |--------------------------------------------------------------------------
-  */
-
-    this.form.reset();
-
-    /*
-  |--------------------------------------------------------------------------
-  | Restaurar estado de Formly
-  |--------------------------------------------------------------------------
-  */
-
-    if (this.options?.resetModel) {
-      this.options.resetModel(this.model);
-    }
-
-    /*
-  |--------------------------------------------------------------------------
-  | Volver a aplicar defaults de empresa
-  |--------------------------------------------------------------------------
-  |
-  | Esto es importante porque puede existir:
-  | - sistema de pago por defecto
-  | - número de cuotas inicial
-  | - configuración de cuota fija por bloque
-  |--------------------------------------------------------------------------
-  */
-
-    setTimeout(() => {
-      this.aplicarDefaultsEmpresa();
-
-      /*
-    |--------------------------------------------------------------------------
-    | Rehabilitar controles que pudieran quedar deshabilitados
-    |--------------------------------------------------------------------------
-    */
-
-      if (!this.esCuotaFijaPorBloque()) {
-        this.form.get('porcint')?.enable({
-          emitEvent: false
-        });
-      }
-
-      /*
-    |--------------------------------------------------------------------------
-    | Refrescar validez
-    |--------------------------------------------------------------------------
-    */
-
-      this.form.updateValueAndValidity({
-        emitEvent: false
-      });
-    }, 0);
   }
 }

@@ -53,7 +53,7 @@ export class PrestamosService {
     cuotasPendientesHoy: this.server + '/cuotas_pendientes_hoy',
     eliminarPrestamo: this.server + '/eliminarPrestamo',
     listatiposistemaprest: this.server + '/listatiposistemaprest',
-    totales_dashboard: this.server + '/totales_dashboard'
+    totales_dashboard: this.server + '/totales_dashboard',
   };
 
   httpOpts = {
@@ -134,11 +134,9 @@ export class PrestamosService {
   ): Observable<Record<string, unknown>> {
     data.id_empresa = this.getStorageValue('id_empresa');
     return this.http
-      .post<Record<string, unknown>>(
-        `${this.services.tarifaBloqueCapital}`,
-        data,
-        this.httpOpts
-      )
+      .post<
+        Record<string, unknown>
+      >(`${this.services.tarifaBloqueCapital}`, data, this.httpOpts)
       .pipe(retry(2), catchError(this.handleError));
   }
 
@@ -457,4 +455,5 @@ export class PrestamosService {
       `${signo}${horas}:${minutos}`
     );
   }
+
 }
